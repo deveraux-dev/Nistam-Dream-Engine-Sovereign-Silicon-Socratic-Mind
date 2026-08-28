@@ -1,0 +1,9 @@
+#vixi:timeline v1
+# flute_moods.timeline.vixi — the fire-flute's 4 state-notes, MIDI 2.0 UMP.
+# AUTHORED already at dirge game/assets/x_flute_001.json; loader instrument_base.rs (T4 GREEN) — WIRE, don't rebuild.
+# velocity16 ramp = how hard he plays = fire intensity = how far the water moves. Profiles: Synesthesia Palette + ChromaBit v2.
+mood Quiet     note 74 vel 26214   # D5  — the dead, silent world
+mood Wandering note 77 vel 39321   # F5
+mood Tense     note 81 vel 52428   # A5
+mood Triumph   note 86 vel 65535   # D6  — re-tuned, ringing
+# aot_compile_to_tickets(this) -> Vec<UmpAuthorityTicket>  (forge-vix::timeline — the canonical timeline IR; vixi-is-the-moat).

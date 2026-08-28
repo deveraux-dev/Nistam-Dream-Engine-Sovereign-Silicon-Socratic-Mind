@@ -1,0 +1,22 @@
+[package]
+name = "gemma-s13"
+version = "3.0.0-s13"
+edition = "2021"
+authors = ["Sean Morin"]
+license = "MIT"
+description = "Zero-heap 1.58-bit balanced ternary inference and sentinel governor for Gemma"
+
+[dependencies]
+memmap2 = "0.9"
+
+[dev-dependencies]
+serde_json = "1.0"
+wgpu = "24"
+pollster = "0.4"
+
+[features]
+default = ["std"]
+std = []
+
+[lints]
+workspace = true

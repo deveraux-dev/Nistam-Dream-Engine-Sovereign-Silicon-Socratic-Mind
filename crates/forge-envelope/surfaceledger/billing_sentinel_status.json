@@ -1,0 +1,9 @@
+{
+  "status": "ACTIVE_SENTINEL_GUARD",
+  "initial_credit_usd": 1361.01,
+  "total_spent_usd": 9.8106,
+  "remaining_credit_usd": 1351.1994,
+  "queries_executed": 1158,
+  "last_alerted_milestone_usd": 0.0,
+  "last_updated_epoch": 1787282680
+}

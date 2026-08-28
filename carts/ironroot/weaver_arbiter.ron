@@ -1,0 +1,83 @@
+// Weaver/Arbiter Authored Cartridge (RON Format)
+// Rules: 7 Hermetic Principles, 0..=255 power ceiling (or uses_byte_overflow),
+// reach bands: Precise (<50), Standard (50..199), Ghost (>=200), #RRGGBB swatches.
+(
+    title: "Ironroot Weaver Grimoire",
+    author: "Sean Morin",
+    principles: [
+        "Mentalism",
+        "Correspondence",
+        "Vibration",
+        "Polarity",
+        "Rhythm",
+        "Cause/Effect",
+        "Gender",
+    ],
+    entities: [
+        (
+            name: "Vitreous Slag Gauntlet",
+            type: "item",
+            power_level: 180,
+            reach_extension: 210,
+            hermetic_principle: "Vibration",
+            shadow_trait: "the strength it will not admit wanting",
+            description: "Rusted iron hammered over something that screamed in the furnace.",
+            metadata: (
+                hex_palette: ["#2A1B3D", "#8C4A2F", "#FF6A1A"],
+                logic_flags: ["echo_strike", "furnace_bound"],
+            ),
+        ),
+        (
+            name: "Thornguard Sentinel",
+            type: "enemy",
+            power_level: 210,
+            reach_extension: 205,
+            hermetic_principle: "Polarity",
+            shadow_trait: "the duty that outlived its masters",
+            description: "A hollow carillon wrapped in black brier, striking only when approached.",
+            metadata: (
+                hex_palette: ["#1F2E2B", "#C8791E", "#3A2415"],
+                logic_flags: ["brier_thorns", "retaliation"],
+            ),
+        ),
+        (
+            name: "Sanctum of the First Forge",
+            type: "location",
+            power_level: 0,
+            reach_extension: 0,
+            hermetic_principle: "Mentalism",
+            shadow_trait: "the quiet where creation pauses",
+            description: "An open stone caldera beneath the 13th moon, cold to the touch yet humming with thought.",
+            metadata: (
+                hex_palette: ["#0C0A08", "#1A0F09", "#F7E9D2"],
+                logic_flags: ["sanctuary", "zero_friction"],
+            ),
+        ),
+        (
+            name: "Void-Born Singularity Relic",
+            type: "item",
+            power_level: 480,
+            reach_extension: 240,
+            hermetic_principle: "Cause/Effect",
+            shadow_trait: "the price of unmaking",
+            description: "A cold sphere suspended between three magnetic rings, licensed past the 16-bit ceiling.",
+            metadata: (
+                hex_palette: ["#000000", "#9B51E0", "#FFFFFF"],
+                logic_flags: ["uses_byte_overflow", "unbounded_gravity"],
+            ),
+        ),
+        (
+            name: "Resonance of the 13th Moon",
+            type: "item",
+            power_level: 130,
+            reach_extension: 120,
+            hermetic_principle: "Rhythm",
+            shadow_trait: "the tempo that cannot be hurried",
+            description: "A tuning fork carved from lunar calcite, vibrating in phase with the tide.",
+            metadata: (
+                hex_palette: ["#050B14", "#56CCF2", "#F4F2EA"],
+                logic_flags: ["lunar_phase", "mtc_transport_lock"],
+            ),
+        ),
+    ],
+)

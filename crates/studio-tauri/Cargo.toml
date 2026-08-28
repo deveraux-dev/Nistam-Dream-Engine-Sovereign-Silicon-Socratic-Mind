@@ -1,0 +1,42 @@
+# The Tauri demo shell — a lightweight sibling demo viewer around .kit.vixi and .forge/ assets.
+# Its own EXCLUDED workspace, same firewall shape as shell/ and sidecar/: the webview stack
+# never enters a main-workspace build, preserving the sub-2s cargo check gate.
+[workspace]
+resolver = "2"
+
+[package]
+name = "studio-tauri"
+version = "0.3.0"
+edition = "2021"
+description = "Forge V3 Demo Shell — lightweight Tauri v2 sibling viewer"
+authors = ["Sean Morin"]
+
+[build-dependencies]
+tauri-build = { version = "2.0", features = [] }
+
+[dependencies]
+tauri = { version = "2.0", features = [] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+forge-vix-v3 = { path = "../forge-vix-v3" }
+forge-daemon-door = { path = "../forge-daemon-door" }
+forge-core-v3 = { path = "../forge-core-v3" }
+forge-calligraphy-v3 = { path = "../forge-calligraphy-v3" }
+forge-mud-v3 = { path = "../forge-mud-v3" }
+forge-cart-v3 = { path = "../forge-cart-v3" }
+forge-canvas-v3 = { path = "../forge-canvas-v3" }
+forge-zones-v3 = { path = "../forge-zones-v3" }
+forge-harmonics = { path = "../forge-harmonics", features = ["musicxml"] }
+forge-tui-v3 = { path = "../forge-tui-v3" }
+forge-gpu-warden-v3 = { path = "../forge-gpu-warden-v3" }
+forge-envelope = { path = "../forge-envelope" }
+forge-ml-bqrouter = { path = "../forge-ml-bqrouter" }
+gemma-s13 = { path = "../gemma-s13" }
+portable-pty = "0.9"
+
+[features]
+default = ["musicxml"]
+musicxml = ["forge-harmonics/musicxml"]
+
+[lints.rust]
+unsafe_code = "deny"

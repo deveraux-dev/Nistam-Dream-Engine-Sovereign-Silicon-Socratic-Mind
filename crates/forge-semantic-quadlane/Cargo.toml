@@ -1,0 +1,17 @@
+# Foreman-promoted from a gated sidecar draft (MIGRATION §M2).
+[package]
+name = "forge-semantic-quadlane"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[dependencies]
+bytemuck = { version = "1", features = ["derive"] }
+# 2026-08-14: EffectDispatcher's budget gate rides forge-core-v3::resolvent::
+# macaulay_pow — a real dependency edge (forge-core-v3 IS Crate Zero, the floor
+# nearly every non-floor crate already stands on), not a widened-law exception.
+forge-core-v3 = { path = "../forge-core-v3" }
+
+[lints]
+workspace = true

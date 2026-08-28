@@ -1,0 +1,42 @@
+//! S08 — DAW Mixer UI integration: MixerCommand dispatch + snapshot.
+//!
+//! Proves: the channel-strip controls (fader/mute/pan) map to MixerCommand
+//! variants the forge-audio bus accepts, and build_snapshot reflects changes.
+//! Staged 2026-07-01 as a Permyriad draft; ported 2026-08-04 to the live f32
+//! hub (SetVolume/SetPan take f32, mute is ToggleMute — no SetMute variant).
+
+use forge_audio_v3::bus::command::MixerCommand;
+use forge_audio_v3::bus::mixer::MixerCommandHub;
+
+#[test]
+fn fader_command_updates_volume() {
+    let mut hub = MixerCommandHub::default();
+    hub.apply_command(MixerCommand::SetVolume { deck: 0, volume: 0.75 });
+    let snap = hub.build_snapshot();
+    assert!(
+        (snap.decks[0].volume - 0.75).abs() < 1e-6,
+        "fader command must update volume, got {}",
+        snap.decks[0].volume
+    );
+}
+
+#[test]
+fn toggle_mute_mutes_channel() {
+    let mut hub = MixerCommandHub::default();
+    hub.apply_command(MixerCommand::ToggleMute { deck: 0 });
+    assert!(hub.build_snapshot().decks[0].muted, "first toggle must set muted=true");
+    hub.apply_command(MixerCommand::ToggleMute { deck: 0 });
+    assert!(!hub.build_snapshot().decks[0].muted, "second toggle must unmute");
+}
+
+#[test]
+fn pan_command_updates_pan() {
+    let mut hub = MixerCommandHub::default();
+    hub.apply_command(MixerCommand::SetPan { deck: 0, pan: -0.4 });
+    let snap = hub.build_snapshot();
+    assert!(
+        (snap.decks[0].pan - (-0.4)).abs() < 1e-6,
+        "pan command must update pan, got {}",
+        snap.decks[0].pan
+    );
+}

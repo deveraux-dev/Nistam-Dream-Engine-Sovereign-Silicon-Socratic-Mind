@@ -1,0 +1,116 @@
+{
+  "meta": {
+    "source": "Bible 004 — Alchemy & Crafting",
+    "notes": "All 9 tinctures. ApothecaryChannel = 180 ticks. Movement-locked. Interrupted by unblocked damage = wasted + bleed."
+  },
+  "tinctures": [
+    {
+      "id": "tin_basilicon",
+      "name": "Basilicon Ointment",
+      "base_type_id": 100,
+      "effect": "Restores Vigor-based HP over time",
+      "potency": 3000,
+      "duration_ticks": 300,
+      "channel_ticks": 180,
+      "cooldown_ticks": 600,
+      "stat_cost": { "resonance": 5 },
+      "description": "Thick paste. Smells like rendered fat and rosemary. Burns going on. Heals underneath."
+    },
+    {
+      "id": "tin_amniotic_purge",
+      "name": "Amniotic Purge",
+      "base_type_id": 101,
+      "effect": "Removes all active debuffs. Reduces Tarnish by potency",
+      "potency": 5000,
+      "duration_ticks": 0,
+      "channel_ticks": 180,
+      "cooldown_ticks": 900,
+      "stat_cost": { "resonance": 8 },
+      "description": "Clear fluid that tastes like salt and iron. Your body rejects everything foreign. Violently."
+    },
+    {
+      "id": "tin_void_extract",
+      "name": "Void Extract",
+      "base_type_id": 102,
+      "effect": "Next attack deals bonus darkness damage equal to potency. Costs Clarity",
+      "potency": 4000,
+      "duration_ticks": 600,
+      "channel_ticks": 180,
+      "cooldown_ticks": 1200,
+      "stat_cost": { "clarity": 10 },
+      "description": "Black. Not dark — black. Light doesn't reflect. It doesn't pour. It moves."
+    },
+    {
+      "id": "tin_quicksilver",
+      "name": "Quicksilver Draught",
+      "base_type_id": 103,
+      "effect": "Momentum buff. Movement and attack speed increased by potency permyriad",
+      "potency": 2500,
+      "duration_ticks": 480,
+      "channel_ticks": 180,
+      "cooldown_ticks": 720,
+      "stat_cost": { "resonance": 3 },
+      "description": "Mercury-bright. Rolls in the vial like it's looking for a way out. Tastes like a battery."
+    },
+    {
+      "id": "tin_giant_phial",
+      "name": "Giant Phial",
+      "base_type_id": 104,
+      "effect": "Size increase. Sprite scale 1.5x. Vigor +potency. Shadow-Weight +potency. Momentum -1500",
+      "potency": 2000,
+      "duration_ticks": 600,
+      "channel_ticks": 180,
+      "cooldown_ticks": 1800,
+      "stat_cost": { "resonance": 12 },
+      "description": "Thick amber syrup. Your bones ache before the growth starts. Everything gets louder."
+    },
+    {
+      "id": "tin_shrink_phial",
+      "name": "Shrink Phial",
+      "base_type_id": 105,
+      "effect": "Size decrease. Sprite scale 0.6x. Momentum +potency. Shadow-Weight -potency. Vigor -1500",
+      "potency": 2000,
+      "duration_ticks": 600,
+      "channel_ticks": 180,
+      "cooldown_ticks": 1800,
+      "stat_cost": { "resonance": 8 },
+      "description": "Pale green. Smells like crushed ants. The world gets bigger. You get faster. Everything can step on you."
+    },
+    {
+      "id": "tin_calcification",
+      "name": "Calcification Tincture",
+      "base_type_id": 106,
+      "effect": "Defense buff. Physical defense increased by potency. Movement reduced by 1500 permyriad",
+      "potency": 3500,
+      "duration_ticks": 480,
+      "channel_ticks": 180,
+      "cooldown_ticks": 900,
+      "stat_cost": { "resonance": 5 },
+      "description": "White powder dissolved in brine. Your skin hardens. Not armor — calcification. Temporary. Hopefully."
+    },
+    {
+      "id": "tin_rorschach",
+      "name": "Rorschach Inkblot",
+      "base_type_id": 107,
+      "effect": "Perception. Reveals hidden geometry, enemy weaknesses, and Shadow proximity for duration. Clarity +potency",
+      "potency": 3000,
+      "duration_ticks": 360,
+      "channel_ticks": 180,
+      "cooldown_ticks": 1200,
+      "stat_cost": { "shadow_weight": 5 },
+      "description": "Dark ink that moves in the vial. When you drink it, you see what was always there. Some of it sees you back."
+    },
+    {
+      "id": "tin_philosopher_crucible",
+      "name": "Philosopher's Crucible",
+      "base_type_id": 108,
+      "effect": "High-risk. ALL stats boosted by potency for duration. On expiry: ALL stats REDUCED by potency for equal duration. If killed during boost: permanent -5 to all stats",
+      "potency": 2500,
+      "duration_ticks": 300,
+      "channel_ticks": 180,
+      "cooldown_ticks": 3600,
+      "stat_cost": { "guilt": 15 },
+      "description": "Gold. Actual gold, suspended in something that shouldn't be liquid. This is the Shield Rod. This is the shortcut. The price comes later."
+    }
+  ]
+}

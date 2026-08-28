@@ -1,0 +1,19 @@
+# DrawList-class types are by-value fixed arenas; debug test threads need
+# more than the 2 MiB std default or STATUS_STACK_OVERFLOW (0xc00000fd).
+[env]
+RUST_MIN_STACK = "16777216"
+# Self-contained builds: cargo's default (no CARGO_TARGET_DIR set) already
+# lands artifacts inside this repo. A machine-wide CARGO_TARGET_DIR env var
+# CANNOT be overridden from here ([env] does not apply to cargo's own
+# target-dir resolution) — on such a machine use scripts/build-shell.ps1,
+# which pins the env var to <repo>/target for the invocation.
+
+[build]
+target-dir = "target"
+
+[target.x86_64-pc-windows-msvc]
+rustflags = [
+    "-C", "link-arg=/FORCE:MULTIPLE",
+    "-C", "link-arg=ucrt.lib",
+    "-C", "link-arg=/STACK:8388608",
+]

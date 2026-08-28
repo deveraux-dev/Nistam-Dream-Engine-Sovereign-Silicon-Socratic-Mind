@@ -1,0 +1,16 @@
+[package]
+name = "goldminer-core-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "Point-at-any-repo 5D ray search engine. Sellable SKU core: offline, no daemon, no LLM."
+
+[lints]
+workspace = true
+
+[dependencies]
+forge-ml-bqrouter = { path = "../forge-ml-bqrouter" }
+
+[dev-dependencies]
+tempfile = "3"

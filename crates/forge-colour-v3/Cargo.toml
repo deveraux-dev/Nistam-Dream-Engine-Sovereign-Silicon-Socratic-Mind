@@ -1,0 +1,25 @@
+# T1 of the forge-vision drain (plan-2-welds.md tranche table, 2026-08-11):
+# the 11a colour ledger re-founded onto the penteract floor. ColourTrit8 is
+# the 8-byte Munsell word; the OKLCH bridge projects it onto Crate Zero's
+# OklchColor. Depends only on Crate Zero — harmony/palette logic arrives in
+# later tranches as functions over these two types, never as a second home.
+[package]
+name = "forge-colour-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+
+[dependencies]
+forge-core-v3 = { path = "../forge-core-v3" }
+
+# The HUD swatch strip (xtask, zero-dependency by its own law) mounts
+# src/trit.rs textually via #[path], the sky.rs precedent: one definition on
+# disk, two compile targets, no cargo edge. The same `sky-mount` feature name
+# tells the file it is riding inside xtask and must compile data-only.
+[features]
+sky-mount = []
+
+[lints]
+workspace = true

@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>RAMUSPRIME — First Square Atlas</title>
+<!--
+  RAMUSPRIME forward-facing atlas — Thornbell Parish, the first square.
+  REFIT 2026-08-12 (ARCH000: "cdk_wireframe.rs and abyss forge-zone — its
+  already a thing, just make it this"): the atlas now IS the existing machine —
+  every cell is a 5D CDK cell, clicks are G19 atomic-bridge contacts, the Bell
+  Pit runs the abyss forge-zone laws. Wire-for-wire seams:
+    forge-game-systems/src/cdk.rs           Triad{love,strife -3700..3700; entropy 0..10000},
+                                            to_channels() -> [0..1000;3] (:16-21,69-74)
+    forge-game-systems/examples/cdk_wireframe.rs  bar(): 6-char '#'/'.' strip, (v*6)/1000 (:10-13);
+                                            z-walk rows z in [4,0,-4,-12] (:57-64);
+                                            faction "thornhaven_guard" (:98) = datapack faction_rooms word
+    forge-studio/src/cdk_verb.rs            colour(): strife->R love->G entropy->B, /1000*255 (:38-42);
+                                            verdict BOUND|DISSONANT (:122); shade floor 350/1000 (:80-84)
+    forge-zones/src/normalized_zone.rs      light = 10000-((10000-500)*density)/10000, ABYSSAL_FLOOR_PMY=500
+                                            "dark, never black" (:279-296,482); drag floor 6000 (:255-285);
+                                            buoyancy=(depth_mu.min(5000)*2)/1000, CAP 5000 MU (:289)
+    forge-audio/src/dimensional_collapse.rs Point5D{x_mu,y_mu,z_semantic,w_tick,theta_mdeg} (:27-33);
+                                            axis map X->pan/ITD Y->gain/lowpass Z->pitch θ->timbre W->drift (:8-13);
+                                            atomic_bridge strike_audio: one contact -> SEE + HEAR,
+                                            integer SoT, float only past render boundary (:530-565)
+    shell/src/hud.rs :33-37,116-128 · xtask/src/hud.rs mudtile :764 · sky.rs :127-247
+    .forge/mud/mud.live sampled 2026-08-12 · carts/ironroot/npe.ironroot.ron
+  PROOF-STATE per entry (L12): OBSERVED | CANON | AUTHORED | ASSUMED.
+  Triad VALUES here are AUTHORED deterministic samples standing in for
+  cdk.rs::triad(mind,cell,haunt) — the FORMATS are the donors' own.
+-->
+<style>
+  :root{
+    --bg:#0d0d14; --panel:#12121c; --border:#1e1e2e;
+    --text:#c4a882; --accent:#c4a035; --accent-dim:#8a7025;
+    --ink:#ffd2a1; --alarm:#ff5a3c; --plate:#100c08; --void:#100C17;
+    --love:#4a9a4a; --strife:#c04040; --entropy:#8a5ad0;   /* cdk_verb lane hues :69-75 */
+    --danger:#8a3030; --success:#308a45;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font:12px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+  #hudrow{background:var(--plate);color:var(--ink);padding:4px 8px;letter-spacing:1px;border-bottom:1px solid var(--border);white-space:nowrap;overflow:hidden}
+  #hudrow b{color:var(--accent)}
+  #main{flex:1;display:flex;min-height:0}
+  #stage{flex:1;display:flex;align-items:center;justify-content:center;position:relative;background:
+    radial-gradient(ellipse at 50% -20%, #1a1626 0%, var(--bg) 55%)}
+  canvas{image-rendering:pixelated;cursor:crosshair;box-shadow:0 0 40px #000}
+  #layers{position:absolute;left:10px;top:10px;display:flex;flex-direction:column;gap:4px}
+  .chip{background:var(--panel);border:1px solid var(--border);color:var(--text);padding:3px 8px;cursor:pointer;user-select:none;opacity:.55;transition:opacity .15s}
+  .chip:hover{opacity:1}
+  .chip.on{border-color:var(--accent);color:var(--accent);opacity:1}
+  .chip.under.on{border-color:var(--alarm);color:var(--alarm)}
+  #inspect{width:320px;background:var(--panel);border-left:1px solid var(--border);padding:10px;overflow-y:auto;display:none}
+  #inspect.open{display:block}
+  #inspect h2{color:var(--accent);font-size:13px;margin-bottom:2px}
+  #inspect .kind{color:var(--accent-dim);text-transform:uppercase;letter-spacing:2px;font-size:10px;margin-bottom:8px}
+  #inspect .row{margin:3px 0;line-height:1.5}
+  #inspect .k{color:var(--accent-dim)}
+  #inspect .proof{font-size:9px;letter-spacing:1px;padding:1px 4px;border:1px solid var(--border)}
+  .proof.CANON{color:var(--success)} .proof.OBSERVED{color:var(--ink)}
+  .proof.AUTHORED{color:var(--accent)} .proof.ASSUMED{color:var(--alarm)}
+  #inspect pre{background:var(--plate);border:1px solid var(--border);padding:6px;margin:6px 0;font-size:11px;line-height:1.55;overflow-x:auto}
+  #inspect .lv{color:var(--love)} #inspect .st{color:var(--strife)} #inspect .en{color:var(--entropy)}
+  #inspect .verdict-BOUND{color:var(--success)} #inspect .verdict-DISSONANT{color:var(--alarm)}
+  #inspect .under-note{color:var(--alarm);margin-top:8px;border-top:1px dashed var(--danger);padding-top:6px}
+  #footer{background:var(--plate);border-top:1px solid var(--border);padding:3px 8px;color:var(--accent-dim);display:flex;justify-content:space-between}
+  #footer .front-line{color:var(--text)} #footer .under-line{color:var(--alarm);display:none}
+  body.under-on #footer .front-line{display:none}
+  body.under-on #footer .under-line{display:inline}
+  #wiresBtn{cursor:pointer;color:var(--accent-dim)} #wiresBtn:hover{color:var(--accent)}
+  #wires{position:absolute;right:330px;bottom:30px;width:460px;max-height:62%;overflow-y:auto;background:var(--panel);border:1px solid var(--border);padding:8px;display:none;font-size:10px}
+  #wires.open{display:block}
+  #wires td{padding:1px 6px;vertical-align:top}#wires td:first-child{color:var(--accent)}
+</style>
+</head>
+<body>
+<div id="hudrow">T <b>4</b> &nbsp;SEED <b>0x0e8f3a7952841f88</b> &nbsp;ERA <b>Void</b> &nbsp;SKY <b>storm</b> &nbsp;AIR <b>fist</b> &nbsp;<b>the Ashborn Legion</b> &nbsp;standing <b>unremarked</b> &nbsp;— THORNBELL PARISH, THE FIRST SQUARE</div>
+
+<div id="main">
+  <div id="stage">
+    <div id="layers">
+      <div class="chip on" data-layer="npcs">PRESENCES</div>
+      <div class="chip on" data-layer="items">ITEMS</div>
+      <div class="chip on" data-layer="exits">EXITS</div>
+      <div class="chip" data-layer="cdk">CDK FIELD</div>
+      <div class="chip" data-layer="stars">STAR MAP</div>
+      <div class="chip under" data-layer="under">WHAT THE MAP DOESN'T SHOW</div>
+    </div>
+    <canvas id="cv" width="520" height="640"></canvas>
+    <div id="wires"><table id="wiretable"></table></div>
+  </div>
+  <div id="inspect"></div>
+</div>
+
+<div id="footer">
+  <span>
+    <span class="front-line">Welcome to Thornbell Parish! Eat well, be kind, and mind the curfew bells.</span>
+    <span class="under-line">ROADS LIE. THE SONGS LIE. ONLY ACCOUNTS REMAIN TRUE. — XIII is a subtraction.</span>
+  </span>
+  <span id="wiresBtn">[ WIRES ]</span>
+</div>
+
+<script>
+'use strict';
+// ───────────────────────────────────────────────────────────────────────────
+// GROUND + PLACES (unchanged from v1 weld; receipts in header comment)
+// ───────────────────────────────────────────────────────────────────────────
+const RAMPS = { // donor 41F51479 :245 [OBSERVED]
+  stone:['#3a3a3a','#4a4a4a','#5a5a5a','#6a6a6a'],
+  grass:['#1a3a1a','#2a5a2a','#3a7a3a','#4a9a4a'],
+  dirt:['#3a2a1a','#5a4a2a','#6a5a3a','#7a6a4a'],
+  water:['#1a3a6a','#2a5a8a','#3a7aaa','#4a9aca'],
+  sand:['#8a7a5a','#9a8a6a','#aa9a72','#baa87a'],
+};
+const CELL=36, GRID=13, ORIGIN_Y=120;
+const G='grass',S='stone',D='dirt',W='water',A='sand';
+const GROUND=[
+ [G,G,S,S,S,S,S,S,S,S,S,G,G],
+ [G,S,S,S,S,S,S,S,S,S,S,S,G],
+ [D,S,S,D,D,D,D,D,D,D,S,S,D],
+ [D,S,D,D,S,S,S,S,S,D,D,S,D],
+ [D,S,D,S,S,S,S,S,S,S,D,S,D],
+ [D,S,D,S,S,W,W,W,S,S,D,S,D],
+ [D,S,D,S,S,W,S,W,S,S,D,S,D],
+ [D,S,D,S,S,W,W,W,S,S,D,S,D],
+ [D,S,D,S,S,S,S,S,S,S,D,S,D],
+ [D,S,D,D,S,S,S,S,S,D,D,S,D],
+ [D,S,S,D,D,D,D,D,D,D,S,S,D],
+ [G,S,S,S,S,A,A,A,S,S,S,S,G],
+ [G,G,G,G,S,A,A,A,S,G,G,G,G],
+];
+const PLACES=[
+ {x:6,y:0, glyph:'†', name:'Parish Shrine', kind:'landmark', proof:'CANON', wire:'IRONROOT-MVP-AUTHORED-CANON.md:15',
+  note:'Candle cairns and cracked bowls, never animal shrines (event revision p.1).',
+  era:{golden:'thornhaven_courtyard_golden.png',decay:'thornhaven_courtyard_decay.png'}},
+ {x:2,y:3, glyph:'⚒', name:'Bellwright Forge', kind:'landmark', proof:'CANON', wire:'IRONROOT-MVP-AUTHORED-CANON.md:15'},
+ {x:10,y:3, glyph:'⚖', name:'Market Row', kind:'landmark', proof:'CANON', wire:'IRONROOT-MVP-AUTHORED-CANON.md:15',
+  era:{golden:'thornhaven_market_golden.png',decay:'thornhaven_market_decay.png'}},
+ {x:2,y:9, glyph:'‖', name:'Witness Rail', kind:'landmark', proof:'CANON', wire:'IRONROOT-MVP-AUTHORED-CANON.md:15'},
+ {x:10,y:9, glyph:'⌂', name:'Parish Inn', kind:'landmark', proof:'ASSUMED', wire:'thornhaven_inn era set (census); not in canon landmark list',
+  era:{golden:'thornhaven_inn_golden.png',decay:'thornhaven_inn_decay.png'}},
+ {x:6,y:12, glyph:'▼', name:'the Toll Gate', kind:'exit', dir:'south, out', proof:'CANON', wire:'IRONROOT-MVP-AUTHORED-CANON.md:15,86',
+  note:'The gate bell tolls a NUMBER equal to your material gap.',
+  era:{golden:'thornhaven_gate_golden.png',decay:'thornhaven_gate_decay.png'}},
+ {x:6,y:6, glyph:'◌', name:'the Bell Pit stair', kind:'exit', dir:'down', abyss:true, proof:'CANON', wire:'IRONROOT-MVP-AUTHORED-CANON.md:22-27',
+  note:'Descends to the Under-Orchard: Root Cellar, Toll Drain, Bell Vein, Spirit Fold, Grave-Mine. The descent runs the ABYSS domain laws below.'},
+ {x:12,y:2, glyph:'▶', name:'orchard lane', kind:'exit', dir:'east', proof:'AUTHORED', wire:'connective; Under-Orchard sits beneath (CANON.md:22)'},
+ {x:5,y:11, glyph:'V', name:'Toll-Sister Vey', kind:'presence', proof:'CANON', wire:'IRONROOT-MVP-AUTHORED-CANON.md:68,85',
+  note:'She stops mid-count and looks at your hands, not your face.'},
+ {x:3,y:3, glyph:'B', name:'the Bellwright', kind:'presence', proof:'CANON', wire:'name CANON.md:15; role npe.ironroot.ron [AUTHORED]'},
+ {x:9,y:4, glyph:'O', name:'Index Clerk Oth', kind:'presence', proof:'CANON', wire:'IRONROOT-MVP-AUTHORED-CANON.md:87'},
+ {x:10,y:5, glyph:'M', name:'Mara of the Free Guilds', kind:'presence', proof:'CANON', wire:'IRONROOT-MVP-AUTHORED-CANON.md:80'},
+ {x:7,y:12, glyph:'d', name:'a rooted deserter', kind:'presence', hostile:true, proof:'CANON',
+  wire:'event revision p.1; first task target, npe.ironroot.ron', note:'First task: KillOne, reward 100 xp.'},
+ {x:5,y:12, glyph:'✦', name:'kit item the first', kind:'item', proof:'OBSERVED', wire:'game.rs:526-550 kit()',
+  note:'Provenance dealt: unrecorded | outlasted | handed down | written back | clean entry.'},
+ {x:6,y:11, glyph:'✦', name:'kit item the second', kind:'item', proof:'OBSERVED', wire:'game.rs:526-550; itemforge.rs:19-34'},
+ {x:7,y:11, glyph:'✦', name:'kit item the third', kind:'item', proof:'OBSERVED', wire:'game.rs:526-550'},
+];
+const SECRETS=[
+ {x:1,y:6, glyph:'⸮', name:'a root vein', kind:'secret', proof:'OBSERVED', wire:'Welcome png legend; Rootcalling CANON.md:55',
+  note:'The paint is thin here. Look beneath.'},
+ {x:6,y:9, glyph:'┄', name:'an erasure route', kind:'secret', path:[[6,12],[6,9],[6,6]], proof:'OBSERVED',
+  wire:'Welcome png legend; disclosure ladder p.1', note:'Gate to pit, straight through the square.'},
+ {x:11,y:11, glyph:'◉', name:'a watcher seat', kind:'secret', proof:'OBSERVED', wire:'Welcome png legend WATCHER SEAT'},
+ {x:9,y:3, glyph:'▽', name:'the name pit', kind:'secret', proof:'OBSERVED', wire:'Welcome png legend NAME PIT',
+  note:'Under Market Row. Names go in. Accounts come out.'},
+ {x:1,y:1, glyph:'☘', name:'a void leak', kind:'secret', proof:'OBSERVED', wire:'Welcome png legend VOID LEAK',
+  note:'The hollow era bleeds through. Colour word: Void Pitch #100C17.'},
+ {x:12,y:6, glyph:'XIII', name:'the subtraction', kind:'secret', proof:'CANON',
+  wire:'Welcome png footer; CANON.md:56; accounts.rs:12-26',
+  note:'Thirteen moons, thirteen accounts, twelve places on the lie-map. Find what the story forgot.'},
+];
+const STARS=[
+ {n:'Polaris',c:'Ursa Minor',mag:19800,cls:'GuideStar',rgb:'#FFF4EA',az:260,alt:18,north:true},
+ {n:'Sirius',c:'Canis Major',mag:-14600,cls:'SpiritFire',rgb:'#CAD7FF',az:60,alt:64},
+ {n:'Rigel',c:'Orion',mag:1300,cls:'GuideStar',rgb:'#AABFFF',az:100,alt:72},
+ {n:'Betelgeuse',c:'Orion',mag:4200,cls:'GuideStar',rgb:'#FFCC6F',az:118,alt:52},
+ {n:'Capella',c:'Auriga',mag:800,cls:'GuideStar',rgb:'#FFF4EA',az:180,alt:40},
+ {n:'Procyon',c:'Canis Minor',mag:3400,cls:'GuideStar',rgb:'#FFF4EA',az:80,alt:88},
+ {n:'Morning Star',c:'Venus',mag:-46000,cls:'SpiritFire',rgb:'#FFFFFF',az:20,alt:96},
+ {n:'Deneb',c:'Cygnus',mag:12500,cls:'GuideStar',rgb:'#CAD7FF',az:330,alt:30},
+ {n:'Altair',c:'Aquila',mag:7700,cls:'GuideStar',rgb:'#CAD7FF',az:370,alt:58},
+ {n:'Spica',c:'Virgo',mag:9700,cls:'GuideStar',rgb:'#CAD7FF',az:430,alt:80},
+ {n:'Vega',c:'Lyra',mag:300,cls:'GuideStar',rgb:'#CAD7FF',az:300,alt:50},
+ {n:'Arcturus',c:'Boötes',mag:-500,cls:'SpiritFire',rgb:'#FFD2A1',az:470,alt:44},
+ {n:'Pleiades',c:'Taurus',mag:16000,cls:'GuideStar',rgb:'#CAD7FF',az:150,alt:22},
+ {n:'Big Dipper',c:'Ursa Major',mag:18000,cls:'GuideStar',rgb:'#CAD7FF',az:225,alt:34},
+ {n:'Andromeda Galaxy',c:'Andromeda',mag:34400,cls:'AncestorLight',rgb:'#E8E0D0',az:400,alt:14},
+ {n:'Milky Way',c:'Galactic Band',mag:-65000,cls:'SpiritFire',rgb:'#D4C8B0',az:260,alt:8,band:true},
+];
+
+// ───────────────────────────────────────────────────────────────────────────
+// CDK — the existing thing, ported format-for-format.
+// Triad channels 0..1000 (cdk.rs:69-74). Values here: AUTHORED deterministic
+// stand-in for cdk.rs::triad(mind,cell,haunt) [cdk.rs:108-123].
+// ───────────────────────────────────────────────────────────────────────────
+const ERA_T={Ancient:0,Golden:1,Decay:2,Void:3};           // lore_registry.rs:7
+const LIVE={tick:4,era:'Void',sky:'storm',faction:'thornhaven_guard'}; // mud.live + cdk_wireframe.rs:98 faction word
+function cell5d(x,y,z){ // CDK Cell axes x,y,z,t,s (cdk.rs:119-140) + collapse Point5D twin
+  return {x,y,z, t:LIVE.tick, s:ERA_T[LIVE.era]};
+}
+function cdkTriad(c){ // AUTHORED sample dealer — integer, deterministic, seed-stable
+  let h=((c.x*73856093)^(c.y*19349663)^(c.z*83492791)^(c.t*2971215073)^(c.s*40503))>>>0;
+  h^=h>>13; h=(h*2654435761)>>>0;
+  return {love:h%1001, strife:(h>>10)%1001, entropy:(h>>20)%1001};
+}
+function bar(v){ // cdk_wireframe.rs:10-13 verbatim shape: (v.clamp(0,1000)*6)/1000
+  const f=Math.floor(Math.min(Math.max(v,0),1000)*6/1000);
+  let s=''; for(let i=0;i<6;i++)s+=(i<f?'#':'.'); return s;
+}
+function cdkRGB(t){ // cdk_verb.rs:38-42: strife->R love->G entropy->B, /1000 -> /255
+  const q=v=>Math.min(255,Math.floor(Math.min(Math.max(v,0),1000)*255/1000));
+  return [q(t.strife),q(t.love),q(t.entropy)];
+}
+function verdict(t){ // cdk_verb.rs:122 exit 0=BOUND 1=DISSONANT; rule [ASSUMED]: love holds the room
+  return t.love>=t.strife ? 'BOUND':'DISSONANT';
+}
+// ABYSS forge-zone laws — normalized_zone.rs:255-296 [OBSERVED], integer-closed
+const ABYSSAL_FLOOR_PMY=500, DRAG_FLOOR_PMY=6000, BUOYANCY_CAP_MU=5000, HALF_CELLS=16;
+const lightPmy=d=>10000-Math.floor((10000-ABYSSAL_FLOOR_PMY)*d/10000);
+const dragPmy=d=>10000-Math.floor((10000-DRAG_FLOOR_PMY)*d/10000);
+const buoyMu=depth=>Math.floor(Math.min(depth,BUOYANCY_CAP_MU)*2/1000);
+const densityAt=z=>z>=0?0:Math.min(10000,Math.floor(-z*10000/HALF_CELLS));
+// DIMENSIONAL COLLAPSE — Point5D -> stereo, Sean's axis map (dimensional_collapse.rs:8-13)
+// integer SoT; floats only at the WebAudio boundary (the doc's own render law :15-19)
+function collapse(x,y,z,theta_seed){
+  const x_mu=Math.floor((x*2-GRID)*10000/GRID);            // X -> pan pmy (strike_audio :545)
+  const depth_mu=z<0?-z*1000:0;                            // Y(down) -> depth (:546)
+  const density=densityAt(z);
+  const gain_pmy=lightPmy(density);                        // depth swallows loudness as it swallows light
+  const z_sem=Math.abs((x+y+z)%24);
+  const root_hz=40+Math.floor(z_sem*160/24);               // Z -> pitch, strike inverse (:547 clamp 40..200)
+  const theta_mdeg=(theta_seed>>>0)%360000;                // θ -> timbre/phase (:548)
+  return {x_mu, depth_mu, gain_pmy, root_hz, theta_mdeg, w_tick:LIVE.tick};
+}
+let AC=null;
+function hear(f){ // the HEAR half of the atomic bridge (strike_audio :530-565)
+  try{
+    AC=AC||new (window.AudioContext||window.webkitAudioContext)();
+    const o=AC.createOscillator(), g=AC.createGain(), p=AC.createStereoPanner();
+    o.frequency.value=f.root_hz;
+    o.type=(f.theta_mdeg%2===0)?'triangle':'sawtooth';     // overtone lane, coarse
+    p.pan.value=Math.max(-1,Math.min(1,f.x_mu/10000));
+    const amp=0.12*f.gain_pmy/10000;
+    g.gain.setValueAtTime(amp,AC.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.0001,AC.currentTime+0.28);
+    o.connect(g);g.connect(p);p.connect(AC.destination);
+    o.start();o.stop(AC.currentTime+0.3);
+  }catch(e){/* no audio device — SEE face still lands */}
+}
+function cdkPanel(c){ // strips + collapse readout for the inspector
+  const t=cdkTriad(c), [r,gg,b]=cdkRGB(t), v=verdict(t);
+  const f=collapse(c.x,c.y,c.z,(t.love<<20)^(t.strife<<10)^t.entropy);
+  hear(f); // one contact -> SEE + HEAR
+  return `<pre>CELL 5D  x ${c.x}  y ${c.y}  z ${c.z}  t ${c.t}  s ${c.s} (${LIVE.era})
+<span class="lv">love    ${bar(t.love)} ${String(t.love).padStart(4)}</span>
+<span class="st">strife  ${bar(t.strife)} ${String(t.strife).padStart(4)}</span>
+<span class="en">entropy ${bar(t.entropy)} ${String(t.entropy).padStart(4)}</span>
+verdict <span class="verdict-${v}">${v}</span>  rgb(${r},${gg},${b})  faction ${LIVE.faction}
+── collapse (X pan · Y gain · Z pitch · θ timbre · W drift) ──
+pan ${f.x_mu} pmy · gain ${f.gain_pmy} pmy · root ${f.root_hz} Hz · θ ${f.theta_mdeg} mdeg · W t${f.w_tick}</pre>
+<div class="row"><span class="k">bridge</span> one contact → SEE + HEAR (G19 atomic_bridge, dimensional_collapse.rs:530)</div>`;
+}
+function abyssPanel(){ // the z-walk, cdk_wireframe.rs:57-64 rows, abyss laws live
+  const rows=[4,0,-4,-12].map(z=>{
+    const d=densityAt(z), L=lightPmy(d), depth=z<0?-z*1000:0;
+    const shade=Math.floor(16+(L/10000)*180);
+    return `<span style="color:rgb(${shade},${Math.floor(shade*0.86)},${Math.floor(shade*0.6)})">z ${String(z).padStart(3)}  light ${bar(Math.floor(L/10))} ${String(L).padStart(5)} pmy  drag ${dragPmy(d)}  buoy ${buoyMu(depth)} mu/t${L<=ABYSSAL_FLOOR_PMY?'  ← THE FLOOR (dark, never black)':''}</span>`;
+  }).join('\n');
+  return `<pre>THE DESCENT — abyss domain (Medium flips, surface follows)
+${rows}
+floors: light ${ABYSSAL_FLOOR_PMY} · drag ${DRAG_FLOOR_PMY} · buoyancy cap ${BUOYANCY_CAP_MU} MU
+you float back: buoyancy grows with depth to the cap, then holds</pre>
+<div class="row"><span class="k">wire</span> normalized_zone.rs:255-296; world.rs:1093-1107,1937; z-walk cdk_wireframe.rs:57-64</div>`;
+}
+
+// ── render ────────────────────────────────────────────────────────────────
+const cv=document.getElementById('cv'),cx=cv.getContext('2d');
+const layers={npcs:true,items:true,exits:true,cdk:false,stars:false,under:false};
+let picked=null;
+function rseed(x,y){let h=(x*73856093)^(y*19349663);h^=h>>13;return ((h>>>0)%4);}
+function draw(){
+  cx.fillStyle='#0d0d14';cx.fillRect(0,0,520,640);
+  const skyG=cx.createLinearGradient(0,0,0,ORIGIN_Y);
+  skyG.addColorStop(0,'#100C17');skyG.addColorStop(1,'#1a1626');
+  cx.fillStyle=skyG;cx.fillRect(0,0,520,ORIGIN_Y);
+  if(layers.stars){
+    cx.fillStyle='rgba(212,200,176,0.07)';cx.fillRect(0,ORIGIN_Y-38,520,26);
+    for(const s of STARS){
+      const y=ORIGIN_Y-6-s.alt, r=Math.max(1.2,(70000-s.mag)/70000*3.4);
+      cx.beginPath();cx.arc(s.az,y,s.band?0.1:r,0,7);cx.fillStyle=s.rgb;cx.fill();
+      if(s.cls==='SpiritFire'){cx.beginPath();cx.arc(s.az,y,r+2.5,0,7);cx.strokeStyle=s.rgb+'44';cx.stroke();}
+      if(s.north){cx.strokeStyle='#c4a035';cx.beginPath();cx.moveTo(s.az,y+8);cx.lineTo(s.az,ORIGIN_Y);cx.stroke();
+        cx.fillStyle='#c4a035';cx.fillText('N',s.az-3,y-8);}
+    }
+  } else {
+    cx.fillStyle='#2a2438';cx.fillText('storm — sky word from mud.live',16,26);
+  }
+  cx.fillStyle='#6a5a3a';cx.fillText('THORNBELL PARISH · THE FIRST SQUARE · era Void (mud.live)',16,ORIGIN_Y-8);
+  for(let y=0;y<GRID;y++)for(let x=0;x<GRID;x++){
+    if(layers.cdk){ // CDK FIELD: paint every cell its triad colour (cdk_verb colour law)
+      const [r,g,b]=cdkRGB(cdkTriad(cell5d(x,y,0)));
+      // shade floor 350/1000 (cdk_verb.rs:80-84) — never fully dark
+      cx.fillStyle=`rgb(${Math.max(r*0.35,r*0.35)|0||r},${g},${b})`;
+      cx.fillStyle=`rgb(${r},${g},${b})`;
+      cx.globalAlpha=0.85;
+      cx.fillRect(26+x*CELL,ORIGIN_Y+y*CELL,CELL-1,CELL-1);
+      cx.globalAlpha=1;
+    } else {
+      cx.fillStyle=RAMPS[GROUND[y][x]][rseed(x,y)];
+      cx.fillRect(26+x*CELL,ORIGIN_Y+y*CELL,CELL-1,CELL-1);
+    }
+  }
+  if(layers.under){
+    cx.fillStyle='rgba(16,12,23,0.55)';cx.fillRect(26,ORIGIN_Y,GRID*CELL,GRID*CELL);
+    for(const s of SECRETS){
+      if(s.path){cx.strokeStyle='#ff5a3c';cx.setLineDash([4,4]);cx.beginPath();
+        cx.moveTo(26+s.path[0][0]*CELL+CELL/2,ORIGIN_Y+s.path[0][1]*CELL+CELL/2);
+        for(const p of s.path)cx.lineTo(26+p[0]*CELL+CELL/2,ORIGIN_Y+p[1]*CELL+CELL/2);
+        cx.stroke();cx.setLineDash([]);}
+      cx.fillStyle='#b48ead';
+      cx.font=(s.glyph.length>2?'bold 10px':'13px')+' monospace';
+      cx.fillText(s.glyph,26+s.x*CELL+9,ORIGIN_Y+s.y*CELL+23);
+      cx.font='12px monospace';
+    }
+  }
+  for(const p of PLACES){
+    const show= p.kind==='presence'?layers.npcs : p.kind==='item'?layers.items :
+                p.kind==='exit'?layers.exits : true;
+    if(!show)continue;
+    const px=26+p.x*CELL,py=ORIGIN_Y+p.y*CELL;
+    if(p.kind==='landmark'){cx.strokeStyle='#c4a035';cx.strokeRect(px+2,py+2,CELL-5,CELL-5);}
+    cx.fillStyle= p.hostile?'#ff5a3c': p.kind==='item'?'#ffd2a1': p.kind==='exit'?'#4a9aca':'#c4a882';
+    cx.font='13px monospace';cx.fillText(p.glyph,px+12,py+23);cx.font='12px monospace';
+    if(picked===p){cx.strokeStyle='#ffd2a1';cx.strokeRect(px,py,CELL-1,CELL-1);}
+  }
+}
+// ── clicks: every contact is the bridge ───────────────────────────────────
+const insp=document.getElementById('inspect');
+function inspect(o,extra){
+  picked=o;
+  const rows=Object.entries(o).filter(([k])=>!['x','y','glyph','path','era','abyss','hostile'].includes(k))
+    .map(([k,v])=>`<div class="row"><span class="k">${k}</span> ${k==='proof'?`<span class="proof ${v}">${v}</span>`:v}</div>`).join('');
+  const era=o.era?`<div class="row"><span class="k">era faces</span> golden → ${o.era.golden}<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;decay → ${o.era.decay}</div>`:'';
+  insp.innerHTML=`<h2>${o.name||o.n}</h2><div class="kind">${o.kind||o.cls}</div>${rows}${era}${extra||''}
+    ${o.kind==='secret'?'<div class="under-note">The kindness is for you. The order is for them.</div>':''}`;
+  insp.classList.add('open');draw();
+}
+cv.addEventListener('click',e=>{
+  const r=cv.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;
+  if(my<ORIGIN_Y&&layers.stars){
+    let best=null,bd=1e9;
+    for(const s of STARS){const d=Math.hypot(s.az-mx,(ORIGIN_Y-6-s.alt)-my);if(d<bd){bd=d;best=s;}}
+    if(best&&bd<16){inspect({name:best.n,kind:'star · '+best.cls,constellation:best.c,
+      mag_permyriad:best.mag, colour_word:best.rgb, proof:'OBSERVED',
+      wire:'forge-core-v3/sky.rs:127-247'+(best.north?' · wayfinding home :172-179 (position AUTHORED)':' (position AUTHORED)')});return;}
+  }
+  const gx=Math.floor((mx-26)/CELL),gy=Math.floor((my-ORIGIN_Y)/CELL);
+  if(gx<0||gy<0||gx>=GRID||gy>=GRID){insp.classList.remove('open');picked=null;draw();return;}
+  const c=cell5d(gx,gy,0);
+  const pool=[...(layers.under?SECRETS:[]),...PLACES.filter(p=>
+    p.kind==='presence'?layers.npcs:p.kind==='item'?layers.items:p.kind==='exit'?layers.exits:true)];
+  const hit=pool.find(p=>p.x===gx&&p.y===gy);
+  if(hit) inspect(hit, hit.abyss? abyssPanel() : cdkPanel(c));
+  else inspect({name:GROUND[gy][gx]+' ground',kind:'tile',proof:'AUTHORED',
+    wire:'ramp: asset-brainstorm :245; lattice home: forge-mud-v3 world.rs (81×81 trit)'}, cdkPanel(c));
+});
+document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{
+  const l=c.dataset.layer;layers[l]=!layers[l];c.classList.toggle('on',layers[l]);
+  document.body.classList.toggle('under-on',layers.under);draw();
+}));
+const WIRES=[
+ ['cdk triad','cdk.rs:16-21 Triad{love,strife -3700..3700; entropy 0..10000}; channels 0..1000 :69-74'],
+ ['cdk strips','cdk_wireframe.rs:10-13 bar() 6-char #/. — ported verbatim; z-walk :57-64'],
+ ['cdk colour','cdk_verb.rs:38-42 strife→R love→G entropy→B; verdict BOUND|DISSONANT :122'],
+ ['cdk faction','cdk_wireframe.rs:98 resolves "thornhaven_guard" — same word as datapack faction_rooms'],
+ ['triad VALUES','AUTHORED deterministic sample — real dealer is cdk.rs::triad(mind,cell,haunt) :108-123'],
+ ['abyss light','normalized_zone.rs:279-296 light=10000-(9500·density)/10000, FLOOR 500 "dark, never black"'],
+ ['abyss float','normalized_zone.rs:255-289 buoyancy=(depth.min(5000)·2)/1000; drag floor 6000'],
+ ['abyss medium','world.rs:1093-1107 Zone{domain Air|Water, water_level_cells ±16, island}'],
+ ['atomic bridge','dimensional_collapse.rs:530-565 strike_audio: one contact → SEE + HEAR, integer SoT'],
+ ['5D axis map','dimensional_collapse.rs:8-13 X→pan Y→gain Z→pitch θ→timbre W→drift (Sean 2026-07-08)'],
+ ['hud row/inks','shell/src/hud.rs:33-37,116-128; mudtile sibling xtask/src/hud.rs:685-769'],
+ ['star catalog','forge-core-v3/sky.rs:127-247 verbatim; positions ATLAS-AUTHORED (:96-110 holds none)'],
+ ['names/places','IRONROOT-MVP-AUTHORED-CANON.md:15,22-27,68,80,85-87; secrets: Welcome png legend'],
+ ['disclosure','disclosure_policy.rs:3-5 — UNDER off by default (Sensory stage)'],
+ ['birth kit','game.rs:526-550; provenance itemforge.rs:19-34; words npe.ironroot.ron'],
+ ['atlas crate','forge-atlas-v3 STUB; AtlasCell awaits B3 — cell5d/triad/collapse here are its target face'],
+];
+document.getElementById('wiretable').innerHTML=WIRES.map(w=>`<tr><td>${w[0]}</td><td>${w[1]}</td></tr>`).join('');
+document.getElementById('wiresBtn').addEventListener('click',()=>document.getElementById('wires').classList.toggle('open'));
+draw();
+</script>
+</body>
+</html>

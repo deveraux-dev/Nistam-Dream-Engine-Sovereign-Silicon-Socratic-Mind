@@ -1,0 +1,105 @@
+// The 5 crafting ethics paths — as a PARARITY structure, not a flat list.
+//
+// Values ported verbatim from F:\NewRepo\crates\forge-reactions\src\substrate.rs:70-123.
+// The grouping below is the structure those values already have; nothing is re-tuned.
+//
+// ── WHY THIS IS 3-BASED, MIRRORING CDK ──────────────────────────────────────
+//
+// `PARARITY.md` §3 Prop. 1: n = 2m + k. Five paths resolve as m=2, k=1 — two
+// mirror pairs and one fixed point. Cor. 1 forces it: 5 is odd, so any involution
+// on the set MUST fix at least one member.
+//
+//   Exploit  <->  Release     (the taking/giving mirror)
+//   Bargain  <->  Replace     (the binding/shedding mirror)
+//   Preserve      FIXED       (Fix(f) — the mirror does not move it)
+//
+// PRESERVE is the fixed point in the DATA, not by assertion: every pressure lane
+// it carries is exactly 0 (obligation, hostility, crown, ecology, difficulty,
+// shimmer). It pushes nothing. It only raises world_stability. That is precisely
+// what `forge_core_v3::cdk::Triad`'s entropy lane is documented as — "what neither
+// love nor strife holds" (cdk.rs:49) — the state reflection leaves where it stands.
+//
+// The mirror is exact where the lane is unambiguous:
+//   fae_hostility_q   Exploit +3000  <->  Release -3000
+//   crown_temptation  Exploit +2000  <->  Release -2000
+// and sign-flipping on the pair axis for Bargain/Replace:
+//   obligation_q      Bargain +1500  <->  Replace -1000   (take on a bond / shed one)
+//
+// So the ethical system is the CDK triad wearing crafting clothes: STRIFE is what
+// separates you from the fae, LOVE is what binds you back, and BALANCE is its own
+// state — never a midpoint between the two, but the thing the fold fixes.
+(
+    // Which member each path maps to under the ethical involution.
+    // `Fixed` means f(x) == x: the mirror leaves it exactly where it is.
+    involution: [
+        (path: Exploit,  mirrors: Release),
+        (path: Release,  mirrors: Exploit),
+        (path: Bargain,  mirrors: Replace),
+        (path: Replace,  mirrors: Bargain),
+        (path: Preserve, mirrors: Preserve),
+    ],
+
+    // The fixed-point set. |Fix(f)| = k = 1, matching n = 2m + k with n=5, m=2.
+    fixed_point: Preserve,
+
+    modifiers: [
+        (
+            path: Exploit,
+            item_power_q: 3000,
+            obligation_pressure_q: 2500,
+            fae_hostility_q: 3000,
+            crown_temptation_q: 2000,
+            ecology_pressure_q: 0,
+            crafting_difficulty_q: 0,
+            provenance_shimmer_q: 0,
+            world_stability_q: 0,
+        ),
+        (
+            path: Bargain,
+            item_power_q: 1500,
+            obligation_pressure_q: 1500,
+            fae_hostility_q: -500,
+            crown_temptation_q: 500,
+            ecology_pressure_q: 0,
+            crafting_difficulty_q: 0,
+            provenance_shimmer_q: 0,
+            world_stability_q: 0,
+        ),
+        (
+            path: Release,
+            item_power_q: -1500,
+            obligation_pressure_q: 0,
+            fae_hostility_q: -3000,
+            crown_temptation_q: -2000,
+            ecology_pressure_q: -2500,
+            crafting_difficulty_q: 0,
+            provenance_shimmer_q: 0,
+            world_stability_q: 0,
+        ),
+        (
+            // item_power depends on replacement_quality_q at runtime — 0 here is the
+            // authored base, not a missing value (substrate.rs:104 says so).
+            path: Replace,
+            item_power_q: 0,
+            obligation_pressure_q: -1000,
+            fae_hostility_q: 0,
+            crown_temptation_q: 0,
+            ecology_pressure_q: 0,
+            crafting_difficulty_q: 3000,
+            provenance_shimmer_q: -1500,
+            world_stability_q: 0,
+        ),
+        (
+            // THE FIXED POINT: every pressure lane 0, stability alone.
+            path: Preserve,
+            item_power_q: 500,
+            obligation_pressure_q: 0,
+            fae_hostility_q: 0,
+            crown_temptation_q: 0,
+            ecology_pressure_q: 0,
+            crafting_difficulty_q: 0,
+            provenance_shimmer_q: 0,
+            world_stability_q: 3000,
+        ),
+    ],
+)

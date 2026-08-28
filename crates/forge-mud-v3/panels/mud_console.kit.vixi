@@ -1,0 +1,43 @@
+#vixi:kit v2
+surface: mud_console
+profile: molten
+classification: overlay_surface
+
+# MUD CONSOLE — The primary text interface into the 13Forge MUD world.
+# Ported 2026-08-25 from F:\NewRepo\crates\forge-vix\panels\mud_console.kit.vixi.
+# Includes: Title grip band (came) · scrolling terminal buffer · command input strip.
+# Spacing: mu(8) gap between regions (Ma spacing canon), mu(12) interior padding.
+slot root kind=region layout=stack_v gap=mu(8) padding=mu(12) material=bone
+
+# ── Draggable Title Band (came) ────────────────────────────────────────────────
+slot root.came kind=chrome layout=stack_h size=mu(30) material=iron
+slot root.came.grip kind=sigil_corner size=mu(30)
+slot root.came.title kind=text ramp=type.ramp[1] color=palette.fg_text source=title size=mu(200)
+slot root.came.close kind=widget name=button size=mu(44) material=iron on_click=edict:overlay_close
+slot root.came.close.label kind=text ramp=type.ramp[1] color=palette.fg_muted
+
+# ── Scrolling Terminal Stream ──────────────────────────────────────────────────
+# Displays room names, sensory descriptions, NPCs, and command execution history.
+slot root.stream kind=region layout=stack_v gap=mu(6) padding=mu(10) bind=palette.bg_near
+slot root.stream.header kind=text ramp=type.ramp[1] color=palette.fg_text source=room_title
+slot root.stream.desc kind=text ramp=type.ramp[0] color=palette.fg_muted source=room_desc
+slot root.stream.output kind=text ramp=type.ramp[0] color=palette.accent_secondary source=console_history
+
+# ── Command Execution Input Strip ──────────────────────────────────────────────
+# `source=` rides the FIELD itself: a text leaf under a widget never lowers to a
+# box, so a bind on `root.input.field.text` cannot be reached by any host.
+slot root.input kind=region layout=stack_h gap=mu(8) size=mu(44) bind=palette.bg_near
+slot root.input.field kind=widget name=button size=mu(440) material=bone color=palette.bg_far source=current_input
+slot root.input.submit kind=widget name=button size=mu(80) material=bronze on_click=edict:mud_execute_command
+slot root.input.submit.label kind=text ramp=type.ramp[1] color=palette.fg_text
+
+# ── Connections Status ─────────────────────────────────────────────────────────
+slot root.status kind=region layout=stack_h gap=mu(6) size=mu(30)
+slot root.status.indicator kind=text ramp=type.ramp[0] color=palette.success source=connection_status size=mu(200)
+slot root.status.help kind=text ramp=type.ramp[0] color=palette.fg_muted source=help_hint size=mu(280)
+
+gate contrast_min = 4.5
+gate hit_target_min = mu(44)
+gate runtime_parse = forbidden
+gate alloc_steady = forbidden
+gate float_in_ir = forbidden

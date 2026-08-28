@@ -1,0 +1,25 @@
+# The Correspondence Engine, ported verbatim from F:\NewRepo\crates\forge-core
+# ({correspondence,material_binding,creature_engine}.rs, 2,277 lines). A
+# sibling of forge-core-v3, not folded into it — forge-core-v3 is Crate Zero
+# (zero deps by law, F:\v3\Cargo.toml:5-6) and this engine needs serde.
+# Ported as one coherent unit (not narrowed to a single caller's subset):
+# color-to-physics-to-stats, feeding from forge-vision.
+[package]
+name = "forge-correspondence-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+description = "Color-to-Physics-to-Stats Correspondence Engine — palette scan -> material map -> physics + stats."
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+forge-core-v3 = { path = "../forge-core-v3" }
+
+[dev-dependencies]
+proptest = "1"
+serde_json = "1"
+
+[lints]
+workspace = true

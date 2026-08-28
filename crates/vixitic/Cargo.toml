@@ -1,0 +1,19 @@
+[package]
+name = "vixitic"
+version = "0.1.1"
+edition = "2021"
+rust-version = "1.70"
+description = "Deterministic tick-reactor async runtime. Wakers bind to your integer simulation clock, not to OS epoll/IOCP. Zero dependencies, std only."
+license = "MIT"
+readme = "README.md"
+homepage = "https://13forge.com"
+documentation = "https://docs.rs/vixitic"
+keywords = ["async", "runtime", "deterministic", "gamedev", "simulation"]
+categories = ["asynchronous", "concurrency", "game-development", "simulation"]
+exclude = ["/.github"]
+
+[dependencies]
+
+[lints.rust]
+missing_docs = "deny"
+unsafe_op_in_unsafe_fn = "allow"

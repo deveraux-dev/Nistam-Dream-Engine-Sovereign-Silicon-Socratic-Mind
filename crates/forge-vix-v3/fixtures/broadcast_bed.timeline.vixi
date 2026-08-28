@@ -1,0 +1,30 @@
+#vixi:timeline v1
+# Broadcast Booth arrangement recipe — broadcast_bed
+
+[timeline]
+mode = "audio"
+duration_us = 10666624
+tempo_bpm_m4 = 90000
+sample_rate = 48000
+frame_rate_m4 = 24000
+property_profile = "ReadOnlyBasics"
+
+[groups.3]
+kind = "music"
+instrument = "pad"
+default_lane = "Critical"
+
+[groups.4]
+kind = "music"
+instrument = "sub"
+default_lane = "NearFuture"
+
+[events]
+encoding = "base64"
+data = "Q5A3AOZlAABEkBgA5mUAAAAgosJEkBgA5mUAAA=="
+
+[stamp]
+stage_raw = "850318938ee34125"
+canonical = "850318938ee34125"
+seed = 1
+authored = "2026-07-12T00:00:00Z"

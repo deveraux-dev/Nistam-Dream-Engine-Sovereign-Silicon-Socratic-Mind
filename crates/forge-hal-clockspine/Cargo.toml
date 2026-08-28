@@ -1,0 +1,25 @@
+# Foreman-promoted from a gated sidecar draft (MIGRATION §M2).
+[package]
+name = "forge-hal-clockspine"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+
+# `forge-core-v3` promoted from dev-dependency to a real one (Sean 2026-08-14,
+# "pick one and port it" — `mom_router.rs` needs `ump_word::UmpWord` at real
+# build time, not just under `cfg(test)`). Not a new-crate exception the way
+# xtask's forge-cart-v3/forge-pkm-v3 are: forge-core-v3 IS Crate Zero, the one
+# floor every non-floor v3 crate is expected to stand on; this crate already
+# carried it as a dev-dep, so promoting is a normal build-graph edge, not a
+# widened "zero dependencies" law.
+[dependencies]
+bytemuck = { version = "1", features = ["derive"] }
+forge-core-v3 = { path = "../forge-core-v3" }
+
+[dev-dependencies]
+loom = "0.7"
+
+[lints]
+workspace = true
+

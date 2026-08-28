@@ -1,0 +1,11 @@
+[package]
+name = "forge-physics-v3"
+version = "0.3.0"
+edition = "2021"
+description = "Hermite/Catmull-Rom spline kernel (hermite.rs, zero-dep) plus a scoped physics-effect/material types port (types.rs, depends on pp-math-v3) — both from F:\\NewRepo\\crates\\forge-physics."
+
+[dependencies]
+pp-math-v3 = { path = "../pp-math-v3" }
+# gjk3d.rs (bake-time asset QC, ghostmoon-merge Wave 2 2026-08-24): matches the
+# 0.29 line already used by forge-geo-v3/forge-audio-v3/forge-comm-v3.
+glam = "0.29"

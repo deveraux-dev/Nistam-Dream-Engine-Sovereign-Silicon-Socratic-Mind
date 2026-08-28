@@ -1,0 +1,23 @@
+# VixiScript syntax leaf, ported verbatim from F:\NewRepo\crates\forge-vix-syntax
+# (v2, 1,871 lines, zero runtime deps by law — the CST lexer, grammar tables,
+# and .kit.vixi surface parser + WidgetSpec-literal emitter). This is the
+# "reuse-parse, NEVER 2nd-parser" leaf the source-compiler skill's FLOW rule 2
+# names: forge-vix-v3's LoweredUi must eventually be fed by THIS parser, not a
+# reinvented one. This crate alone does not yet produce a LoweredUi — the
+# lowering bridge (v2's layout.rs) is a separate, not-yet-ported step.
+[package]
+name = "forge-vix-syntax-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+description = "VixiScript syntax leaf — lossless CST lexer, grammar tables, .kit.vixi surface parser + WidgetSpec-literal emitter. Zero deps by law."
+
+[dependencies]
+
+[dev-dependencies]
+proptest = "1"
+
+[lints]
+workspace = true

@@ -1,0 +1,10 @@
+[package]
+name = "forge-reactions-v3"
+version.workspace = true
+edition.workspace = true
+description = "Law layer types: factions, world bosses, fae overlay, living substrate crafting, solution paths."
+
+[dependencies]
+
+[lints]
+workspace = true

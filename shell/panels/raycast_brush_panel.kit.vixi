@@ -1,0 +1,30 @@
+#vixi:kit v2
+surface: raycast_brush_panel
+profile: studio_3d
+classification: surface_paint
+# PORTED 2026-08-24 from F:\NewRepo\crates\forge-vix\panels\raycast_brush_panel.kit.vixi
+# (731 B, v2) — byte-for-byte on the slot/gate rows, only this provenance block added.
+# Gated through v3's own kit door before landing: cst_check (wire 51,
+# forge_vix_syntax_v3::surface::parse_kit_surface + gate_surface_tree) -> decision:allow.
+#
+# `root.size` is the dial main.rs:1049-1052 names: it binds brush.raycast_size to the
+# live `brush_radius_cells: i64 = 2`, which the scroll wheel drives until this panel is
+# LOADED. Landing the surface does not wire it — shell/src has no .vixi loader yet
+# (no parse_kit, no include_str! of a kit anywhere in shell/src), so this is an authored
+# surface awaiting a host, not a live panel. The bind is the contract; the loader is the
+# open work.
+slot root kind=region layout=stack_h padding=mu(8) gap=mu(8) material=bone align=center
+
+slot root.title kind=text ramp=type.ramp[0] color=palette.fg_text
+
+slot root.paint_mode kind=widget name=toggle size=mu(44) material=iron bind=brush.surface_paint_mode
+slot root.paint_mode.label kind=text ramp=type.ramp[1] color=palette.fg_muted
+
+slot root.size kind=widget name=dial size=mu(44) material=bone bind=brush.raycast_size
+slot root.size.label kind=text ramp=type.ramp[1] color=palette.fg_muted
+
+gate contrast_min = 4.5
+gate hit_target_min = mu(44)
+gate runtime_parse = forbidden
+gate alloc_steady = forbidden
+gate float_in_ir = forbidden

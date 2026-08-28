@@ -1,0 +1,19 @@
+   Compiling forge-mud-v3 v0.3.0 (F:\Nistam-Dream-Engine-Sovereign-Silicon-Socratic-Mind\crates\forge-mud-v3)
+   Compiling studio-tauri v0.3.0 (F:\Nistam-Dream-Engine-Sovereign-Silicon-Socratic-Mind\crates\studio-tauri)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 10.59s
+     Running unittests src\main.rs (F:/v3/target\debug\deps\studio_tauri-a1f0dee9a25f7d2a.exe)
+
+running 10 tests
+test tests::test_get_astrolabe_state ... ok
+test tests::test_get_star_catalog ... ok
+test tests::test_load_all_samples ... ok
+test tests::test_navigate_mud_direction ... ok
+test tests::test_mud_get_magic_lexicon_contains_all_words ... ok
+test tests::test_step_mud_tour ... ok
+test tests::test_compile_kit_refusal ... ok
+test tests::test_compile_kit_success ... ok
+test tests::test_world_builder_snapshot_distinct_arts_produce_distinct_layouts ... ok
+test tests::test_generate_star_world_and_replay_ledger ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

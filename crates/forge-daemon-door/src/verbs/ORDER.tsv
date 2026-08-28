@@ -1,0 +1,10 @@
+# Lane RON append-order ledger — one verb name per line, APPEND ONLY, never
+# reordered/deleted. Id = line position + EXT_ID_BASE (`codegen::generate`).
+# Proof-of-concept seed (2026-08-22): lsp_hover, ported from the hand-written
+# verb of the same name (tool_id 53 in wire.rs's legacy TOOL_TABLE) to prove
+# the generator is wire-identical (`cargo xtask diff-wire --verb lsp_hover`).
+# Not wired into live dispatch — see codegen.rs's module doc for scope.
+lsp_hover
+example_empty
+example_keyed
+example_verbatim

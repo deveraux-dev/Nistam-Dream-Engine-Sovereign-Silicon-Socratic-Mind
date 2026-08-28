@@ -1,0 +1,147 @@
+#vixi:kit v2
+surface: djdaw_turntable
+profile: physical_turntable_audio_workstation
+classification: dj_audio_performance_and_studio_creation
+
+# ==============================================================================
+# DJ DAW & CONVERGED AUDIO WORKSTATION (Physical Turntable Surface)
+# Grounded in physical CDJ/Turntable ergonomics, MoM physical dispatch,
+# and MoE .s13 spectral routing. Zero ancient Star Trek alienation.
+# ==============================================================================
+
+slot root                          kind=region  layout=stack_v  padding=mu(12) gap=mu(8)
+
+# ------------------------------------------------------------------------------
+# 1. TOP HEADER & PHRASE-ALIGNED PARALLEL WAVEFORMS
+# ------------------------------------------------------------------------------
+slot root.header                   kind=region  layout=stack_h  justify=space_between size=mu(40)
+slot root.header.brand             kind=widget  name=label      text="13FORGE TURNTABLE STUDIO // MoE-S13" size=mu(240)
+slot root.header.mode_switch       kind=region  layout=stack_h  gap=mu(4)
+slot root.header.mode_switch.dj    kind=widget  name=button     text="[DJ Platters]" on_click=edict:mode_dj size=mu(100) material=graphite
+slot root.header.mode_switch.pod   kind=widget  name=button     text="[Podcast/VO]" on_click=edict:mode_podcast size=mu(100) material=graphite
+slot root.header.mode_switch.midi  kind=widget  name=button     text="[MIDI/Synth]" on_click=edict:mode_midi size=mu(100) material=graphite
+slot root.header.mode_switch.morph kind=widget  name=button     text="[Voice Morph]" on_click=edict:mode_morph size=mu(100) material=graphite
+slot root.header.master_clock      kind=widget  name=readout    text="BPM: 126.00 | SYNC: LOCK | QUANT: 1/16" size=mu(240)
+
+# Waveform stack: RGB 3-band spectral waveforms + 32-bar KORETECH phrase boundaries
+slot root.waveforms                kind=region  layout=stack_v  gap=mu(4) size=mu(120)
+slot root.waveforms.deck_a         kind=region  layout=stack_h  gap=mu(4) size=mu(58)
+slot root.waveforms.deck_a.phrase  kind=widget  name=phrase_bar text="INTRO [8] > VERSE [16] > BUILD [8] > DROP [32]" size=mu(200)
+slot root.waveforms.deck_a.wave    kind=widget  name=rgb_waveform binding=deck_a_wave size=mu(800)
+slot root.waveforms.deck_b         kind=region  layout=stack_h  gap=mu(4) size=mu(58)
+slot root.waveforms.deck_b.phrase  kind=widget  name=phrase_bar text="INTRO [16] > CHORUS [32] > OUTRO [16]" size=mu(200)
+slot root.waveforms.deck_b.wave    kind=widget  name=rgb_waveform binding=deck_b_wave size=mu(800)
+
+# ------------------------------------------------------------------------------
+# 2. MAIN CONSOLE: DECK A (LEFT), CENTRAL MIXER, DECK B (RIGHT)
+# ------------------------------------------------------------------------------
+slot root.console                  kind=region  layout=stack_h  gap=mu(12) size=mu(480)
+
+# --- DECK A: PHYSICAL TURNTABLE / CDJ (LEFT) ---
+slot root.console.deck_a           kind=region  layout=stack_v  gap=mu(8) size=mu(380)
+slot root.console.deck_a.track_info kind=region layout=stack_h  justify=space_between size=mu(32)
+slot root.console.deck_a.track_info.title kind=widget name=label text="Deck A: Solid State Grooves" size=mu(240)
+slot root.console.deck_a.track_info.key   kind=widget name=badge text="8A / Am" size=mu(60) material=cyan
+slot root.console.deck_a.track_info.bpm   kind=widget name=badge text="126.0" size=mu(60) material=gold
+
+# Platter & Pitch section
+slot root.console.deck_a.platter_zone kind=region layout=stack_h gap=mu(12) size=mu(260)
+slot root.console.deck_a.platter_zone.platter kind=widget name=motorized_turntable binding=deck_a_platter size=mu(260) material=vinyl_slipmat
+slot root.console.deck_a.platter_zone.pitch_strip kind=region layout=stack_v gap=mu(4) size=mu(80)
+slot root.console.deck_a.platter_zone.pitch_strip.fader kind=widget name=pitch_slider binding=deck_a_pitch size=mu(180)
+slot root.console.deck_a.platter_zone.pitch_strip.range kind=widget name=button text="+/-8%" on_click=edict:deck_a_pitch_range size=mu(40)
+slot root.console.deck_a.platter_zone.pitch_strip.zero_led kind=widget name=indicator state=center_zero size=mu(20)
+
+# Transport & 8 Performance Pads
+slot root.console.deck_a.lower     kind=region  layout=stack_h  gap=mu(8) size=mu(140)
+slot root.console.deck_a.lower.transport kind=region layout=stack_v gap=mu(8) size=mu(80)
+slot root.console.deck_a.lower.transport.cue  kind=widget name=tactile_button text="CUE" on_click=mom:cue_a size=mu(56) material=amber_backlit
+slot root.console.deck_a.lower.transport.play kind=widget name=tactile_button text="PLAY/PAUSE" on_click=mom:play_a size=mu(56) material=green_backlit
+
+slot root.console.deck_a.lower.pads kind=region layout=grid cols=4 gap=mu(4) size=mu(280)
+slot root.console.deck_a.lower.pads.pad1 kind=widget name=rgb_pad text="HOT CUE 1" on_click=mom:deck_a_pad_1 size=mu(56) material=cyan
+slot root.console.deck_a.lower.pads.pad2 kind=widget name=rgb_pad text="HOT CUE 2" on_click=mom:deck_a_pad_2 size=mu(56) material=cyan
+slot root.console.deck_a.lower.pads.pad3 kind=widget name=rgb_pad text="VOCAL SOLO" on_click=mom:deck_a_vocal size=mu(56) material=magenta
+slot root.console.deck_a.lower.pads.pad4 kind=widget name=rgb_pad text="DRUM MUTE" on_click=mom:deck_a_drums size=mu(56) material=amber
+slot root.console.deck_a.lower.pads.pad5 kind=widget name=rgb_pad text="ROLL 1/4" on_click=mom:deck_a_roll_4 size=mu(56) material=blue
+slot root.console.deck_a.lower.pads.pad6 kind=widget name=rgb_pad text="ROLL 1/8" on_click=mom:deck_a_roll_8 size=mu(56) material=blue
+slot root.console.deck_a.lower.pads.pad7 kind=widget name=rgb_pad text="SLICER" on_click=mom:deck_a_slicer size=mu(56) material=purple
+slot root.console.deck_a.lower.pads.pad8 kind=widget name=rgb_pad text="MORPH VOX" on_click=mom:deck_a_morph size=mu(56) material=red
+
+# --- CENTRAL 4-BAND MIXER SECTION ---
+slot root.console.mixer            kind=region  layout=stack_v  gap=mu(6) size=mu(260) material=brushed_aluminum
+slot root.console.mixer.master_meter kind=region layout=stack_h justify=center gap=mu(8) size=mu(40)
+slot root.console.mixer.master_meter.vu_l kind=widget name=vu_meter binding=master_vu_l size=mu(110)
+slot root.console.mixer.master_meter.vu_r kind=widget name=vu_meter binding=master_vu_r size=mu(110)
+
+# Channel strips (Deck A & Deck B)
+slot root.console.mixer.channels   kind=region  layout=stack_h  justify=space_around gap=mu(8) size=mu(280)
+# Channel A
+slot root.console.mixer.channels.ch_a kind=region layout=stack_v gap=mu(4) size=mu(110)
+slot root.console.mixer.channels.ch_a.trim  kind=widget name=rotary_knob text="TRIM" binding=deck_a_gain size=mu(40)
+slot root.console.mixer.channels.ch_a.hi    kind=widget name=rotary_knob text="HI EQ" binding=deck_a_hi size=mu(40)
+slot root.console.mixer.channels.ch_a.mid   kind=widget name=rotary_knob text="MID EQ" binding=deck_a_mid size=mu(40)
+slot root.console.mixer.channels.ch_a.low   kind=widget name=rotary_knob text="LOW EQ" binding=deck_a_low size=mu(40)
+slot root.console.mixer.channels.ch_a.color kind=widget name=rotary_knob text="COLOR FX" binding=deck_a_color size=mu(40)
+slot root.console.mixer.channels.ch_a.fader kind=widget name=channel_fader binding=deck_a_fader size=mu(60)
+
+# Channel B
+slot root.console.mixer.channels.ch_b kind=region layout=stack_v gap=mu(4) size=mu(110)
+slot root.console.mixer.channels.ch_b.trim  kind=widget name=rotary_knob text="TRIM" binding=deck_b_gain size=mu(40)
+slot root.console.mixer.channels.ch_b.hi    kind=widget name=rotary_knob text="HI EQ" binding=deck_b_hi size=mu(40)
+slot root.console.mixer.channels.ch_b.mid   kind=widget name=rotary_knob text="MID EQ" binding=deck_b_mid size=mu(40)
+slot root.console.mixer.channels.ch_b.low   kind=widget name=rotary_knob text="LOW EQ" binding=deck_b_low size=mu(40)
+slot root.console.mixer.channels.ch_b.color kind=widget name=rotary_knob text="COLOR FX" binding=deck_b_color size=mu(40)
+slot root.console.mixer.channels.ch_b.fader kind=widget name=channel_fader binding=deck_b_fader size=mu(60)
+
+# Asymmetric Bass-Swap Crossfader & Curve Switch
+slot root.console.mixer.crossfade_zone kind=region layout=stack_v gap=mu(4) size=mu(120)
+slot root.console.mixer.crossfade_zone.curve_switch kind=widget name=toggle text="BASS SWAP: ACTIVE" on_click=edict:toggle_bass_swap size=mu(32)
+slot root.console.mixer.crossfade_zone.crossfader   kind=widget name=crossfader binding=crossfader_pos size=mu(64) material=scratch_magvel
+
+# --- DECK B: PHYSICAL TURNTABLE / CDJ (RIGHT) ---
+slot root.console.deck_b           kind=region  layout=stack_v  gap=mu(8) size=mu(380)
+slot root.console.deck_b.track_info kind=region layout=stack_h  justify=space_between size=mu(32)
+slot root.console.deck_b.track_info.title kind=widget name=label text="Deck B: Soliton Phase Rhythm" size=mu(240)
+slot root.console.deck_b.track_info.key   kind=widget name=badge text="9A / Em" size=mu(60) material=cyan
+slot root.console.deck_b.track_info.bpm   kind=widget name=badge text="126.0" size=mu(60) material=gold
+
+# Platter & Pitch section
+slot root.console.deck_b.platter_zone kind=region layout=stack_h gap=mu(12) size=mu(260)
+slot root.console.deck_b.platter_zone.platter kind=widget name=motorized_turntable binding=deck_b_platter size=mu(260) material=vinyl_slipmat
+slot root.console.deck_b.platter_zone.pitch_strip kind=region layout=stack_v gap=mu(4) size=mu(80)
+slot root.console.deck_b.platter_zone.pitch_strip.fader kind=widget name=pitch_slider binding=deck_b_pitch size=mu(180)
+slot root.console.deck_b.platter_zone.pitch_strip.range kind=widget name=button text="+/-8%" on_click=edict:deck_b_pitch_range size=mu(40)
+slot root.console.deck_b.platter_zone.pitch_strip.zero_led kind=widget name=indicator state=center_zero size=mu(20)
+
+# Transport & 8 Performance Pads
+slot root.console.deck_b.lower     kind=region  layout=stack_h  gap=mu(8) size=mu(140)
+slot root.console.deck_b.lower.transport kind=region layout=stack_v gap=mu(8) size=mu(80)
+slot root.console.deck_b.lower.transport.cue  kind=widget name=tactile_button text="CUE" on_click=mom:cue_b size=mu(56) material=amber_backlit
+slot root.console.deck_b.lower.transport.play kind=widget name=tactile_button text="PLAY/PAUSE" on_click=mom:play_b size=mu(56) material=green_backlit
+
+slot root.console.deck_b.lower.pads kind=region layout=grid cols=4 gap=mu(4) size=mu(280)
+slot root.console.deck_b.lower.pads.pad1 kind=widget name=rgb_pad text="HOT CUE 1" on_click=mom:deck_b_pad_1 size=mu(56) material=cyan
+slot root.console.deck_b.lower.pads.pad2 kind=widget name=rgb_pad text="HOT CUE 2" on_click=mom:deck_b_pad_2 size=mu(56) material=cyan
+slot root.console.deck_b.lower.pads.pad3 kind=widget name=rgb_pad text="VOCAL SOLO" on_click=mom:deck_b_vocal size=mu(56) material=magenta
+slot root.console.deck_b.lower.pads.pad4 kind=widget name=rgb_pad text="DRUM MUTE" on_click=mom:deck_b_drums size=mu(56) material=amber
+slot root.console.deck_b.lower.pads.pad5 kind=widget name=rgb_pad text="ROLL 1/4" on_click=mom:deck_b_roll_4 size=mu(56) material=blue
+slot root.console.deck_b.lower.pads.pad6 kind=widget name=rgb_pad text="ROLL 1/8" on_click=mom:deck_b_roll_8 size=mu(56) material=blue
+slot root.console.deck_b.lower.pads.pad7 kind=widget name=rgb_pad text="SLICER" on_click=mom:deck_b_slicer size=mu(56) material=purple
+slot root.console.deck_b.lower.pads.pad8 kind=widget name=rgb_pad text="MORPH VOX" on_click=mom:deck_b_morph size=mu(56) material=red
+
+# ------------------------------------------------------------------------------
+# 3. BOTTOM TELEMETRY FOOTER & MoE-S13 DSP ROUTER STATUS
+# ------------------------------------------------------------------------------
+slot root.footer                   kind=region  layout=stack_h  justify=space_between size=mu(36)
+slot root.footer.moe_status        kind=widget  name=label      text="MoE DSP Active: [Exp 0: Vocal Formant] [Exp 1: Sub-Bass Swap] [Exp 5: Cymatics]" size=mu(480)
+slot root.footer.latency_watch     kind=widget  name=label      text="Audio Engine: 48kHz / 512f | Latency: 3.4ms | Zero-Alloc SPSC: OK" size=mu(380)
+
+# ==============================================================================
+# SOVEREIGN UI GATES
+# ==============================================================================
+gate contrast_min = 4.5
+gate hit_target_min = mu(44)
+gate runtime_parse = forbidden
+gate alloc_steady = forbidden
+gate float_in_ir = forbidden

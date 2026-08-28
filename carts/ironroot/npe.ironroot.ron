@@ -1,0 +1,227 @@
+// NPE.IRONROOT — Cartridge #1 bindings for the New Player Experience.
+// Rolls Ironroot lore + Desktop\Good visuals onto every slot of
+// carts/base/npe.base.ron. BASE-AND-CARTRIDGE.md §4 dual-seed law: strip
+// every word and path in this file and the base NULL cart must still pass
+// every gate — if it breaks, mechanics were hiding in flavor.
+//
+// FORBID-FIRST (C03, receipts inline):
+//   NO zodiac, NO animal signs, NO constellations as identity
+//     (ironroot_event_revision_no_zodiac_no_animals.pdf p.1-2 — replaced by
+//      Oath Disciplines; scars/ledgers/nail-maps replace star-maps)
+//   NO "Earthcalling" / "Nemesis" / "Windigo" on any surface
+//     (IRONROOT-MVP-AUTHORED-CANON.md:55,57,58 — Rootcalling|Stonecalling,
+//      Shadowmirror, The Branded)
+//   NO aurora / bone-whistle / Cree surface terms (CANON.md:60; cultural_safety.md:19-25 —
+//      no living cultural grammar as flavor, fictional mode names only)
+//   NO gore-forward, no cruelty as spectacle (tone_and_atmosphere.rs:30-33)
+//   NO numbers in surface words except the gate bell, which TOLLS a number —
+//      that number is canon mechanics, not flavor (CANON.md:86,206)
+//
+// PROOF-STATE key (L12): every binding below is
+//   [OBSERVED] pixel-witnessed or file:line-read this session
+//   [CANON]    carried verbatim from an authored Ironroot source
+//   [AUTHORED] new connective words written in this weld (anchor-exempt, never Unproven)
+//   [ASSUMED]  named but not opened this session
+
+NpeCart(
+    schema: "NPE1",
+    cart: "IRONROOT",
+    version: (major: 0, minor: 1, patch: 0),
+    sha256: "UNSTAMPED",               // stamped by the W-C bake verb, not by hand (L02)
+    asset_root: "C:/Users/seanm/Desktop/Good",   // pre-bake home; bake copies into the cart
+
+    // ── TITLE ─────────────────────────────────────────────────────────────
+    // The lie-map IS the title (CANON.md:40 — hour-0 entry gate is the
+    // diegetic "Welcome to Ironroot" tourist surface; the dark panel is the
+    // same screen's under face).
+    title: Title(
+        world_word: "IRONROOT",                                  // [CANON]
+        front_line: "Where every fairytale comes true!",         // [OBSERVED] Welcome png, left panel
+        under_line: "ROADS LIE. THE SONGS LIE. ONLY ACCOUNTS REMAIN TRUE.",  // [OBSERVED] Welcome png, bottom-left slab
+        art: TitleArt(
+            front_slot: Some("Welcome to Ironroot's hidden wonders.png"),    // [OBSERVED] pixel-witnessed
+            under_slot: Some("Ironroot_ tales beneath the surface.png"),     // [ASSUMED] named in census, unopened
+        ),
+        hidden_count: 13,
+        thirteenth_word: "the subtraction",
+        // [OBSERVED] Welcome png footer: "XIII is not a place. XIII is a
+        // subtraction. Find what the story forgot."
+    ),
+
+    // ── BIRTH RITE (Birthday Pick, zodiac-free by law) ────────────────────
+    // Moon + day picks already stand (main.rs:39-73); the interview strikes
+    // the seed (vixi-chat.html: thirteen moons, fnv1a → 0x-hex; console.rs:33
+    // accepts it). Ironroot adds the ONE themed pick the revision allows:
+    // the Oath Discipline — identity from craft and wound, never sky
+    // (revision pdf p.2). Moon names already live in content/moons.rs
+    // [OBSERVED :13-27] — NOTE-DEBT: those thirteen names are theme and
+    // should migrate base→cart at bake time (BASE-AND-CARTRIDGE.md §1
+    // "nothing in the base carries a proper noun"); not moved in this weld.
+    birth: BirthRite(
+        moon_count: 13,
+        day_count: 28,
+        calendar_word: "the Thirteen Tolls",                     // [CANON] CANON.md:56
+        craft_pick: CraftPick(
+            prompt_word: "discipline",
+            choice_count: 8,
+            // The eight Oath Disciplines [CANON revision pdf p.2]; readings [AUTHORED],
+            // saga-flat per author-dossier.md:27 (understatement carries the weight).
+            choices: [
+                ("Edge",   "you kept something sharp when keeping it was the harder thing"),
+                ("Weight", "you carried what was set down and did not say so"),
+                ("Breath", "you stayed calm in a room that wanted otherwise"),
+                ("Thread", "you mended; the mend outlived the maker"),
+                ("Ash",    "you burned it clean and kept the smoke to yourself"),
+                ("Root",   "you stayed. that was the whole of it"),
+                ("Glass",  "you saw through, and said only what was needed"),
+                ("Salt",   "you preserved what would otherwise have spoiled"),
+            ],
+        ),
+        hidden_account_dealt: true,
+        // The account is dealt from content/accounts.rs [OBSERVED :12-26] and
+        // stays unspoken at birth — disclosure_policy.rs:5, Sensory stage.
+        seed_console_hex: true,
+    ),
+
+    // ── STARTING KIT ──────────────────────────────────────────────────────
+    // Three items, provenance dealt (game.rs:526-550). Ironroot speaks
+    // provenance in ledger-voice [AUTHORED, tone: design_guidelines.rs:37-40
+    // "plain, weathered, small"]:
+    kit: StartingKit(
+        item_count: 3,
+        provenance_words: ProvenanceWords(
+            stolen: "unrecorded",       // a thing the ledger never saw taken
+            grave: "outlasted",         // its holder is off the ledger now
+            blood: "handed down",
+            reclaimed: "written back",
+            pure: "clean entry",        // accounts.rs:18 "Clean Index" adjacency [CANON-echo]
+        ),
+        item_pins: [
+            (0, 8),    // Edge discipline: overlay key 8
+            (1, 9),    // Weight discipline: overlay key 9
+            (2, 10),   // Breath discipline: overlay key 10
+            (3, 11),   // Thread discipline: overlay key 11
+            (4, 12),   // Ash discipline: overlay key 12
+            (5, 13),   // Root discipline: overlay key 13
+            (6, 14),   // Glass discipline: overlay key 14
+            (7, 15),   // Salt discipline: overlay key 15
+        ],                              // discipline-keyed Domain::Item(6) overlay entries per Oath pick
+    ),
+
+    // ── STARTING WORLD ────────────────────────────────────────────────────
+    // Thornbell Parish is the authored hub (CANON.md:15); entry is the Toll
+    // Gate where Toll-Sister Vey stops mid-count and looks at your hands,
+    // not your face (CANON.md:68,85), and the gate bell tolls a number equal
+    // to your material gap (CANON.md:86).
+    world: StartingWorld(
+        entry_zone_word: "Thornbell Parish",                     // [CANON]
+        entry_gate_word: "the Toll Gate",                        // [CANON]
+        presences: (
+            threat_word: "a rooted deserter",       // [CANON] revision pdf p.1 —
+                                                    // replaces corrupted wildlife
+            territorial_word: "the Bellwright at her forge",     // [CANON name CANON.md:15; role AUTHORED]
+            questgiver_word: "Toll-Sister Vey",                  // [CANON]
+        ),
+        first_task: FirstTask(
+            shape: KillOne,             // mechanics unchanged (dual-seed law)
+            target_word: "the rooted deserter",
+            reward_xp: 100,             // ancestors' value (first_hunt.toml via datapack :187)
+        ),
+        door_out_word: "the Bell Pit stair",                     // [CANON] CANON.md:22 —
+                                        // arena descent toward the Under-Orchard
+        landmarks: ["Bellwright Forge", "Market Row", "Witness Rail",
+                    "Parish Shrine"],                            // [CANON] CANON.md:15
+    ),
+
+    // ── STARTING VISUALS ──────────────────────────────────────────────────
+    visuals: StartingVisuals(
+        era_count: 4,
+        era_words: ["Ancient", "Golden", "Decay", "Void"],       // [CANON] lore_registry.rs:7
+        // Era face sets from the thornhaven series [OBSERVED census; gate
+        // golden+decay pixel-witnessed this session: same gate, shining then
+        // ruined — the exact front/under law the title teaches].
+        face_sets: [
+            ("gate",      ["thornhaven_gate_ancient.png", "thornhaven_gate_golden.png",
+                           "thornhaven_gate_decay.png",   "thornhaven_gate_void.png"]),
+            ("inn",       ["thornhaven_inn_ancient.png",  "thornhaven_inn_golden.png",
+                           "thornhaven_inn_decay.png",    "thornhaven_inn_void.png"]),
+            ("market",    ["thornhaven_market_ancient.png","thornhaven_market_golden.png",
+                           "thornhaven_market_decay.png", "thornhaven_market_void.png"]),
+            ("courtyard", ["thornhaven_courtyard_ancient.png","thornhaven_courtyard_golden.png",
+                           "thornhaven_courtyard_decay.png","thornhaven_courtyard_void.png"]),
+            // cellar has NO golden face in the census — stated aloud (T1):
+            // absent is the truthful binding; the cellar was never bright.
+            ("cellar",    ["thornhaven_cellar_ancient.png", "ABSENT",
+                           "thornhaven_cellar_decay.png",  "thornhaven_cellar_void.png"]),
+        ],
+        // Palette: 2dak 64-colour k-means [OBSERVED 2dak-palette-zodiac.png].
+        // PROVENANCE NOTE: source sprites were zodiac-era art; the zodiac is
+        // banned as IDENTITY (revision pdf) — colours carry no sign meaning
+        // here, and family names below are the palette's own machine words.
+        // Only the hex witnessed on-screen is stated (L02); the remaining 63
+        // are extracted by the bake verb from the PNG, never typed by hand.
+        palette_families: ["void", "blood", "arcane", "flesh", "frost",
+                           "shadow", "ash", "ember", "earth", "accent"],
+        palette: [
+            ("void", ["#100C17"]),      // [OBSERVED] "Void Pitch", selected swatch
+            // remaining families: BAKE-EXTRACT from 2dak-palette-zodiac.png
+            // (counts observed on-sheet: blood 15, arcane 11, flesh 5,
+            //  frost 8, shadow 3, ash 7, ember 4, earth 1, accent 8)
+        ],
+        fonts: FontSlots(
+            display: Some("rajdhani_bold.ttf"),                  // [ASSUMED role; census FONTS.md holds roles]
+            body:    Some("jura_regular.ttf"),                   // [ASSUMED role]
+            console: Some("IosevkaFixed-Regular.ttf"),           // [ASSUMED role]
+        ),
+        // Faction banners for the five faction slots (mud deals five):
+        // four banners exist, the fifth is ABSENT and said so (T1).
+        banners: [
+            ("thornhaven_guard", "thornhaven_guard_banner_golden.png"),
+            ("ironmoor_trade",   "ironmoor_trade_banner_golden.png"),
+            ("hollowden_pack",   "hollowden_pack_banner_golden.png"),
+            ("murkveil_cult",    "murkveil_cult_banner_decay.png"),
+            ("fifth_faction",    "ABSENT"),
+        ],
+    ),
+
+    // ── SYSTEMS TOGGLES ──────────────────────────────────────────────────
+    // Ironroot opts into crime (the Ledger/accounts law, CANON.md accounts
+    // surface) and factions (the five Standings below); pvp stays off —
+    // not in this cartridge's scope.
+    systems: SystemsToggles(
+        combat: true, vendor: true, crafting: true, fishing: true,
+        crime: true, pets: true, dialogue: true, pvp: false,
+        factions: true, mob_ai: true, weather: true, day_night: true,
+        quests: true, loot: true,
+    ),
+
+    // ── VOCABULARY ───────────────────────────────────────────────────────
+    // Ledger-voice terms [AUTHORED, tone: design_guidelines.rs:37-40 "plain,
+    // weathered, small"], echoing the accounts/ledger metaphor already CANON
+    // in content/accounts.rs and CANON.md's toll-and-ledger surface.
+    vocabulary: Vocabulary(
+        currency: VocabTerm(term_word: "Gold", icon_word: "coin", color_word: "gold"),          // [ASSUMED] common ledger term, not pixel-witnessed this session
+        health: VocabTerm(term_word: "Standing", icon_word: "heart", color_word: "red"),         // [AUTHORED]
+        mana: Some(VocabTerm(term_word: "Reserve", icon_word: "drop", color_word: "blue")),      // [AUTHORED]
+        xp: Some(VocabTerm(term_word: "Account", icon_word: "star", color_word: "white")),        // [AUTHORED] accounts.rs metaphor
+        stamina: Some(VocabTerm(term_word: "Wind", icon_word: "lungs", color_word: "green")),    // [AUTHORED]
+    ),
+
+    // ── FACTIONS (the five Standings) ───────────────────────────────────
+    // [CANON-echo] drained verbatim from mind.rs's own five hardcoded rows
+    // (mind.rs:34-88 doc comments name these "AUTHORED for the five Ironroot
+    // factions") — this is the census §2 DRAIN-INTO ruling in effect: the
+    // machine (mind.rs::FactionMind::for_faction) stays put, the DATA moves
+    // to its correct home, the cart. Slug order matches the banners list
+    // above by position (index 0..4); the pairing itself is [AUTHORED], not
+    // independently re-verified against a lore source this session.
+    // NOTE-DEBT: mind.rs is not yet wired to read this row set (see base
+    // file's matching NOTE-DEBT) — schema growth only, wiring is follow-on.
+    factions: [
+        FactionRow(name_word: "the Thornguard", threat_sensitivity: 700, ambiguity_tolerance: -600, hierarchy_need: 800, novelty_drive: -400, closure_pressure: 800, mortality_pressure: 500, dominance_drive: 600, permeability: -700),
+        FactionRow(name_word: "the Verdant Pact", threat_sensitivity: 300, ambiguity_tolerance: 500, hierarchy_need: -200, novelty_drive: 600, closure_pressure: -300, mortality_pressure: 200, dominance_drive: -100, permeability: 700),
+        FactionRow(name_word: "the Ashborn Legion", threat_sensitivity: 800, ambiguity_tolerance: -700, hierarchy_need: 700, novelty_drive: -600, closure_pressure: 700, mortality_pressure: 700, dominance_drive: 800, permeability: -600),
+        FactionRow(name_word: "the Pallid Court", threat_sensitivity: 400, ambiguity_tolerance: -300, hierarchy_need: 600, novelty_drive: -500, closure_pressure: 600, mortality_pressure: 300, dominance_drive: 400, permeability: -500),
+        FactionRow(name_word: "the Null Communion", threat_sensitivity: 200, ambiguity_tolerance: 800, hierarchy_need: -600, novelty_drive: 700, closure_pressure: -500, mortality_pressure: 0, dominance_drive: -300, permeability: 900),
+    ],
+)

@@ -1,0 +1,31 @@
+#vixi:geom v1
+# toll_gate.geom.vixi — canonical PaTeX geometry source (ORACLE-C spec sec-2, Lock 3).
+# parse_geom -> bake_geom -> Pexil lattice + annotation table -> CartBody seal. Runtime never parses.
+surface: toll_gate
+cart: IRONROOT
+band: mud
+size: 71x22
+legend:
+  '.' = [ 0, 0, 1, 0, 0]      # far firm ground, seen
+  '#' = [ 1,-1, 0, 0, 1]      # made wall in under-shadow, ledgered
+  '=' = [ 1, 0,-1, 0, 1]      # made rail, near, ledgered
+  '~' = [-1, 0, 0,-1, 0]      # loose ground, decaying
+  '+' = [ 1, 1, 0, 0, 1]      # made, lit, ledgered — the gate
+front:
+  |.......................................................................|
+  |...........................######++######..............................|
+  |~~~~.......................#.....++.....#..........~~~~~~..............|
+  |====.......................#.....++.....#..............................|
+  |.......................................................................|
+under:
+  @ cell=34.2 axes=[1,1,0,0,-1]    # the gate claims ledgered; the record holds unwritten
+anno:
+  @ cell=34.2  bind=npe.title.under_line
+  @ cell=38.4  sentinel=door out="bell_pit"
+  @ region=0.0..71.1 bind=sky.band
+  @ cell=20.3  bind=presence.questgiver
+gate contrast_min = 4.5
+gate hit_target_min = mu(44)
+gate runtime_parse = forbidden
+gate float_in_ir = forbidden
+gate seed_deterministic = required

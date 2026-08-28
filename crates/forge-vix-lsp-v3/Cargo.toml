@@ -1,0 +1,30 @@
+[package]
+name = "forge-vix-lsp-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+description = "Sovereign no-dep VixiScript language server — hand-rolled JSON-RPC-over-stdio wrapping forge-vix (grammar/diagnostics) + the gbnf closed-set completion law. NO external LSP framework (tower-lsp / vscode-languageserver REJECTED, Sean 2026-06-03)."
+
+[features]
+stdio-transport = []
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+# BLOCKER: forge-vix (v2) has diagnostics::check, cst::Document, and grammar module.
+# In v3, these are split: cst in forge-vix-syntax-v3, but diagnostics module not yet ported.
+# Attempting forge-vix-syntax-v3 as partial substitute for CST/grammar tables only.
+# Note: forge-vix-syntax-v3 does NOT provide diagnostics::check or grammar functions like
+# kind_doc, layout_doc, dialect_hover, is_headerless_vixel — these are missing from v3.
+forge-vix-syntax-v3 = { path = "../forge-vix-syntax-v3" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+# The cognitive lens we WRAP. Light: forge-sieve-v3 pulls only forge-core/serde/blake3/glam
+# — NO tokio/burn/ash.
+forge-sieve-v3 = { path = "../forge-sieve-v3", default-features = false }
+
+[lints]
+workspace = true

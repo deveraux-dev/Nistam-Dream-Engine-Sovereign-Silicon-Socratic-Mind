@@ -1,0 +1,20 @@
+# Extracted from `xtask/src/river.rs` (2026-08-19, Sean: "why cant the river
+# live in daemon, thats prolly why agents cant see verbs like pwsh"). The real
+# logic sat in xtask, a binary-only crate — nothing else in the workspace
+# could depend on it, so `forge-daemon-door` couldn't expose river verbs
+# natively and every caller had to shell out to `cargo xtask river ...`
+# (full compile-check per call) instead of a fast in-process/wire call.
+# Matches this workspace's own established pattern (see xtask/Cargo.toml's
+# own comments on forge-pkm-v3/forge-index-v3/forge-book-v3): logic lives in
+# a real crate, xtask only drives it.
+[package]
+name = "forge-river-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[dependencies]
+
+[lints]
+workspace = true

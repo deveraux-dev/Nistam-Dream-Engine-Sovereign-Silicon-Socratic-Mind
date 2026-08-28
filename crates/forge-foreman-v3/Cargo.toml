@@ -1,0 +1,40 @@
+# The M2 foreman — HANDOFF §11's deterministic orchestrator, in-repo.
+# One dependency: the flight recorder. The sidecar is reached over loopback
+# TCP (std only) and the gate is a spawned cargo — no HTTP crate, no serde,
+# no async runtime. Candle and blake3 stay behind their own firewalls.
+[package]
+name = "forge-foreman-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "Deterministic build-loop orchestrator: census -> sidecar draft -> gate -> tape"
+
+[lints]
+workspace = true
+
+[dependencies]
+forge-vcs-v3 = { path = "../forge-vcs-v3" }
+forge-ml-bqrouter = { path = "../forge-ml-bqrouter" }
+serde_json = "1.0"
+# `foreman witness <scenario>` (Sean 2026-08-15) — the visual witness harness.
+forge-witness-v3 = { path = "../forge-witness-v3" }
+# L05 one-home gate (post_edit) — reuses walker::walk_bounded_skipping to
+# scan crates/*/src for an existing pub struct/enum before allowing a new one.
+forge-index-v3 = { path = "../forge-index-v3" }
+# CLAUDE.md is RON now (2026-08-23) -- real parse for drift::check_claude_ron,
+# not a hand-rolled string search. Version matches the 4 crates that already
+# pin it (L05 one-home version).
+ron = "0.8"
+
+# Build-time twin of the `forge-vcs-v3` dependency above — `build.rs` hashes
+# this crate's own `src/*.rs` with the SAME `BrutalHash` function the
+# runtime `staleness` module re-hashes with, so a compiled binary can prove
+# whether it matches the source that's on disk right now (ADR:
+# crates/forge-vcs-v3/docs/ADR-forge-vcs-v3-not-git-and-the-binary-staleness-gap.md).
+[build-dependencies]
+forge-vcs-v3 = { path = "../forge-vcs-v3" }
+
+[[bin]]
+name = "foreman"
+path = "src/main.rs"

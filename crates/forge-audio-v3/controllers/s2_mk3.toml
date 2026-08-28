@@ -1,0 +1,306 @@
+# Traktor Kontrol S2 MK3 — TOML controller descriptor
+# VID=0x17CC, PID=0x1720 (dreadpiratedev product ID)
+# LED byte offsets extracted from forge-audio/src/hid_s2.rs S2Leds struct.
+# Output report: 0x80, 62-byte LED frame.
+#
+# NOTE: Only LEDs with valid LedRole variants are mapped here.
+# Additional LEDs (pfl, flux, rev, keylock, mic) are driven directly
+# by the HID thread until LedRole is extended to cover them.
+
+name = "Traktor Kontrol S2 MK3"
+vendor_id = 0x17CC
+product_id = 0x1720
+
+[protocol]
+type = "hid"
+frame_size = 62
+
+[capabilities]
+decks = 2
+pads_per_deck = 8
+has_rgb_pads = false
+has_rgb_buttons = false
+
+# ─── Deck A transport (bytes 6–12) ───
+
+[leds.shift_a]
+role = "shift"
+deck = "a"
+led_type = "brightness"
+address = 6
+
+[leds.sync_a]
+role = "sync"
+deck = "a"
+led_type = "brightness"
+address = 9
+
+[leds.cue_a]
+role = "cue"
+deck = "a"
+led_type = "brightness"
+address = 11
+
+[leds.play_a]
+role = "play"
+deck = "a"
+led_type = "brightness"
+address = 12
+
+# ─── Deck A hotcue pads (bytes 13–20) ───
+
+[leds.pad_0_a]
+role = "pad_0"
+deck = "a"
+led_type = "brightness"
+address = 13
+
+[leds.pad_1_a]
+role = "pad_1"
+deck = "a"
+led_type = "brightness"
+address = 14
+
+[leds.pad_2_a]
+role = "pad_2"
+deck = "a"
+led_type = "brightness"
+address = 15
+
+[leds.pad_3_a]
+role = "pad_3"
+deck = "a"
+led_type = "brightness"
+address = 16
+
+[leds.pad_4_a]
+role = "pad_4"
+deck = "a"
+led_type = "brightness"
+address = 17
+
+[leds.pad_5_a]
+role = "pad_5"
+deck = "a"
+led_type = "brightness"
+address = 18
+
+[leds.pad_6_a]
+role = "pad_6"
+deck = "a"
+led_type = "brightness"
+address = 19
+
+[leds.pad_7_a]
+role = "pad_7"
+deck = "a"
+led_type = "brightness"
+address = 20
+
+# ─── FX buttons (global, bytes 21–24) ───
+
+[leds.fx_1]
+role = "fx_1"
+led_type = "brightness"
+address = 21
+
+[leds.fx_2]
+role = "fx_2"
+led_type = "brightness"
+address = 22
+
+[leds.fx_3]
+role = "fx_3"
+led_type = "brightness"
+address = 23
+
+[leds.fx_4]
+role = "fx_4"
+led_type = "brightness"
+address = 24
+
+# ─── Deck A mixer (bytes 25–32) ───
+
+[leds.loop_a]
+role = "loop"
+deck = "a"
+led_type = "brightness"
+address = 26
+
+# VU meter Deck A: 5 segments at bytes 28–32
+
+[leds.vu_0_a]
+role = "vu_0"
+deck = "a"
+led_type = "brightness"
+address = 28
+
+[leds.vu_1_a]
+role = "vu_1"
+deck = "a"
+led_type = "brightness"
+address = 29
+
+[leds.vu_2_a]
+role = "vu_2"
+deck = "a"
+led_type = "brightness"
+address = 30
+
+[leds.vu_3_a]
+role = "vu_3"
+deck = "a"
+led_type = "brightness"
+address = 31
+
+[leds.vu_4_a]
+role = "vu_4"
+deck = "a"
+led_type = "brightness"
+address = 32
+
+# ─── Deck B mixer (bytes 31–38) ───
+# NOTE: Deck B loop shares byte 32 with vu_4_a on hardware
+
+[leds.loop_b]
+role = "loop"
+deck = "b"
+led_type = "brightness"
+address = 32
+
+# Master level — byte 33 (between VU banks)
+
+[leds.master_level]
+role = "master_level"
+led_type = "brightness"
+address = 33
+
+# VU meter Deck B: 5 segments at bytes 34–38
+
+[leds.vu_0_b]
+role = "vu_0"
+deck = "b"
+led_type = "brightness"
+address = 34
+
+[leds.vu_1_b]
+role = "vu_1"
+deck = "b"
+led_type = "brightness"
+address = 35
+
+[leds.vu_2_b]
+role = "vu_2"
+deck = "b"
+led_type = "brightness"
+address = 36
+
+[leds.vu_3_b]
+role = "vu_3"
+deck = "b"
+led_type = "brightness"
+address = 37
+
+[leds.vu_4_b]
+role = "vu_4"
+deck = "b"
+led_type = "brightness"
+address = 38
+
+# ─── Deck B hotcue pads (bytes 40–47) ───
+# NOTE: Pads 5–7 share bytes 45–47 with shift/flux/keylock on hardware
+
+[leds.pad_0_b]
+role = "pad_0"
+deck = "b"
+led_type = "brightness"
+address = 40
+
+[leds.pad_1_b]
+role = "pad_1"
+deck = "b"
+led_type = "brightness"
+address = 41
+
+[leds.pad_2_b]
+role = "pad_2"
+deck = "b"
+led_type = "brightness"
+address = 42
+
+[leds.pad_3_b]
+role = "pad_3"
+deck = "b"
+led_type = "brightness"
+address = 43
+
+[leds.pad_4_b]
+role = "pad_4"
+deck = "b"
+led_type = "brightness"
+address = 44
+
+[leds.pad_5_b]
+role = "pad_5"
+deck = "b"
+led_type = "brightness"
+address = 45
+
+[leds.pad_6_b]
+role = "pad_6"
+deck = "b"
+led_type = "brightness"
+address = 46
+
+[leds.pad_7_b]
+role = "pad_7"
+deck = "b"
+led_type = "brightness"
+address = 47
+
+# ─── Deck B transport (bytes 45–51) ───
+# NOTE: shift_b (45), sync_b (48), cue_b (50), play_b (51)
+# Bytes 45–47 overlap with pads 5–7 on hardware
+
+[leds.shift_b]
+role = "shift"
+deck = "b"
+led_type = "brightness"
+address = 45
+
+[leds.sync_b]
+role = "sync"
+deck = "b"
+led_type = "brightness"
+address = 48
+
+[leds.cue_b]
+role = "cue"
+deck = "b"
+led_type = "brightness"
+address = 50
+
+[leds.play_b]
+role = "play"
+deck = "b"
+led_type = "brightness"
+address = 51
+
+# ─── Global LEDs ───
+
+[leds.browse]
+role = "browse"
+led_type = "brightness"
+address = 60
+
+[leds.deck_focus_a]
+role = "deck_focus"
+deck = "a"
+led_type = "brightness"
+address = 60
+
+[leds.deck_focus_b]
+role = "deck_focus"
+deck = "b"
+led_type = "brightness"
+address = 61

@@ -1,0 +1,11 @@
+[package]
+name = "tree-sitter-vixel-v3"
+version = "0.1.0"
+edition = "2021"
+description = "Zero-alloc CST parser for VixiScript DSL — bridges GBNF-constrained AI output to the AOT compiler"
+
+[dependencies]
+# None — zero external deps, zero-alloc
+
+[lints]
+workspace = true

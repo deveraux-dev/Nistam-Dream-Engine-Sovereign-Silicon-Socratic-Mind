@@ -1,0 +1,129 @@
+  ## 1. The Ephemeral Envelope Lifecycle (6 Steps)
+
+  Source: lib.rs
+
+    [ Step 1: Birth ] ──> [ Step 2: Read ] ──┬──> [ Step 3: Revocation ] (Trit -1) ──┐
+                                             ├──> [ Step 4: Expiration ] (Trit  0) ──┼──> [ Step 6: Zeroize & Shred ]
+                                             └──> [ Step 5: Attestation] (Trit +1) ──┘
+
+  1. Step 1: Birth / Allocation (lib.rs:260)
+      • EphemeralEnvelope::new(payload, born_tick, ttl) allocates a payload bound to engine ticks (expiry_tick = born_tick.saturating_add(ttl)).
+  2. Step 2: Active Read Window (lib.rs:271)
+      • env.get(current_tick) returns Some(&T) only while current_tick < expiry_tick. If queried at or past the deadline, it immediately zeroizes internal memory and returns None.
+  3. Step 3: Deliberate Revocation (lib.rs:281)
+      • env.revoke() immediately wipes the payload unwitnessed and sets the internal disposition to Disposition::Revoked (Balanced Trit $-1$).
+  4. Step 4: Expiration Fixed Point (lib.rs:307)
+      • If the deadline elapses without explicit seal or revocation, env.resolve() automatically records Disposition::Expired (Balanced Trit $0$).
+  5. Step 5: Cryptographic Attestation & Sealing (lib.rs:303)
+      • Before deadline, env.resolve(tick, &mut chain) computes SHA-256 (payload) and appends Disposition::Attested(seal) (Balanced Trit $1$) to the rolling EvidenceChain.
+  6. Step 6: Mercy-Tick Crypto-Shred & Drop Zeroization (lib.rs:343, lib.rs:335)
+      • crypto_shred_seed(&mut seed) and Drop implementation invoke Zeroize::zeroize() to overwrite all heap and stack buffers with zero bytes, enforcing the ADR-0026 zero-retention invariant.
+
+  ──────
+  ## 2. The Cloud Run Evidence Flywheel Pipeline (7 Stages)
+
+  Source: agent_loop.py
+
+  1. Stage 1: Ingest Poll (agent_loop.py:8)
+      • Asynchronous GCS inbox watcher listens for arriving sensor readings, photo buffers, or somatic inspector records.
+  2. Stage 2: Deterministic Byte-Sieve Triage (agent_loop.py:94)
+      • ByteSieve.validate_file() verifies file extensions (.png, .jpg, .s13, .ump), enforces the 10 MB size ceiling, and validates header magic bytes.
+  3. Stage 3: Schema-Locked Gemini 3.7 Flash Audit (agent_loop.py:10)
+      • Dispatches payloads to Gemini 3.7 Flash on Vertex AI locked to PhysicalInspectionAudit Pydantic schema at deterministic temperature 0.0, extracting NACE rust metrics and structural risk scores.
+  4. Stage 4: Degradation Cross-Check (agent_loop.py:145)
+      • get_expected_nace_level(tick) compares the model’s observed corrosion level against the mathematical 50-year fixed-point trajectory for Alberta municipal baselines.
+  5. Stage 5: Rust Attestation Subprocess (agent_loop.py:112)
+      • Calls the compiled native attest binary (forge-envelope --chain), forging an immutable ChainLink with cryptographic proof.
+  6. Stage 6: Sharded Firestore Ledger Write (agent_loop.py:13)
+      • Writes the rolling chain head, tick, and verified disposition into sharded collections on Google Cloud Firestore (northamerica-northeast1).
+  7. Stage 7: ADR-0026 Zero-Retention Staging Wipe (agent_loop.py:14)
+      • Immediately executes shutil.rmtree() on local staging directories upon Firestore receipt acknowledgment, retaining 0  bytes of raw photo or sensor liability.
+
+  ──────
+  ## 3. Vertex Flash Context Caching 4-Stage Boot/Delta Pipeline
+
+  Source: vertex_flash_cache.py
+
+  1. Stage 1: Sovereign Airgap Pre-Flight Gate (vertex_flash_cache.py:66)
+      • Scans candidate files against regex [\u1400-\u167F] (UCAS Syllabics) and private crate blocklists (gemma-s13, cree_grammar.rs, m5_geodesic.rs), refusing upload if sovereign data is detected.
+  2. Stage 2: Context Bundle Packing & Checksum (vertex_flash_cache.py:143)
+      • Assembles selected profiles (lean, patex, devops, full) into a 450,000-token VARS dictionary bundle and computes an authoritative SHA-256 fingerprint.
+  3. Stage 3: Vertex AI CachedContent Warmup (vertex_flash_cache.py:168)
+      • Calls genai.types.CreateCachedContentConfig on Vertex AI to instantiate a 1-hour cached session (75% cost reduction: $0.01875/1 M cached read vs $0.075/1 M fresh input).
+  4. Stage 4: Active Thermodynamic Governor Session Binding (vertex_flash_cache.py:220)
+      • Binds subsequent queries to the cached content ID at deterministic temperature 0.0, recording millisecond latency and sub-cent billing draw in live telemetry.
+
+  ──────
+  ## 4. S13 Inference & Weaver Conflict Arbitration Pipeline
+
+  Source: s13.rs, weaver.rs
+
+  1. Stage 1: Sensor & Somatic Tokenization (somatic_tokenizer.rs:1)
+      • Converts raw CAN bus, Modbus, and 16-byte MIDI 2.0 UMP streams into normalized fixed-point Permyriad tensors without heap allocations.
+  2. Stage 2: S13 Balanced-Ternary Quantization (s13.rs:108)
+      • Packs 5 trits ({ - 1,0, + 1}) per byte (3⁵ = 243 states) into a 13-lane spatial state vector.
+  3. Stage 3: 13 Moons Nehiyaw Natural Law Sentinel Gating (s13.rs:14)
+      • Evaluates out-of-bounds byte codes (243.. = 255, e.g., MikikapisePisim 254 for sabotage, TheThirteenthMoon 255 for hard zeroize). If tripped, stream decoding halts immediately in ≈35  ns.
+  4. Stage 4: Zero-Heap Weaver DFA Arbitration (weaver.rs:31)
+      • WeaverArbiter::arbitrate(chain, s13_token) computes composite gravity in O(1) time, yielding:
+          • StructuralEquilibrium (∑ = 0, stable baseline)
+          • ScheduledMaintenance (|∑| ≤ 3, minor drift)
+          • CriticalEscalation (|∑| > 3, structural risk)
+          • ProvenanceBreach (empty/unanchored evidence chain, immediate repudiation)
+
+  5. Stage 5: TPDF Dithered Audio Folding (mom.rs:173)
+      • Folds the 64-bit float accumulator into a 24-bit PCM stream using Triangular Probability Density Function dither, eliminating quantization distortion on the 120Hz/48kHz bus.
+
+  ──────
+  ## 5. The 50-Year Infrastructure Degradation Simulation (5 Steps)
+
+  Source: degradation.rs, simulate_50yr_degradation.py
+
+  1. Step 1: Environmental Parameter Initialization (degradation.rs:25)
+      • Configures substrate material, annual freeze-thaw count, salt spray exposure, and nominal coating thickness (μ m).
+  2. Step 2: Annual Permyriad Degradation Step (degradation.rs:60)
+      • Computes annual coating loss
+
+
+    Δρ
+      pmy
+
+  via integer fixed-point arithmetic, accounting for austerity budgets and extreme weather events.
+  3. Step 3: NACE Rust Progression Assessment (degradation.rs:90)
+
+  • Maps remaining coating thickness to standard NACE corrosion grades (Level 0: Pristine to Level 5: Catastrophic Substrate Delamination).
+
+  4. Step 4: Annual Audit Record Stamping (degradation.rs:115)
+      • Generates a YearAuditRecord struct containing year index, remaining microns, NACE level, and health verdict.
+  5. Step 5: 50-Year Trajectory Attestation (degradation.rs:140)
+      • Seals the complete 50-year lifecycle into the EvidenceChain, proving historical compliance across multi-decade municipal infrastructure lifetimes.
+
+  ──────
+  ## 6. The 4-Act Kishōtenketsu Video & Submission Narrative
+
+  Source: VIDEO_PLAYBOOK.md, video_deck_3min.json
+
+  1. Act 1: Ki (起 — Introduction / Human Ground) [0:00 – 0:24]
+      • Theme: 23-year journeyman coating craftsman; physical dispute loops on construction substrates; why human attention is the hotpath.
+  2. Act 2: Shō (承 — Development / Sovereign Edge Engine) [0:24 – 0:48]app
+      • Theme: #![no_std] Rust; 1.58-bit ternary S13 quantization; 2.3–2.8 Mtok/s single-core hardware baseline; 0  bytes heap allocation in arbitration DFA.
+  3. Act 3: Ten (転 — Twist / The Sentinel Breach & Cloud Oracle) [0:48 – 1:08]
+      • Theme: Sabotage injected on wire; 13 Moons sentinel halts decoding in 35  ns; Vertex AI Gemini 3.7 Flash active context caching slashes costs by 75% while locking structured audit schemas.
+  4. Act 4: Ketsu (結 — Resolution / The Immutable Evidence Lock) [1:08 – 1:20]
+      • Theme: State resolution folded onto rolling SHA-256 evidence chain; ADR-0026 zero-retention memory shred; non-repudiable cyber-physical trust.
+
+  ──────
+  ## 7. Master Canon Sprint & Execution Gates (5 Gates)
+
+  Source: SOVEREIGN_MASTER_CANON.md, SUBMISSION_ENTRY.md
+
+  1. Gate 1: Lossless Synthesis & Mathematical Priority Landing
+      • Consolidated 54 exploratory milestone handoffs into SOVEREIGN_MASTER_CANON.md and secured Zenodo DOI 10.5281/zenodo.22020676 https://doi.org/10.5281/zenodo.22020676 (Pararity).
+  2. Gate 2: Crate Zero Core Primitives & Safety Mandate
+      • Implemented forge-envelope under #![deny(unsafe_code)], enforcing zero-heap ephemeral buffer sealing and balanced-ternary Disposition trits (53/53 tests green).
+  3. Gate 3: Benchmark Reconciliation & Calibration
+      • Ran physical CPU benchmarks (mtok_bench_receipt.txt), officially withdrawing early 6.42 Gtok/s theoretical L1 claims in favor of the measured 2.3–2.8 Mtok/s single-core baseline.
+  4. Gate 4: Planetary Stress & Sabotage Defense Verification
+      • Simulated 10,000 inspectors executing 1,000,000 arbitrations with 40,000 injected sabotage attacks (100% repudiation rate, scale_test.rs).
+  5. Gate 5: Competition Submission & Live Showcase Seal
+      • Packaged SUBMISSION_ENTRY.md and deployed the live interactive reactive shaderbind showcase to https://13forge.com.

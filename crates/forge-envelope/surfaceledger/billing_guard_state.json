@@ -1,0 +1,13 @@
+{
+  "initial_credit_usd": 1361.01,
+  "total_spent_usd": 9.810575999999948,
+  "remaining_credit_usd": 1351.1994240000001,
+  "last_alerted_milestone_usd": 0.0,
+  "queries_executed": 1158,
+  "cached_tokens_read": 521100000,
+  "uncached_tokens_read": 138960,
+  "output_tokens_generated": 98430,
+  "circuit_breaker_tripped": false,
+  "last_updated": 1787282680.381779,
+  "history": []
+}

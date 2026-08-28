@@ -1,0 +1,93 @@
+{
+  "spec_id": "nipr-gemma-s13-v1.1.0",
+  "title": "Normalized IPR (N x IPR) zero-transcendental localization metric",
+  "supersedes": "dimensional_collapse_nipr_plan.md",
+  "canonical_doc": "docs/whitepapers/01_NORMALIZED_IPR.md",
+  "review_provenance": {
+    "gemini_review": "APPROVED with 3 adjustments (SIMD-safe, u128, S1=0 semantics)",
+    "claude_review": "APPROVED with 2 additional fixes (dimension width, missing_docs) and 1 naming veto"
+  },
+  "target": {
+    "crate": "gemma-s13",
+    "file": "crates/gemma-s13/src/nipr.rs",
+    "module": "nipr",
+    "naming_veto": "dimensional_collapse is TAKEN by forge-audio-v3/src/dimensional_collapse.rs (5D audio downmix). One-home law: do NOT reuse the name. Module and file MUST be nipr."
+  },
+  "crate_gates_verbatim": {
+    "lib_rs_11": "#![deny(unsafe_code)]",
+    "lib_rs_12": "#![deny(missing_docs)]",
+    "lib_rs_13": "#![cfg_attr(not(test), no_std)]",
+    "implications": [
+      "NO unsafe blocks, therefore NO raw SIMD intrinsics (_mm256_madd_epi16 banned). Use chunks_exact scalar MAC loops; LLVM auto-vectorizes.",
+      "EVERY pub item (struct, field, fn, const) carries a /// doc comment or the crate fails to compile.",
+      "core-only in non-test builds: no std, no heap, no Vec/String/Box anywhere in this module."
+    ]
+  },
+  "formula": {
+    "inputs": "V = non-negative integer slice &[u16], N = V.len()",
+    "s1": "sum(v_i) accumulated in u64",
+    "s2": "sum(v_i * v_i) accumulated in u64",
+    "pmy": "floor( (N*S2 - S1^2) * 10000 / ((N-1) * S1^2) )",
+    "arithmetic_width": "numerator and denominator computed strictly in u128 (N*S2 alone brushes u64::MAX at u16-saturated 65535-length input; *10000 overflows u64)",
+    "range": "[0, 10000] pmy; 0 = uniform/delocalized, 10000 = single-spike localized",
+    "safety": "N*S2 >= S1^2 always (Cauchy-Schwarz) so the numerator never underflows; .min(10000) clamp is defensive only"
+  },
+  "edge_cases": {
+    "empty_slice": { "pmy": 0, "dimension": 0, "total_mass": 0 },
+    "s1_zero_any_n": { "pmy": 0, "rationale": "all-zero vector = dead context = prune candidate, never a landmark. v1.0.0 conservatively said 10000; current canon: 0 (implemented, tested)." },
+    "n_1_nonzero": { "pmy": 10000, "rationale": "single nonzero element is perfectly localized by definition; formula denominator is 0 at N=1 so this is a defined convention, not computed." }
+  },
+  "api": {
+    "struct": "NormalizedIpr",
+    "fields": [
+      { "name": "pmy", "type": "u16", "doc": "Localization in permyriad: 0 uniform, 10000 single peak." },
+      { "name": "dimension", "type": "u32", "doc": "Slice length N. u32 NOT u16: KV-cache slices exceed 65535 (128k contexts); `n as u16` silently truncates. Reviewed defect, fixed here." },
+      { "name": "total_mass", "type": "u64", "doc": "S1 sum; 0 means dead/prunable regardless of pmy." }
+    ],
+    "derives": "Debug, Clone, Copy, PartialEq, Eq",
+    "constructor": "pub fn compute_u16(slice: &[u16]) -> Self",
+    "predicates": [
+      { "sig": "pub fn is_landmark(&self) -> bool", "body": "self.pmy >= LANDMARK_PMY && self.total_mass > 0", "doc_required": true },
+      { "sig": "pub fn is_diffuse(&self) -> bool", "body": "self.pmy < DIFFUSE_PMY || self.total_mass == 0", "doc_required": true }
+    ],
+    "consts": [
+      { "name": "LANDMARK_PMY", "type": "u16", "value": 7500 },
+      { "name": "DIFFUSE_PMY", "type": "u16", "value": 2500 }
+    ]
+  },
+  "telemetry_word_separate_type": {
+    "name": "NiprPackedWord",
+    "storage": "AtomicU64 payload per whitepaper 01 section 3 invariant 3",
+    "layout_bits": { "0_15": "pmy_level", "16_31": "dimension_n SATURATING at 65535 (0xFFFF sentinel = overflow, read true N from NormalizedIpr)", "32_47": "gate_status 0=INIT 1=ACTIVE 2=FALLBACK 3=FAULT", "48_63": "sequence_tick wrapping" },
+    "rule": "wire/HUD word only; NEVER the compute struct. dimension_n saturates, NormalizedIpr.dimension does not."
+  },
+  "gate_bands": {
+    "ge_7500": "localized: direct execution granted, L402 credit 1x baseline",
+    "2500_7499": "multimodal: GBNF-constrained sampling path",
+    "lt_2500": "delocalized/entropic: reject, early-terminate, or require higher L402 stake"
+  },
+  "tests_required": [
+    { "name": "uniform_zero_pmy", "input": "[10,10,10,10]", "expect": { "pmy": 0 } },
+    { "name": "singular_full_pmy", "input": "[10,0,0,0]", "expect": { "pmy": 10000 } },
+    { "name": "bimodal_3333", "input": "[10,10,0,0]", "expect": { "pmy": 3333 } },
+    { "name": "singular_anchor_n8", "input": "[100,0,0,0,0,0,0,0]", "expect": { "pmy": 10000 } },
+    { "name": "zero_mass_is_diffuse", "input": "[0,0,0,0]", "expect": { "pmy": 0, "total_mass": 0, "is_diffuse": true, "is_landmark": false } },
+    { "name": "overflow_stress_no_panic", "input": "[u16::MAX; 4096]", "expect": { "pmy": 0 }, "note": "uniform saturated vector; exercises u128 path; must not panic in debug" },
+    { "name": "large_n_dimension_no_truncation", "input": "[1; 70000]", "expect": { "dimension": 70000, "pmy": 0 }, "note": "proves u32 dimension; u16 would wrap to 4464" },
+    { "name": "empty_slice", "input": "[]", "expect": { "pmy": 0, "dimension": 0 } },
+    { "name": "n1_nonzero", "input": "[7]", "expect": { "pmy": 10000, "dimension": 1 } }
+  ],
+  "verification_commands": [
+    "cargo check -p gemma-s13",
+    "cargo test -p gemma-s13 nipr",
+    "RUSTFLAGS='-D warnings' cargo check -p gemma-s13"
+  ],
+  "banned": [
+    "unsafe blocks and arch intrinsics",
+    "f32/f64 anywhere in this module",
+    "transcendental calls (ln, exp, sin, cos, powf)",
+    "heap allocation (Vec, String, Box, format!)",
+    "dimension stored narrower than u32 in the compute struct",
+    "module or file named dimensional_collapse"
+  ]
+}

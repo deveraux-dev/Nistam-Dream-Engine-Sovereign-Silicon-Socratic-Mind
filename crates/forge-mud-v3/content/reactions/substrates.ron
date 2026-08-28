@@ -1,0 +1,66 @@
+// The 7 living substrates — fae-bound crafting materials.
+//
+// Ported verbatim from F:\NewRepo\crates\forge-reactions\src\substrate.rs:136-144.
+// Values unchanged: this is a drain, not a re-authoring.
+//
+// THE LOOP IS THE TWO NAME COLUMNS. `public_name` is what the market calls it;
+// `true_label` is what it is. "Sweet Draft" is bottled fae breath. "Weatherhide"
+// is a stolen skin. The distance between those two strings is the game — a cozy
+// crafting economy whose goods each remember what they cost their source.
+//
+// `ethical_pressure_q` is permyriad (10_000 = 1.0). The ladder is authored, not
+// derived: a borrowed identity (9500) weighs more than a death (7500), and the
+// spirit holding back Ironroot (9000) weighs more than blood (7000).
+(
+    substrates: [
+        (
+            id: FaeBlood,
+            public_name: "Red Sap",
+            true_label: "fae blood",
+            ethical_pressure_q: 7000,
+            corruption_risk: "vampiric_crafting",
+        ),
+        (
+            id: FaeBreath,
+            public_name: "Sweet Draft",
+            true_label: "bottled fae breath",
+            ethical_pressure_q: 6000,
+            corruption_risk: "suffocation_debt",
+        ),
+        (
+            id: FaeSong,
+            public_name: "Harmonic Thread",
+            true_label: "captured fae song",
+            ethical_pressure_q: 7000,
+            corruption_risk: "false_voice",
+        ),
+        (
+            id: FaeRootSpirit,
+            public_name: "Root-Stay",
+            true_label: "fae spirit holding back Ironroot",
+            ethical_pressure_q: 9000,
+            corruption_risk: "root_backlash",
+        ),
+        (
+            id: FaeSkinOrCoat,
+            public_name: "Weatherhide",
+            true_label: "stolen fae skin/coat",
+            ethical_pressure_q: 9500,
+            corruption_risk: "borrowed_identity",
+        ),
+        (
+            id: FaeBone,
+            public_name: "Hollow Ivory",
+            true_label: "fae remains",
+            ethical_pressure_q: 7500,
+            corruption_risk: "ancestral_anger",
+        ),
+        (
+            id: FaeDream,
+            public_name: "Soft Map",
+            true_label: "harvested fae dream",
+            ethical_pressure_q: 7000,
+            corruption_risk: "false_geography",
+        ),
+    ],
+)

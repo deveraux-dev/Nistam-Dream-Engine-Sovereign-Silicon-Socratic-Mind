@@ -1,0 +1,83 @@
+// The 5 fae reward outcomes — what taking (or not taking) a fae gift does to the world.
+//
+// Ported verbatim from F:\NewRepo\crates\forge-reactions\src\fae_ethics.rs:24-32.
+//
+// ── THE STRUCTURE ───────────────────────────────────────────────────────────
+//
+// Five lanes, each SIGNED: -/0/+ is a balanced trit, with permyriad magnitude on
+// top. Five lanes x three states = 3^5 = 243, the exact shape of
+// `forge_core_v3::atom::TritCell5D` (atom.rs:17, TRITS_PER_BYTE=5, 3^5==243
+// asserted at :144). PARARITY.md §3 Cor. 2 is why a zero can exist at all:
+// (m,k)=(1,1) is the only orbit type that carries a neutral.
+//
+// Sign vectors (own, oblig, crown, hostil, ecol):
+//   Claimed    [+, 0, +, +, +]
+//   Bargained  [+, +, +, -, 0]
+//   Gifted     [-, +, -, -, -]
+//   Stolen     [+, 0, +, +, +]     <- identical signature to Claimed
+//   Refused    [-, -, -, -, -]
+//
+// TWO THINGS THE DATA SAYS, both preserved rather than flattened:
+//
+// 1. STOLEN AND CLAIMED SHARE ONE SIGN VECTOR. They differ only in magnitude and
+//    in `shimmer_detectable`, which is true for Stolen ALONE across all five rows.
+//    Stealing IS claiming — louder, and the only one that leaves a trace. A schema
+//    storing only signs would merge them; one storing only magnitudes would lose
+//    the trit. Both are stored.
+//
+// 2. CLAIMED -> REFUSED IS NOT AN EXACT NEGATION. Four lanes flip cleanly
+//    (ownership, crown, hostility, ecology). Obligation does NOT: Claimed carries
+//    0 and Refused carries -500. Claiming takes on no bond; refusing actively
+//    sheds one. The mirror is real on four lanes and asymmetric on the fifth, and
+//    the tests assert exactly that rather than the tidier claim.
+(
+    outcomes: [
+        (
+            outcome: Claimed,
+            ownership_pressure_q: 2500,
+            obligation_pressure_q: 0,
+            crown_temptation_q: 2000,
+            fae_hostility_q: 2000,
+            ecology_pressure_q: 500,
+            shimmer_detectable: false,
+        ),
+        (
+            outcome: Bargained,
+            ownership_pressure_q: 500,
+            obligation_pressure_q: 2500,
+            crown_temptation_q: 500,
+            fae_hostility_q: -500,
+            ecology_pressure_q: 0,
+            shimmer_detectable: false,
+        ),
+        (
+            outcome: Gifted,
+            ownership_pressure_q: -1000,
+            obligation_pressure_q: 500,
+            crown_temptation_q: -2000,
+            fae_hostility_q: -2000,
+            ecology_pressure_q: -1000,
+            shimmer_detectable: false,
+        ),
+        (
+            // The only detectable row. Same trit signature as Claimed, larger in
+            // every magnitude, and it leaves a shimmer the world can read.
+            outcome: Stolen,
+            ownership_pressure_q: 3000,
+            obligation_pressure_q: 0,
+            crown_temptation_q: 1500,
+            fae_hostility_q: 3500,
+            ecology_pressure_q: 1000,
+            shimmer_detectable: true,
+        ),
+        (
+            outcome: Refused,
+            ownership_pressure_q: -1500,
+            obligation_pressure_q: -500,
+            crown_temptation_q: -2500,
+            fae_hostility_q: -3000,
+            ecology_pressure_q: -2000,
+            shimmer_detectable: false,
+        ),
+    ],
+)

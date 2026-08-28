@@ -1,0 +1,62 @@
+# Sovereign UI foundation — integer layout, spring physics, text shaping,
+# draw commands, software rasterizer. WARM QUARRY CANVAS RASTER lane, drained
+# from F:\NewRepo\crates\forge-canvas (v2). No forge-vix, no forge-render dep
+# (dependency firewall, mirrored from the v2 doctrine header).
+#
+# fontdue: ARCH000-nodded 2026-08-12 (L19) — near-zero transitive deps,
+# replaces unsafe-by-hand font parsing, already proven in the v2 donor crate.
+[package]
+name = "forge-canvas-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+
+[dependencies]
+forge-core-v3 = { path = "../forge-core-v3" }
+forge-correspondence-v3 = { path = "../forge-correspondence-v3" }
+# The stroke-unification seam (Sean 2026-08-17 "one home, no L05 violation"):
+# tablet/pad input tape lowers INTO ritual_glyph::Stroke here — consumer knows
+# producer's quantized sample type; forge-input-v3 stays data-only/zero-dep.
+forge-input-v3 = { path = "../forge-input-v3" }
+# Pen->CST speculative-alignment bridge (Sean 2026-08-18): zero external deps
+# itself (see its own Cargo.toml), so pulling it in adds nothing to the
+# transitive tree (L19). Not a firewall violation — the ban is forge-vix/
+# forge-render specifically, not the VixiScript CST parser.
+tree-sitter-vixel-v3 = { path = "../tree-sitter-vixel-v3" }
+# EFFECT_CAMERA_MAX/ATOM conductor bits for supermaxatom_camera (2026-08-24).
+# Light: bytemuck + forge-core-v3 only. Not a firewall breach — the ban is
+# forge-vix/forge-render specifically.
+forge-semantic-quadlane = { path = "../forge-semantic-quadlane" }
+fontdue = "0.9"
+
+# DEV-ONLY, examples only — never a runtime dep, so the shipped dependency
+# surface above is unchanged. `examples/cdk_panel_bake.rs` renders the MUD's
+# authored studio face (forge_mud_v3::cdk::wireframe_lines) through this
+# crate's own widgets + FontAtlas + rasterizer, headless to a BMP. It exists so
+# a bad panel is caught before paying shell/'s cold wgpu+tao build. Direction is
+# legal: forge-mud-v3 does not depend on this crate.
+[dev-dependencies]
+forge-mud-v3 = { path = "../forge-mud-v3" }
+# TESTS ONLY (2026-08-24): `layout::GridLayout` and `pp_math::formation` both
+# compute "thirds", in different crates, by different rounding order. The parity
+# test binds them so the divergence is recorded rather than discovered later.
+# Nothing in src/ reaches for it.
+pp_math = { package = "pp-math-v3", path = "../pp-math-v3" }
+# Harmony for `examples/astrolabe_bake.rs` — `ScaleMask` (12-bit pitch-class set, no_std-safe,
+# zero deps) + `note_to_mhz`/`VoicePreset`. The full Camelot wheel lives in `forge-audio-v3`,
+# which is NOT pulled here: it carries rustfft/lofty/ogg/rubato/windows-COM and would turn a
+# headless bake into a heavy build. The shell already depends on both, so the on-glass panel
+# reaches Camelot there; this bake proves the colour+harmony effects on the light half.
+forge-harmonics = { path = "../forge-harmonics" }
+# PNG encoder for `examples/render8k.rs` — 8K technicolor photon output. L19 receipt:
+# png 0.17 already in workspace lock; adding as dev-dep per L13 wire-first (prefer
+# existing dep over hand-rolled encoder).
+png = "0.17"
+# SHA256 for `examples/render8k.rs` provenance sidecar. L19 receipt:
+# sha2 0.10 in workspace lock via forge-kv-math-v3; prefer existing over embedded.
+sha2 = "0.10"
+
+[lints]
+workspace = true

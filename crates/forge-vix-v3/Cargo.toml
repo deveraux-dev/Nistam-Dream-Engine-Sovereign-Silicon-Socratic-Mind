@@ -1,0 +1,37 @@
+# The vixi lowering IR + emit_html AOT emitter — v3 customs-gate slice
+# (MIGRATION.md:179-181 §MV Track B): "forge-vix ranked early: emit_html.rs
+# (546 lines, already integer-geometry and wall-clock-free) + the vixi
+# lowering path, through the customs gate like every crate."
+#
+# Scope of THIS crate: the LoweredUi IR planes (drained from v2
+# F:\NewRepo\crates\forge-vix\src\ir.rs) and the emit_html AOT HTML emitter
+# (drained from ir.rs's sibling emit_html.rs) — the two pieces the tranche
+# names. The `.kit.vixi` text parser/loader (v2 parse.rs, grammar.rs,
+# semantic.rs, loader.rs — ~350k bytes) is NOT in this slice; a LoweredUi is
+# built by hand or by a future lowering crate, not read from source text here.
+[package]
+name = "forge-vix-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+
+[dependencies]
+forge-canvas-v3 = { path = "../forge-canvas-v3" }
+forge-core-v3 = { path = "../forge-core-v3" }
+forge-ump-v3 = { path = "../forge-ump-v3" }
+# baked.rs needs Material/MaterialAtom — lands here, not folded into
+# forge-core-v3, because the correspondence engine needs serde and
+# forge-core-v3 is Crate Zero (zero deps by law).
+forge-correspondence-v3 = { path = "../forge-correspondence-v3" }
+# layout.rs re-exports Justify/Align from here (one-table-row law, 2026-08-05) —
+# the exact "reuse-parse, NEVER 2nd-parser" seam the source-compiler skill names.
+forge-vix-syntax-v3 = { path = "../forge-vix-syntax-v3" }
+# timeline.rs parsing: TOML config, base64 event encoding, blake3 stamp hashing.
+toml = "0.8"
+base64 = { version = "0.22", features = ["std"] }
+blake3 = "1.8.5"
+
+[lints]
+workspace = true

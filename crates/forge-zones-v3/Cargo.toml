@@ -1,0 +1,28 @@
+# T9 of the forge-vision drain (plan-2-welds.md tranche table, D4 ruling
+# 2026-08-11: Ulam IS DONE at F:\NewRepo\crates\forge-zones\src\worldgen\
+# ulam.rs — quarry weld, not fresh authoring). UlamCell64 is the 64-byte
+# spiral/biome word; UlamSpiral3D is the closed-form integer ring-walk it is
+# addressed by. Self-contained; scatter-layer/lore binding arrive in later
+# tranches as functions over this type, never as a second home.
+[package]
+name = "forge-zones-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+
+[dependencies]
+forge-core-v3 = { path = "../forge-core-v3" }
+# gjk2d + support::ConvexPolygon2D for the room-overlap/spawn-safety/door-contact
+# validators — integer MilliUnit narrow-phase, no glam, no float.
+forge-physics-v3 = { path = "../forge-physics-v3" }
+pp-math-v3 = { path = "../pp-math-v3" }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+[features]
+sky-mount = []
+
+[lints]
+workspace = true

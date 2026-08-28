@@ -1,0 +1,19 @@
+[package]
+name = "forge-calligraphy-v3"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+authors = ["Sean Morin"]
+description = "Sovereign WASI calligraphy scratch pad — signs a Wacom glyph and publishes it (SVG + RSS) to deveraux.dev. Lean web/SVG face: serde/sha2 only, no cargo edge to engine crates (Firewall Law)."
+
+[lib]
+name = "forge_calligraphy_v3"
+path = "src/lib.rs"
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha2 = "0.10"
+
+[lints]
+workspace = true

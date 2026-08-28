@@ -1,0 +1,11 @@
+// Third worked example (2026-08-22 fan-out proof): the `Keyed` payload kind
+// — N typed key:value lines, no verbatim tail. Not wired into live dispatch.
+(
+    name: "example_keyed",
+    payload: Keyed(
+        keys: [
+            ("label", String),
+        ],
+    ),
+    mutating: false,
+)

@@ -1,0 +1,622 @@
+{
+  "timestamp_utc": 1787911506,
+  "duration_seconds": 0.0826971,
+  "total_physical_inspectors": 10000,
+  "total_s13_attestations": 1000000,
+  "total_arbitration_cycles": 1000000,
+  "arbitrations_per_second": 12092322.463544672,
+  "avg_latency_per_arbitration_nanos": 34.921,
+  "heap_allocations_in_hotpath_bytes": 0,
+  "memory_safety_verdict": "STRICT_NO_STD_ZERO_ALLOCATION_VERIFIED",
+  "total_sabotage_attempts_injected": 40000,
+  "total_sabotage_attempts_intercepted": 40000,
+  "sabotage_repudiation_rate_pct": 100.0,
+  "context_caching": {
+    "model": "gemini-3.7-flash",
+    "cached_resource_name": "cachedContents/vars_23yr_handbook_sha256_e83b4",
+    "vars_handbook_tokens": 450000,
+    "total_audit_queries": 25000,
+    "cache_hits": 24950,
+    "cache_misses": 50,
+    "cache_hit_rate_pct": 99.8,
+    "uncached_estimated_cost_usd": 843.75,
+    "cached_actual_cost_usd": 212.203125,
+    "cost_reduction_pct": 74.85000000000001,
+    "avg_cached_latency_ms": 0.85,
+    "avg_uncached_latency_ms": 142.5
+  },
+  "site_summaries": [
+    {
+      "site_name": "Edmonton Walterdale Bridge Arch Inspection",
+      "inspectors_count": 1000,
+      "tokens_submitted": 100000,
+      "structural_equilibrium_count": 13402,
+      "scheduled_maintenance_count": 62970,
+      "critical_escalation_count": 23627,
+      "provenance_breaches_repudiated": 4000
+    },
+    {
+      "site_name": "Calgary Bow River LRT Expansion (Green Line)",
+      "inspectors_count": 1000,
+      "tokens_submitted": 100000,
+      "structural_equilibrium_count": 13402,
+      "scheduled_maintenance_count": 62970,
+      "critical_escalation_count": 23627,
+      "provenance_breaches_repudiated": 4000
+    },
+    {
+      "site_name": "Fort McMurray Suncor Base Plant Coating Assessment",
+      "inspectors_count": 1000,
+      "tokens_submitted": 100000,
+      "structural_equilibrium_count": 13402,
+      "scheduled_maintenance_count": 62970,
+      "critical_escalation_count": 23627,
+      "provenance_breaches_repudiated": 4000
+    },
+    {
+      "site_name": "Red Deer River Bridge Abutment Survey",
+      "inspectors_count": 1000,
+      "tokens_submitted": 100000,
+      "structural_equilibrium_count": 13402,
+      "scheduled_maintenance_count": 62970,
+      "critical_escalation_count": 23627,
+      "provenance_breaches_repudiated": 4000
+    },
+    {
+      "site_name": "Lethbridge High Level Viaduct Steel Audit",
+      "inspectors_count": 1000,
+      "tokens_submitted": 100000,
+      "structural_equilibrium_count": 13402,
+      "scheduled_maintenance_count": 62970,
+      "critical_escalation_count": 23627,
+      "provenance_breaches_repudiated": 4000
+    },
+    {
+      "site_name": "Medicine Hat Gas Infrastructure Corrosion Log",
+      "inspectors_count": 1000,
+      "tokens_submitted": 100000,
+      "structural_equilibrium_count": 13402,
+      "scheduled_maintenance_count": 62970,
+      "critical_escalation_count": 23627,
+      "provenance_breaches_repudiated": 4000
+    },
+    {
+      "site_name": "Grande Prairie Wapiti River Bridge Seismic Check",
+      "inspectors_count": 1000,
+      "tokens_submitted": 100000,
+      "structural_equilibrium_count": 13402,
+      "scheduled_maintenance_count": 62970,
+      "critical_escalation_count": 23627,
+      "provenance_breaches_repudiated": 4000
+    },
+    {
+      "site_name": "Banff Cascade Mountain Highway Viaduct",
+      "inspectors_count": 1000,
+      "tokens_submitted": 100000,
+      "structural_equilibrium_count": 13402,
+      "scheduled_maintenance_count": 62970,
+      "critical_escalation_count": 23627,
+      "provenance_breaches_repudiated": 4000
+    },
+    {
+      "site_name": "St. Albert Ring Road Overpass NACE Evaluation",
+      "inspectors_count": 1000,
+      "tokens_submitted": 100000,
+      "structural_equilibrium_count": 13402,
+      "scheduled_maintenance_count": 62970,
+      "critical_escalation_count": 23627,
+      "provenance_breaches_repudiated": 4000
+    },
+    {
+      "site_name": "Peace River Shaft & Deep Anchor Attestation",
+      "inspectors_count": 1000,
+      "tokens_submitted": 100000,
+      "structural_equilibrium_count": 13402,
+      "scheduled_maintenance_count": 62970,
+      "critical_escalation_count": 23627,
+      "provenance_breaches_repudiated": 4000
+    }
+  ],
+  "sabotage_logs": [
+    {
+      "attack_id": 1,
+      "attack_type": "Predecessor Hash Collision Attack",
+      "target_site": "Edmonton Walterdale Bridge Arch Inspection",
+      "inspector_id": 0,
+      "simulated_tick": 1070,
+      "threat_signature": "CHAIN_DISCONTINUITY_PREV_HASH_MISMATCH",
+      "intercepted": true,
+      "repudiation_mechanism": "ChainLink::follows() strict predecessor check"
+    },
+    {
+      "attack_id": 2,
+      "attack_type": "Unanchored Genesis Evaluation Attack",
+      "target_site": "Edmonton Walterdale Bridge Arch Inspection",
+      "inspector_id": 0,
+      "simulated_tick": 1220,
+      "threat_signature": "UNANCHORED_GENESIS_ZERO_HEAD_BREACH",
+      "intercepted": true,
+      "repudiation_mechanism": "WeaverArbiter Provenance Gate repudiation"
+    },
+    {
+      "attack_id": 3,
+      "attack_type": "Reentry Post-Expiry Memory Snoop",
+      "target_site": "Edmonton Walterdale Bridge Arch Inspection",
+      "inspector_id": 0,
+      "simulated_tick": 1350,
+      "threat_signature": "ZEROIZE_READ_ON_EXPIRED_PAYLOAD",
+      "intercepted": true,
+      "repudiation_mechanism": "EphemeralEnvelope proactive .wipe() on read"
+    },
+    {
+      "attack_id": 4,
+      "attack_type": "Retroactive Tick Timestamp Forgery",
+      "target_site": "Edmonton Walterdale Bridge Arch Inspection",
+      "inspector_id": 0,
+      "simulated_tick": 1524,
+      "threat_signature": "TAMPER_TICK_MUTATION_DETECTED",
+      "intercepted": true,
+      "repudiation_mechanism": "ChainLink::follows() verification failure"
+    },
+    {
+      "attack_id": 5,
+      "attack_type": "Unanchored Genesis Evaluation Attack",
+      "target_site": "Calgary Bow River LRT Expansion (Green Line)",
+      "inspector_id": 1,
+      "simulated_tick": 1078,
+      "threat_signature": "UNANCHORED_GENESIS_ZERO_HEAD_BREACH",
+      "intercepted": true,
+      "repudiation_mechanism": "WeaverArbiter Provenance Gate repudiation"
+    },
+    {
+      "attack_id": 6,
+      "attack_type": "Reentry Post-Expiry Memory Snoop",
+      "target_site": "Calgary Bow River LRT Expansion (Green Line)",
+      "inspector_id": 1,
+      "simulated_tick": 1199,
+      "threat_signature": "ZEROIZE_READ_ON_EXPIRED_PAYLOAD",
+      "intercepted": true,
+      "repudiation_mechanism": "EphemeralEnvelope proactive .wipe() on read"
+    },
+    {
+      "attack_id": 7,
+      "attack_type": "Retroactive Tick Timestamp Forgery",
+      "target_site": "Calgary Bow River LRT Expansion (Green Line)",
+      "inspector_id": 1,
+      "simulated_tick": 1334,
+      "threat_signature": "TAMPER_TICK_MUTATION_DETECTED",
+      "intercepted": true,
+      "repudiation_mechanism": "ChainLink::follows() verification failure"
+    },
+    {
+      "attack_id": 8,
+      "attack_type": "Predecessor Hash Collision Attack",
+      "target_site": "Calgary Bow River LRT Expansion (Green Line)",
+      "inspector_id": 1,
+      "simulated_tick": 1463,
+      "threat_signature": "CHAIN_DISCONTINUITY_PREV_HASH_MISMATCH",
+      "intercepted": true,
+      "repudiation_mechanism": "ChainLink::follows() strict predecessor check"
+    },
+    {
+      "attack_id": 9,
+      "attack_type": "Reentry Post-Expiry Memory Snoop",
+      "target_site": "Fort McMurray Suncor Base Plant Coating Assessment",
+      "inspector_id": 2,
+      "simulated_tick": 1114,
+      "threat_signature": "ZEROIZE_READ_ON_EXPIRED_PAYLOAD",
+      "intercepted": true,
+      "repudiation_mechanism": "EphemeralEnvelope proactive .wipe() on read"
+    },
+    {
+      "attack_id": 10,
+      "attack_type": "Retroactive Tick Timestamp Forgery",
+      "target_site": "Fort McMurray Suncor Base Plant Coating Assessment",
+      "inspector_id": 2,
+      "simulated_tick": 1236,
+      "threat_signature": "TAMPER_TICK_MUTATION_DETECTED",
+      "intercepted": true,
+      "repudiation_mechanism": "ChainLink::follows() verification failure"
+    },
+    {
+      "attack_id": 11,
+      "attack_type": "Predecessor Hash Collision Attack",
+      "target_site": "Fort McMurray Suncor Base Plant Coating Assessment",
+      "inspector_id": 2,
+      "simulated_tick": 1380,
+      "threat_signature": "CHAIN_DISCONTINUITY_PREV_HASH_MISMATCH",
+      "intercepted": true,
+      "repudiation_mechanism": "ChainLink::follows() strict predecessor check"
+    },
+    {
+      "attack_id": 12,
+      "attack_type": "Unanchored Genesis Evaluation Attack",
+      "target_site": "Fort McMurray Suncor Base Plant Coating Assessment",
+      "inspector_id": 2,
+      "simulated_tick": 1522,
+      "threat_signature": "UNANCHORED_GENESIS_ZERO_HEAD_BREACH",
+      "intercepted": true,
+      "repudiation_mechanism": "WeaverArbiter Provenance Gate repudiation"
+    },
+    {
+      "attack_id": 13,
+      "attack_type": "Retroactive Tick Timestamp Forgery",
+      "target_site": "Red Deer River Bridge Abutment Survey",
+      "inspector_id": 3,
+      "simulated_tick": 1092,
+      "threat_signature": "TAMPER_TICK_MUTATION_DETECTED",
+      "intercepted": true,
+      "repudiation_mechanism": "ChainLink::follows() verification failure"
+    },
+    {
+      "attack_id": 14,
+      "attack_type": "Predecessor Hash Collision Attack",
+      "target_site": "Red Deer River Bridge Abutment Survey",
+      "inspector_id": 3,
+      "simulated_tick": 1217,
+      "threat_signature": "CHAIN_DISCONTINUITY_PREV_HASH_MISMATCH",
+      "intercepted": true,
+      "repudiation_mechanism": "ChainLink::follows() strict predecessor check"
+    },
+    {
+      "attack_id": 15,
+      "attack_type": "Unanchored Genesis Evaluation Attack",
+      "target_site": "Red Deer River Bridge Abutment Survey",
+      "inspector_id": 3,
+      "simulated_tick": 1356,
+      "threat_signature": "UNANCHORED_GENESIS_ZERO_HEAD_BREACH",
+      "intercepted": true,
+      "repudiation_mechanism": "WeaverArbiter Provenance Gate repudiation"
+    },
+    {
+      "attack_id": 16,
+      "attack_type": "Reentry Post-Expiry Memory Snoop",
+      "target_site": "Red Deer River Bridge Abutment Survey",
+      "inspector_id": 3,
+      "simulated_tick": 1467,
+      "threat_signature": "ZEROIZE_READ_ON_EXPIRED_PAYLOAD",
+      "intercepted": true,
+      "repudiation_mechanism": "EphemeralEnvelope proactive .wipe() on read"
+    },
+    {
+      "attack_id": 17,
+      "attack_type": "Predecessor Hash Collision Attack",
+      "target_site": "Lethbridge High Level Viaduct Steel Audit",
+      "inspector_id": 4,
+      "simulated_tick": 1118,
+      "threat_signature": "CHAIN_DISCONTINUITY_PREV_HASH_MISMATCH",
+      "intercepted": true,
+      "repudiation_mechanism": "ChainLink::follows() strict predecessor check"
+    },
+    {
+      "attack_id": 18,
+      "attack_type": "Unanchored Genesis Evaluation Attack",
+      "target_site": "Lethbridge High Level Viaduct Steel Audit",
+      "inspector_id": 4,
+      "simulated_tick": 1290,
+      "threat_signature": "UNANCHORED_GENESIS_ZERO_HEAD_BREACH",
+      "intercepted": true,
+      "repudiation_mechanism": "WeaverArbiter Provenance Gate repudiation"
+    },
+    {
+      "attack_id": 19,
+      "attack_type": "Reentry Post-Expiry Memory Snoop",
+      "target_site": "Lethbridge High Level Viaduct Steel Audit",
+      "inspector_id": 4,
+      "simulated_tick": 1426,
+      "threat_signature": "ZEROIZE_READ_ON_EXPIRED_PAYLOAD",
+      "intercepted": true,
+      "repudiation_mechanism": "EphemeralEnvelope proactive .wipe() on read"
+    },
+    {
+      "attack_id": 20,
+      "attack_type": "Retroactive Tick Timestamp Forgery",
+      "target_site": "Lethbridge High Level Viaduct Steel Audit",
+      "inspector_id": 4,
+      "simulated_tick": 1604,
+      "threat_signature": "TAMPER_TICK_MUTATION_DETECTED",
+      "intercepted": true,
+      "repudiation_mechanism": "ChainLink::follows() verification failure"
+    },
+    {
+      "attack_id": 21,
+      "attack_type": "Unanchored Genesis Evaluation Attack",
+      "target_site": "Medicine Hat Gas Infrastructure Corrosion Log",
+      "inspector_id": 5,
+      "simulated_tick": 1108,
+      "threat_signature": "UNANCHORED_GENESIS_ZERO_HEAD_BREACH",
+      "intercepted": true,
+      "repudiation_mechanism": "WeaverArbiter Provenance Gate repudiation"
+    },
+    {
+      "attack_id": 22,
+      "attack_type": "Reentry Post-Expiry Memory Snoop",
+      "target_site": "Medicine Hat Gas Infrastructure Corrosion Log",
+      "inspector_id": 5,
+      "simulated_tick": 1221,
+      "threat_signature": "ZEROIZE_READ_ON_EXPIRED_PAYLOAD",
+      "intercepted": true,
+      "repudiation_mechanism": "EphemeralEnvelope proactive .wipe() on read"
+    },
+    {
+      "attack_id": 23,
+      "attack_type": "Retroactive Tick Timestamp Forgery",
+      "target_site": "Medicine Hat Gas Infrastructure Corrosion Log",
+      "inspector_id": 5,
+      "simulated_tick": 1350,
+      "threat_signature": "TAMPER_TICK_MUTATION_DETECTED",
+      "intercepted": true,
+      "repudiation_mechanism": "ChainLink::follows() verification failure"
+    },
+    {
+      "attack_id": 24,
+      "attack_type": "Predecessor Hash Collision Attack",
+      "target_site": "Medicine Hat Gas Infrastructure Corrosion Log",
+      "inspector_id": 5,
+      "simulated_tick": 1465,
+      "threat_signature": "CHAIN_DISCONTINUITY_PREV_HASH_MISMATCH",
+      "intercepted": true,
+      "repudiation_mechanism": "ChainLink::follows() strict predecessor check"
+    },
+    {
+      "attack_id": 25,
+      "attack_type": "Reentry Post-Expiry Memory Snoop",
+      "target_site": "Grande Prairie Wapiti River Bridge Seismic Check",
+      "inspector_id": 6,
+      "simulated_tick": 1132,
+      "threat_signature": "ZEROIZE_READ_ON_EXPIRED_PAYLOAD",
+      "intercepted": true,
+      "repudiation_mechanism": "EphemeralEnvelope proactive .wipe() on read"
+    },
+    {
+      "attack_id": 26,
+      "attack_type": "Retroactive Tick Timestamp Forgery",
+      "target_site": "Grande Prairie Wapiti River Bridge Seismic Check",
+      "inspector_id": 6,
+      "simulated_tick": 1282,
+      "threat_signature": "TAMPER_TICK_MUTATION_DETECTED",
+      "intercepted": true,
+      "repudiation_mechanism": "ChainLink::follows() verification failure"
+    },
+    {
+      "attack_id": 27,
+      "attack_type": "Predecessor Hash Collision Attack",
+      "target_site": "Grande Prairie Wapiti River Bridge Seismic Check",
+      "inspector_id": 6,
+      "simulated_tick": 1440,
+      "threat_signature": "CHAIN_DISCONTINUITY_PREV_HASH_MISMATCH",
+      "intercepted": true,
+      "repudiation_mechanism": "ChainLink::follows() strict predecessor check"
+    },
+    {
+      "attack_id": 28,
+      "attack_type": "Unanchored Genesis Evaluation Attack",
+      "target_site": "Grande Prairie Wapiti River Bridge Seismic Check",
+      "inspector_id": 6,
+      "simulated_tick": 1590,
+      "threat_signature": "UNANCHORED_GENESIS_ZERO_HEAD_BREACH",
+      "intercepted": true,
+      "repudiation_mechanism": "WeaverArbiter Provenance Gate repudiation"
+    },
+    {
+      "attack_id": 29,
+      "attack_type": "Retroactive Tick Timestamp Forgery",
+      "target_site": "Banff Cascade Mountain Highway Viaduct",
+      "inspector_id": 7,
+      "simulated_tick": 1124,
+      "threat_signature": "TAMPER_TICK_MUTATION_DETECTED",
+      "intercepted": true,
+      "repudiation_mechanism": "ChainLink::follows() verification failure"
+    },
+    {
+      "attack_id": 30,
+      "attack_type": "Predecessor Hash Collision Attack",
+      "target_site": "Banff Cascade Mountain Highway Viaduct",
+      "inspector_id": 7,
+      "simulated_tick": 1263,
+      "threat_signature": "CHAIN_DISCONTINUITY_PREV_HASH_MISMATCH",
+      "intercepted": true,
+      "repudiation_mechanism": "ChainLink::follows() strict predecessor check"
+    },
+    {
+      "attack_id": 31,
+      "attack_type": "Unanchored Genesis Evaluation Attack",
+      "target_site": "Banff Cascade Mountain Highway Viaduct",
+      "inspector_id": 7,
+      "simulated_tick": 1394,
+      "threat_signature": "UNANCHORED_GENESIS_ZERO_HEAD_BREACH",
+      "intercepted": true,
+      "repudiation_mechanism": "WeaverArbiter Provenance Gate repudiation"
+    },
+    {
+      "attack_id": 32,
+      "attack_type": "Reentry Post-Expiry Memory Snoop",
+      "target_site": "Banff Cascade Mountain Highway Viaduct",
+      "inspector_id": 7,
+      "simulated_tick": 1519,
+      "threat_signature": "ZEROIZE_READ_ON_EXPIRED_PAYLOAD",
+      "intercepted": true,
+      "repudiation_mechanism": "EphemeralEnvelope proactive .wipe() on read"
+    },
+    {
+      "attack_id": 33,
+      "attack_type": "Predecessor Hash Collision Attack",
+      "target_site": "St. Albert Ring Road Overpass NACE Evaluation",
+      "inspector_id": 8,
+      "simulated_tick": 1166,
+      "threat_signature": "CHAIN_DISCONTINUITY_PREV_HASH_MISMATCH",
+      "intercepted": true,
+      "repudiation_mechanism": "ChainLink::follows() strict predecessor check"
+    },
+    {
+      "attack_id": 34,
+      "attack_type": "Unanchored Genesis Evaluation Attack",
+      "target_site": "St. Albert Ring Road Overpass NACE Evaluation",
+      "inspector_id": 8,
+      "simulated_tick": 1306,
+      "threat_signature": "UNANCHORED_GENESIS_ZERO_HEAD_BREACH",
+      "intercepted": true,
+      "repudiation_mechanism": "WeaverArbiter Provenance Gate repudiation"
+    },
+    {
+      "attack_id": 35,
+      "attack_type": "Reentry Post-Expiry Memory Snoop",
+      "target_site": "St. Albert Ring Road Overpass NACE Evaluation",
+      "inspector_id": 8,
+      "simulated_tick": 1452,
+      "threat_signature": "ZEROIZE_READ_ON_EXPIRED_PAYLOAD",
+      "intercepted": true,
+      "repudiation_mechanism": "EphemeralEnvelope proactive .wipe() on read"
+    },
+    {
+      "attack_id": 36,
+      "attack_type": "Retroactive Tick Timestamp Forgery",
+      "target_site": "St. Albert Ring Road Overpass NACE Evaluation",
+      "inspector_id": 8,
+      "simulated_tick": 1592,
+      "threat_signature": "TAMPER_TICK_MUTATION_DETECTED",
+      "intercepted": true,
+      "repudiation_mechanism": "ChainLink::follows() verification failure"
+    },
+    {
+      "attack_id": 37,
+      "attack_type": "Unanchored Genesis Evaluation Attack",
+      "target_site": "Peace River Shaft & Deep Anchor Attestation",
+      "inspector_id": 9,
+      "simulated_tick": 1168,
+      "threat_signature": "UNANCHORED_GENESIS_ZERO_HEAD_BREACH",
+      "intercepted": true,
+      "repudiation_mechanism": "WeaverArbiter Provenance Gate repudiation"
+    },
+    {
+      "attack_id": 38,
+      "attack_type": "Reentry Post-Expiry Memory Snoop",
+      "target_site": "Peace River Shaft & Deep Anchor Attestation",
+      "inspector_id": 9,
+      "simulated_tick": 1291,
+      "threat_signature": "ZEROIZE_READ_ON_EXPIRED_PAYLOAD",
+      "intercepted": true,
+      "repudiation_mechanism": "EphemeralEnvelope proactive .wipe() on read"
+    },
+    {
+      "attack_id": 39,
+      "attack_type": "Retroactive Tick Timestamp Forgery",
+      "target_site": "Peace River Shaft & Deep Anchor Attestation",
+      "inspector_id": 9,
+      "simulated_tick": 1412,
+      "threat_signature": "TAMPER_TICK_MUTATION_DETECTED",
+      "intercepted": true,
+      "repudiation_mechanism": "ChainLink::follows() verification failure"
+    },
+    {
+      "attack_id": 40,
+      "attack_type": "Predecessor Hash Collision Attack",
+      "target_site": "Peace River Shaft & Deep Anchor Attestation",
+      "inspector_id": 9,
+      "simulated_tick": 1541,
+      "threat_signature": "CHAIN_DISCONTINUITY_PREV_HASH_MISMATCH",
+      "intercepted": true,
+      "repudiation_mechanism": "ChainLink::follows() strict predecessor check"
+    },
+    {
+      "attack_id": 41,
+      "attack_type": "Reentry Post-Expiry Memory Snoop",
+      "target_site": "Edmonton Walterdale Bridge Arch Inspection",
+      "inspector_id": 10,
+      "simulated_tick": 1194,
+      "threat_signature": "ZEROIZE_READ_ON_EXPIRED_PAYLOAD",
+      "intercepted": true,
+      "repudiation_mechanism": "EphemeralEnvelope proactive .wipe() on read"
+    },
+    {
+      "attack_id": 42,
+      "attack_type": "Retroactive Tick Timestamp Forgery",
+      "target_site": "Edmonton Walterdale Bridge Arch Inspection",
+      "inspector_id": 10,
+      "simulated_tick": 1358,
+      "threat_signature": "TAMPER_TICK_MUTATION_DETECTED",
+      "intercepted": true,
+      "repudiation_mechanism": "ChainLink::follows() verification failure"
+    },
+    {
+      "attack_id": 43,
+      "attack_type": "Predecessor Hash Collision Attack",
+      "target_site": "Edmonton Walterdale Bridge Arch Inspection",
+      "inspector_id": 10,
+      "simulated_tick": 1508,
+      "threat_signature": "CHAIN_DISCONTINUITY_PREV_HASH_MISMATCH",
+      "intercepted": true,
+      "repudiation_mechanism": "ChainLink::follows() strict predecessor check"
+    },
+    {
+      "attack_id": 44,
+      "attack_type": "Unanchored Genesis Evaluation Attack",
+      "target_site": "Edmonton Walterdale Bridge Arch Inspection",
+      "inspector_id": 10,
+      "simulated_tick": 1682,
+      "threat_signature": "UNANCHORED_GENESIS_ZERO_HEAD_BREACH",
+      "intercepted": true,
+      "repudiation_mechanism": "WeaverArbiter Provenance Gate repudiation"
+    },
+    {
+      "attack_id": 45,
+      "attack_type": "Retroactive Tick Timestamp Forgery",
+      "target_site": "Calgary Bow River LRT Expansion (Green Line)",
+      "inspector_id": 11,
+      "simulated_tick": 1182,
+      "threat_signature": "TAMPER_TICK_MUTATION_DETECTED",
+      "intercepted": true,
+      "repudiation_mechanism": "ChainLink::follows() verification failure"
+    },
+    {
+      "attack_id": 46,
+      "attack_type": "Predecessor Hash Collision Attack",
+      "target_site": "Calgary Bow River LRT Expansion (Green Line)",
+      "inspector_id": 11,
+      "simulated_tick": 1307,
+      "threat_signature": "CHAIN_DISCONTINUITY_PREV_HASH_MISMATCH",
+      "intercepted": true,
+      "repudiation_mechanism": "ChainLink::follows() strict predecessor check"
+    },
+    {
+      "attack_id": 47,
+      "attack_type": "Unanchored Genesis Evaluation Attack",
+      "target_site": "Calgary Bow River LRT Expansion (Green Line)",
+      "inspector_id": 11,
+      "simulated_tick": 1420,
+      "threat_signature": "UNANCHORED_GENESIS_ZERO_HEAD_BREACH",
+      "intercepted": true,
+      "repudiation_mechanism": "WeaverArbiter Provenance Gate repudiation"
+    },
+    {
+      "attack_id": 48,
+      "attack_type": "Reentry Post-Expiry Memory Snoop",
+      "target_site": "Calgary Bow River LRT Expansion (Green Line)",
+      "inspector_id": 11,
+      "simulated_tick": 1543,
+      "threat_signature": "ZEROIZE_READ_ON_EXPIRED_PAYLOAD",
+      "intercepted": true,
+      "repudiation_mechanism": "EphemeralEnvelope proactive .wipe() on read"
+    },
+    {
+      "attack_id": 49,
+      "attack_type": "Predecessor Hash Collision Attack",
+      "target_site": "Fort McMurray Suncor Base Plant Coating Assessment",
+      "inspector_id": 12,
+      "simulated_tick": 1210,
+      "threat_signature": "CHAIN_DISCONTINUITY_PREV_HASH_MISMATCH",
+      "intercepted": true,
+      "repudiation_mechanism": "ChainLink::follows() strict predecessor check"
+    },
+    {
+      "attack_id": 50,
+      "attack_type": "Unanchored Genesis Evaluation Attack",
+      "target_site": "Fort McMurray Suncor Base Plant Coating Assessment",
+      "inspector_id": 12,
+      "simulated_tick": 1386,
+      "threat_signature": "UNANCHORED_GENESIS_ZERO_HEAD_BREACH",
+      "intercepted": true,
+      "repudiation_mechanism": "WeaverArbiter Provenance Gate repudiation"
+    }
+  ]
+}

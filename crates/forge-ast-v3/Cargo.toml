@@ -1,0 +1,26 @@
+[package]
+name = "forge-ast-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "VixiScript DSL — parser, AST, and lowering targets. Ported from F:\\NewRepo\\crates\\forge-ast\\src\\vixel\\ (2026-08-19)."
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha2 = "0.10"
+pp-math-v3 = { path = "../pp-math-v3" }
+# shell_gate.rs: Enter-time AST command gate (ported from F:\NewRepo\crates\
+# forge-ast\src\shell_gate.rs 2026-08-24) — same versions v2 pinned.
+tree-sitter = "0.25"
+tree-sitter-bash = "0.23"
+# rust_squish.rs: Rust symbol/signature extraction (ported from F:\NewRepo\crates\
+# forge-ast\src\rust_squish.rs 2026-08-25) — same version v2 pinned.
+tree-sitter-rust = "0.24"
+
+[dev-dependencies]
+tempfile = "3"
+
+[lints]
+workspace = true

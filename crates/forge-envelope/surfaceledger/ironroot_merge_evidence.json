@@ -1,0 +1,28 @@
+{
+  "timestamp": "2026-08-21T14:47:00-06:00",
+  "pipeline": "Gemma Triad S13 Autonomous Code-Merge Engine",
+  "source_census": {
+    "files_ingested": 327,
+    "total_source_bytes": 3226513,
+    "total_lines_of_code": 85815,
+    "merkle_root_sha256": "e3365833c428d9a775fff53c692887b71471ab35ca8c1f4d33822ec21dc048d4"
+  },
+  "triad_execution": {
+    "ast_nodes_unified": 2728,
+    "first_locks_validated": 12,
+    "zones_topologies_mapped": 13,
+    "raw_compute_latency_ms": 76.25,
+    "measured_throughput_mb_s": 40.36,
+    "measured_throughput_lines_s": 1125507.57
+  },
+  "output_datapack": {
+    "path": "assets/ironroot/Good/ironroot_headless_flash_datapack.ron",
+    "size_bytes": 20026,
+    "sha256": "3a76400e52ca186bbb5f61db6def7d844aa11d358a5762d7dcc89a961f9b8127"
+  },
+  "presentation": {
+    "is_paced_demo": false,
+    "total_wall_clock_ms": 76.25
+  },
+  "tcp_door_status": "Skipped (pass --stream-door to stream)"
+}

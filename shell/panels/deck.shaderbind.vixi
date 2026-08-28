@@ -1,0 +1,18 @@
+#vixi:shaderbind v1
+surface: deck
+profile: singing_terminal
+
+signal rms source=audio.rms range=0..10000
+signal sub_bass source=audio.sub_bass range=0..10000
+signal spectrum_high source=audio.spectrum_high range=0..10000
+signal beat_phase source=audio.beat_phase range=0..10000
+
+deck.channel[0] <- rms
+deck.channel[1] <- sub_bass
+deck.channel[2] <- spectrum_high
+deck.channel[3] <- beat_phase
+
+gate audio_not_identity = required
+gate mix_clarity = required
+gate shader_compile_hotpath = forbidden
+gate visual_only_mutates_authority = required

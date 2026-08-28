@@ -1,0 +1,74 @@
+{
+  "meta": {
+    "project": "2DAK",
+    "version": "1.0",
+    "source": "Ported from AKGAME PlayerLoadout.gd + ActorArchetype.gd",
+    "math": "All integers. Permyriad (0-10000) for percentages. u8 (0-255) for stats."
+  },
+  "slot_enum": {
+    "WEAPON": 0,
+    "OFFHAND": 1,
+    "HEAD": 2,
+    "CHEST": 3,
+    "ARMS": 4,
+    "LEGS": 5,
+    "BOOTS": 6,
+    "ACCESSORY_1": 7,
+    "ACCESSORY_2": 8,
+    "SIGIL_1": 9,
+    "SIGIL_2": 10,
+    "RELIC": 11
+  },
+  "inventory_capacity": {
+    "equipped": 12,
+    "belt": 3,
+    "backpack": 24,
+    "bank_start": 12,
+    "bank_max": 120
+  },
+  "item_schema": {
+    "id": "string — unique identifier",
+    "name": "string — display name (oath or label, not glory)",
+    "slot": "int — slot_enum value",
+    "tier": "int — 0=common, 1=uncommon, 2=rare, 3=artifact",
+    "level_req": "int — minimum zone progression",
+    "stats": {
+      "vigor": "int — stat modifier (signed, -128 to +127)",
+      "momentum": "int",
+      "logic_depth": "int",
+      "shadow_weight": "int",
+      "tarnish": "int",
+      "resonance": "int",
+      "guilt": "int",
+      "clarity": "int"
+    },
+    "damage": {
+      "base": "int — raw damage value",
+      "element": "string — fire/poison/water/light/electric/blood/earth/darkness",
+      "freq_byte": "int — 0x00-0xFF, for Vibration principle armor pen"
+    },
+    "defense": {
+      "physical": "int — flat damage reduction",
+      "element_resist": "dict — element:permyriad pairs"
+    },
+    "tags": "array of string — from 18 Logic Tags",
+    "material": "string — SLAG/ICHOR/BONE/ASH/IRON/STEEL/OBSIDIAN/etc",
+    "gender": "string — active/passive/neutral (for Synthesis crafting)",
+    "durability": {
+      "current": "int",
+      "max": "int"
+    },
+    "sockets": "int — 0-2 (item depth limit)",
+    "description": "string — short, worn, not flowery"
+  },
+  "tincture_schema": {
+    "id": "string",
+    "name": "string",
+    "base_type_id": "int — 100-108",
+    "effect": "string — effect description",
+    "potency": "int — permyriad effectiveness",
+    "duration_ticks": "int — 0 for instant",
+    "channel_ticks": "int — 180 for ApothecaryChannel",
+    "cooldown_ticks": "int"
+  }
+}

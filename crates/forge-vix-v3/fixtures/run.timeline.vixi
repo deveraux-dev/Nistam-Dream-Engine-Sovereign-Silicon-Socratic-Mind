@@ -1,0 +1,12 @@
+#vixi:timeline v1
+# run.timeline.vixi — a Dirge Runner run, as the canonical TIMELINE IR.
+# forge-vix::timeline::aot_compile_to_tickets(this) -> Vec<UmpAuthorityTicket> (MIDI 2.0 UMP). Replay-safe; BrutalHash-anchored.
+# Every on-beat hit is a UMP NoteOn; the era/WCE state rides controllers. The game EMITS this; OMR INGESTS the reverse.
+tempo_bpm 174  tick_hz 120  seed 130013
+event tick 0    note 60 vel 52428  state "Jump"     # gap cleared on the beat   (UMP group 1)
+event tick 96   note 64 vel 65535  state "Strike"   # foe broken on the beat
+event tick 192  cc 7  value 2147483647  state "EraUp"  # WCE: Void->Decay  (volume/era controller)
+event tick 288  note 67 vel 52428  state "Jump"
+event tick 384  cc 10 value 1073741824 state "EraUp"   # Decay->Golden
+# directions: serialize (timeline -> UMP/MusicXML/GLB) = deterministic, NO Gemma. ingest (OMR score -> .vixi) = Gemma egress (forge-stego/score_scanner).
+# adapters are ONE-WAY off the IR -> a format swap can't perturb hash_canonical (vixi-is-the-moat).

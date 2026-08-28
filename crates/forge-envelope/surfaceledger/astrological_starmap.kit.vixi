@@ -1,0 +1,63 @@
+#vixi:kit v1
+# Broski's astrological starmap automaton & synesthetic dsp-modulation
+# Anchored in Schaeffer's Typo-Morphology of Sound Objects and Laban Movement Analysis
+
+# Define sound morphology mapping (Schaeffer)
+schaeffer.mass     = signal(audio.sub_bass)        # Mass: low frequency pitch/noise content
+schaeffer.dynamic  = signal(audio.rms)             # Dynamic: amplitude envelope
+schaeffer.grain    = signal(audio.spectrum_high)   # Grain: micro-texture noise
+schaeffer.allure   = signal(audio.formant_energy)  # Allure: vocal-formant micro-modulation
+
+# Define movement effort mapping (Laban)
+laban.space        = direct   | indirect           # Space: sharp constellation focus vs floating nebula drift
+laban.weight       = strong   | light              # Weight: copper-oxide thick border vs golden hair-line
+laban.time         = sudden   | sustained          # Time: rapid oscilloscope jitter vs smooth cosmic spin
+laban.flow         = bound    | free               # Flow: strict border clipping vs ectoplasmic trailing lines
+
+# Dynamic Automata states matching OODA cycle
+state listening {
+  laban.space <- direct
+  laban.weight <- light
+  laban.time <- sudden
+  laban.flow <- bound
+  
+  vibe_glow <- schaeffer.mass * 8000p
+  vibe_shake <- schaeffer.grain * 2000p
+}
+
+state previewing {
+  laban.space <- indirect
+  laban.weight <- light
+  laban.time <- sustained
+  laban.flow <- free
+  
+  vibe_glow <- schaeffer.mass * 5000p
+  vibe_shake <- schaeffer.allure * 4000p
+}
+
+state executing {
+  laban.space <- direct
+  laban.weight <- strong
+  laban.time <- sudden
+  laban.flow <- free
+  
+  vibe_glow <- schaeffer.dynamic * 9500p
+  vibe_shake <- schaeffer.grain * 8500p
+}
+
+state sleep {
+  laban.space <- indirect
+  laban.weight <- light
+  laban.time <- sustained
+  laban.flow <- bound
+  
+  vibe_glow <- 1000p
+  vibe_shake <- 0p
+}
+
+# Gate-footer conventions
+gate contrast_min    = 4.5
+gate hit_target_min  = mu(32)
+gate runtime_parse   = forbidden
+gate alloc_steady    = forbidden
+gate float_in_ir     = forbidden

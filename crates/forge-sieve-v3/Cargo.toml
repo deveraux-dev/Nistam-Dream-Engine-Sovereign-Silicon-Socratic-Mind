@@ -1,0 +1,30 @@
+# Prime Resonance Sieve, ported from F:\NewRepo\crates\forge-sieve. Beachhead
+# grew past resonance.rs/prime_seed.rs: combat/world/social state structs are
+# also landed (data only). The v2 `Sieve` trait impl (observe/evaluate/promote/
+# snapshot) was never ported — that trait's SieveEvent/SieveAction wire is 40+
+# variants of full-game plumbing this crate has no use for. 2026-08-22 (Sean
+# ARCH000 ruling, driver trial): social.rs's action layer rides forge-ml's BQ
+# leg instead (npc_bq.rs) — a router classifies signal/noise from a sieve's own
+# state, no SieveEvent/SieveAction enum needed.
+[package]
+name = "forge-sieve-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+description = "Prime Resonance Sieve — deterministic algorithmic grid from prime number theory, and the phrase-keyed world-seed digest built on it."
+
+[dependencies]
+forge-core-v3 = { path = "../forge-core-v3" }
+forge-ml-bqrouter = { path = "../forge-ml-bqrouter" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+blake3 = "1"
+crossbeam = "0.8"
+
+[dev-dependencies]
+proptest = "1"
+
+[lints]
+workspace = true

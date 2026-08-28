@@ -1,0 +1,76 @@
+#vixi:kit v2
+surface: launcher
+profile: molten
+classification: front_door
+
+# LAUNCHER — the front door. Two planes on one page: a tympan ground (`0) under
+# a sparse rete (`2). Page geometry is Van de Graaf on 1280x800: inner unit
+# mu(142) = w/9, outer void doubled to mu(284) by margin+padding on the rete.
+# padding=mu(0): the page edge IS the page edge. Left unauthored, the root wears
+# density base (mu(12)) and every ninth below is measured off a false origin.
+# color=, not bind=: bind is carried uninterpreted for the host (loader.rs:63-68),
+# so a ground painted with bind= lowers grey.
+slot root kind=region layout=overlay padding=mu(0) color=palette.bg_far material=bone
+
+# ── Tympan: the ground plane. Full bleed, no cards, no words. ──────────────────
+# The sky fills, so the horizon lands where the sky stops — a horizon authored as
+# a first child is a ceiling.
+slot root.tympan kind=region layout=stack_v padding=mu(0) gap=mu(0) color=palette.bg_far material=stone `0
+slot root.tympan.sky kind=region layout=stack_v
+slot root.tympan.horizon kind=chrome size=mu(2) color=palette.accent_secondary alpha=1200
+slot root.tympan.field kind=brush shape=ring radius=pmy(3400) phase=tick stride=weyl size=mu(178) color=palette.bg_near alpha=900
+# The theme's own figure, under the horizon. Molten reads it as heat off the
+# forge floor; permafrost reads the same disc as cold light through ice. One
+# authored figure, two sheets — the ink is `accent_primary`, which each profile
+# owns. Integer only: radius is a permyriad RATIO of this slot's box, and
+# phase=tick is a SimTick commitment, never a wall clock.
+slot root.tympan.radiant kind=brush shape=disc radius=pmy(5600) phase=tick stride=weyl size=mu(120) color=palette.accent_primary alpha=1600
+
+# ── Rete: the sparse plane. Cards + wordmark only. ─────────────────────────────
+# margin mu(142) + padding mu(142) = mu(284) of void where the rete meets the
+# page edge — the 2:1 outer:inner the canon asks for, held as two real insets
+# rather than one asymmetric number the solver has no axis for.
+# padding=mu(0), not a second mu(142): vixi insets are ONE scalar for all four
+# sides, so a uniform padding on top of a uniform margin costs the vertical
+# budget twice and the stack overflows the page. The horizontal canon rides the
+# margin; the vertical canon is authored below as real slots, which is the only
+# place an asymmetric inset can live in this grammar.
+slot root.rete kind=region layout=stack_v margin=mu(142) padding=mu(0) gap=mu(12) `2
+
+# ── The vertical canon, as slots. 516 of content: 166 + 96 + 160 + 30 + 16
+# + 4 gaps of 12 = 516 exactly. The head void is SMALLER than everything under
+# the rail, which is what puts the wordmark above the geometric centre —
+# optical centring is a mass argument, not a coordinate.
+slot root.rete.head_void kind=region layout=stack_v size=mu(166)
+
+# Optical-center rail: the wordmark rides here.
+slot root.rete.rail kind=region layout=stack_v size=mu(96) gap=mu(12) align=center
+slot root.rete.rail.wordmark kind=text ramp=type.ramp[4] color=palette.fg_text text="13FORGE" font=display
+slot root.rete.rail.under kind=text ramp=type.ramp[0] color=palette.fg_muted text="the record disagrees"
+
+# ── The entries. The first is rubricated: accent slot + one ramp stop up. ──────
+slot root.rete.cards kind=region layout=stack_h size=mu(160) padding=mu(0) gap=mu(71) justify=center align=center
+slot root.rete.cards.mud kind=widget name=button size=mu(240) material=bronze color=palette.accent_primary border_radius=mu(4) on_click=edict:launch_mud focus=true primary=true
+slot root.rete.cards.mud.label kind=text ramp=type.ramp[2] color=palette.accent_primary text="ENTER THE MUD"
+slot root.rete.cards.studio kind=widget name=button size=mu(240) material=iron color=palette.fg_text border_radius=mu(4) on_click=edict:launch_studio focus=true
+slot root.rete.cards.studio.label kind=text ramp=type.ramp[1] color=palette.fg_text text="STUDIO"
+slot root.rete.cards.reel kind=widget name=button size=mu(240) material=iron color=palette.fg_text border_radius=mu(4) on_click=edict:launch_reel focus=true
+slot root.rete.cards.reel.label kind=text ramp=type.ramp[1] color=palette.fg_text text="REEL"
+
+# ── Telemetry strip — the SAME feed HUD.html reads off 127.0.0.1:13013. ────────
+# `source=` names are the wire words; `xtask mud` emits the socket wiring from
+# these binds, so the page never carries a second copy of the field table.
+slot root.rete.telemetry kind=region layout=stack_h size=mu(30) padding=mu(0) gap=mu(24) justify=center align=center
+slot root.rete.telemetry.status kind=text ramp=type.ramp[0] color=palette.warning_danger source=hud_status size=mu(160)
+slot root.rete.telemetry.ipr kind=text ramp=type.ramp[0] color=palette.fg_text source=hud_ipr size=mu(160)
+slot root.rete.telemetry.progress kind=chrome size=mu(240) color=palette.success source=hud_progress
+slot root.rete.telemetry.log kind=text ramp=type.ramp[0] color=palette.fg_muted source=hud_log size=mu(360)
+
+# Ballast — the last of the mass under the rail. Carries no words on purpose.
+slot root.rete.ballast kind=region layout=stack_v size=mu(16)
+
+gate contrast_min = 4.5
+gate hit_target_min = mu(44)
+gate runtime_parse = forbidden
+gate alloc_steady = forbidden
+gate float_in_ir = forbidden

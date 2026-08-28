@@ -1,0 +1,40 @@
+#vixi:timeline v1
+# Broadcast Booth arrangement recipe — latenight_house
+
+[timeline]
+mode = "audio"
+duration_us = 4000000
+tempo_bpm_m4 = 120000
+sample_rate = 48000
+frame_rate_m4 = 24000
+property_profile = "ReadOnlyBasics"
+
+[groups.0]
+kind = "music"
+instrument = "drums"
+default_lane = "Critical"
+
+[groups.1]
+kind = "music"
+instrument = "bass"
+default_lane = "NearFuture"
+
+[groups.2]
+kind = "music"
+instrument = "hats"
+default_lane = "PriorAuthority"
+
+[groups.3]
+kind = "music"
+instrument = "pad"
+default_lane = "Speculative"
+
+[events]
+encoding = "base64"
+data = "QJAkAOZlAABBkBwA5mUAAEOQPADmZQAAACAehEKQKgDmZQAAACAPQkGQHADmZQAAACAPQ0CQJADmZQAAACAehEGQHADmZQAAQpAqAOZlAAAAIB6FQJAkAOZlAABBkBwA5mUAAAAgHoRCkCoA5mUAAAAgD0JBkBwA5mUAAAAgD0NAkCQA5mUAAAAgHoRBkBwA5mUAAEKQKgDmZQAAACAehUCQJADmZQAAQZAcAOZlAAAAIB6EQpAqAOZlAAAAIA9CQZAcAOZlAAAAIA9DQJAkAOZlAAAAIB6EQZAcAOZlAABCkCoA5mUAAAAgHoVAkCQA5mUAAEGQHADmZQAAQ5A8AOZlAAAAIB6EQpAqAOZlAAAAIA9CQZAcAOZlAAAAIA9DQJAkAOZlAAAAIA9CQZAcAOZlAABCkCoA5mUAAAAgD0JAkCQA5mUAAEKQKgDmZQAAACAPQkKQKgDmZQAA"
+
+[stamp]
+stage_raw = "3885e4a98126649b"
+canonical = "3885e4a98126649b"
+seed = 1
+authored = "2026-07-12T00:00:00Z"

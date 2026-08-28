@@ -1,0 +1,14 @@
+# Ported as-is from F:\NewRepo\crates\forge-watchmen (subsystem governor
+# fabric: Watchman trait, sharded WatchmanRegistry, HealthSignal). Zero deps
+# in v2, kept zero deps here.
+[package]
+name = "forge-watchmen-v3"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+
+[dev-dependencies]
+
+[lints]
+workspace = true

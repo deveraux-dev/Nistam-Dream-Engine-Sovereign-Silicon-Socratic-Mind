@@ -1,0 +1,16 @@
+[package]
+name = "forge-cart-brain-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "The RunDevRun cart brain — integer-deterministic, edge-portable (wasm32-unknown-unknown + wasm32-wasip1). Calls the live engine ONLY through forge-cart-sink-v3. Ported verbatim from v2 forge-cart-brain (2026-08-16)."
+
+[dependencies]
+forge-cart-sink-v3 = { path = "../forge-cart-sink-v3" }
+
+[dev-dependencies]
+proptest = "1"
+
+[lints]
+workspace = true

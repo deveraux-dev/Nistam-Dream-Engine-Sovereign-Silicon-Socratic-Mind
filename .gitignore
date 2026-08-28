@@ -1,0 +1,129 @@
+# ==============================================================================
+# NISTAM DREAM ENGINE & THE FORGE ENGINE — ROOT .GITIGNORE
+# Comprehensive Cleanroom Submission Shield
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# 1. Rust Build Artifacts & Binaries
+# ------------------------------------------------------------------------------
+target/
+**/target/
+target_env/
+**/*.rs.bk
+*.rlib
+*.rmeta
+*.pdb
+*.exe
+*.dll
+*.so
+*.dylib
+*.d
+*.profraw
+*.profdata
+*.lcov
+
+# ------------------------------------------------------------------------------
+# 2. Python Bytecode, Caches & Virtual Envs
+# ------------------------------------------------------------------------------
+__pycache__/
+**/__pycache__/
+**/*.py[cod]
+**/*$py.class
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# ------------------------------------------------------------------------------
+# 3. Node & Web UI Artifacts (if applicable)
+# ------------------------------------------------------------------------------
+node_modules/
+**/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+dist/
+build/
+.turbo/
+
+# ------------------------------------------------------------------------------
+# 4. Internal Engine Workspaces, Caches & Archives
+# ------------------------------------------------------------------------------
+.cache/
+**/.cache/
+*.cache
+**/*.cache
+.forge/
+_attic*/
+_archive*/
+_archive-2026-08-27/
+.claude/
+.claude
+_proof/
+_staging*/
+_staging/
+_quarry/
+_tmp/
+tmp/
+*.db
+*.sqlite
+*.sqlite3
+
+# ------------------------------------------------------------------------------
+# 5. Heavy Uncompressed & Intermediate Render Assets
+# ------------------------------------------------------------------------------
+*.bmp
+**/*.bmp
+*.raw
+**/*.raw
+
+# ------------------------------------------------------------------------------
+# 6. Credentials, Keys & Secrets (Strict Zero-Leak)
+# ------------------------------------------------------------------------------
+.env
+*.env
+*.env.*
+*.pem
+*.key
+*.pfx
+*credentials*.json
+*service_account*.json
+service_account.json
+*.id_ed25519
+*.id_rsa
+
+# ------------------------------------------------------------------------------
+# 7. Logs & Lock Files
+# ------------------------------------------------------------------------------
+*.log
+**/*.log
+stdout.log
+stderr.log
+*.pid
+**/*.pid
+door.pid
+scheduled_tasks.lock
+
+# ------------------------------------------------------------------------------
+# 8. Editor, OS & Agent Generated Files
+# ------------------------------------------------------------------------------
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+*~
+.system_generated/
+**/.system_generated/

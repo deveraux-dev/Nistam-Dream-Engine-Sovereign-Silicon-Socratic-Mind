@@ -1,0 +1,81 @@
+{
+  "meta": {
+    "act": 1,
+    "notes": "Drop rates in permyriad (0-10000). Low rates. Most enemies drop nothing. Boss drops guaranteed. Server-authoritative — these tables live on pp-server."
+  },
+  "tables": {
+    "corrupted_wolf": {
+      "entity_id": "enemy_corrupted_wolf",
+      "drops": [
+        { "item_id": "mat_corrupted_fang", "rate": 1500, "quantity": 1 },
+        { "item_id": "mat_bloom_membrane", "rate": 500, "quantity": 1 },
+        { "item_id": "tin_basilicon", "rate": 200, "quantity": 1 }
+      ]
+    },
+    "corrupted_boar": {
+      "entity_id": "enemy_corrupted_boar",
+      "drops": [
+        { "item_id": "mat_cracked_tusk", "rate": 1200, "quantity": 1 },
+        { "item_id": "mat_bloom_spore", "rate": 600, "quantity": 1 }
+      ]
+    },
+    "bandit_swordsman": {
+      "entity_id": "enemy_bandit_sword",
+      "drops": [
+        { "item_id": "wpn_bandit_shortsword", "rate": 800, "quantity": 1 },
+        { "item_id": "arm_bandit_leather", "rate": 400, "quantity": 1 },
+        { "item_id": "mat_iron_scrap", "rate": 2000, "quantity": [1, 3] },
+        { "item_id": "tin_basilicon", "rate": 300, "quantity": 1 }
+      ]
+    },
+    "bandit_archer": {
+      "entity_id": "enemy_bandit_archer",
+      "drops": [
+        { "item_id": "wpn_bandit_dagger", "rate": 600, "quantity": 1 },
+        { "item_id": "mat_iron_scrap", "rate": 1500, "quantity": [1, 2] },
+        { "item_id": "tin_quicksilver", "rate": 200, "quantity": 1 }
+      ]
+    },
+    "bandit_brute": {
+      "entity_id": "enemy_bandit_brute",
+      "drops": [
+        { "item_id": "arm_bandit_shield", "rate": 500, "quantity": 1 },
+        { "item_id": "mat_iron_scrap", "rate": 2500, "quantity": [2, 4] },
+        { "item_id": "mat_leather_strip", "rate": 1500, "quantity": [1, 2] }
+      ]
+    },
+    "boss_assessor": {
+      "entity_id": "boss_assessor",
+      "guaranteed": true,
+      "drops": [
+        { "item_id": "wpn_assessor_hammer", "rate": 10000, "quantity": 1 },
+        { "item_id": "arm_assessor_tabard", "rate": 5000, "quantity": 1 },
+        { "item_id": "arm_bloom_pauldron", "rate": 10000, "quantity": 1 },
+        { "item_id": "mat_convocation_seal", "rate": 10000, "quantity": 1 },
+        { "item_id": "tin_philosopher_crucible", "rate": 3000, "quantity": 1 }
+      ]
+    },
+    "boss_assessor_corrupted": {
+      "entity_id": "boss_assessor_bloom",
+      "guaranteed": true,
+      "drops": [
+        { "item_id": "wpn_bloom_hybrid", "rate": 10000, "quantity": 1 },
+        { "item_id": "mat_bloom_core", "rate": 10000, "quantity": 1 },
+        { "item_id": "mat_meridian_shard", "rate": 5000, "quantity": 1 },
+        { "item_id": "tin_rorschach", "rate": 5000, "quantity": 1 },
+        { "item_id": "tin_void_extract", "rate": 3000, "quantity": 1 }
+      ]
+    }
+  },
+  "materials": {
+    "mat_corrupted_fang": { "name": "Corrupted Fang", "element": "blood", "gender": "active", "description": "Still warm. The corruption makes it harder than steel." },
+    "mat_bloom_membrane": { "name": "Bloom Membrane", "element": "blood", "gender": "passive", "description": "Translucent. Pulses when you hold it near iron." },
+    "mat_bloom_spore": { "name": "Bloom Spore", "element": "poison", "gender": "passive", "description": "Violet. Don't breathe near it. Don't hold it long." },
+    "mat_cracked_tusk": { "name": "Cracked Tusk", "element": "earth", "gender": "active", "description": "Split by the corruption growing inside it." },
+    "mat_iron_scrap": { "name": "Iron Scrap", "element": "earth", "gender": "neutral", "description": "Bent, rusted, still usable. Everything in the Holds is." },
+    "mat_leather_strip": { "name": "Leather Strip", "element": "earth", "gender": "neutral", "description": "Cut from something. Don't ask what." },
+    "mat_convocation_seal": { "name": "Convocation Seal", "element": "darkness", "gender": "passive", "description": "Brass. Heavy. The authority it represents is heavier." },
+    "mat_bloom_core": { "name": "Bloom Core", "element": "blood", "gender": "passive", "description": "The heart of the growth. It beats. It shouldn't." },
+    "mat_meridian_shard": { "name": "Meridian Shard", "element": "earth", "gender": "active", "description": "Petrified root-wood from the First Meridian. Older than the Holds." }
+  }
+}

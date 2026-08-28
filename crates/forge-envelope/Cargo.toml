@@ -1,0 +1,45 @@
+[package]
+name = "forge-envelope"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "Tick-bounded ephemeral buffer sealing with cryptographic zeroization and hash-before-drop evidence chains."
+repository = "https://github.com/deveraux-dev/forge-envelope"
+keywords = ["zeroize", "ephemeral", "deterministic", "tick", "evidence"]
+categories = ["cryptography", "memory-management", "science"]
+[lib]
+crate-type = ["rlib", "cdylib"]
+
+[dependencies]
+# `zeroize_derive` dropped from the proposed manifest: this crate never invokes the
+# derive macro, so it would ship a proc-macro dependency that does nothing (L14 ablate).
+zeroize = { version = "1.7", default-features = false, features = ["alloc"] }
+sha2 = { version = "0.10", default-features = false }
+# CLI-only (the `attest` bin). Optional so the library stays serde-free and
+# no_std-pure; both were already in-tree as dev-deps (L19: near-zero new transitive).
+serde = { version = "1.0", features = ["derive"], optional = true }
+serde_json = { version = "1.0", optional = true }
+
+[features]
+default = ["std"]
+# Real, not decorative: `std` forwards to both dependencies and the crate is
+# `#![no_std]` without it. An advertised feature that gates nothing is a lie.
+std = ["sha2/std", "zeroize/std"]
+# The attest CLI. Build with: cargo build -p forge-envelope --features cli
+cli = ["std", "dep:serde", "dep:serde_json"]
+
+[[bin]]
+name = "attest"
+path = "src/bin/attest.rs"
+required-features = ["cli"]
+
+[[bin]]
+name = "chaos_monkey"
+path = "src/bin/chaos_monkey.rs"
+required-features = ["cli"]
+
+[dev-dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+

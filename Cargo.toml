@@ -1,0 +1,68 @@
+[workspace]
+resolver = "2"
+members = [
+    # Original submission core (bench + sovereignty claims live here).
+    "crates/gemma-s13",
+    "crates/forge-envelope",
+    "crates/forge-ml-bqrouter",
+    "crates/forge-core-v3",
+    "crates/forge-hal-clockspine",
+    "crates/forge-gpu-warden-v3",
+    "crates/forge-watchmen-v3",
+
+    # Demo-shell dependency closure (studio-tauri path deps + transitive).
+    "crates/forge-vix-v3",
+    "crates/forge-daemon-door",
+    "crates/forge-mud-v3",
+    "crates/forge-cart-v3",
+    "crates/forge-canvas-v3",
+    "crates/forge-harmonics",
+    "crates/forge-tui-v3",
+    "crates/forge-ump-v3",
+    "crates/forge-correspondence-v3",
+    "crates/forge-vix-syntax-v3",
+    "crates/forge-river-v3",
+    "crates/forge-vcs-v3",
+    "crates/forge-foreman-v3",
+    "crates/forge-ast-v3",
+    "crates/forge-vix-lsp-v3",
+    "crates/forge-cart-brain-v3",
+    "crates/forge-lighting-v3",
+    "crates/forge-sieve-v3",
+    "crates/forge-pp-lore-v3",
+    "crates/forge-items-v3",
+    "crates/forge-reactions-v3",
+    "crates/forge-input-v3",
+    "crates/forge-semantic-quadlane",
+    "crates/forge-colour-v3",
+    "crates/pp-math-v3",
+    "crates/forge-physics-v3",
+    "crates/forge-zones-v3",
+    "crates/forge-index-v3",
+    "crates/vixitic",
+    "crates/goldminer-core-v3",
+]
+# The Tauri demo shell is its own workspace behind a dependency firewall,
+# same shape as the source tree: the webview stack never enters this build.
+exclude = ["crates/studio-tauri", "shell"]
+
+[workspace.package]
+version = "0.3.0"
+edition = "2021"
+authors = ["Sean Morin"]
+license = "MIT"
+repository = "https://github.com/deveraux-dev/Nistam-Dream-Engine-Sovereign-Silicon-Socratic-Mind.git"
+
+[workspace.lints.rust]
+unsafe_code = "deny"
+unexpected_cfgs = { level = "warn", check-cfg = ["cfg(loom)"] }
+
+[profile.dev]
+opt-level = 1
+debug = 1
+
+[profile.release]
+strip = true
+opt-level = 3
+lto = true
+codegen-units = 1

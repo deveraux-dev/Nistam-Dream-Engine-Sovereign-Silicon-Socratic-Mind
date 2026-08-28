@@ -1,0 +1,24 @@
+# The f32 light lane. v2's own doctrine (forge-lighting/src/lib.rs:77-78) put
+# every float in forge-lighting/forge-render/forge-gpu and kept the i64 MilliUnit
+# / i32 Permyriad kernel clean. v3 broke that: sky_irradiance.rs is f32 and lives
+# inside forge-core-v3, the kernel crate. This crate is where the float lane goes.
+#
+# ONE HOME (L05): sky_radiance is NOT reimplemented here. It is already ported at
+# forge-core-v3/src/zones/sky_irradiance.rs:31 and is re-exported, not copied.
+[package]
+name = "forge-lighting-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+
+[dependencies]
+# The only dep. Carries the already-ported sky_radiance + hemispheric_irradiance
+# this crate re-exports, and the Permyriad/MilliUnit types the integer boundary
+# uses. No serde: v2's LightRig was Serialize/Deserialize for its WorldContract
+# pipeline, which has no v3 home (sky_irradiance.rs:4-8 names that absence).
+forge-core-v3 = { path = "../forge-core-v3" }
+
+[lints]
+workspace = true

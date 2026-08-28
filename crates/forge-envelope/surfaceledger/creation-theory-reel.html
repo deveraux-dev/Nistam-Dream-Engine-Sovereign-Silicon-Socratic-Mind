@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Creation Theory — Reel</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{
+    --ground:#101215; --ink:#e9e7e1; --muted:#5c636b; --dim:#3a4046;
+    --accent:#e0561f; --void:#7a86e8; --gate:#d9a13b; --made:#7dc95e;
+    --mono:"JetBrains Mono",Consolas,monospace;
+    --body:"Archivo","Segoe UI",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0}
+  html,body{height:100%}
+  body{background:var(--ground);color:var(--ink);font-family:var(--body);overflow:hidden;font-weight:300}
+
+  /* HUD top */
+  .hud{position:fixed;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:18px 28px;font-family:var(--mono);font-size:13px;color:var(--muted)}
+  .hud .tc{font-size:22px;color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:.04em}
+  .trit{display:flex;gap:8px;align-items:center}
+  .trit .cell{width:34px;height:34px;border:1px solid var(--dim);display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .5s steps(1)}
+  .trit .cell.on-void{border-color:var(--void);color:var(--void);box-shadow:0 0 14px rgba(122,134,232,.35)}
+  .trit .cell.on-gate{border-color:var(--gate);color:var(--gate);box-shadow:0 0 14px rgba(217,161,59,.35)}
+  .trit .cell.on-made{border-color:var(--made);color:var(--made);box-shadow:0 0 14px rgba(125,201,94,.35)}
+  .beat{width:10px;height:10px;border-radius:50%;background:var(--dim)}
+  .beat.tick{background:var(--accent)}
+
+  /* section title */
+  .section{position:fixed;top:76px;left:0;right:0;text-align:center;font-family:var(--mono);font-size:12px;letter-spacing:.3em;color:var(--muted);text-transform:uppercase;transition:color .5s steps(1)}
+
+  /* prompter */
+  .prompter{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 8vw;text-align:center}
+  .line{max-width:22ch}
+  @keyframes land{from{opacity:.15;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+  .curr.land{animation:land .5s ease-out}
+  @media(prefers-reduced-motion:reduce){.curr.land{animation:none}}
+  .prev{font-size:clamp(16px,2.2vw,24px);color:var(--dim);min-height:2.5em;display:flex;align-items:flex-end;justify-content:center}
+  .curr{font-size:clamp(30px,4.6vw,58px);line-height:1.3;font-weight:400;margin:26px 0;text-wrap:balance;max-width:26ch}
+  .next{font-size:clamp(16px,2.2vw,24px);color:var(--muted);min-height:2.5em;display:flex;align-items:flex-start;justify-content:center}
+
+  /* progress rail */
+  .rail{position:fixed;bottom:0;left:0;right:0;height:44px}
+  .bar{position:absolute;bottom:22px;left:28px;right:28px;height:2px;background:var(--dim)}
+  .fill{position:absolute;bottom:22px;left:28px;height:2px;background:var(--accent);width:0}
+  .mark{position:absolute;bottom:16px;width:1px;height:14px;background:var(--muted)}
+  .rail .lbl{position:absolute;bottom:2px;font-family:var(--mono);font-size:9px;color:var(--muted);transform:translateX(-50%)}
+
+  .help{position:fixed;bottom:54px;left:0;right:0;text-align:center;font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.08em}
+  .hidden{opacity:0;transition:opacity .5s}
+  .flash-done .curr{color:var(--accent)}
+</style>
+</head>
+<body>
+
+<img id="moon" src="moon-253.jpg" alt="" style="position:fixed;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;transition:opacity 2s ease;pointer-events:none">
+
+<div class="hud">
+  <div class="trit">
+    <div class="cell" id="c-void">−1</div>
+    <div class="cell" id="c-gate">0</div>
+    <div class="cell" id="c-made">+1</div>
+  </div>
+  <div class="tc" id="tc">00:00.0</div>
+  <div style="display:flex;gap:10px;align-items:center">
+    <span id="bpm">60 BPM · 20 FPS</span>
+    <div class="beat" id="beat"></div>
+  </div>
+</div>
+
+<div class="section" id="section">READY</div>
+
+<div class="prompter">
+  <div class="line prev" id="prev"></div>
+  <div class="line curr" id="curr">Creation Theory</div>
+  <div class="line next" id="next">SPACE to start</div>
+</div>
+
+<div class="help" id="help">SPACE start/pause · R reset · ← → seek 5s · N/P step cue · B beat click · F fullscreen</div>
+
+<div class="rail">
+  <div class="bar"></div>
+  <div class="fill" id="fill"></div>
+</div>
+
+<script>
+// [youtube-forgev1] ReelClock: 60 BPM @ 20 FPS, 500ms column, Drop Law floors (no cue < 3.5s dwell).
+const DURATION = 180;
+const SECTIONS = [
+  {at:0,   name:"−1 · THE VOID TELLING",      cls:"on-void", cell:"c-void"},
+  {at:60,  name:"0 · THE THRESHOLD TELLING",  cls:"on-gate", cell:"c-gate"},
+  {at:120, name:"+1 · THE MADE TELLING",      cls:"on-made", cell:"c-made"},
+];
+// Retimed 2026-08-20 vs THE DROP LAW terse cut: tails no longer overrun minute marks.
+// Pace: −1 and 0 read at ~150 wpm with >=1s breath before each turn. +1 reads at ~160 wpm,
+// final two lines share one card (31w, 11.6s dwell), 0.4s blank out-tail. Blank tail counts.
+const CUES = [
+  [0.0,"The point is this. Before the work there is no record of the work, and I will not invent one."],
+  [8,"The oldest hymn I know refuses to guess."],
+  [12,"Neither existence, it says, nor non-being."],
+  [17,"Not even the one watching from the highest heaven knows for certain, or perhaps he does not know."],
+  [24,"The North told it as a gap between fire and ice, and had the honesty to give the gap a name before giving it a world."],
+  [33,"This repo keeps its void the same way."],
+  [36,"Before nine twenty-four there is no lock in the tree. I checked."],
+  [40,"Before the first tick there is no chain, and I can say absent because I looked, not because I guessed."],
+  [47,"Absent is a finding. It costs nothing to say."],
+  [51,"This video is three minutes long. The void gets the first one, because everything after it has to be earned."],
+  [60,"The point is that a gate that cannot say no is not a gate."],
+  [66,"It is four in the morning somewhere in this build, and the byte I trust most is the smallest one."],
+  [73,"Nine twenty-four, the morning after two agents welded the same file blind, one byte goes into the core."],
+  [80,"Claim. Alignment. Proof. Eight bits, and nothing passes ungated."],
+  [86,"Zero is not maybe. Zero is almost, held honestly."],
+  [90,"The soft drift that is not yet a hazard, the test that compiles but has not run, the report written but not signed."],
+  [98,"The lock reads it and the lock refuses. Not yet. No seal without proof."],
+  [103,"Poisoned means evicted, and there is no appeal, because an appeal is just a second chance to lie."],
+  [110,"I stand at this gate more than I stand anywhere. Most of creation is the part where it does not happen yet."],
+  [120,"The point is that one thing, allowed to split honestly, becomes everything."],
+  [125,"The old book says one begets two, two begets three, and three begets the ten thousand things."],
+  [131,"In this tree it is already landed and it is smaller than that. CREATE begets SPACE and TIME. That is the whole bifurcation."],
+  [139,"Each branch halves again into four leaves or so, no more, because the aperture law holds the fan to what a hand can carry."],
+  [148,"It is this hour, and a leaf is landing."],
+  [152,"It is a stroke I can see on the glass, a note I can hear at four forty, a byte I can hold at two forty-three."],
+  [160,"The ratchet only turns forward. What lands stays landed."],
+  [164,"Three tellings, one creation, one trit. Minus one, zero, plus one."],
+  [168,"You cannot hold more than one at a time, and that is not a limit, that is the design. It is why there are three videos, and why the third one is not on this soundtrack."],
+];
+
+const $=id=>document.getElementById(id);
+let t=0, playing=false, last=null, clickOn=false, actx=null, lastBeat=-1, raf=null, lastCue=-2;
+
+function fmt(s){const m=Math.floor(s/60),sec=Math.floor(s%60),d=Math.floor((s%1)*10);
+  return String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0')+'.'+d;}
+
+function cueIndex(s){let i=-1;for(let k=0;k<CUES.length;k++){if(CUES[k][0]<=s)i=k;else break;}return i;}
+function sectionAt(s){let cur=SECTIONS[0];for(const x of SECTIONS){if(x.at<=s)cur=x;}return cur;}
+
+function beepTick(){
+  if(!clickOn)return;
+  actx=actx||new (window.AudioContext||window.webkitAudioContext)();
+  const o=actx.createOscillator(),g=actx.createGain();
+  o.frequency.value=880;g.gain.value=.06;
+  o.connect(g);g.connect(actx.destination);
+  o.start();o.stop(actx.currentTime+.03);
+}
+
+function render(){
+  $('tc').textContent=fmt(t);
+  $('fill').style.width=((t/DURATION)*100)+'%';
+  const sec=sectionAt(t);
+  $('section').textContent = t>=DURATION ? "OUT" : sec.name;
+  for(const s of SECTIONS){const el=$(s.cell);el.classList.remove('on-void','on-gate','on-made');}
+  if(t<DURATION)$(sec.cell).classList.add(sec.cls);
+  const i=cueIndex(t);
+  if(i!==lastCue){
+    lastCue=i;
+    const c=$('curr');
+    c.classList.remove('land');void c.offsetWidth;c.classList.add('land');
+  }
+  $('prev').textContent = i>0 ? CUES[i-1][1] : '';
+  $('curr').textContent = i>=0 ? CUES[i][1] : 'Creation Theory';
+  $('next').textContent = i+1<CUES.length ? CUES[i+1][1] : (t>=DURATION?'':'');
+  document.body.classList.toggle('flash-done', t>=DURATION);
+  // pillow frames: the moon holds the pre-roll and the out. 2s ease, kept-frame legal.
+  const pillow = (t===0 && !playing) || t>=DURATION;
+  $('moon').style.opacity = pillow ? '0.5' : '0';
+  const beat=Math.floor(t); // 60 BPM: one beat per second
+  if(beat!==lastBeat){lastBeat=beat;$('beat').classList.add('tick');beepTick();setTimeout(()=>$('beat').classList.remove('tick'),120);}
+}
+
+function loop(now){
+  if(playing){
+    if(last!=null) t=Math.min(DURATION, t+(now-last)/1000);
+    last=now;
+    if(t>=DURATION) playing=false;
+  } else last=now;
+  render();
+  raf=requestAnimationFrame(loop);
+}
+
+addEventListener('keydown',e=>{
+  if(e.code==='Space'){e.preventDefault();playing=!playing;$('help').classList.toggle('hidden',playing);}
+  else if(e.key==='r'||e.key==='R'){t=0;playing=false;lastBeat=-1;$('help').classList.remove('hidden');}
+  else if(e.key==='ArrowRight'){t=Math.min(DURATION,t+5);}
+  else if(e.key==='ArrowLeft'){t=Math.max(0,t-5);}
+  else if(e.key==='b'||e.key==='B'){clickOn=!clickOn;$('bpm').textContent=clickOn?'60 BPM · CLICK ON':'60 BPM · 20 FPS';}
+  else if(e.key==='f'||e.key==='F'){document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen();}
+  else if(e.key==='n'||e.key==='N'||e.key==='.'){const i=cueIndex(t);if(i+1<CUES.length){t=CUES[i+1][0];}}
+  else if(e.key==='p'||e.key==='P'||e.key===','){const i=cueIndex(t);t=CUES[Math.max(0,i-1)][0];}
+});
+
+// minute marks on the rail
+(function(){
+  const rail=document.querySelector('.rail');
+  [0,60,120,180].forEach(s=>{
+    const pct=s/DURATION;
+    const m=document.createElement('div');m.className='mark';
+    m.style.left='calc(28px + (100% - 56px) * '+pct+')';rail.appendChild(m);
+    const l=document.createElement('div');l.className='lbl';
+    l.style.left='calc(28px + (100% - 56px) * '+pct+')';l.textContent=fmt(s).slice(0,5);rail.appendChild(l);
+  });
+})();
+
+render();
+raf=requestAnimationFrame(loop);
+</script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+# Ported from `outland-index` (F:\NewRepo\crates\outland) — path/name 5D semantic
+# search. Zero-dependency: the v2 original also links `vixio` (network tick
+# delivery) and `windows-sys` (raw MFT FFI, `unsafe`); neither is ported. This
+# crate carries only the pure, safe half: family/z classification, embed5, and a
+# `fs::read_dir`-based walker. See `crates/forge-core-v3/river/headwater.river`
+# for the disk-anchored receipt trail this crate extends.
+[package]
+name = "forge-index-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+
+[dependencies]
+
+# ARCH000 scoping reversed for this one module only (Sean 2026-08-18: "the
+# HotPath is the user's attention and flow during an active shell/game/creative
+# process, not a one-shot xtask build tool" — `unsafe-fast-scan` is opt-in,
+# never pulled in by default, and nothing under `shell/` or any runtime crate
+# requests it). See `src/mft.rs` for the ported module and its SAFETY comments.
+[target.'cfg(windows)'.dependencies]
+windows-sys = { version = "0.59", features = [
+    "Win32_Foundation",
+    "Win32_Security",
+    "Win32_Storage_FileSystem",
+    "Win32_System_Ioctl",
+    "Win32_System_IO",
+], optional = true }
+
+[features]
+unsafe-fast-scan = ["dep:windows-sys"]
+
+[lints]
+workspace = true

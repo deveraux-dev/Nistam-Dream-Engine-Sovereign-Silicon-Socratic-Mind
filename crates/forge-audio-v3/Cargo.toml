@@ -1,0 +1,92 @@
+[package]
+name = "forge-audio-v3"
+description = "Audio organ — AudioFftBuf spectra, harmonic brush, MIDI/UMP seams into the one bin. Ported verbatim from F:\\NewRepo\\crates\\forge-audio (155 files, 2026-08-15)."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+
+# Optional features carried from the v2 Cargo.toml verbatim — all default off
+# there too, so dropping their gated deps (forge-vision/forge-sieve, both
+# name-collide with different-shaped v3 crates of the same name, and
+# forge-vision-v3/forge-sieve-v3 are NOT their v2 namesakes — checked, not
+# assumed) does not change default behavior. Re-enable only after a real
+# v3-shaped port of whichever v2 crate the feature actually needs.
+[features]
+default = []
+# Registered so `#[cfg(feature = "cognitive")]` (lib.rs, mixer.rs,
+# cognitive_heal.rs) passes rustc's unexpected_cfgs lint. Still unbuildable if
+# actually enabled — `forge_sieve` is not a dependency here (see the module
+# doc above: dropped pending a real v3-shaped port), same as every other
+# feature this comment block already names as carried-but-unported.
+cognitive = []
+hid = ["dep:hidapi"]
+sovereign-broadcast = ["dep:k256", "dep:chacha20poly1305", "dep:hkdf", "dep:rand_core"]
+winmm-out = []
+livecast = []
+radio-db = []
+vision = []
+calligraphy = []
+
+[dependencies]
+log = "0.4"
+# Aliased under their v2 identifiers (Sean 2026-08-15 "port over forge audio" —
+# 155 files import `forge_core::`/`forge_photometric::`/`forge_ump::` verbatim;
+# `package = "..."` resolves those to the real v3 crates with ZERO source edits
+# across the whole port, versus rewriting every import site by hand).
+forge_core = { package = "forge-core-v3", path = "../forge-core-v3" }
+forge_photometric = { package = "forge-photometric-v3", path = "../forge-photometric-v3" }
+forge_ump = { package = "forge-ump-v3", path = "../forge-ump-v3" }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+toml = "0.8"
+glam = "0.29"
+hound = "3.5"
+midir = "0.10"
+symphonia = { version = "0.5", features = ["mp3", "flac", "ogg", "wav", "aiff", "pcm", "vorbis"] }
+flacenc = "0.4"
+cpal = "0.15"
+hidapi = { version = "2.6", optional = true }
+realfft = "3"
+num-complex = "0.4"
+rtrb = "0.3"
+vorbis-encoder = "0.1"
+base64 = "0.22"
+rusqlite = { version = "0.31", features = ["bundled"] }
+chrono = "0.4"
+crossbeam-channel = "0.5"
+arc-swap = "1"
+lofty = "0.21"
+sha2 = "0.10"
+bytemuck = { version = "1", features = ["derive"] }
+rustfft = "6"
+k256 = { version = "0.13", features = ["ecdh"], optional = true }
+chacha20poly1305 = { version = "0.10", optional = true }
+hkdf = { version = "0.12", optional = true }
+rand_core = { version = "0.6", features = ["getrandom"], optional = true }
+urlencoding = "2"
+hex = "0.4"
+ogg = "0.9.2"
+rubato = "3.0.0"
+forge-harmonics = { path = "../forge-harmonics" }
+forge_hal = { package = "forge-hal-clockspine", path = "../forge-hal-clockspine" }
+# ShadowBackend (broski/dream_backend.rs) reuses the daemon's real wire/protocol
+# codec instead of hand-rolling a duplicate JSON-newline format (L05 one-home,
+# revascularize-first) — routes through the whitelisted `infer` op only.
+forge_daemon_door = { package = "forge-daemon-door", path = "../forge-daemon-door" }
+forge_colour = { package = "forge-colour-v3", path = "../forge-colour-v3" }
+pp_math = { package = "pp-math-v3", path = "../pp-math-v3" }
+forge_mud_v3 = { package = "forge-mud-v3", path = "../forge-mud-v3" }
+
+[target.'cfg(windows)'.dependencies]
+windows-sys = { version = "0.59", features = ["Win32_Foundation", "Win32_System_Threading"] }
+windows = { version = "0.54", features = ["Win32_Foundation", "Win32_Media_Audio", "Win32_Media_KernelStreaming", "Win32_System_Com"] }
+
+[dev-dependencies]
+tempfile = "3"
+assert_no_alloc = "1.1.2"
+proptest = "1.11.0"
+forge_evidence = { package = "forge-evidence-v3", path = "../forge-evidence-v3" }
+
+[lints]
+workspace = true

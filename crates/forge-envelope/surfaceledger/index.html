@@ -1,0 +1,209 @@
+<title>13forge</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --ground:#15171a; --panel:#1b1e22; --line:#282c31;
+    --ink:#e9e7e1; --muted:#9299a1; --accent:#e0561f;
+    --pass:#7dc95e; --fail:#d64545; --warn:#d9a13b;
+    --body:"Archivo","Segoe UI",system-ui,sans-serif;
+    --mono:"JetBrains Mono",Consolas,monospace;
+  }
+  *{box-sizing:border-box;margin:0}
+  body{background:var(--ground);color:var(--ink);font-family:var(--body);line-height:1.6;font-size:16px;font-weight:300}
+  a{color:var(--accent)}
+  .wrap{max-width:680px;margin:0 auto;padding:0 24px}
+  code{font-family:var(--mono);font-size:.9em}
+  pre{font-family:var(--mono);background:#101215;border:1px solid var(--line);padding:14px 16px;overflow-x:auto;font-size:12.5px;line-height:1.6}
+  b{font-weight:500;color:var(--ink)}
+
+  .hero{padding:18vh 0 10vh}
+  .mark{font-weight:600;font-size:17px;letter-spacing:.02em}
+  .mark .n{color:var(--accent)}
+  .hero h1{font-weight:300;font-size:clamp(28px,5vw,40px);line-height:1.25;margin-top:48px;letter-spacing:-.01em;text-wrap:balance}
+  .hero h1 b{font-weight:400;color:var(--accent)}
+  .byline{margin-top:28px;font-family:var(--mono);font-size:13px;color:var(--muted)}
+
+  details{border-top:1px solid var(--line)}
+  details:last-of-type{border-bottom:1px solid var(--line)}
+  summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:baseline;padding:22px 0;font-weight:400;font-size:17px}
+  summary::-webkit-details-marker{display:none}
+  summary .hint{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.08em}
+  summary:hover{color:var(--accent)}
+  summary:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
+  details[open] summary{color:var(--accent)}
+  .body{padding:0 0 34px;color:var(--muted)}
+  .body p{max-width:60ch}
+  .body p+p{margin-top:12px}
+
+  .nums{display:grid;gap:10px;margin-top:18px}
+  .num-row{display:flex;gap:14px;align-items:baseline;flex-wrap:wrap;font-size:14px}
+  .num-row .v{font-family:var(--mono);font-size:14px;color:var(--ink);min-width:110px;font-variant-numeric:tabular-nums}
+  .tag{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;padding:1px 6px;border:1px solid}
+  .tag.meas{color:var(--pass);border-color:var(--pass)}
+  .tag.sim{color:var(--warn);border-color:var(--warn)}
+  .tag.live{color:var(--accent);border-color:var(--accent)}
+
+  table{border-collapse:collapse;width:100%;margin-top:16px;font-size:13.5px}
+  th{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-align:left;padding:6px 10px 6px 0;border-bottom:1px solid var(--line);font-weight:400}
+  td{padding:7px 10px 7px 0;border-bottom:1px solid var(--line);vertical-align:top}
+  td.mono{font-family:var(--mono);font-size:12px;color:var(--muted)}
+  .tbl-wrap{overflow-x:auto}
+
+  .demo-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+  .demo-row input{flex:1 1 240px;background:#101215;border:1px solid var(--line);color:var(--ink);font-family:var(--mono);font-size:13px;padding:10px 12px}
+  .demo-row button{background:transparent;color:var(--ink);border:1px solid var(--ink);font-family:var(--body);font-weight:500;font-size:14px;padding:10px 20px;cursor:pointer}
+  .demo-row button:hover{border-color:var(--accent);color:var(--accent)}
+  .demo-row button.danger{border-color:var(--line);color:var(--muted)}
+  .demo-row button.danger:hover{border-color:var(--fail);color:var(--fail)}
+  .demo-row button:focus-visible,.demo-row input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  #chain{margin-top:14px;font-family:var(--mono);font-size:12px}
+  .link-row{display:flex;gap:12px;padding:6px 0;border-top:1px dashed var(--line);align-items:baseline;flex-wrap:wrap}
+  .link-row .h{color:var(--pass);word-break:break-all}
+  .link-row .t{color:var(--muted)}
+  .broken{color:var(--fail)}
+
+  footer{padding:60px 0 70px;color:var(--muted);font-size:12px;font-family:var(--mono)}
+  footer div+div{margin-top:8px}
+</style>
+
+<div class="wrap">
+  <div class="hero">
+    <div class="mark"><span class="n">13</span>forge</div>
+    <h1>A byte holds 256 states. Five trits fill 243. <b>I kept the thirteen.</b></h1>
+    <p class="byline">The workshop of Sean Everett Morin. Twenty-three years of industrial coatings; now I forge software the same way — prep first, prove everything, sign the work.</p>
+  </div>
+
+  <details>
+    <summary>The forge <span class="hint">WHAT THIS PLACE IS</span></summary>
+    <div class="body">
+      <p>Not a company, not a product. A one-man forge where trade discipline gets compiled into machine law: balanced ternary instead of tokens, integer ticks instead of wall clocks, evidence chains instead of trust. Everything is <code>#![no_std]</code> Rust, and nothing gets claimed without a receipt.</p>
+      <p>The pieces come off the bench with names — the S13 sieve, the ephemeral envelope, the weaver, the thirteen sentinels. They're built to outlive my opinion of them.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>The thirteen <span class="hint">WHY THE NAME</span></summary>
+    <div class="body">
+      <p>The thirteen bytes ternary can't reach — 243 through 255 — I refused to waste. They became control sentinels, mapped to the 13 Moons of Nehiyaw Natural Law. Each Moon's traditional meaning is its machine role. The calendar is the interrupt table.</p>
+      <div class="tbl-wrap">
+      <table>
+        <tr><th>Byte</th><th>Moon</th><th>Role</th></tr>
+        <tr><td class="mono">243</td><td>Kisepisim · Cold Moon</td><td>end of sequence</td></tr>
+        <tr><td class="mono">244</td><td>Mikisewipisim · Eagle Moon</td><td>extreme-weather anomaly routing</td></tr>
+        <tr><td class="mono">245</td><td>Niskipisim · Goose Moon</td><td>ecological shift deviations</td></tr>
+        <tr><td class="mono">246</td><td>Athiki-pisim · Frog Moon</td><td>sub-arctic thaw, runoff</td></tr>
+        <tr><td class="mono">247</td><td>Saginipisim · Budding Moon</td><td>vegetation health</td></tr>
+        <tr><td class="mono">248</td><td>Pinawewipisim · Egg Laying Moon</td><td>ecosystem replenishment</td></tr>
+        <tr><td class="mono">249</td><td>Paskawipisim · Molting Moon</td><td>material degradation, structural wear</td></tr>
+        <tr><td class="mono">250</td><td>Ohpahowipisim · Harvest Moon</td><td>yield and civic energy stress</td></tr>
+        <tr><td class="mono">251</td><td>Nonomipisim · Rutting Moon</td><td>grid stress, vibration</td></tr>
+        <tr><td class="mono">252</td><td>Kaskatinowipisim · Freeze-up Moon</td><td>freeze-thaw rebar fatigue</td></tr>
+        <tr><td class="mono">253</td><td>Pawacakinasisis-pisim · Frost on Trees</td><td>micro-climatic frost</td></tr>
+        <tr><td class="mono">254</td><td>Mikikapise-pisim · Ancestor Moon</td><td style="color:var(--fail)">the sabotage gate</td></tr>
+        <tr><td class="mono">255</td><td>The Thirteenth Moon</td><td style="color:var(--accent)">the zeroize moon — memory wipe</td></tr>
+      </table>
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>On the bench <span class="hint">CURRENT WORK</span></summary>
+    <div class="body">
+      <p>Surface Ledger — an inspection auditor that can't lie about what it saw. A photo of corroding steel goes in; Gemini renders a schema-locked verdict; the disposition folds into a rolling SHA-256 chain and the raw data is wiped. A backdated log or a swapped photo breaks every seal after it.</p>
+      <p>It exists because I spent two decades watching good steel fail on bad paperwork. Below is a verdict from the bench, unedited — curvature 0.72 mm against a 0.5 mm threshold:</p>
+      <pre>{
+  "event": "asset",
+  "action": "attest",
+  "tick": 1001,
+  "payload": {
+    "nace_compliance_level": 3,
+    "s13_state_vector": "S13:CRV.A3.072.FAIL",
+    "detected_defects": ["Excessive Curvature", "Roughness", "Potential Blistering"],
+    "mean_curvature_mm": 0.72,
+    "cost_usd": 0.0004,
+    "model": "gemini-2.5-flash",
+    "region": "us-central1"
+  }
+}</pre>
+    </div>
+  </details>
+
+  <details>
+    <summary>Break the chain <span class="hint">GO AHEAD, TRY</span></summary>
+    <div class="body">
+      <p>The idea, small enough to hold: attest a note or two, then tamper with the first one and watch the chain refuse to forgive it. This copy runs in your browser; the real one runs in Rust.</p>
+      <div class="demo-row">
+        <input id="note" maxlength="120" value="pit cluster, north web, 3 o'clock" aria-label="inspection note">
+        <button id="attest">Attest</button>
+        <button id="tamper" class="danger">Tamper</button>
+      </div>
+      <div id="chain" aria-live="polite"></div>
+    </div>
+  </details>
+
+  <details>
+    <summary>Receipts <span class="hint">MEASURED, NOT CLAIMED</span></summary>
+    <div class="body">
+      <p>An inspector who signs an unverified report should lose the stamp. Same rule here — every number carries its label, and one command reproduces the measured ones.</p>
+      <div class="nums">
+        <div class="num-row"><span class="v">49 / 49</span> tests green, zero failures <span class="tag meas">MEASURED</span></div>
+        <div class="num-row"><span class="v">37.4 ns</span> per verdict — 1,000,000 arbitrations in 0.083 s <span class="tag meas">MEASURED</span></div>
+        <div class="num-row"><span class="v">0 bytes</span> heap allocated on the hot path <span class="tag meas">MEASURED</span></div>
+        <div class="num-row"><span class="v">40,000 / 40,000</span> forgery attempts repudiated <span class="tag meas">MEASURED</span></div>
+        <div class="num-row"><span class="v">$0.0004</span> one Gemini audit round-trip, Vertex AI <span class="tag live">LIVE CALL</span></div>
+        <div class="num-row"><span class="v">10,000</span> simulated inspectors, 10 Alberta sites <span class="tag sim">SIMULATED</span></div>
+      </div>
+      <p style="margin-top:16px;font-family:var(--mono);font-size:12px">reproduce: <code>cargo test -p forge-envelope</code></p>
+    </div>
+  </details>
+
+  <details>
+    <summary>The trade <span class="hint">WHERE IT COMES FROM</span></summary>
+    <div class="body">
+      <p>Bridges, plants, pipelines. Twenty-three years learning that the failure mode is never the steel — it's the paperwork. Prep before paint. Seal before storage. Sign your work.</p>
+    </div>
+  </details>
+
+  <footer>
+    <div><span style="color:var(--accent)">13</span>forge.com · Sean Everett Morin</div>
+    <div>DOI 10.5281/zenodo.22020676 · <code>cargo test -p forge-envelope</code></div>
+  </footer>
+</div>
+
+<script>
+(function(){
+  const chainEl=document.getElementById('chain');
+  const note=document.getElementById('note');
+  const GENESIS='0000000000000000';
+  let links=[];
+  async function sha(s){
+    const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));
+    return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');
+  }
+  async function fold(prev,tick,payload){ return sha(prev+'|'+tick+'|'+payload); }
+  async function render(){
+    let prev=GENESIS, html='';
+    for(const l of links){
+      const expect=await fold(prev,l.tick,l.note);
+      const ok = expect===l.hash && l.prev===prev;
+      html+='<div class="link-row"><span class="t">tick '+l.tick+'</span>'+
+        '<span>'+l.note.replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]))+'</span>'+
+        '<span class="'+(ok?'h':'broken')+'">'+(ok?'SEAL ':'BROKEN ')+l.hash.slice(0,16)+'…</span></div>';
+      prev=l.hash;
+    }
+    chainEl.innerHTML=html||'<div class="link-row"><span class="t">chain empty — genesis '+GENESIS+'</span></div>';
+  }
+  document.getElementById('attest').addEventListener('click',async()=>{
+    const tick=1000+links.length+1;
+    const prev=links.length?links[links.length-1].hash:GENESIS;
+    const hash=await fold(prev,tick,note.value);
+    links.push({tick,note:note.value,prev,hash});
+    render();
+  });
+  document.getElementById('tamper').addEventListener('click',()=>{
+    if(links.length){ links[0].note='(quietly edited) '+links[0].note; render(); }
+  });
+  render();
+})();
+</script>

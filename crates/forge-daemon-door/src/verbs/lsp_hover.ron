@@ -1,0 +1,14 @@
+// Lane RON spec — proof-of-concept port of the hand-written `lsp_hover`
+// verb (tool_id 53, wire.rs/protocol.rs/door.rs). See ORDER.tsv/codegen.rs
+// for scope: this proves the generator matches the hand-written wire shape,
+// it does not (yet) replace the live verb.
+(
+    name: "lsp_hover",
+    payload: KeyedTail(
+        keys: [
+            ("line", U32),
+            ("character", U32),
+        ],
+    ),
+    mutating: false,
+)

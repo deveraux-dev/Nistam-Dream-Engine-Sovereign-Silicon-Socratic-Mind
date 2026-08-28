@@ -1,0 +1,19 @@
+# The visual witness harness — drives forge-wright (real Win32 capture/inject
+# FFI, its own excluded workspace) as a subprocess, does pure-safe pixel math
+# here. No unsafe, no GPU, no webview: workspace unsafe_code=deny stays clean.
+[package]
+name = "forge-witness-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "Visual witness harness: launch studio-shell, inject scripted input via forgewright, capture BMP frames, diff against stored baselines with per-channel tolerance."
+
+[lints]
+workspace = true
+
+[dependencies]
+# BMP decode only (default-features off drops the other ~15 codecs this
+# crate never touches) — the same crate/feature forge-wright encodes with,
+# so both sides of the file agree on the format without a hand-rolled parser.
+image = { version = "0.25", default-features = false, features = ["bmp"] }

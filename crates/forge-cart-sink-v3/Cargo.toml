@@ -1,0 +1,16 @@
+[package]
+name = "forge-cart-sink-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "Pure firewall seam for the RunDevRun cart — zero engine deps; the brain calls live primitives only through these sink traits (WASM + WASI portable). Ported verbatim from v2 forge-cart-sink (2026-08-15)."
+
+[dependencies]
+# INTENTIONALLY EMPTY. This crate is the SEAM. Adding an engine dependency here
+# breaks the firewall AND the brain's edge-portability (it must compile to both
+# wasm32-unknown-unknown and wasm32-wasip1 unchanged). Live, engine-backed sink
+# impls live in the host crate, injected at runtime via CartSinks.
+
+[lints]
+workspace = true

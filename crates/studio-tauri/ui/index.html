@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nistam Dream Engine</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+  <link rel="manifest" href="site.webmanifest" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <canvas id="gl-sky"></canvas>
+  <canvas id="space-canvas"></canvas>
+  <div class="app-layout">
+    <header class="app-header">
+      <div class="brand">
+        <span class="sigil">◈</span>
+        <span class="title">13FORGE DEMO SHELL</span>
+        <span class="version-tag">TAURI v2 / MOLTEN — 5D SKY</span>
+      </div>
+      <div class="astro-ctl" title="raise the astrolabe — or fly into Sol and it rises on its own">
+        <span class="astro-glyph">✳</span>
+        <input id="astro-slider" type="range" min="0" max="100" value="0" />
+        <span class="astro-lbl">ASTROLABE</span>
+      </div>
+      <div class="head-right">
+        <button id="btn-fleet" class="btn" title="Three Bears Gemma Triad & 2.71 GB VRAM Fleet Telemetry">🐻 FLEET TRIAD</button>
+        <button id="btn-theory" class="btn">♪ THEORY</button>
+        <button id="btn-chain" class="btn" title="Harmonic Constellation Chain Arpeggiator (Click/Drag stars to weave chords)">✦ CONSTELLATION</button>
+        <button id="btn-mute" class="btn on" title="mute every voice — star rings, the terminal's ear, played scores (M)">SOUND</button>
+        <span class="unit-tag" id="sky-title">drag to look (it glides) · wheel to fly · right-drag to drift · ctrl+wheel to descend · double-strike a star to sail there</span>
+      </div>
+    </header>
+
+    <main class="sky-stage"></main>
+
+    <div id="fleet-panel" class="dossier hidden" style="width: 500px; top: 56px; left: 16px; z-index: 100;">
+      <div class="reticle reticle-tl"></div>
+      <div class="reticle reticle-tr"></div>
+      <div class="reticle reticle-bl"></div>
+      <div class="reticle reticle-br"></div>
+      <div class="dossier-header">
+        <div class="dossier-title">
+          <span class="star-catalog-id">S13 BALANCED TERNARY ENGINE · 2.71 GB VRAM</span>
+          <span class="star-name">🐻 THREE BEARS GEMMA FLEET</span>
+        </div>
+        <span class="spectral-badge" style="color: var(--accent-cyan); border-color: var(--accent-cyan);">RESIDENT</span>
+        <span class="dossier-pin" id="fleet-close" title="close this glass">✕</span>
+      </div>
+
+      <div class="fleet-vram-strip">
+        <div class="fleet-bear-card">
+          <span class="bear-tag">BABY (2B)</span>
+          <b class="bear-val">410 MB</b>
+          <span class="bear-sub">Shader Geodesic</span>
+        </div>
+        <div class="fleet-bear-card active">
+          <span class="bear-tag">MAMA (9B)</span>
+          <b class="bear-val">1.72 GB</b>
+          <span class="bear-sub">52.6 tok/s GPU decode</span>
+        </div>
+        <div class="fleet-bear-card">
+          <span class="bear-tag">PAPA (27B)</span>
+          <b class="bear-val">580 MB</b>
+          <span class="bear-sub">1.76–2.75M dec/s</span>
+        </div>
+      </div>
+
+      <div class="fleet-telemetry-box">
+        <div class="telemetry-row">
+          <span>HOST VRAM COMMITTED:</span>
+          <b id="fleet-vram-committed" class="badge-gold">2,710 MB / 8,192 MB (RTX 3070)</b>
+        </div>
+        <div class="telemetry-row">
+          <span>9B S13 GPU DECODE (measured):</span>
+          <b id="fleet-9b-tput" class="badge-cyan">52.6 tok/s · 19.03 ms/tok (437.5 Gweights/s)</b>
+        </div>
+        <div class="telemetry-row">
+          <span>CPU SCALAR BASELINE (not decode):</span>
+          <b id="fleet-9b-scalar">1.922 Gweights/s · 0.54 M row-GEMV/s</b>
+        </div>
+        <div class="telemetry-row">
+          <span>N×IPR ATTENTION SIEVE:</span>
+          <b id="fleet-nipr-rate">762.8 ns/eval (1.31 Meval/s)</b>
+        </div>
+      </div>
+
+      <div class="fleet-section-title">⚡ 7-DOMAIN BQ METAROUTER & INFERENCE</div>
+      <div class="fleet-prompt-row">
+        <input type="text" id="fleet-prompt-input" class="rite-input" placeholder="Enter prompt (e.g. 'Synthesize radiant plasma thruster')..." value="Synthesize radiant plasma thruster" />
+        <button type="button" class="btn" id="btn-fleet-route">ROUTE</button>
+        <button type="button" class="btn" id="btn-fleet-step">TRIAD STEP</button>
+      </div>
+
+      <div id="fleet-route-result" class="fleet-result-card hidden">
+        <div class="telemetry-row">
+          <span>TARGET SPECIALIST DOMAIN:</span>
+          <b id="fleet-res-domain" class="badge-gold">—</b>
+        </div>
+        <div class="telemetry-row">
+          <span>HAMMING DIST / 3σ MARGIN:</span>
+          <b id="fleet-res-margin" class="badge-cyan">—</b>
+        </div>
+        <div class="telemetry-row">
+          <span>ROUTE CALL (IPC ROUND-TRIP):</span>
+          <b id="fleet-res-latency">— (router core: 363–568 ns, 3 release runs)</b>
+        </div>
+      </div>
+
+      <div id="fleet-triad-result" class="fleet-result-card hidden">
+        <div class="telemetry-row">
+          <span>BABY 2B M5 COORDS:</span>
+          <b id="fleet-baby-m5" class="badge-cyan">—</b>
+        </div>
+        <div class="telemetry-row">
+          <span>PAPA 9B N×IPR PMY:</span>
+          <b id="fleet-papa-nipr" class="badge-gold">—</b>
+        </div>
+        <div class="telemetry-row">
+          <span>MAMA 9B SOVEREIGN SCRUB:</span>
+          <b id="fleet-mama-verdict" class="badge-gold" style="color: var(--accent-verdigris) !important;">—</b>
+        </div>
+      </div>
+    </div>
+
+    <div id="theory-panel" class="dossier hidden">
+      <div class="reticle reticle-tl"></div>
+      <div class="reticle reticle-tr"></div>
+      <div class="reticle reticle-bl"></div>
+      <div class="reticle reticle-br"></div>
+      <div class="dossier-header">
+        <div class="dossier-title">
+          <span class="star-catalog-id" id="theory-key">—</span>
+          <span class="star-name" id="theory-scale">—</span>
+        </div>
+        <span class="spectral-badge" id="theory-ref">A440</span>
+        <span class="dossier-pin" id="theory-close" title="close this glass">✕</span>
+      </div>
+      <div class="theory-blurb" id="theory-blurb">—</div>
+      <div class="theory-knobs" id="theory-knobs"><!-- drawn from CATALOG --></div>
+      <div class="dossier-grid">
+        <div class="telemetry-cell"><span class="label">notes</span><b class="val" id="theory-notes">—</b></div>
+        <div class="telemetry-cell"><span class="label">beat</span><b class="val badge-gold" id="theory-beat">—</b></div>
+      </div>
+      <div class="theory-vol-box">
+        <div class="knob-row">
+          <span class="knob-label">🔊 MASTER VOL</span>
+          <input type="range" id="theory-vol-slider" min="0" max="100" value="45" class="knob-slider" />
+          <span class="knob-val" id="theory-vol-val">45%</span>
+        </div>
+      </div>
+      <div class="theory-actions">
+        <button type="button" class="btn" id="theory-audition">▶ HEAR THE SCALE</button>
+        <button type="button" class="btn" id="theory-play-bach">▶ BACH</button>
+        <button type="button" class="btn" id="theory-tuning">A432</button>
+        <button type="button" class="btn" id="theory-reset">RESET</button>
+      </div>
+    </div>
+
+    <div id="star-hud" class="star-hud hidden">
+      <div class="star-name" id="hud-name">—</div>
+      <div class="row"><span>harmonic</span><b id="hud-hz">—</b></div>
+      <div class="row"><span>mag (pmy)</span><b id="hud-mag">—</b></div>
+    </div>
+
+    <div id="chain-hud" class="chain-hud hidden">
+      <div class="chain-head">
+        <span class="badge-gold">✦ CONSTELLATION ARPEGGIATOR</span>
+        <button id="btn-chain-clear" class="btn btn-sm">CLEAR</button>
+      </div>
+      <div class="chain-row"><span>nodes</span><b id="chain-node-count">0</b></div>
+      <div class="chain-row"><span>tempo</span><b id="chain-bpm">120 BPM</b></div>
+      <div class="chain-row"><span>doppler D(n)</span><b id="chain-doppler" class="badge-cyan">1.00x</b></div>
+      <div class="chain-row"><span>mode</span><b id="chain-mode">LINEAR CHAIN</b></div>
+      <div class="chain-hint">Click / Shift-Click stars to link · Loop to origin for resonant drone</div>
+    </div>
+
+    <div id="term-dock" class="term-dock collapsed">
+      <div id="term-grip" class="term-grip" title="drag to size · double-click to open/close"></div>
+      <div class="term-head">
+        <span class="pane-title">⌨ TERMINAL — PWSH (ConPTY · VT500)</span>
+        <span>
+          <button id="btn-hauntbox" class="btn" title="run the sealed WASI sandbox demo — GREEN/RED gatekeeper cycle, sung live">👻 HAUNTBOX</button>
+          <button id="btn-term-toggle" class="btn">▲ OPEN</button>
+        </span>
+      </div>
+      <canvas id="term-canvas" tabindex="0"></canvas>
+      <canvas id="emerge-canvas"></canvas>
+    </div>
+
+    <div id="hud-5d-bar" class="hud-5d-bar">
+      <div class="hud-5d-badge">
+        <span class="badge-gold">✨ 5D HYPER-PROJECTION</span>
+      </div>
+      <div class="hud-5d-controls">
+        <div class="hud-5d-slider-group">
+          <label>θ_zw (Z↔W Hyper-Plane): <b id="val-theta-zw">0.00 rad</b></label>
+          <input type="range" id="slider-theta-zw" min="0" max="628" value="0" class="knob-slider" />
+        </div>
+        <div class="hud-5d-slider-group">
+          <label>ϕ_wv (W↔V Spectral Plane): <b id="val-phi-wv">0.00 rad</b></label>
+          <input type="range" id="slider-phi-wv" min="0" max="628" value="0" class="knob-slider" />
+        </div>
+        <div class="hud-5d-slider-group">
+          <label>β = v/c (Lorentz Warp): <b id="val-beta-lorentz">0.00 c</b></label>
+          <input type="range" id="slider-beta-lorentz" min="0" max="95" value="0" class="knob-slider" />
+        </div>
+      </div>
+      <div class="hud-5d-actions">
+        <button type="button" class="btn" id="btn-focus-earth">🌍 FOCUS EARTH</button>
+        <button type="button" class="btn" id="btn-spin-so5">🔄 AUTO-SPIN SO(5)</button>
+        <button type="button" class="btn" id="btn-reset-5d">RESET</button>
+      </div>
+    </div>
+
+    <div id="star-dossier" class="star-dock-row hidden">
+      <div class="star-dock-main">
+        <div class="star-dock-identity">
+          <span class="star-catalog-id" id="dossier-cat">—</span>
+          <span class="star-name" id="dossier-name">—</span>
+          <span class="spectral-badge" id="dossier-spectral">—</span>
+        </div>
+        <div class="star-dock-telemetry">
+          <div class="telemetry-cell"><span class="label">freq</span><b class="val" id="dossier-hz">—</b></div>
+          <div class="telemetry-cell"><span class="label">pulse</span><b class="val badge-gold" id="dossier-key">—</b></div>
+          <div class="telemetry-cell"><span class="label">mag</span><b class="val" id="dossier-mag">—</b></div>
+          <div class="telemetry-cell"><span class="label">oklch</span><b class="val badge-cyan" id="dossier-oklch">—</b></div>
+          <div class="telemetry-cell"><span class="label">ansi</span><b class="val" id="dossier-ansi">—</b></div>
+          <div class="telemetry-cell"><span class="label">doppler</span><b class="val badge-gold" id="dossier-doppler">—</b></div>
+          <div class="telemetry-cell"><span class="label">dist</span><b class="val" id="dossier-dist">—</b></div>
+          <div class="telemetry-cell"><span class="label">coords</span><b class="val" id="dossier-pos">—</b></div>
+        </div>
+        <div class="star-dock-scope">
+          <div class="spectral-band"><div class="spectral-marker" id="dossier-spec-marker"></div></div>
+          <div class="scope-container">
+            <canvas id="dossier-scope" width="120" height="16"></canvas>
+            <div class="scope-sweep"></div>
+          </div>
+        </div>
+        <div class="star-dock-actions">
+          <span class="dossier-pin" id="dossier-pin" title="pin: hold this star, ignore further clicks">◉</span>
+          <span class="dossier-pin" id="dossier-close" title="close this glass (Esc)">✕</span>
+        </div>
+      </div>
+      <div class="dossier-foot" id="dossier-foot" style="display:none;">WORLDBUILDER — a mesh world sleeps under this seed</div>
+    </div>
+
+    <footer class="status-pane">
+      <span class="status-card">DAEMON :13013 <span id="daemon-pill" class="status-pill offline">OFFLINE</span> <span id="daemon-uptime" class="muted">--</span></span>
+      <span class="status-card"><span id="context-health" class="muted">HEALTH: --</span> <span id="shi-score" class="muted">SHI: --</span></span>
+      <span class="status-card">S13 GEMMA <span id="sidecar-pill" class="status-pill offline">OFFLINE</span></span>
+      <span class="status-card vram-card">
+        <span class="vram-tag">VRAM</span>
+        <span class="vram-stack">
+          <span class="vram-row"><em>PRED</em><span class="vram-track"><i id="vram-pred"></i></span><b id="vram-pred-text" class="muted">--</b></span>
+          <span class="vram-row"><em>ACT</em><span class="vram-track"><i id="vram-fill"></i></span><b id="vram-text" class="muted">no probe</b></span>
+        </span>
+      </span>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+# Ported as-is from F:\NewRepo\crates\forge-gpu-warden (fence, lane, and
+# manifest guards over GPU device submission) — the "3-Tier GPU/CPU
+# Dual-Flywheel Trit Distillation" plan's hot-swap substrate (Phase 1).
+[package]
+name = "forge-gpu-warden-v3"
+description = "GPU warden — fence, lane, and manifest guards over device submission"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+forge-watchmen-v3 = { path = "../forge-watchmen-v3" }
+crossbeam-channel = "0.5"
+sha2 = "0.10"
+thiserror = "2"
+serde = { version = "1", features = ["derive"] }
+serde-big-array = "0.5"
+log = "0.4"
+ed25519-dalek = "2"
+# vram_bridge.rs (ghostmoon-merge Wave 2b, ARCH000-nodded 2026-08-24): the real
+# device-buffer half vram_staging.rs never landed. Version matches shell/Cargo.toml
+# (the eventual consumer) so the two never drift apart.
+wgpu = "24"
+bytemuck = { version = "1", features = ["derive"] }
+
+[dependencies.nvml-wrapper]
+version = "0.10"
+optional = true
+
+[features]
+default = []
+nvml = ["dep:nvml-wrapper"]
+cloud-sim = []
+shakedown = ["cloud-sim", "nvml"]
+
+[dev-dependencies]
+forge-ml-bqrouter = { path = "../forge-ml-bqrouter" }
+forge-envelope = { path = "../forge-envelope" }
+
+[lints]
+workspace = true

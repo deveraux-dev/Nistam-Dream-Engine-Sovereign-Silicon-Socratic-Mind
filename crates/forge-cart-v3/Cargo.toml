@@ -1,0 +1,29 @@
+# Cartridge packing and sealing — the cart domain drain.
+# Sealed carts are RON-serialized payloads with BLAKE3 integrity verification.
+# No unsafe, no dependencies beyond serde/ron/blake3 in a default build.
+[package]
+name = "forge-cart-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+ron = "0.8"
+blake3 = "1.8.5"
+# `texbake` (2026-08-25): the texture corpus carries 853 JPEG and 180 PNG files
+# and the tree held no JPEG decoder — image 0.25 was already a workspace edge via
+# crates/forge-witness-v3, so this adds the `jpeg` feature, not a dependency.
+# Optional and off by default so a default build keeps the serde/ron/blake3 set
+# above; only xtask turns it on, same shape as forge-index-v3's `unsafe-fast-scan`.
+image = { version = "0.25", default-features = false, features = ["jpeg", "png"], optional = true }
+
+[features]
+# Offline texture bake: decode + derive-rule falsification. Never linked by the
+# shell or any runtime crate — `texpack` (the index) stays dependency-free.
+texbake = ["dep:image"]
+
+[lints]
+workspace = true

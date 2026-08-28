@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en" class="bg-[#090a0f] text-slate-200 selection:bg-teal-500/30 selection:text-teal-300">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>13Forge — Live Deck</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {950:'#020306',900:'#060911',850:'#090e1a',800:'#0d1527'},
+                        brass: '#d3af37',
+                        verdigris: '#5e9e73',
+                        rust: '#8a4b2b'
+                    },
+                    fontFamily: {
+                        mono: ['JetBrains Mono', 'Fira Code', 'Courier New', 'monospace'],
+                        sans: ['Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .mono-font { font-family: 'JetBrains Mono', monospace; }
+        .glass-panel {
+            background: rgba(9,14,26,0.78);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(27,43,74,0.65);
+        }
+        .pulse-dot { animation: pulse 2s cubic-bezier(0.4,0,0.6,1) infinite; }
+        @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .5; } }
+        .astrolabe-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        #astrolabeCanvas {
+            filter: drop-shadow(0 0 20px rgba(26,224,255,0.1));
+            transition: filter 0.3s ease;
+        }
+        .astrolabe-state {
+            text-xs font-mono text-slate-400 tracking-wide uppercase;
+        }
+        .log-container {
+            height: 240px;
+            overflow-y: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            line-height: 1.4;
+            background: rgba(0,0,0,0.3);
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            color: #94a3b8;
+        }
+        .log-line {
+            margin: 0;
+            word-break: break-word;
+        }
+        .log-line.lifecycle { color: #60a5fa; }
+        .log-line.error { color: #ef4444; }
+        .derived-strip {
+            background: rgba(15,23,42,0.5);
+            border: 1px solid rgba(51,65,85,0.4);
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            color: #cbd5e1;
+            min-height: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            font-size: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            padding: 0.375rem 0.75rem;
+            border-radius: 0.375rem;
+            border: 1px solid;
+        }
+        .chip.live { background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.3); color: #10b981; }
+        .chip.dead { background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.3); color: #ef4444; }
+        .chip.running { background: rgba(59,130,246,0.1); border-color: rgba(59,130,246,0.3); color: #3b82f6; }
+        .chip.exit-ok { background: rgba(34,197,94,0.1); border-color: rgba(34,197,94,0.3); color: #22c55e; }
+        .chip.exit-fail { background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.3); color: #ef4444; }
+        .chip.skipped { background: rgba(217,119,6,0.1); border-color: rgba(217,119,6,0.3); color: #d97706; }
+        .dot { display: inline-block; width: 0.375rem; height: 0.375rem; border-radius: 50%; }
+        .dot.live { background: #10b981; }
+        .dot.dead { background: #ef4444; }
+    </style>
+</head>
+<body class="min-h-screen bg-[#090a0f] overflow-x-hidden">
+    <!-- Ambient Grid Overlay -->
+    <div class="pointer-events-none fixed inset-0 z-0 bg-[linear-gradient(to_right,#141622_1px,transparent_1px),linear-gradient(to_bottom,#141622_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
+
+    <!-- Content -->
+    <div class="relative z-10">
+        <!-- Header -->
+        <header class="border-b border-slate-800/80 bg-dark-950/90 backdrop-blur-md sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <span class="font-extrabold tracking-tight text-white mono-font text-base flex items-center gap-2">
+                        <span class="h-2 w-2 rounded-full bg-teal-400 pulse-dot"></span>
+                        13FORGE.COM / LIVE DECK
+                    </span>
+                    <span class="ml-3 px-2.5 py-1 rounded-full border border-sky-500/40 bg-sky-500/10 text-sky-300 text-[11px] mono-font font-semibold tracking-wide">
+                        Gemini 3.7 Flash · Gemma Triad · Google Cloud Vertex AI
+                    </span>
+                </div>
+                <div class="flex items-center gap-3 text-xs mono-font">
+                    <div id="wireStatusChip" class="chip dead">
+                        <span class="dot dead"></span>
+                        <span id="wireStatus">DEAD</span>
+                    </div>
+                    <div class="px-3 py-1 rounded-lg bg-dark-900 border border-slate-800 text-slate-300">
+                        Elapsed: <span id="elapsedMs">0</span>ms
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Astrolabe Masthead -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+            <div class="astrolabe-container">
+                <canvas id="astrolabeCanvas" width="380" height="380" class="rounded-lg"></canvas>
+                <div class="astrolabe-state" id="astrolabeState">sleep</div>
+            </div>
+        </section>
+
+        <!-- Panel Grid -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Panel: Test Wall -->
+                <div class="glass-panel rounded-2xl p-5 shadow-2xl space-y-3 flex flex-col">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-sm font-bold text-white mono-font uppercase">Test Wall</h2>
+                        <div id="tests-status" class="chip dead">
+                            <span class="dot dead"></span>
+                            <span>DEAD</span>
+                        </div>
+                    </div>
+                    <div id="tests-log" class="log-container flex-1"></div>
+                    <div id="tests-strip" class="derived-strip">— awaiting wire —</div>
+                </div>
+
+                <!-- Panel: Affect Census -->
+                <div class="glass-panel rounded-2xl p-5 shadow-2xl space-y-3 flex flex-col">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-sm font-bold text-white mono-font uppercase">Affect Census</h2>
+                        <div id="census-status" class="chip dead">
+                            <span class="dot dead"></span>
+                            <span>DEAD</span>
+                        </div>
+                    </div>
+                    <div id="census-log" class="log-container flex-1"></div>
+                    <div id="census-strip" class="derived-strip">— awaiting wire —</div>
+                </div>
+
+                <!-- Panel: Ironroot Merge -->
+                <div class="glass-panel rounded-2xl p-5 shadow-2xl space-y-3 flex flex-col">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-sm font-bold text-white mono-font uppercase">Ironroot Merge</h2>
+                        <div id="ironroot-status" class="chip dead">
+                            <span class="dot dead"></span>
+                            <span>DEAD</span>
+                        </div>
+                    </div>
+                    <div id="ironroot-log" class="log-container flex-1"></div>
+                    <div id="ironroot-strip" class="derived-strip">— awaiting wire —</div>
+                </div>
+
+                <!-- Panel: Gemma Triad (local) -->
+                <div class="glass-panel rounded-2xl p-5 shadow-2xl space-y-3 flex flex-col">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-sm font-bold text-white mono-font uppercase">Gemma Triad (local)</h2>
+                        <div id="gemma-status" class="chip dead">
+                            <span class="dot dead"></span>
+                            <span>DEAD</span>
+                        </div>
+                    </div>
+                    <div id="gemma-log" class="log-container flex-1"></div>
+                    <div id="gemma-strip" class="derived-strip">— awaiting wire —</div>
+                </div>
+
+                <!-- Panel: Gemini 3.7 Flash (governed) -->
+                <div class="glass-panel rounded-2xl p-5 shadow-2xl space-y-3 flex flex-col">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-sm font-bold text-white mono-font uppercase">Gemini 3.7 Flash (governed)</h2>
+                        <div id="flash-status" class="chip dead">
+                            <span class="dot dead"></span>
+                            <span>DEAD</span>
+                        </div>
+                    </div>
+                    <div id="flash-log" class="log-container flex-1"></div>
+                    <div id="flash-strip" class="derived-strip">— awaiting wire —</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="max-w-7xl mx-auto px-4 sm:px-6 py-12 border-t border-slate-800/60 text-center space-y-4">
+            <p class="text-xs text-slate-400 mono-font leading-relaxed max-w-2xl mx-auto">
+                Every number on this page arrived over <code class="text-cyan-300 bg-cyan-950/20 px-1 py-0.5 rounded">ws://127.0.0.1:13013&#8203;/13016</code> (loopback — this machine talking to itself, never a public address) from a live process. Load this page without the conductor and it is honest about being dead.
+            </p>
+            <div class="text-xs text-slate-500 mono-font space-y-1">
+                <div class="font-semibold text-slate-400">Channels:</div>
+                <div>deck.meta (ticks) · deck.tests · deck.census · deck.ironroot · deck.gemma · deck.flash</div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        const channels = {
+            tests: { el: 'tests', name: 'deck.tests', lines: [], status: 'DEAD', parseRegex: /test result: (ok|FAILED)\. (\d+) passed; (\d+) failed/ },
+            census: { el: 'census', name: 'deck.census', lines: [], status: 'DEAD', keywords: ['bound', 'neutral', 'torn', 'permyriad'] },
+            ironroot: { el: 'ironroot', name: 'deck.ironroot', lines: [], status: 'DEAD', keywords: ['merkle', 'sha256', '.ron'] },
+            gemma: { el: 'gemma', name: 'deck.gemma', lines: [], status: 'DEAD' },
+            flash: { el: 'flash', name: 'deck.flash', lines: [], status: 'DEAD' }
+        };
+
+        let maxMs = 0;
+        let astrolabeState = 'sleep';
+        let jobsActive = 0;
+        let wsConnected = false;
+        let reconnectAttempt = 0;
+        let astrolabeAngle = 0;
+        const astroCanvas = document.getElementById('astrolabeCanvas');
+        const astroCtx = astroCanvas.getContext('2d');
+        const centerX = astroCanvas.width / 2;
+        const centerY = astroCanvas.height / 2;
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        const DECK_PORTS = [13013, 13016];
+        function connectWs() {
+            try {
+                const port = DECK_PORTS[reconnectAttempt % DECK_PORTS.length];
+                const ws = new WebSocket('ws://127.0.0.1:' + port);
+                const guard = setTimeout(() => {
+                    if (ws.readyState !== WebSocket.OPEN) { try { ws.close(); } catch (e) {} }
+                }, 1500);
+                ws.onopen = () => {
+                    clearTimeout(guard);
+                    wsConnected = true;
+                    reconnectAttempt = 0;
+                    astrolabeState = 'previewing';
+                    updateAstrolabeState();
+                    updateWireStatus();
+                };
+                ws.onmessage = (e) => handleFrame(e.data);
+                ws.onclose = () => {
+                    wsConnected = false;
+                    updateWireStatus();
+                    astrolabeState = 'sleep';
+                    updateAstrolabeState();
+                    setTimeout(() => {
+                        reconnectAttempt++;
+                        if (reconnectAttempt < 50) connectWs();
+                    }, 3000);
+                };
+                return ws;
+            } catch (err) { console.error('WS connect error:', err); return null; }
+        }
+
+        function handleFrame(data) {
+            try {
+                const msg = typeof data === 'string' ? JSON.parse(data) : data;
+                const ch = (msg.ch || '').startsWith('deck.') ? msg.ch.slice(5) : msg.ch;
+                const ms = msg.ms || 0;
+                const line = msg.line || '';
+                if (ms > maxMs) maxMs = ms;
+                if (channels[ch]) {
+                    channels[ch].lines.push(line);
+                    if (channels[ch].lines.length > 200) channels[ch].lines.shift();
+                    if (line.includes('JOB START')) {
+                        jobsActive++;
+                        updateAstrolabeState();
+                        channels[ch].status = 'RUNNING';
+                    } else if (line.includes('JOB EXIT')) {
+                        jobsActive = Math.max(0, jobsActive - 1);
+                        updateAstrolabeState();
+                        const code = line.match(/JOB EXIT (-?\d+)/)?.[1] || '0';
+                        channels[ch].status = code === '0' ? 'EXIT_OK' : 'EXIT_FAIL';
+                    } else if (line.includes('SKIPPED')) {
+                        channels[ch].status = 'SKIPPED';
+                    } else if (channels[ch].status === 'DEAD') {
+                        channels[ch].status = 'RUNNING';
+                    }
+                    updatePanel(ch);
+                }
+            } catch (err) { console.error('Parse error:', err); }
+        }
+
+        function updateWireStatus() {
+            if (window.__DECK_REPLAY) return; // replay chip is set once by playReplay
+            const chip = document.getElementById('wireStatusChip');
+            const text = document.getElementById('wireStatus');
+            if (wsConnected && maxMs > 0) {
+                chip.className = 'chip live';
+                text.textContent = 'LIVE';
+            } else {
+                chip.className = 'chip dead';
+                text.textContent = 'DEAD';
+            }
+        }
+
+        function updateAstrolabeState() {
+            let newState = 'sleep';
+            if (wsConnected || window.__DECK_REPLAY) {
+                if (jobsActive > 0) newState = 'executing';
+                else if (maxMs > 0) newState = 'previewing';
+                else newState = 'listening';
+            } else {
+                newState = 'sleep';
+            }
+            astrolabeState = newState;
+            document.getElementById('astrolabeState').textContent = astrolabeState;
+        }
+
+        function drawAstrolabe() {
+            const w = astroCanvas.width, h = astroCanvas.height;
+            astroCtx.fillStyle = '#030509';
+            astroCtx.fillRect(0, 0, w, h);
+            const r1 = 100, r2 = 58, r3 = 33;
+            const brassColor = '#d3af37', verdigrisColor = '#5e9e73', rustColor = '#8a4b2b';
+
+            for (let i = 0; i < 3; i++) {
+                const r = [r1, r2, r3][i];
+                const col = [brassColor, verdigrisColor, rustColor][i];
+                const thick = [2, 1.5, 1][i];
+                astroCtx.strokeStyle = col;
+                astroCtx.lineWidth = thick;
+                astroCtx.beginPath();
+                astroCtx.arc(centerX, centerY, r, 0, Math.PI * 2);
+                astroCtx.stroke();
+            }
+
+            const speedMap = { listening: 0.2, previewing: 0.5, executing: 3, sleep: 0 };
+            const speed = speedMap[astrolabeState] || 0;
+            astrolabeAngle += speed;
+
+            const strikeThickness = { listening: 0.5, previewing: 1, executing: 2.5, sleep: 0.5 };
+            astroCtx.strokeStyle = astrolabeState === 'sleep' ? '#3f3f3f' : brassColor;
+            astroCtx.lineWidth = strikeThickness[astrolabeState] || 1;
+            const ax = centerX + r1 * Math.cos(astrolabeAngle);
+            const ay = centerY + r1 * Math.sin(astrolabeAngle);
+            astroCtx.beginPath();
+            astroCtx.moveTo(centerX, centerY);
+            astroCtx.lineTo(ax, ay);
+            astroCtx.stroke();
+
+            const alidadeAngle = astrolabeAngle * 0.7;
+            astroCtx.strokeStyle = astrolabeState === 'sleep' ? '#2f2f2f' : rustColor;
+            astroCtx.lineWidth = 1.5;
+            const naX = centerX + r2 * Math.cos(alidadeAngle);
+            const naY = centerY + r2 * Math.sin(alidadeAngle);
+            astroCtx.beginPath();
+            astroCtx.moveTo(centerX, centerY);
+            astroCtx.lineTo(naX, naY);
+            astroCtx.stroke();
+
+            if (astrolabeState !== 'sleep') requestAnimationFrame(drawAstrolabe);
+        }
+        drawAstrolabe();
+
+        function updatePanel(ch) {
+            const cfg = channels[ch];
+            const logEl = document.getElementById(ch + '-log');
+            const stripEl = document.getElementById(ch + '-strip');
+            const statusEl = document.getElementById(ch + '-status');
+
+            logEl.innerHTML = cfg.lines.map(ln => {
+                const isLC = /^(JOB|SKIPPED)/.test(ln);
+                const isErr = /^JOB EXIT [^0]/.test(ln);
+                return `<div class="log-line${isLC ? ' lifecycle' : ''}${isErr ? ' error' : ''}">${escapeHtml(ln)}</div>`;
+            }).join('');
+            logEl.scrollTop = logEl.scrollHeight;
+
+            let statusClass = 'chip dead', statusText = 'DEAD', statusDot = 'dead';
+            if (cfg.status === 'RUNNING') {
+                statusClass = 'chip running'; statusText = 'RUNNING'; statusDot = 'live';
+            } else if (cfg.status === 'EXIT_OK') {
+                statusClass = 'chip exit-ok'; statusText = 'EXIT 0'; statusDot = 'live';
+            } else if (cfg.status === 'EXIT_FAIL') {
+                statusClass = 'chip exit-fail'; statusText = /JOB EXIT (\d+)/.exec(cfg.lines[cfg.lines.length-1])?.[1] || 'FAIL'; statusDot = 'dead';
+            } else if (cfg.status === 'SKIPPED') {
+                statusClass = 'chip skipped'; statusText = 'SKIPPED'; statusDot = 'live';
+            }
+            statusEl.className = statusClass;
+            statusEl.innerHTML = `<span class="dot ${statusDot}"></span><span>${statusText}</span>`;
+
+            if (ch === 'tests' && cfg.parseRegex) {
+                let matched = false;
+                for (const ln of cfg.lines) {
+                    const m = cfg.parseRegex.exec(ln);
+                    if (m) {
+                        stripEl.textContent = `${m[2]} passed, ${m[3]} failed`;
+                        matched = true;
+                        break;
+                    }
+                }
+                if (!matched) stripEl.textContent = '— awaiting wire —';
+            } else if ((ch === 'census' || ch === 'ironroot') && cfg.keywords) {
+                const matches = cfg.lines.filter(ln => cfg.keywords.some(kw => ln.toLowerCase().includes(kw)));
+                if (matches.length > 0) {
+                    stripEl.textContent = matches.slice(-1)[0];
+                } else {
+                    stripEl.textContent = '— awaiting wire —';
+                }
+            } else if (ch === 'gemma' || ch === 'flash') {
+                const nonLC = cfg.lines.filter(ln => !/^(JOB|SKIPPED)/.test(ln));
+                if (nonLC.length > 0) {
+                    stripEl.textContent = nonLC.slice(-1)[0];
+                } else {
+                    stripEl.textContent = '— awaiting wire —';
+                }
+            }
+        }
+
+        function updateAllPanels() {
+            for (const ch in channels) updatePanel(ch);
+        }
+
+        setInterval(() => {
+            document.getElementById('elapsedMs').textContent = maxMs;
+            updateWireStatus();
+        }, 100);
+
+        function playReplay(replay) {
+            const chip = document.getElementById('wireStatusChip');
+            const text = document.getElementById('wireStatus');
+            chip.className = 'chip skipped';
+            const when = new Date(replay.baked_unix * 1000).toISOString().slice(0, 16).replace('T', ' ');
+            text.textContent = 'REPLAY ×10 — live run ' + when + 'Z';
+            wsConnected = false;
+            document.getElementById('astrolabeState').textContent = 'previewing';
+            replay.frames.forEach((frame) => {
+                setTimeout(() => handleFrame(frame), Math.floor((frame.ms || 0) / 10));
+            });
+        }
+
+        if (window.__DECK_REPLAY) {
+            // Baked page: replay the recorded run at 10x, labeled, no wire.
+            playReplay(window.__DECK_REPLAY);
+        } else {
+            connectWs();
+        }
+        updateAllPanels();
+    </script>
+</body>
+</html>

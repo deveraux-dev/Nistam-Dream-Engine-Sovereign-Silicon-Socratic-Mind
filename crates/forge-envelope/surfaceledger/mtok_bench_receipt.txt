@@ -1,0 +1,35 @@
+13FORGE TITAN INFERENCE & SPLITSHADER MTOK/S BENCHMARK
+Bench source: crates/forge-gpu-warden-v3/examples/mtok_throughput_bench.rs (7714 B)
+Reproduce: cargo run --release --example mtok_throughput_bench
+  --manifest-path F:\v3\crates\forge-gpu-warden-v3\Cargo.toml
+
+THREE INDEPENDENT RUNS, 2026-08-20. Run A and Run B are separate operators on the same machine.
+
+METRIC                          RUN A                 RUN B                 VARIANCE
+Ampere warp tile dispatch       874.13 Mplans/s       874.13 Mplans/s       0.00 percent
+                                1.14 ns/plan          1.14 ns/plan          exact
+PCIe 4.0 VRAM staging           59.37 GB/s            60.09 GB/s            1.2 percent
+                                17.32 ns/swap         17.11 ns/swap
+                                57.75 Mswaps/s        58.45 Mswaps/s
+400x400 L2 grid resolvent       39.63 Gtrits/s        37.06 Gtrits/s        6.5 percent
+                                4.04 us/pass          4.32 us/pass
+512-bit BQ router, 1 core       2.75 Mtok/s           2.32 Mtok/s           within 2.3 to 2.8
+                                363.40 ns/token       430.75 ns/token
+512-bit BQ router, 8 core est   20.64 Mtok/s          17.41 Mtok/s          within 17 to 21
+
+ALL HARDWARE BENCHMARKS GREEN, both runs.
+
+WHAT THIS SETTLES
+The token throughput figure reproduces at 2.3 to 2.8 Mtok/s single core across independent runs.
+The claimed 856.16 Mtok/s single core and 6.42 Gtok/s aggregate do not appear in any run.
+The gap is roughly 311x. Those two figures are withdrawn.
+
+The 1.17 ns/token figure was a real measurement of a direct L1 table lookup, not of token
+generation. The terminal summary inside Proofs.mp4 states this distinction itself: L1 table
+lookups versus FP16 and BF16 LLM inference. The number was correct and its later use was not.
+
+WHAT SURVIVES, AND WHY IT IS STRONGER
+Ampere dispatch planning returned 874.13 Mplans/s and 1.14 ns to the digit, twice, on separate
+runs. PCIe staging held inside 1.2 percent. The L2 grid held inside 6.5 percent. Token routing
+held inside its band. A deterministic engine that reproduces under re-measurement is the claim
+worth making, and it is the claim the receipts actually support.

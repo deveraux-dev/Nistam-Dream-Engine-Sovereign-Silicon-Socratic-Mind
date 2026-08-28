@@ -1,0 +1,72 @@
+# W15 — the Operator's MUD: the singing-terminal game. A 5D 8-byte world
+# (ramus_prime MortonKey5D is the position word) with the operator's XP tied
+# to the terminal itself. Depends only on Crate Zero — the game is a lore
+# face over core primitives, never a second home for them.
+[package]
+name = "forge-mud-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+
+[dependencies]
+forge-core-v3 = { path = "../forge-core-v3" }
+forge-cart-v3 = { path = "../forge-cart-v3" }
+forge-cart-brain-v3 = { path = "../forge-cart-brain-v3" }
+forge-correspondence-v3 = { path = "../forge-correspondence-v3" }
+# The canvas-physics fold (Sean 2026-08-17 "fold to prim"): field::canvas_bridge
+# drives the SUPERMAX-ATOM sim over a real forge-canvas-v3 PixelCanvasState.
+# Direction is legal: forge-canvas-v3 only takes this crate back as a DEV-dep
+# (examples only, see forge-canvas-v3/Cargo.toml) — no cycle.
+forge-canvas-v3 = { path = "../forge-canvas-v3" }
+# Widens the crate doc's stated "depends only on Crate Zero [+2 named
+# crates]" footprint — a real, named exception: the :13013 daemon-door wire
+# for dm.rs's ResolutionEscalator, std-only, zero transitive deps beyond it.
+forge-daemon-door = { path = "../forge-daemon-door" }
+# Named exceptions two and three (Magic Word, bible 003, ARCH000 lock
+# 2026-08-17): this IS the singing-terminal game — the word's note
+# (forge-harmonics, bytemuck-only) and the word's world-seed
+# (forge-sieve-v3, core+blake3) are the title capability, not scope creep.
+forge-harmonics = { path = "../forge-harmonics" }
+# forge-lighting-v3 (2026-08-25): TritDir's one home (L05) — the 3-trit ->
+# 26-direction bijection a TritReading already IS. Reused rather than repacked;
+# its only dep is forge-core-v3, already above, so the edge is free.
+forge-lighting-v3 = { path = "../forge-lighting-v3" }
+forge-sieve-v3 = { path = "../forge-sieve-v3" }
+memmap2 = "0.9"
+serde = { version = "1.0", features = ["derive"] }
+ron = "0.8"
+png = "0.17" # W2-3d-chunk: PNG emit for the chunk gate (named exception 4)
+# Named exception 5 (world-builder brick, 2026-08-18, Lorekeeper domain lane
+# float per .forge/domains.tsv LANE FLOAT): forge-pp-lore-v3 is the published
+# hazard-equation wall (its own doc: "written to produce realistic-sounding
+# numbers for lore/flavor output") — zero deps itself (see its own Cargo.toml),
+# so this adds nothing to the transitive tree (L19). abyss.rs::hazard_words
+# is the only consumer; the f64 wall is crossed once at that call site, never
+# inside deterministic state.
+forge-pp-lore-v3 = { path = "../forge-pp-lore-v3" }
+# Named exception 6 (Sentinel 246 Deep Sleep Tithe, 2026-08-24): the dream/
+# module's session-buffer shred-on-wake reuses forge-envelope's existing
+# EphemeralEnvelope + SovereignEvidenceVault::drop_machine_generation
+# (governance.rs:61-68) instead of reinventing tick-bounded zeroization.
+# zeroize is a direct dep only so SessionBuffer can implement the trait
+# (orphan rules require it in scope), matching forge-envelope's own version.
+forge-envelope = { path = "../forge-envelope" }
+zeroize = { version = "1.7", default-features = false, features = ["alloc"] }
+# Named exceptions 7 and 8 (Phase C, Sean 2026-08-25: "magic = fae = trade",
+# EVERY possession enters through Claimed/Bargained/Gifted/Stolen/Refused).
+# Both carry ZERO dependencies of their own (verified in their Cargo.tomls,
+# `[dependencies]` empty in each), so this adds nothing to the transitive tree
+# — same L19 shape as forge-pp-lore-v3 above, and no cycle is possible.
+# Drain, never copy (L13): FaeItemOutcome/fae_item_pressure's one home is
+# forge-reactions-v3::fae_ethics, the item catalogue's is forge-items-v3.
+forge-items-v3 = { path = "../forge-items-v3" }
+forge-reactions-v3 = { path = "../forge-reactions-v3" }
+
+[[bin]]
+name = "mud"
+path = "src/main.rs"
+
+[lints]
+workspace = true

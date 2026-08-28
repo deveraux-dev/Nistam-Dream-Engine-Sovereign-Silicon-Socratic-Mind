@@ -1,0 +1,19 @@
+# Foreman-promoted from a gated sidecar draft (MIGRATION §M2).
+[package]
+name = "forge-tui-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[dependencies]
+bytemuck = { version = "1", features = ["derive"] }
+forge-core-v3 = { path = "../forge-core-v3" }
+forge-colour-v3 = { path = "../forge-colour-v3" }
+# vt.rs (moved from shell/src/vt.rs 2026-08-26): Alacritty's VT500 state
+# machine drives this crate's own GridBuffer — the shell and studio-tauri
+# both read the one Terminal home instead of each carrying a twin.
+vte = "0.11"
+
+[lints]
+workspace = true

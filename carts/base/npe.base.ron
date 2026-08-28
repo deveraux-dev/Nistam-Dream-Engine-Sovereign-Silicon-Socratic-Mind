@@ -1,0 +1,186 @@
+// NPE.BASE — New Player Experience cartridge schema + NULL bindings.
+// BASE-AND-CARTRIDGE.md law: nothing here carries a proper noun; every slot
+// is an index/word the engine already deals. This file IS the NULL cart for
+// the NPE surface — the base alone must boot and test against it (doctrine §3).
+// Schema magic NPE1; frozen carts are sha256-stamped by the W-C bake verb
+// (COMPILER-GROUPS.md group B). This draft is UNSTAMPED (design weld, not baked).
+//
+// FORBID-FIRST (C03, carried from receipts):
+//   no floats, no wall-clock (L02/C14 — ticks and permyriad only)
+//   no proper nouns, no prose flesh (flesh rides the themed cart, never base)
+//   no numbers in surface words (sensation law, WELD-MUD-AUTHORING-HANDOFF.md:67-68)
+//   no mechanics hiding in flavor (dual-seed law: this cart must pass every
+//     gate the themed cart passes — BASE-AND-CARTRIDGE.md §4)
+//   colour alone never determines material (compiler doctrine, 01_compiler_doctrine.md:29)
+//
+// Seams this schema binds to (observed):
+//   birth prompt   main.rs:39-73  (name + moon 1-13 + day 1-28)
+//   birth seed     console.rs:33-34 (reseed accepts vixi 0x-hex; vixi-chat.html:174-176 fnv1a)
+//   birth kit      game.rs:526-550 (three items, provenance dealt: Stolen/Grave/Blood/Reclaimed/Pure)
+//   overlay        overlay.rs:36-73 (Domain u8 0-16), resolve_str:173 resolve_i64:199 resolve_pmy:226
+//   calendars      content/moons.rs (thirteen), content/accounts.rs (thirteen, hidden)
+//   eras           weather.rs (four eras, integer, permyriad)
+//   disclosure     disclosure_policy.rs:3-5 (new player sees Sensory stage: public ledger only)
+
+NpeCart(
+    schema: "NPE1",
+    cart: "NULL",                      // engine-test flavor; themed carts override every slot
+    version: (major: 0, minor: 1, patch: 0),
+    sha256: "UNSTAMPED",
+
+    // ── TITLE ─────────────────────────────────────────────────────────────
+    // Base law: every title has a FRONT face and an UNDER face. The front is
+    // what the world claims; the under is what the ledger holds. A cart that
+    // binds only a front is refused whole (L10) — the two-layer title is
+    // mechanics, not theme.
+    title: Title(
+        world_word: "the world",       // NULL flavor, no proper noun
+        front_line: "welcome, traveler",
+        under_line: "the record disagrees",
+        bench_line: "nothing on the bench yet",   // the bench card's empty-state voice (terse+warm)
+        art: TitleArt(
+            front_slot: None,          // path bound by cart; base ships artless (ASCII door)
+            under_slot: None,
+        ),
+        // The count the title teaches. Thirteen is base mechanics (thirteen
+        // moons, thirteen accounts already live in content/); the WORD for
+        // the thirteenth is theme and rides the cart.
+        hidden_count: 13,
+        thirteenth_word: "the missing one",
+    ),
+
+    // ── BIRTH RITE (the Birthday Pick) ────────────────────────────────────
+    // The engine already asks: name, moon 1-13, day 1-28 (main.rs:39-73) and
+    // accepts an interview-struck seed (console.rs:33-34). The cart may bind
+    // WORDS to the picks; it may never add or remove a pick (entropy law C10 —
+    // the rite is exactly: name, moon, day, [optional seed hex], one craft-pick).
+    birth: BirthRite(
+        moon_count: 13,                // must equal content/moons.rs len (test target)
+        day_count: 28,
+        // The one themed choice a cart may surface at birth. NULL cart deals
+        // it silently from seed (choice_count: 0 = no menu shown).
+        craft_pick: CraftPick(
+            prompt_word: "calling",
+            choice_count: 0,
+            choices: [],               // themed cart: 1..=13 (word, reading) pairs
+        ),
+        // The hidden account is dealt, never picked, never printed at birth
+        // (disclosure_policy.rs:5 — Sensory stage sees public ledger only).
+        hidden_account_dealt: true,
+        seed_console_hex: true,        // vixi contract: 0x + 8 lowercase hex
+    ),
+
+    // ── STARTING KIT ──────────────────────────────────────────────────────
+    // kit() deals three items with provenance (game.rs:526-550). The cart
+    // binds the WORDS the provenances speak and may pin item table indices;
+    // it never changes the count or the deal.
+    kit: StartingKit(
+        item_count: 3,
+        provenance_words: ProvenanceWords(
+            stolen: "taken",
+            grave: "unearthed",
+            blood: "inherited",
+            reclaimed: "recovered",
+            pure: "unmarked",
+        ),
+        // Optional overlay pins: (slot, Domain::Item key) — empty in NULL.
+        item_pins: [],
+    ),
+
+    // ── STARTING WORLD ────────────────────────────────────────────────────
+    // The entry shape drained from the zone ancestors (prairie_start.json):
+    // one open zone, three dealt presences — a threat, a warden-of-ground,
+    // a quest-holder — one first task, one door out. Shape is base; names ride carts.
+    world: StartingWorld(
+        entry_zone_word: "the open ground",
+        presences: (
+            threat_word: "a hunting thing",
+            territorial_word: "a thing that holds its ground",
+            questgiver_word: "a passer-through",
+        ),
+        first_task: FirstTask(
+            shape: KillOne,            // ancestors' first_hunt shape (first_hunt.toml)
+            target_word: "the hunting thing",
+            reward_xp: 100,
+        ),
+        door_out_word: "a way deeper",
+    ),
+
+    // ── STARTING VISUALS ──────────────────────────────────────────────────
+    // Base law: every place face ships as an ERA SET — one image per era the
+    // weather already turns (weather.rs, four eras). A cart binding fewer
+    // than its era count states each absence aloud (T1: 'absent' is valid).
+    visuals: StartingVisuals(
+        era_count: 4,
+        era_words: ["first", "bright", "worn", "hollow"],   // NULL words; carts rename
+        face_sets: [],                 // themed cart: (place_slot, [era paths])
+        // Palette families are machine-first (L08): exact hex words compared
+        // as words before any perceptual transform. Family names are base;
+        // member hexes ride the cart.
+        palette_families: ["void", "blood", "arcane", "flesh", "frost",
+                           "shadow", "ash", "ember", "earth", "accent"],
+        palette: [],                   // themed cart: (family, [hex words])
+        fonts: FontSlots(
+            display: None, body: None, console: None,   // paths ride the cart
+        ),
+    ),
+
+    // ── SYSTEMS TOGGLES ──────────────────────────────────────────────────
+    // Base law: every system defaults ON except the opt-in social/risk
+    // systems (pvp, crime) which default OFF until a cart opts in. Field set
+    // mirrors the donor toggle table [OBSERVED forge-game-systems/src/
+    // cartridge.rs:112-141], census §2 DRAIN-INTO ruling ("[systems] toggles
+    // and vocabulary section" are cart-schema growth targets).
+    systems: SystemsToggles(
+        combat: true, vendor: true, crafting: true, fishing: true,
+        crime: false, pets: true, dialogue: true, pvp: false,
+        factions: true, mob_ai: true, weather: true, day_night: true,
+        quests: true, loot: true,
+    ),
+
+    // ── VOCABULARY ───────────────────────────────────────────────────────
+    // The engine already deals currency/health/mana/xp/stamina numbers
+    // (elsewhere); the cart binds only the WORD, machine-first (L08).
+    vocabulary: Vocabulary(
+        currency: VocabTerm(term_word: "coin", icon_word: "coin", color_word: "gold"),
+        health: VocabTerm(term_word: "vitality", icon_word: "heart", color_word: "red"),
+        mana: Some(VocabTerm(term_word: "reserve", icon_word: "drop", color_word: "blue")),
+        xp: Some(VocabTerm(term_word: "growth", icon_word: "star", color_word: "white")),
+        stamina: Some(VocabTerm(term_word: "wind", icon_word: "lungs", color_word: "green")),
+    ),
+
+    // ── FACTIONS ─────────────────────────────────────────────────────────
+    // 8-axis temperament rows the mud's mind.rs machine already scores
+    // against (mind.rs::FactionMind::for_faction, five slots — the machine
+    // itself is L05 one-home and stays in mind.rs; only the per-faction DATA
+    // rides the cart, per census §2's "cart binds the WORDS; base carries
+    // the math" ruling). Base carries five generic slots, no proper nouns —
+    // themed values (currently [AUTHORED] hardcoded in mind.rs as Ironroot
+    // sample data) are drained into npe.ironroot.ron instead of this file.
+    // NOTE-DEBT: mind.rs::for_faction() still reads its own match table, not
+    // this cart row — wiring mind.rs to consume these rows is a follow-on,
+    // out of this pass's CartBody-schema-growth scope, named here per T1.
+    factions: [
+        FactionRow(name_word: "the first standing", threat_sensitivity: 0, ambiguity_tolerance: 0, hierarchy_need: 0, novelty_drive: 0, closure_pressure: 0, mortality_pressure: 0, dominance_drive: 0, permeability: 0),
+        FactionRow(name_word: "the second standing", threat_sensitivity: 0, ambiguity_tolerance: 0, hierarchy_need: 0, novelty_drive: 0, closure_pressure: 0, mortality_pressure: 0, dominance_drive: 0, permeability: 0),
+        FactionRow(name_word: "the third standing", threat_sensitivity: 0, ambiguity_tolerance: 0, hierarchy_need: 0, novelty_drive: 0, closure_pressure: 0, mortality_pressure: 0, dominance_drive: 0, permeability: 0),
+        FactionRow(name_word: "the fourth standing", threat_sensitivity: 0, ambiguity_tolerance: 0, hierarchy_need: 0, novelty_drive: 0, closure_pressure: 0, mortality_pressure: 0, dominance_drive: 0, permeability: 0),
+        FactionRow(name_word: "the fifth standing", threat_sensitivity: 0, ambiguity_tolerance: 0, hierarchy_need: 0, novelty_drive: 0, closure_pressure: 0, mortality_pressure: 0, dominance_drive: 0, permeability: 0),
+    ],
+
+    // ── PRODUCTION BUDGET ───────────────────────────────────────────────
+    // Content-gap hour table [OBSERVED census §1, forge-cart-budget
+    // lib.rs:51-118]. Mechanics, not flavor — base owns it whole; no cart
+    // is expected to override it (merge law: ironroot omits this section,
+    // inherits base's rows unchanged).
+    budget: [
+        BudgetRow(category_word: "npc", hours_needed: 8),
+        BudgetRow(category_word: "route", hours_needed: 2),
+        BudgetRow(category_word: "map", hours_needed: 12),
+        BudgetRow(category_word: "material", hours_needed: 3),
+        BudgetRow(category_word: "dialogue", hours_needed: 1),
+        BudgetRow(category_word: "vfx", hours_needed: 4),
+        BudgetRow(category_word: "sfx", hours_needed: 1),
+        BudgetRow(category_word: "music", hours_needed: 6),
+    ],
+)

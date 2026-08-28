@@ -1,0 +1,23 @@
+# UMP provenance tape — ported from F:\NewRepo\crates\forge-ump's
+# timeline_recorder.rs closure only (packet, stamp_chain, provenance_tag,
+# timeline, recorder; 5 of 21 v2 files — the rest is out of scope, see
+# TODO/handoffs/HANDOFF-2026-08-14-SPOOL-FULL-CHAIN-SPEC.md Layer 2).
+[package]
+name = "forge-ump-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+description = "UMP stamp-chain provenance tape — sealed (tick, moon, essence, code_hash) tuples, BLAKE3-chained."
+
+[dependencies]
+# ticket.rs Pod/Zeroable derive (2026-08-24) — already in workspace via
+# forge-core-v3/forge-semantic-quadlane; keeps the 16B GPU-share property.
+bytemuck = { version = "1", features = ["derive"] }
+forge-core-v3 = { path = "../forge-core-v3" }
+forge-vcs-v3 = { path = "../forge-vcs-v3" }
+forge-correspondence-v3 = { path = "../forge-correspondence-v3" }
+
+[lints]
+workspace = true

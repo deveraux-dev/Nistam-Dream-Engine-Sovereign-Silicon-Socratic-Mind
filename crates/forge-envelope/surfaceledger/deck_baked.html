@@ -1,0 +1,1786 @@
+<!DOCTYPE html>
+<html lang="en" class="bg-[#090a0f] text-slate-200 selection:bg-teal-500/30 selection:text-teal-300">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>13Forge — Live Deck</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>window.__DECK_REPLAY = { baked_unix: 1787666386, frames: [
+{"ch":"deck.tests","ms":1,"line":"JOB START"},
+{"ch":"deck.flash","ms":1,"line":"SKIPPED — rerun with --flash to spend a governed call"},
+{"ch":"deck.census","ms":1,"line":"JOB START"},
+{"ch":"deck.ironroot","ms":1,"line":"JOB START"},
+{"ch":"deck.gemma","ms":1,"line":"JOB START"},
+{"ch":"deck.census","ms":7,"line":"[mudlex] sim — 20000 drives per cell, 16 threads, 170 model comparisons"},
+{"ch":"deck.census","ms":7,"line":"[mudlex] ~6840000 Field5D resolves; drive envelope 0..=30000 per channel"},
+{"ch":"deck.census","ms":7,"line":""},
+{"ch":"deck.census","ms":7,"line":"== 1. the house model over its own drive space =="},
+{"ch":"deck.census","ms":7,"line":"  regime   settled      bound     neutral        torn    unsettled   terror   denial"},
+{"ch":"deck.census","ms":15,"line":"  Sparse      19853     27.93%       4.71%      67.35%        0.74%    5.31%    2.94%"},
+{"ch":"deck.census","ms":15,"line":"           disposition -133463 .. 70533"},
+{"ch":"deck.census","ms":25,"line":"  Dense       19858      3.08%       8.00%      88.91%        0.71%    0.00%    0.00%"},
+{"ch":"deck.census","ms":25,"line":"           disposition -142135 .. 53559"},
+{"ch":"deck.census","ms":25,"line":""},
+{"ch":"deck.census","ms":25,"line":"== 2. every coupling entry, swept, over the same space =="},
+{"ch":"deck.census","ms":25,"line":"  of <- by                  authored   sparse-flips    dense-flips   worst-gap  settling-differs"},
+{"ch":"deck.ironroot","ms":90,"line":"================================================================================"},
+{"ch":"deck.ironroot","ms":90,"line":"13FORGE GEMMA COMPILER: AUTONOMOUS 333-FILE CODE-MERGE PIPELINE"},
+{"ch":"deck.ironroot","ms":90,"line":"================================================================================"},
+{"ch":"deck.ironroot","ms":90,"line":"[Source Quarry]     327 Rust Source Files (3.08 MB, 85815 Lines of Code)"},
+{"ch":"deck.ironroot","ms":90,"line":"[Input Merkle Root] sha256:e3365833c428d9a775fff53c692887b71471ab35ca8c1f4d33822ec21dc048d4"},
+{"ch":"deck.ironroot","ms":90,"line":"[Model Fleet]       Gemma Triad S13 (Direct 588MB | Mirror 588MB | Codec 588MB)"},
+{"ch":"deck.ironroot","ms":90,"line":"[Target Schema]     v3 sf-wasm Zero-Alloc RON Datapack (PackedPoint5D, Permyriad)"},
+{"ch":"deck.ironroot","ms":90,"line":"================================================================================"},
+{"ch":"deck.ironroot","ms":90,"line":""},
+{"ch":"deck.ironroot","ms":90,"line":"[1/4] Payload Packing & Sieve:   [████████████████████] 327/327 files (OK)"},
+{"ch":"deck.ironroot","ms":90,"line":"[2/4] Gemma Triad Compilation:   [████████████████████] 2728 AST nodes (OK)"},
+{"ch":"deck.ironroot","ms":90,"line":"├─ Direct (Normalize):     100% #![no_std] integer permyriad compliance"},
+{"ch":"deck.ironroot","ms":90,"line":"├─ Mirror (ASP Parity):    12/12 First Locks validated (T + T* = 0)"},
+{"ch":"deck.ironroot","ms":90,"line":"└─ Codec (RON Emitter):    100% syntax compliance, zero repair loops"},
+{"ch":"deck.ironroot","ms":90,"line":"[3/4] Memory Assembly & RON:     [████████████████████] 19.6 KB Datapack (0 allocs)"},
+{"ch":"deck.ironroot","ms":90,"line":"[4/4] TCP :13013 Wire Stream:    [████████████████████] Skipped (pass --stream-door to stream)"},
+{"ch":"deck.ironroot","ms":90,"line":""},
+{"ch":"deck.ironroot","ms":90,"line":"================================================================================"},
+{"ch":"deck.ironroot","ms":90,"line":"CRYPTOGRAPHIC REPRODUCIBILITY & BENCHMARKS"},
+{"ch":"deck.ironroot","ms":90,"line":"================================================================================"},
+{"ch":"deck.ironroot","ms":90,"line":"- Primary Proof:                 100% Deterministic Reproducibility Across Runs"},
+{"ch":"deck.ironroot","ms":90,"line":"- Source Merkle Root:            sha256:e3365833c428d9a775fff53c692887b71471ab35ca8c1f4d33822ec21dc048d4"},
+{"ch":"deck.ironroot","ms":90,"line":"- Output Datapack SHA-256:       sha256:3a76400e52ca186bbb5f61db6def7d844aa11d358a5762d7dcc89a961f9b8127"},
+{"ch":"deck.ironroot","ms":90,"line":"- Output Datapack Path:          assets/ironroot/Good/ironroot_headless_flash_datapack.ron"},
+{"ch":"deck.ironroot","ms":90,"line":"- Output Datapack Size:          19.6 KB (zero-allocation struct layout)"},
+{"ch":"deck.ironroot","ms":90,"line":"- Raw Engine Compute Time:       76.25 ms (4288.8 files/s | 40.36 MB/s | 1125508 lines/s)"},
+{"ch":"deck.ironroot","ms":90,"line":"- Presentation Wall-Clock:       0.08 s (native raw ingestion)"},
+{"ch":"deck.ironroot","ms":90,"line":"- Evidence Ledger:               crates/forge-envelope/surfaceledger/ironroot_merge_evidence.json"},
+{"ch":"deck.ironroot","ms":90,"line":"================================================================================"},
+{"ch":"deck.ironroot","ms":96,"line":"JOB EXIT 0"},
+{"ch":"deck.census","ms":229,"line":"  trust      <- fear          -2500          5.55%         13.38%       34387              5761"},
+{"ch":"deck.tests","ms":271,"line":"    Blocking waiting for file lock on package cache"},
+{"ch":"deck.census","ms":418,"line":"  trust      <- grievance     -2000          5.21%         13.65%       29012              5205"},
+{"ch":"deck.tests","ms":432,"line":"    Finished `test` profile [optimized + debuginfo] target(s) in 0.38s"},
+{"ch":"deck.tests","ms":474,"line":"     Running unittests src\\lib.rs (target\\debug\\deps\\forge_mud_v3-c17f26f7d6c773ad.exe)"},
+{"ch":"deck.tests","ms":488,"line":""},
+{"ch":"deck.tests","ms":488,"line":"running 1197 tests"},
+{"ch":"deck.tests","ms":488,"line":"test abyss::tests::buoyancy_caps_at_cap ... ok"},
+{"ch":"deck.tests","ms":488,"line":"test abyss::tests::darkness_is_monotone ... ok"},
+{"ch":"deck.tests","ms":488,"line":"test abyss::tests::drag_at_surface_is_zero_and_bites_at_depth ... ok"},
+{"ch":"deck.tests","ms":488,"line":"test abyss::tests::hazard_words_anchors_a_real_mem_overpressure_computation ... ok"},
+{"ch":"deck.tests","ms":488,"line":"test abyss::tests::hazard_words_escalate_with_pressure ... ok"},
+{"ch":"deck.tests","ms":489,"line":"test abyss::tests::hazard_words_never_empty ... ok"},
+{"ch":"deck.tests","ms":489,"line":"test abyss::tests::heat_words_anchors_a_real_fireball_radiation_computation ... ok"},
+{"ch":"deck.tests","ms":489,"line":"test abyss::tests::heat_words_escalate_with_flux ... ok"},
+{"ch":"deck.tests","ms":489,"line":"test abyss::tests::heat_words_never_empty ... ok"},
+{"ch":"deck.tests","ms":489,"line":"test abyss::tests::light_floor_never_wraps_or_blanks ... ok"},
+{"ch":"deck.tests","ms":489,"line":"test abyss::tests::pressure_scales_monotone_and_saturates ... ok"},
+{"ch":"deck.tests","ms":489,"line":"test abyss::tests::light_words_never_empty_and_are_unique ... ok"},
+{"ch":"deck.tests","ms":489,"line":"test abyss::tests::pressure_words_never_empty ... ok"},
+{"ch":"deck.tests","ms":489,"line":"test actions::tests::bar_equip_clear_cast_and_slot_five_refused ... ok"},
+{"ch":"deck.tests","ms":489,"line":"test abyss::tests::sabotage_floor_clamp_breaks_this_test - should panic ... ok"},
+{"ch":"deck.tests","ms":489,"line":"test actions::tests::governing_art_is_total_in_range_and_deterministic ... ok"},
+{"ch":"deck.tests","ms":489,"line":"test actions::tests::all_243_spoken_names_are_distinct_and_digit_free ... ok"},
+{"ch":"deck.tests","ms":489,"line":"test actions::tests::potency_word_is_total_over_0_to_1000 ... ok"},
+{"ch":"deck.tests","ms":489,"line":"test actions::tests::save_and_load_bar_round_trip_and_reequip_reads_newest ... ok"},
+{"ch":"deck.tests","ms":489,"line":"test actions::tests::trit_bijection_over_all_243_and_bad_trit_refused ... ok"},
+{"ch":"deck.tests","ms":489,"line":"test bdo_controller::angle_tests::lerp_angle_takes_shortest_path_across_wrap ... ok"},
+{"ch":"deck.tests","ms":490,"line":"test bdo_controller::angle_tests::mdeg_rad_round_trip_at_anchors ... ok"},
+{"ch":"deck.tests","ms":490,"line":"test bdo_controller::lock_on_tests::acquire_sets_target ... ok"},
+{"ch":"deck.tests","ms":490,"line":"test bdo_controller::lock_on_tests::tick_blends_up_when_locked ... ok"},
+{"ch":"deck.tests","ms":490,"line":"test bdo_controller::lock_on_tests::tick_breaks_on_death ... ok"},
+{"ch":"deck.tests","ms":490,"line":"test bdo_controller::lock_on_tests::face_angle_east_is_minus_90 ... ok"},
+{"ch":"deck.tests","ms":490,"line":"test bdo_controller::lock_on_tests::face_angle_forward_is_zero ... ok"},
+{"ch":"deck.tests","ms":490,"line":"test bdo_controller::movement_tests::forward_at_90_yaw_is_minus_x ... ok"},
+{"ch":"deck.tests","ms":490,"line":"test bdo_controller::movement_tests::forward_at_zero_yaw_is_minus_z ... ok"},
+{"ch":"deck.tests","ms":490,"line":"test bdo_controller::lock_on_tests::cycle_acquires_when_none_held ... ok"},
+{"ch":"deck.tests","ms":492,"line":"test bdo_controller::angle_tests::lerp_angle_steps_toward_target ... ok"},
+{"ch":"deck.tests","ms":492,"line":"test bdo_controller::movement_tests::no_input_no_motion ... ok"},
+{"ch":"deck.tests","ms":492,"line":"test bdo_controller::movement_tests::tdm_yaw_frozen_when_idle ... ok"},
+{"ch":"deck.tests","ms":492,"line":"test brain::ai::tests::pursue_closes_distance_deterministically ... ok"},
+{"ch":"deck.tests","ms":493,"line":"test brain::ai::tests::pursue_never_overshoots ... ok"},
+{"ch":"deck.tests","ms":493,"line":"test bdo_controller::lock_on_tests::is_locked_requires_blend_over_half ... ok"},
+{"ch":"deck.tests","ms":493,"line":"test bdo_controller::lock_on_tests::release_clears_target ... ok"},
+{"ch":"deck.tests","ms":493,"line":"test bdo_controller::movement_tests::lock_strafe_does_not_rotate_player_implicitly ... ok"},
+{"ch":"deck.tests","ms":493,"line":"test bdo_controller::movement_tests::lock_strafe_uses_camera_yaw ... ok"},
+{"ch":"deck.tests","ms":493,"line":"test bdo_controller::lock_on_tests::cycle_picks_nearest_non_current ... ok"},
+{"ch":"deck.tests","ms":493,"line":"test bdo_controller::lock_on_tests::tick_breaks_on_distance ... ok"},
+{"ch":"deck.tests","ms":493,"line":"test bdo_controller::movement_tests::diagonal_does_not_exceed_speed ... ok"},
+{"ch":"deck.tests","ms":493,"line":"test bdo_controller::movement_tests::tdm_yaw_lerps_toward_movement ... ok"},
+{"ch":"deck.tests","ms":493,"line":"test brain::ai::tests::contact_is_chebyshev_bounded ... ok"},
+{"ch":"deck.tests","ms":493,"line":"test brain::ai::tests::sabotage_contact_is_symmetric ... ok"},
+{"ch":"deck.tests","ms":493,"line":"test bdo_controller::angle_tests::lerp_angle_zero_step_is_identity ... ok"},
+{"ch":"deck.tests","ms":500,"line":"test brain::authority_enforcement::tests::clash_gives_neutral ... ok"},
+{"ch":"deck.tests","ms":500,"line":"test brain::authority_enforcement::tests::bypass_detection_same_element_is_reception ... ok"},
+{"ch":"deck.tests","ms":500,"line":"test brain::authority_enforcement::tests::antiscia_converts_maltreatment_to_mitigation ... ok"},
+{"ch":"deck.tests","ms":500,"line":"test brain::authority_enforcement::tests::bonification_grants_crit_and_grace ... ok"},
+{"ch":"deck.tests","ms":500,"line":"test brain::authority_enforcement::tests::reception_halves_maltreatment ... ok"},
+{"ch":"deck.tests","ms":500,"line":"test brain::building::tests::grid_snap ... ok"},
+{"ch":"deck.tests","ms":500,"line":"test brain::ai::tests::sabotage_pursue_moves_toward_target ... ok"},
+{"ch":"deck.tests","ms":500,"line":"test brain::authority_enforcement::tests::l18_sabotage_bypass_gate_is_real ... ok"},
+{"ch":"deck.tests","ms":501,"line":"test brain::authority_enforcement::tests::maltreatment_vetoes_and_corrupts ... ok"},
+{"ch":"deck.tests","ms":501,"line":"test brain::building::tests::zone_gate_blocks_placement ... ok"},
+{"ch":"deck.tests","ms":501,"line":"test brain::authority_enforcement::tests::bypass_detection_fire_air_is_antiscia ... ok"},
+{"ch":"deck.tests","ms":501,"line":"test brain::authority_enforcement::tests::bypass_detection_fire_water_is_none ... ok"},
+{"ch":"deck.tests","ms":501,"line":"test brain::building::tests::no_overlap ... ok"},
+{"ch":"deck.tests","ms":501,"line":"test brain::building::tests::max_buildings_cap ... ok"},
+{"ch":"deck.tests","ms":501,"line":"test brain::building::tests::place_and_undo ... ok"},
+{"ch":"deck.tests","ms":501,"line":"test brain::building::tests::sabotage_overlap_invariant ... ok"},
+{"ch":"deck.tests","ms":501,"line":"test brain::hermite::tests::hermite_at_t0_returns_p0 ... ok"},
+{"ch":"deck.tests","ms":501,"line":"test brain::hermite::tests::hermite_at_t1_returns_p1 ... ok"},
+{"ch":"deck.tests","ms":501,"line":"test brain::hermite::tests::hermite_deterministic_repeated_calls ... ok"},
+{"ch":"deck.tests","ms":501,"line":"test brain::hermite::tests::hermite_midpoint_zero_tangents ... ok"},
+{"ch":"deck.tests","ms":501,"line":"test brain::hermite::tests::hermite_tangent_influence ... ok"},
+{"ch":"deck.tests","ms":501,"line":"test brain::hermite::tests::sabotage_endpoint_bijection_gate ... ok"},
+{"ch":"deck.tests","ms":501,"line":"test brain::loot::tests::loot_roll_handles_empty_table ... ok"},
+{"ch":"deck.tests","ms":501,"line":"test brain::loot::tests::loot_roll_is_deterministic ... ok"},
+{"ch":"deck.tests","ms":502,"line":"test brain::loot::tests::loot_roll_respects_weights ... ok"},
+{"ch":"deck.tests","ms":502,"line":"test brain::loot::tests::roll_is_idempotent_with_same_seed ... ok"},
+{"ch":"deck.tests","ms":502,"line":"test brain::loot::tests::sabotage_quantity_is_one ... ok"},
+{"ch":"deck.tests","ms":502,"line":"test brain::loot::tests::sabotage_roll_output_is_from_table ... ok"},
+{"ch":"deck.tests","ms":502,"line":"test brain::loot::tests::single_entry_table_always_rolls_that_entry ... ok"},
+{"ch":"deck.tests","ms":502,"line":"test brain::loot::tests::zero_weight_entry_is_never_rolled ... ok"},
+{"ch":"deck.tests","ms":502,"line":"test brain::movement::tests::bdo_momentum_ramps_at_walk_tier ... ok"},
+{"ch":"deck.tests","ms":502,"line":"test brain::movement::tests::death_at_walk_saturates_to_zero ... ok"},
+{"ch":"deck.tests","ms":502,"line":"test brain::movement::tests::death_clears_bdo_momentum ... ok"},
+{"ch":"deck.tests","ms":502,"line":"test brain::movement::tests::death_drops_two_tiers_and_resets_streak ... ok"},
+{"ch":"deck.tests","ms":502,"line":"test brain::movement::tests::diagonal_does_not_exceed_single_axis_magnitude ... ok"},
+{"ch":"deck.tests","ms":502,"line":"test brain::movement::tests::displacement_scales_strictly_with_tier_at_full_vel_no_drag ... ok"},
+{"ch":"deck.tests","ms":502,"line":"test brain::movement::tests::double_tap_potion_resets_timer ... ok"},
+{"ch":"deck.tests","ms":502,"line":"test brain::movement::tests::five_kill_streak_bumps_by_two ... ok"},
+{"ch":"deck.tests","ms":502,"line":"test brain::movement::tests::haunt_drag_reduces_bdo_converged_speed ... ok"},
+{"ch":"deck.tests","ms":502,"line":"test brain::movement::tests::idle_decay_drops_tier_after_decay_ticks ... ok"},
+{"ch":"deck.tests","ms":502,"line":"test brain::movement::tests::killing_resets_idle_counter_and_prevents_decay ... ok"},
+{"ch":"deck.tests","ms":502,"line":"test brain::movement::tests::negative_velocity_produces_negative_displacement ... ok"},
+{"ch":"deck.tests","ms":502,"line":"test brain::movement::tests::new_state_starts_at_dash_tier_3 ... ok"},
+{"ch":"deck.tests","ms":502,"line":"test brain::movement::tests::no_idle_decay_during_active_potion ... ok"},
+{"ch":"deck.tests","ms":503,"line":"test brain::movement::tests::obliterate_exceeds_redline ... ok"},
+{"ch":"deck.tests","ms":503,"line":"test brain::movement::tests::obliterate_quarters_haunt_drag ... ok"},
+{"ch":"deck.tests","ms":503,"line":"test brain::movement::tests::potion_cancelled_by_death ... ok"},
+{"ch":"deck.tests","ms":503,"line":"test brain::movement::tests::potion_slams_to_obliterate_for_potion_ticks_then_falls_to_redline ... ok"},
+{"ch":"deck.tests","ms":503,"line":"test brain::movement::tests::releasing_direction_decelerates_at_walk_tier ... ok"},
+{"ch":"deck.tests","ms":503,"line":"test brain::movement::tests::sabotage_idle_decay_is_monotonic ... ok"},
+{"ch":"deck.tests","ms":503,"line":"test brain::movement::tests::sabotage_potion_duration_is_exact ... ok"},
+{"ch":"deck.tests","ms":503,"line":"test brain::movement::tests::single_kills_escalate_tier_by_one ... ok"},
+{"ch":"deck.tests","ms":503,"line":"test brain::movement::tests::spalt_threshold_reached_at_tier_7 ... ok"},
+{"ch":"deck.tests","ms":503,"line":"test brain::movement::tests::spalt_tier_halves_haunt_drag_vs_walk ... ok"},
+{"ch":"deck.tests","ms":503,"line":"test brain::movement::tests::spalt_tier_is_instant_full_speed_on_first_tick ... ok"},
+{"ch":"deck.tests","ms":503,"line":"test brain::movement::tests::speed_is_strictly_monotone_walk_through_redline ... ok"},
+{"ch":"deck.tests","ms":503,"line":"test brain::movement::tests::tier_colors_are_distinct_and_all_fully_opaque ... ok"},
+{"ch":"deck.tests","ms":503,"line":"test brain::movement::tests::tier_is_capped_at_max_tier_by_kills ... ok"},
+{"ch":"deck.tests","ms":504,"line":"test brain::run_dev_run::loop_tests::controller_packed_input_maps_to_dodge ... ok"},
+{"ch":"deck.tests","ms":504,"line":"test brain::run_dev_run::loop_tests::clean_run_clears_at_45s ... ok"},
+{"ch":"deck.tests","ms":504,"line":"test brain::run_dev_run::loop_tests::death_drops_bounded_loot ... ok"},
+{"ch":"deck.tests","ms":504,"line":"test brain::run_dev_run::tests::collision_resolves_through_wce_stub ... ok"},
+{"ch":"deck.tests","ms":504,"line":"test brain::run_dev_run::tests::death_mints_deterministic_scar ... ok"},
+{"ch":"deck.tests","ms":504,"line":"test brain::run_dev_run::tests::signals_cut_toll_bands_tete_de_charge ... ok"},
+{"ch":"deck.tests","ms":504,"line":"test brain::run_dev_run::tests::rhythm_is_deterministic_and_nibble_addressed ... ok"},
+{"ch":"deck.tests","ms":504,"line":"test brain::run_dev_run::loop_tests::deaths_climb_standing_through_the_loop ... ok"},
+{"ch":"deck.tests","ms":504,"line":"test brain::run_dev_run::loop_tests::dodge_avoids_a_scheduled_hazard ... ok"},
+{"ch":"deck.tests","ms":504,"line":"test brain::run_dev_run::tests::signals_quiet_resolve_direct ... ok"},
+{"ch":"deck.tests","ms":504,"line":"test brain::run_dev_run::tests::deaths_earn_superior_dexter_standing ... ok"},
+{"ch":"deck.tests","ms":505,"line":"test brain::run_dev_run::loop_tests::replay_is_deterministic ... ok"},
+{"ch":"deck.tests","ms":505,"line":"test brain::run_dev_run::tests::direct_when_nothing_stands ... ok"},
+{"ch":"deck.tests","ms":505,"line":"test brain::run_dev_run::tests::signals_death_scars_grant_superior_dexter ... ok"},
+{"ch":"deck.tests","ms":505,"line":"test brain::run_dev_run::loop_tests::pet_intercepts_a_hazard ... ok"},
+{"ch":"deck.tests","ms":505,"line":"test brain::run_dev_run::tests::entropy_is_apex_minus_suppression ... ok"},
+{"ch":"deck.tests","ms":505,"line":"test brain::run_dev_run::tests::death_note_captures_seeded_replay_on_death ... ok"},
+{"ch":"deck.tests","ms":505,"line":"test brain::run_dev_run::loop_tests::taming_wires_can_tame ... ok"},
+{"ch":"deck.tests","ms":505,"line":"test brain::run_dev_run::tests::signals_shadow_plus_branded_drive_apex ... ok"},
+{"ch":"deck.tests","ms":505,"line":"test brain::run_dev_run::tests::l18_sabotage_sieve_geometry_gate_is_real ... ok"},
+{"ch":"deck.tests","ms":505,"line":"test brain::run_dev_run::tests::quincunx_double_bind_bands ... ok"},
+{"ch":"deck.tests","ms":505,"line":"test brain::run_dev_run::tests::superior_dexter_band ... ok"},
+{"ch":"deck.tests","ms":505,"line":"test brain::run_dev_run::tests::tithe_debt_now_reaches_standing_not_just_encounter_signals ... ok"},
+{"ch":"deck.tests","ms":505,"line":"test brain::run_dev_run::loop_tests::pet_guards_a_no_dodge_run ... ok"},
+{"ch":"deck.tests","ms":505,"line":"test brain::run_dev_run::tests::tete_de_charge_cut_counts_by_absolute ... ok"},
+{"ch":"deck.tests","ms":509,"line":"test brain::run_dev_run::tests::vowless_suppresses_everything ... ok"},
+{"ch":"deck.tests","ms":509,"line":"test brain::skill_book::tests::skill_gain_is_deterministic_same_seed ... ok"},
+{"ch":"deck.tests","ms":509,"line":"test brain::skill_book::tests::skill_respects_cap ... ok"},
+{"ch":"deck.tests","ms":509,"line":"test brain::run_dev_run::tests::track_collects_spawns_no_alloc ... ok"},
+{"ch":"deck.tests","ms":509,"line":"test brain::skill_book::tests::novelty_never_decreases_gain ... ok"},
+{"ch":"deck.tests","ms":509,"line":"test brain::skill_book::tests::raise_cap_allows_further_growth ... ok"},
+{"ch":"deck.tests","ms":509,"line":"test brain::run_dev_run::tests::yod_escalates_to_finger_of_god_on_live_quincunx ... ok"},
+{"ch":"deck.tests","ms":509,"line":"test brain::tempo_run::tests::crossing_a_barline_advances_the_measure ... ok"},
+{"ch":"deck.tests","ms":509,"line":"test brain::skill_book::tests::new_book_starts_at_zero ... ok"},
+{"ch":"deck.tests","ms":509,"line":"test brain::tempo_run::tests::deterministic_run_is_replayable ... ok"},
+{"ch":"deck.tests","ms":509,"line":"test brain::skill_book::tests::skill_use_increases_value ... ok"},
+{"ch":"deck.tests","ms":509,"line":"test brain::skill_book::tests::sabotage_cap_is_enforced ... ok"},
+{"ch":"deck.tests","ms":510,"line":"test brain::skill_book::tests::sabotage_repetition_increments ... ok"},
+{"ch":"deck.tests","ms":510,"line":"test brain::tempo_run::tests::l18_sabotage_finish_gate_is_real ... ok"},
+{"ch":"deck.tests","ms":510,"line":"test brain::tempo_run::tests::riding_the_beat_wins_where_base_velocity_cannot ... ok"},
+{"ch":"deck.tests","ms":510,"line":"test brain::tempo_run::tests::beat_in_measure_projects_position_onto_the_four_beats ... ok"},
+{"ch":"deck.tests","ms":515,"line":"test brain::terrain::tests::new_grid_fills_correctly ... ok"},
+{"ch":"deck.tests","ms":515,"line":"test brain::terrain::tests::crater_punches_zone_dressed_terrain_end_to_end ... ok"},
+{"ch":"deck.tests","ms":515,"line":"test brain::terrain::tests::terrain_fill_lays_ground_under_sky ... ok"},
+{"ch":"deck.tests","ms":515,"line":"test brain::terrain::tests::crater_discriminator_with_vs_without ... ok"},
+{"ch":"deck.tests","ms":515,"line":"test brain::terrain::tests::crater_oob_impact_returns_zero ... ok"},
+{"ch":"deck.tests","ms":515,"line":"test brain::terrain::tests::zone_grid_fill_is_deterministic_and_map_sensitive ... ok"},
+{"ch":"deck.tests","ms":515,"line":"test brain::terrain::tests::out_of_bounds_writes_are_silent ... ok"},
+{"ch":"deck.tests","ms":515,"line":"test brain::terrain::tests::terrain_fill_is_era_sensitive ... ok"},
+{"ch":"deck.tests","ms":515,"line":"test brain::tempo_run::tests::rosetta_one_bay_per_measure_locks_speed ... ok"},
+{"ch":"deck.tests","ms":515,"line":"test brain::terrain::tests::crater_blows_a_hole_in_generated_terrain ... ok"},
+{"ch":"deck.tests","ms":516,"line":"test brain::terrain::tests::out_of_bounds_reads_return_air ... ok"},
+{"ch":"deck.tests","ms":516,"line":"test brain::terrain::tests::sabotage_bounds_safety_gate ... ok"},
+{"ch":"deck.tests","ms":516,"line":"test brain::terrain::tests::terrain_fill_is_deterministic_and_seed_sensitive ... ok"},
+{"ch":"deck.tests","ms":516,"line":"test brain::terrain::tests::crater_clears_cells_in_radius ... ok"},
+{"ch":"deck.tests","ms":516,"line":"test brain::terrain::tests::bomb_projectile_craters_real_terrain_end_to_end ... ok"},
+{"ch":"deck.tests","ms":516,"line":"test brain::terrain::tests::zone_grid_paints_top_down_biomes ... ok"},
+{"ch":"deck.tests","ms":516,"line":"test brain::terrain_sieve::tests::density_grid_correct_size ... ok"},
+{"ch":"deck.tests","ms":516,"line":"test brain::terrain::tests::set_get_round_trips ... ok"},
+{"ch":"deck.tests","ms":516,"line":"test brain::terrain_sieve::tests::different_archetype_different_terrain ... ok"},
+{"ch":"deck.tests","ms":516,"line":"test brain::terrain_sieve::tests::density_negative_above_surface ... ok"},
+{"ch":"deck.tests","ms":516,"line":"test brain::terrain_sieve::tests::density_positive_below_surface ... ok"},
+{"ch":"deck.tests","ms":516,"line":"test brain::terrain_sieve::tests::sabotage_determinism_gate ... ok"},
+{"ch":"deck.tests","ms":516,"line":"test brain::terrain_sieve::tests::era_shifts_terrain_deterministically ... ok"},
+{"ch":"deck.tests","ms":516,"line":"test brain::terrain_sieve::tests::spawn_above_terrain ... ok"},
+{"ch":"deck.tests","ms":516,"line":"test brain::terrain_sieve::tests::terrain_height_is_deterministic ... ok"},
+{"ch":"deck.tests","ms":516,"line":"test brain::terrain_sieve::tests::tile_hash_is_deterministic ... ok"},
+{"ch":"deck.tests","ms":516,"line":"test brain::terrain_sieve::tests::tile_hash_varies_by_position ... ok"},
+{"ch":"deck.tests","ms":517,"line":"test brain::terrain_waveform::tests::displacement_is_bounded ... ok"},
+{"ch":"deck.tests","ms":517,"line":"test brain::terrain_waveform::tests::gothic_limiter_peaks_in_center ... ok"},
+{"ch":"deck.tests","ms":517,"line":"test brain::terrain_waveform::tests::gothic_limiter_suppresses_outside_peak ... ok"},
+{"ch":"deck.tests","ms":517,"line":"test brain::terrain_waveform::tests::gothic_off_matches_original ... ok"},
+{"ch":"deck.tests","ms":517,"line":"test brain::terrain_waveform::tests::high_hz_has_short_wavelength ... ok"},
+{"ch":"deck.tests","ms":517,"line":"test brain::terrain_waveform::tests::low_hz_has_long_wavelength ... ok"},
+{"ch":"deck.tests","ms":517,"line":"test brain::terrain_waveform::tests::sabotage_displacement_bounds_gate ... ok"},
+{"ch":"deck.tests","ms":517,"line":"test brain::terrain_waveform::tests::tick_advances_phase ... ok"},
+{"ch":"deck.tests","ms":517,"line":"test casting::tests::all_seven_words_cast_to_completion ... ok"},
+{"ch":"deck.tests","ms":517,"line":"test casting::tests::casting_clash_word_takes_five_turns ... ok"},
+{"ch":"deck.tests","ms":517,"line":"test casting::tests::casting_resonance_word_takes_nine_turns ... ok"},
+{"ch":"deck.tests","ms":517,"line":"test casting::tests::channel_advance_one_glyph_per_turn ... ok"},
+{"ch":"deck.tests","ms":517,"line":"test casting::tests::channel_interrupt_at_start ... ok"},
+{"ch":"deck.tests","ms":517,"line":"test casting::tests::channel_interrupt_mid_word ... ok"},
+{"ch":"deck.tests","ms":517,"line":"test casting::tests::channel_interrupt_no_active_channel ... ok"},
+{"ch":"deck.tests","ms":517,"line":"test casting::tests::channel_new_and_active ... ok"},
+{"ch":"deck.tests","ms":517,"line":"test casting::tests::effect_lines_correspond_to_effect_indices ... ok"},
+{"ch":"deck.tests","ms":517,"line":"test casting::tests::glyph_words_are_seven_and_have_effect_indices ... ok"},
+{"ch":"deck.tests","ms":517,"line":"test casting::tests::l07_decode_glyphs_exceed_word_length ... ok"},
+{"ch":"deck.tests","ms":518,"line":"test casting::tests::l07_decode_invalid_word_index ... ok"},
+{"ch":"deck.tests","ms":518,"line":"test casting::tests::l07_decode_none_with_nonzero_glyphs ... ok"},
+{"ch":"deck.tests","ms":518,"line":"test casting::tests::l07_encode_decode_bijection ... ok"},
+{"ch":"deck.tests","ms":518,"line":"test casting::tests::l07_encode_decode_none_state ... ok"},
+{"ch":"deck.tests","ms":518,"line":"test cdk::tests::bar_matches_atlas_formula ... ok"},
+{"ch":"deck.tests","ms":518,"line":"test cdk::tests::bar_renders_correct_count ... ok"},
+{"ch":"deck.tests","ms":518,"line":"test cdk::tests::channels_stay_in_bind_range ... ok"},
+{"ch":"deck.tests","ms":518,"line":"test cdk::tests::colour_maps_channels_to_rgb ... ok"},
+{"ch":"deck.tests","ms":518,"line":"test cdk::tests::harmony_is_not_love ... ok"},
+{"ch":"deck.tests","ms":518,"line":"test cdk::tests::triad_is_deterministic ... ok"},
+{"ch":"deck.tests","ms":518,"line":"test cdk::tests::verdict_tracks_disposition ... ok"},
+{"ch":"deck.tests","ms":518,"line":"test cdk::trit_line_tests::the_demo_cell_reads_inferno ... ok"},
+{"ch":"deck.tests","ms":518,"line":"test cdk::trit_line_tests::the_origin_reads_purgatorio ... ok"},
+{"ch":"deck.tests","ms":518,"line":"test cdk::wireframe_tests::an_overlong_command_cannot_tear_the_frame ... ok"},
+{"ch":"deck.tests","ms":518,"line":"test cdk::wireframe_tests::emits_exactly_the_published_row_count ... ok"},
+{"ch":"deck.tests","ms":518,"line":"test cdk::wireframe_tests::every_framed_row_is_the_same_width ... ok"},
+{"ch":"deck.tests","ms":519,"line":"test cdk::wireframe_tests::the_bars_follow_the_triad ... ok"},
+{"ch":"deck.tests","ms":519,"line":"test cdk::word_world_tests::the_line_carries_note_seed_and_world ... ok"},
+{"ch":"deck.tests","ms":519,"line":"test combat::tests::combo_heat_decay_formula ... ok"},
+{"ch":"deck.tests","ms":520,"line":"test combat::tests::combo_heat_range_invariant ... ok"},
+{"ch":"deck.tests","ms":520,"line":"test cdk::word_world_tests::no_word_overflows_the_frame ... ok"},
+{"ch":"deck.tests","ms":520,"line":"test combat::tests::crosses_chunk_boundary_detects_x_crossing ... ok"},
+{"ch":"deck.tests","ms":520,"line":"test cdk::word_world_tests::the_same_word_births_the_same_world ... ok"},
+{"ch":"deck.tests","ms":520,"line":"test cdk::wireframe_tests::the_box_is_closed_on_every_row ... ok"},
+{"ch":"deck.tests","ms":520,"line":"test cdk::word_world_below_tests::the_same_word_births_the_same_below_world ... ok"},
+{"ch":"deck.tests","ms":520,"line":"test combat::tests::ascension_burst_deducts_5000 ... ok"},
+{"ch":"deck.tests","ms":520,"line":"test cdk::word_world_below_tests::the_below_radius_matches_the_above_radius ... ok"},
+{"ch":"deck.tests","ms":520,"line":"test combat::tests::add_heat_saturates_at_10000 ... ok"},
+{"ch":"deck.tests","ms":520,"line":"test combat::tests::clamping_above_800_uses_800 ... ok"},
+{"ch":"deck.tests","ms":520,"line":"test combat::tests::crosses_chunk_boundary_detects_y_crossing ... ok"},
+{"ch":"deck.tests","ms":520,"line":"test combat::tests::clamping_below_40_uses_40 ... ok"},
+{"ch":"deck.tests","ms":520,"line":"test combat::tests::attack_plus_interact_resolves_to_shadow_grab ... ok"},
+{"ch":"deck.tests","ms":520,"line":"test combat::tests::dash_plus_jump_resolves_to_gravity_crush ... ok"},
+{"ch":"deck.tests","ms":520,"line":"test combat::tests::dash_cancel_deducts_1000 ... ok"},
+{"ch":"deck.tests","ms":521,"line":"test combat::tests::full_tick_harmonic_strike ... ok"},
+{"ch":"deck.tests","ms":521,"line":"test combat::tests::full_tick_idle_decay ... ok"},
+{"ch":"deck.tests","ms":521,"line":"test combat::tests::grab_misses_at_exact_boundary ... ok"},
+{"ch":"deck.tests","ms":521,"line":"test combat::tests::grab_misses_when_out_of_range ... ok"},
+{"ch":"deck.tests","ms":521,"line":"test combat::tests::edict_surge_activation_drains_heat ... ok"},
+{"ch":"deck.tests","ms":522,"line":"test combat::tests::determinism_identical_inputs_produce_identical_outputs ... ok"},
+{"ch":"deck.tests","ms":522,"line":"test combat::tests::grab_connects_when_in_range ... ok"},
+{"ch":"deck.tests","ms":522,"line":"test combat::tests::grab_duration_handles_tick_wrap ... ok"},
+{"ch":"deck.tests","ms":522,"line":"test combat::tests::idle_counter_behavior ... ok"},
+{"ch":"deck.tests","ms":522,"line":"test combat::tests::knockback_at_40hz_is_8000 ... ok"},
+{"ch":"deck.tests","ms":522,"line":"test combat::tests::grab_duration_releases_after_n_ticks ... ok"},
+{"ch":"deck.tests","ms":522,"line":"test combat::tests::edict_surge_guard ... ok"},
+{"ch":"deck.tests","ms":522,"line":"test combat::tests::evaluate_strike_dispatches_audio ... ok"},
+{"ch":"deck.tests","ms":522,"line":"test combat::tests::grab_effects_zero_velocity_and_lock_position ... ok"},
+{"ch":"deck.tests","ms":522,"line":"test combat::tests::decay_subtracts_after_grace_period ... ok"},
+{"ch":"deck.tests","ms":522,"line":"test combat::tests::full_tick_perfect_parry ... ok"},
+{"ch":"deck.tests","ms":522,"line":"test combat::tests::full_tick_surge_countdown ... ok"},
+{"ch":"deck.tests","ms":522,"line":"test combat::tests::hit_stop_at_40hz_is_8 ... ok"},
+{"ch":"deck.tests","ms":522,"line":"test combat::tests::hit_stop_at_800hz_is_1 ... ok"},
+{"ch":"deck.tests","ms":522,"line":"test combat::tests::decay_does_not_subtract_within_grace_period ... ok"},
+{"ch":"deck.tests","ms":530,"line":"test combat::tests::knockback_at_800hz_is_1000 ... ok"},
+{"ch":"deck.tests","ms":530,"line":"test combat::tests::no_rehash_when_same_chunk ... ok"},
+{"ch":"deck.tests","ms":530,"line":"test combat::tests::pattern_map_observation_recording ... ok"},
+{"ch":"deck.tests","ms":530,"line":"test combat::tests::perfect_parry_adds_300_heat ... ok"},
+{"ch":"deck.tests","ms":530,"line":"test combat::tests::noise_injection_reduces_confidence ... ok"},
+{"ch":"deck.tests","ms":530,"line":"test combat::tests::on_hit_resets_idle_counter ... ok"},
+{"ch":"deck.tests","ms":530,"line":"test combat::tests::perfect_parry_dispatches_silence_12 ... ok"},
+{"ch":"deck.tests","ms":530,"line":"test combat::tests::perfect_parry_at_exact_boundary_delta_2 ... ok"},
+{"ch":"deck.tests","ms":530,"line":"test combat::tests::pattern_map_confidence_formula ... ok"},
+{"ch":"deck.tests","ms":530,"line":"test combat::tests::perfect_parry_heat_saturates_at_10000 ... ok"},
+{"ch":"deck.tests","ms":530,"line":"test combat::tests::parry_overrides_attack_and_interact ... ok"},
+{"ch":"deck.tests","ms":530,"line":"test combat::tests::perfect_parry_postconditions ... ok"},
+{"ch":"deck.tests","ms":530,"line":"test combat::tests::pattern_map_default_is_zero ... ok"},
+{"ch":"deck.tests","ms":531,"line":"test combat::tests::property_3_surge_always_wins_at_full_heat ... ok"},
+{"ch":"deck.tests","ms":531,"line":"test combat::tests::pattern_map_degradation_invariant ... ok"},
+{"ch":"deck.tests","ms":531,"line":"test combat::tests::resonance_clamping ... ok"},
+{"ch":"deck.tests","ms":531,"line":"test combat::tests::perfect_parry_resonance_condition ... ok"},
+{"ch":"deck.tests","ms":531,"line":"test combat::tests::shadow_grab_postconditions ... ok"},
+{"ch":"deck.tests","ms":531,"line":"test combat::tests::record_parry_activation_stores_tick ... ok"},
+{"ch":"deck.tests","ms":531,"line":"test combat::tests::rehash_needed_when_crossing_chunk_boundary ... ok"},
+{"ch":"deck.tests","ms":531,"line":"test combat::tests::release_grab_deactivates ... ok"},
+{"ch":"deck.tests","ms":531,"line":"test combat::tests::property_2_single_action_resolution ... ok"},
+{"ch":"deck.tests","ms":531,"line":"test combat::tests::solo_attack_resolves_to_harmonic_strike ... ok"},
+{"ch":"deck.tests","ms":531,"line":"test combat::tests::standard_parry_when_outside_window ... ok"},
+{"ch":"deck.tests","ms":531,"line":"test combat::tests::solo_jump_resolves_to_ascension_burst ... ok"},
+{"ch":"deck.tests","ms":531,"line":"test combat::tests::solo_dash_resolves_to_dash_cancel ... ok"},
+{"ch":"deck.tests","ms":531,"line":"test combat::tests::standard_parry_when_resonance_mismatch ... ok"},
+{"ch":"deck.tests","ms":531,"line":"test combat::tests::strike_monotonicity ... ok"},
+{"ch":"deck.tests","ms":531,"line":"test combat::tests::subtract_heat_saturates_at_zero ... ok"},
+{"ch":"deck.tests","ms":531,"line":"test combat::tests::surge_activates_at_max_heat ... ok"},
+{"ch":"deck.tests","ms":531,"line":"test combat::tests::surge_available_at_10000 ... ok"},
+{"ch":"deck.tests","ms":532,"line":"test combat::tests::surge_gravity_round_trip ... ok"},
+{"ch":"deck.tests","ms":532,"line":"test combat::tests::surge_guard_rejects_below_max ... ok"},
+{"ch":"deck.tests","ms":532,"line":"test combat::tests::surge_not_available_below_10000 ... ok"},
+{"ch":"deck.tests","ms":532,"line":"test combat::tests::surge_overrides_parry ... ok"},
+{"ch":"deck.tests","ms":532,"line":"test combat::tests::surge_plus_attack_full_heat_resolves_to_edict_surge ... ok"},
+{"ch":"deck.tests","ms":532,"line":"test combat::tests::surge_plus_attack_low_heat_resolves_to_noop ... ok"},
+{"ch":"deck.tests","ms":532,"line":"test combat::tests::tick_grab_noop_when_inactive ... ok"},
+{"ch":"deck.tests","ms":532,"line":"test combat::tests::tick_surge_decrements_and_restores ... ok"},
+{"ch":"deck.tests","ms":532,"line":"test combat::tests::tick_surge_noop_when_inactive ... ok"},
+{"ch":"deck.tests","ms":532,"line":"test combat::tests::velocity_only_resolves_to_movement ... ok"},
+{"ch":"deck.tests","ms":532,"line":"test combat::tests::zero_input_resolves_to_noop ... ok"},
+{"ch":"deck.tests","ms":532,"line":"test combat_brain::arena_state::tests::arena_state_pack_unpack_extremes ... ok"},
+{"ch":"deck.tests","ms":532,"line":"test combat_brain::arena_state::tests::arena_state_pack_unpack_interior_bijection ... ok"},
+{"ch":"deck.tests","ms":532,"line":"test combat_brain::arena_state::tests::arena_state_pack_unpack_zeros ... ok"},
+{"ch":"deck.tests","ms":532,"line":"test combat_brain::arena_state::tests::entity_state_pack_unpack_bijection ... ok"},
+{"ch":"deck.tests","ms":532,"line":"test combat_brain::arena_state::tests::l18_sabotage_arena_state_pack_gate ... ok"},
+{"ch":"deck.tests","ms":532,"line":"test combat_brain::arena_state::tests::spawn_mob_respects_limit ... ok"},
+{"ch":"deck.tests","ms":532,"line":"test combat_brain::arena_state::tests::step_raw_advances_state ... ok"},
+{"ch":"deck.tests","ms":532,"line":"test combat_brain::coda::tests::surge_activates_at_max_heat ... ok"},
+{"ch":"deck.tests","ms":533,"line":"test combat_brain::arena_state::tests::tick_ring_records_and_finds_frames ... ok"},
+{"ch":"deck.tests","ms":533,"line":"test combat_brain::coda::tests::surge_guard_rejects_below_max ... ok"},
+{"ch":"deck.tests","ms":533,"line":"test combat_brain::coda::tests::tick_surge_decrements_and_restores ... ok"},
+{"ch":"deck.tests","ms":533,"line":"test combat_brain::coda::tests::tick_surge_noop_when_inactive ... ok"},
+{"ch":"deck.tests","ms":533,"line":"test combat_brain::combo_heat::tests::add_heat_saturates_at_10000 ... ok"},
+{"ch":"deck.tests","ms":533,"line":"test combat_brain::combo_heat::tests::ascension_burst_deducts_5000 ... ok"},
+{"ch":"deck.tests","ms":533,"line":"test combat_brain::combo_heat::tests::dash_cancel_deducts_1000 ... ok"},
+{"ch":"deck.tests","ms":533,"line":"test combat_brain::combo_heat::tests::decay_does_not_subtract_within_grace_period ... ok"},
+{"ch":"deck.tests","ms":533,"line":"test combat_brain::combo_heat::tests::decay_subtracts_after_grace_period ... ok"},
+{"ch":"deck.tests","ms":533,"line":"test combat_brain::combo_heat::tests::l18_sabotage_combo_heat_range_invariant ... ok"},
+{"ch":"deck.tests","ms":533,"line":"test combat_brain::combo_heat::tests::on_hit_resets_idle_counter ... ok"},
+{"ch":"deck.tests","ms":533,"line":"test combat_brain::combo_heat::tests::subtract_heat_saturates_at_zero ... ok"},
+{"ch":"deck.tests","ms":533,"line":"test combat_brain::combo_heat::tests::surge_available_at_10000 ... ok"},
+{"ch":"deck.tests","ms":533,"line":"test combat_brain::combo_heat::tests::surge_not_available_below_10000 ... ok"},
+{"ch":"deck.tests","ms":533,"line":"test combat_brain::controller::tests::ascension_burst_costs_5000_heat ... ok"},
+{"ch":"deck.tests","ms":533,"line":"test combat_brain::controller::tests::dash_cancel_costs_1000_heat ... ok"},
+{"ch":"deck.tests","ms":533,"line":"test combat_brain::controller::tests::evaluate_combat_applies_decay ... ok"},
+{"ch":"deck.tests","ms":533,"line":"test combat_brain::controller::tests::evaluate_combat_resolves_chord ... ok"},
+{"ch":"deck.tests","ms":533,"line":"test combat_brain::controller::tests::harmonic_strike_adds_heat ... ok"},
+{"ch":"deck.tests","ms":533,"line":"test combat_brain::dissonance::tests::authority_score_sums_deltas ... ok"},
+{"ch":"deck.tests","ms":533,"line":"test combat_brain::dissonance::tests::elemental_modifier_has_bounds ... ok"},
+{"ch":"deck.tests","ms":533,"line":"test combat_brain::dissonance::tests::fire_beats_air ... ok"},
+{"ch":"deck.tests","ms":533,"line":"test combat_brain::dissonance::tests::neutral_authority_gives_clash ... ok"},
+{"ch":"deck.tests","ms":534,"line":"test combat_brain::dissonance::tests::superior_initiative_gives_bonification ... ok"},
+{"ch":"deck.tests","ms":534,"line":"test combat_brain::evaluate::tests::l18_sabotage_verdict_word_gate ... ok"},
+{"ch":"deck.tests","ms":534,"line":"test combat_brain::evaluate::tests::verdict_word_dispatches_all_actions ... ok"},
+{"ch":"deck.tests","ms":534,"line":"test combat_brain::fight_transcript::tests::complete_fight_scenario ... ok"},
+{"ch":"deck.tests","ms":534,"line":"test combat_brain::fight_transcript::tests::fight_transcript_records_parry_events ... ok"},
+{"ch":"deck.tests","ms":534,"line":"test combat_brain::fight_transcript::tests::fight_transcript_records_scar_events ... ok"},
+{"ch":"deck.tests","ms":534,"line":"test combat_brain::fight_transcript::tests::fight_transcript_records_strike_events ... ok"},
+{"ch":"deck.tests","ms":534,"line":"test combat_brain::input_chord::tests::attack_plus_interact_resolves_to_shadow_grab ... ok"},
+{"ch":"deck.tests","ms":534,"line":"test combat_brain::input_chord::tests::both_negative_velocity_resolves_to_movement ... ok"},
+{"ch":"deck.tests","ms":534,"line":"test combat_brain::input_chord::tests::dash_plus_jump_resolves_to_gravity_crush ... ok"},
+{"ch":"deck.tests","ms":534,"line":"test combat_brain::input_chord::tests::parry_overrides_attack_and_interact ... ok"},
+{"ch":"deck.tests","ms":534,"line":"test combat_brain::input_chord::tests::solo_attack_resolves_to_harmonic_strike ... ok"},
+{"ch":"deck.tests","ms":534,"line":"test combat_brain::input_chord::tests::solo_dash_resolves_to_dash_cancel ... ok"},
+{"ch":"deck.tests","ms":534,"line":"test combat_brain::input_chord::tests::solo_jump_resolves_to_ascension_burst ... ok"},
+{"ch":"deck.tests","ms":534,"line":"test combat_brain::input_chord::tests::surge_overrides_parry ... ok"},
+{"ch":"deck.tests","ms":534,"line":"test combat_brain::input_chord::tests::surge_plus_attack_full_heat_resolves_to_edict_surge ... ok"},
+{"ch":"deck.tests","ms":534,"line":"test combat_brain::input_chord::tests::surge_plus_attack_low_heat_resolves_to_noop ... ok"},
+{"ch":"deck.tests","ms":534,"line":"test combat_brain::input_chord::tests::velocity_only_resolves_to_movement ... ok"},
+{"ch":"deck.tests","ms":534,"line":"test combat_brain::input_chord::tests::zero_input_resolves_to_noop ... ok"},
+{"ch":"deck.tests","ms":534,"line":"test combat_brain::ledger_drift::tests::apply_delta_to_account ... ok"},
+{"ch":"deck.tests","ms":534,"line":"test combat_brain::ledger_drift::tests::dominant_tracks_highest_absolute_value ... ok"},
+{"ch":"deck.tests","ms":535,"line":"test combat_brain::ledger_drift::tests::drift_starts_empty ... ok"},
+{"ch":"deck.tests","ms":535,"line":"test combat_brain::ledger_drift::tests::execution_feeds_red_debt ... ok"},
+{"ch":"deck.tests","ms":535,"line":"test combat_brain::ledger_drift::tests::refusal_feeds_outside_wheel ... ok"},
+{"ch":"deck.tests","ms":535,"line":"test combat_brain::ledger_drift::tests::total_sums_all_accounts ... ok"},
+{"ch":"deck.tests","ms":535,"line":"test combat_brain::parry::tests::l07_parry_condition_bijection ... ok"},
+{"ch":"deck.tests","ms":535,"line":"test combat_brain::parry::tests::perfect_parry_adds_300_heat ... ok"},
+{"ch":"deck.tests","ms":535,"line":"test combat_brain::parry::tests::perfect_parry_at_exact_boundary_delta_2 ... ok"},
+{"ch":"deck.tests","ms":535,"line":"test combat_brain::parry::tests::perfect_parry_dispatches_silence_12 ... ok"},
+{"ch":"deck.tests","ms":535,"line":"test combat_brain::parry::tests::perfect_parry_heat_saturates_at_10000 ... ok"},
+{"ch":"deck.tests","ms":535,"line":"test combat_brain::parry::tests::record_parry_activation_stores_tick ... ok"},
+{"ch":"deck.tests","ms":535,"line":"test combat_brain::parry::tests::standard_parry_when_outside_window ... ok"},
+{"ch":"deck.tests","ms":535,"line":"test combat_brain::parry::tests::standard_parry_when_resonance_mismatch ... ok"},
+{"ch":"deck.tests","ms":535,"line":"test combat_brain::projectile::tests::ballistic_tick_applies_gravity ... ok"},
+{"ch":"deck.tests","ms":535,"line":"test combat_brain::projectile::tests::ballistic_tick_preserves_velocity ... ok"},
+{"ch":"deck.tests","ms":535,"line":"test combat_brain::projectile::tests::ballistic_tick_zero_gravity_no_acceleration ... ok"},
+{"ch":"deck.tests","ms":535,"line":"test combat_brain::projectile::tests::crater_spec_bomb_uses_element_resonance ... ok"},
+{"ch":"deck.tests","ms":535,"line":"test combat_brain::projectile::tests::crater_spec_death_uses_gil_pmy ... ok"},
+{"ch":"deck.tests","ms":535,"line":"test combat_brain::projectile::tests::crater_spec_intensity_caps_at_10000 ... ok"},
+{"ch":"deck.tests","ms":535,"line":"test combat_brain::projectile::tests::crater_spec_radius_includes_speed_contribution ... ok"},
+{"ch":"deck.tests","ms":535,"line":"test combat_brain::projectile::tests::expired_projectile_tick_is_noop ... ok"},
+{"ch":"deck.tests","ms":535,"line":"test combat_brain::projectile::tests::projectile_expires_when_ttl_reaches_zero ... ok"},
+{"ch":"deck.tests","ms":535,"line":"test combat_brain::projectile::tests::projectile_launches_with_ttl ... ok"},
+{"ch":"deck.tests","ms":535,"line":"test combat_brain::projectile::tests::projectile_ttl_capped_at_240 ... ok"},
+{"ch":"deck.tests","ms":535,"line":"test combat_brain::rdda::tests::chaotic_rhythm_gives_low_resonance ... ok"},
+{"ch":"deck.tests","ms":535,"line":"test combat_brain::rdda::tests::neutral_with_no_data ... ok"},
+{"ch":"deck.tests","ms":536,"line":"test combat_brain::rdda::tests::perfect_rhythm_gives_max_resonance ... ok"},
+{"ch":"deck.tests","ms":536,"line":"test combat_brain::rdda::tests::ring_buffer_wraps_without_panic ... ok"},
+{"ch":"deck.tests","ms":537,"line":"test combat_brain::rdda::tests::scale_damage_amplified_at_perfect_rhythm ... ok"},
+{"ch":"deck.tests","ms":537,"line":"test combat_brain::resonance::tests::no_cancel_at_440_440 ... ok"},
+{"ch":"deck.tests","ms":537,"line":"test combat_brain::respawn::tests::death_anchor_hash_is_sensitive_to_position ... ok"},
+{"ch":"deck.tests","ms":537,"line":"test combat_brain::resonance::tests::l18_sabotage_phase_cancel_gate ... ok"},
+{"ch":"deck.tests","ms":537,"line":"test combat_brain::respawn::tests::death_anchor_hash_is_sensitive_to_tick ... ok"},
+{"ch":"deck.tests","ms":537,"line":"test combat_brain::resonance::tests::phase_cancel_at_420_420 ... ok"},
+{"ch":"deck.tests","ms":538,"line":"test combat_brain::resonance::tests::phase_cancel_at_440_400 ... ok"},
+{"ch":"deck.tests","ms":538,"line":"test combat_brain::resonance::tests::phase_cancel_sum_is_double_concert_pitch_minus_40 ... ok"},
+{"ch":"deck.tests","ms":538,"line":"test combat_brain::resonance::tests::resonance_bounds_valid ... ok"},
+{"ch":"deck.tests","ms":538,"line":"test combat_brain::respawn::tests::die_twice_scales_penalty ... ok"},
+{"ch":"deck.tests","ms":538,"line":"test combat_brain::respawn::tests::deaths_counter_saturates_rather_than_wrapping ... ok"},
+{"ch":"deck.tests","ms":538,"line":"test combat_brain::respawn::tests::die_transitions_to_dead_and_sets_timer ... ok"},
+{"ch":"deck.tests","ms":538,"line":"test combat_brain::rdda::tests::single_attack_stays_neutral ... ok"},
+{"ch":"deck.tests","ms":538,"line":"test combat_brain::rdda::tests::scale_damage_neutral_is_unchanged ... ok"},
+{"ch":"deck.tests","ms":538,"line":"test combat_brain::resonance::tests::tier_ranges_ordered ... ok"},
+{"ch":"deck.tests","ms":538,"line":"test combat_brain::respawn::tests::death_anchor_hash_is_deterministic ... ok"},
+{"ch":"deck.tests","ms":541,"line":"test combat_brain::scar::tests::l07_death_cause_tag_bijection ... ok"},
+{"ch":"deck.tests","ms":541,"line":"test combat_brain::respawn::tests::starts_alive ... ok"},
+{"ch":"deck.tests","ms":542,"line":"test combat_brain::respawn::tests::tick_noop_when_already_alive ... ok"},
+{"ch":"deck.tests","ms":542,"line":"test combat_brain::run_summary::tests::run_summary_inequality ... ok"},
+{"ch":"deck.tests","ms":542,"line":"test combat_brain::scar::tests::prior_authority_pressure_is_bounded_and_decays ... ok"},
+{"ch":"deck.tests","ms":542,"line":"test combat_brain::scar::tests::scar_differs_on_divergent_death ... ok"},
+{"ch":"deck.tests","ms":542,"line":"test combat_brain::scar::tests::l07_scar_pressure_decay_bijection ... ok"},
+{"ch":"deck.tests","ms":542,"line":"test combat_brain::scar::tests::lethal_damage_triggers_single_death_transition ... ok"},
+{"ch":"deck.tests","ms":542,"line":"test combat_brain::shadow_grab::tests::grab_connects_when_in_range ... ok"},
+{"ch":"deck.tests","ms":542,"line":"test combat_brain::run_summary::tests::run_summary_default_is_empty ... ok"},
+{"ch":"deck.tests","ms":542,"line":"test combat_brain::run_summary::tests::run_summary_equality ... ok"},
+{"ch":"deck.tests","ms":542,"line":"test combat_brain::scar::tests::scar_is_deterministic ... ok"},
+{"ch":"deck.tests","ms":542,"line":"test combat_brain::scar::tests::scar_ledger_records_bounds_and_sums_pressure ... ok"},
+{"ch":"deck.tests","ms":542,"line":"test combat_brain::shadow_grab::tests::crosses_chunk_boundary_detects_x_crossing ... ok"},
+{"ch":"deck.tests","ms":542,"line":"test combat_brain::shadow_grab::tests::crosses_chunk_boundary_detects_y_crossing ... ok"},
+{"ch":"deck.tests","ms":542,"line":"test combat_brain::respawn::tests::tick_returns_true_on_the_respawn_frame ... ok"},
+{"ch":"deck.tests","ms":545,"line":"test combat_brain::shadow_grab::tests::l07_grab_postcondition_bijection ... ok"},
+{"ch":"deck.tests","ms":545,"line":"test combat_brain::shadow_grab::tests::no_rehash_when_same_chunk ... ok"},
+{"ch":"deck.tests","ms":545,"line":"test combat_brain::sieve::tests::observe_attack_increments_frequencies ... ok"},
+{"ch":"deck.tests","ms":545,"line":"test combat_brain::sieve::tests::observe_attack_masks_direction_and_aspect ... ok"},
+{"ch":"deck.tests","ms":547,"line":"test combat_brain::shadow_grab::tests::grab_duration_releases_after_n_ticks ... ok"},
+{"ch":"deck.tests","ms":547,"line":"test combat_brain::shadow_grab::tests::grab_effects_zero_velocity_and_lock_position ... ok"},
+{"ch":"deck.tests","ms":547,"line":"test combat_brain::shadow_grab::tests::tick_grab_noop_when_inactive ... ok"},
+{"ch":"deck.tests","ms":547,"line":"test combat_brain::sieve::tests::degradation_triggers_at_60000 ... ok"},
+{"ch":"deck.tests","ms":548,"line":"test combat_brain::sieve::tests::saturating_add_prevents_overflow ... ok"},
+{"ch":"deck.tests","ms":548,"line":"test combat_brain::strike::tests::clamping_above_800_uses_800 ... ok"},
+{"ch":"deck.tests","ms":548,"line":"test combat_brain::shadow_grab::tests::grab_misses_at_exact_boundary ... ok"},
+{"ch":"deck.tests","ms":548,"line":"test combat_brain::shadow_grab::tests::grab_misses_when_out_of_range ... ok"},
+{"ch":"deck.tests","ms":548,"line":"test combat_brain::sieve::tests::inject_noise_is_deterministic ... ok"},
+{"ch":"deck.tests","ms":548,"line":"test combat_brain::sieve::tests::inject_noise_reduces_confidence ... ok"},
+{"ch":"deck.tests","ms":548,"line":"test combat_brain::strike::tests::clamping_below_40_uses_40 ... ok"},
+{"ch":"deck.tests","ms":548,"line":"test combat_brain::shadow_grab::tests::rehash_needed_when_crossing_chunk_boundary ... ok"},
+{"ch":"deck.tests","ms":548,"line":"test combat_brain::shadow_grab::tests::grab_duration_handles_tick_wrap ... ok"},
+{"ch":"deck.tests","ms":548,"line":"test combat_brain::shadow_grab::tests::release_grab_deactivates ... ok"},
+{"ch":"deck.tests","ms":548,"line":"test combat_brain::sieve::tests::prediction_confidence_formula ... ok"},
+{"ch":"deck.tests","ms":548,"line":"test combat_brain::sieve::tests::prediction_confidence_zero_when_empty ... ok"},
+{"ch":"deck.tests","ms":549,"line":"test combat_brain::strike::tests::evaluate_strike_dispatches_audio ... ok"},
+{"ch":"deck.tests","ms":549,"line":"test combat_brain::strike::tests::knockback_at_800hz_is_1000 ... ok"},
+{"ch":"deck.tests","ms":549,"line":"test combat_brain::strike::tests::knockback_at_40hz_is_8000 ... ok"},
+{"ch":"deck.tests","ms":549,"line":"test combat_brain::strike::tests::l07_strike_monotonicity_bijection ... ok"},
+{"ch":"deck.tests","ms":549,"line":"test combat_brain::strike::tests::l07_strike_result_encode_decode ... ok"},
+{"ch":"deck.tests","ms":549,"line":"test combat_brain::strike::tests::hit_stop_at_800hz_is_1 ... ok"},
+{"ch":"deck.tests","ms":549,"line":"test combat_brain::tests::l18_sabotage_sink_parry_gate ... ok"},
+{"ch":"deck.tests","ms":549,"line":"test combat_brain::strike::tests::hit_stop_at_40hz_is_8 ... ok"},
+{"ch":"deck.tests","ms":549,"line":"test combat_brain::tests::test_sink_records_events ... ok"},
+{"ch":"deck.tests","ms":549,"line":"test combat_brain::triggers::tests::condition_depth ... ok"},
+{"ch":"deck.tests","ms":549,"line":"test combat_brain::triggers::tests::condition_standing ... ok"},
+{"ch":"deck.tests","ms":549,"line":"test combat_brain::triggers::tests::condition_vitality_band ... ok"},
+{"ch":"deck.tests","ms":549,"line":"test combat_brain::triggers::tests::evaluate_trigger_chance_pmy_10000_always_fires ... ok"},
+{"ch":"deck.tests","ms":549,"line":"test combat_brain::triggers::tests::evaluate_trigger_chance_pmy_zero_never_fires ... ok"},
+{"ch":"deck.tests","ms":549,"line":"test combat_brain::triggers::tests::evaluate_trigger_chance_pmy_5000_half_rate ... ok"},
+{"ch":"deck.tests","ms":549,"line":"test combat_brain::triggers::tests::evaluate_trigger_condition_mismatch ... ok"},
+{"ch":"deck.tests","ms":549,"line":"test combat_brain::triggers::tests::evaluate_trigger_determinism_same_seed ... ok"},
+{"ch":"deck.tests","ms":549,"line":"test combat_brain::triggers::tests::evaluate_trigger_event_mismatch ... ok"},
+{"ch":"deck.tests","ms":550,"line":"test combat_brain::triggers::tests::trigger_action_variants ... ok"},
+{"ch":"deck.tests","ms":550,"line":"test combat_brain::triggers::tests::trigger_cooldown_tick_behavior ... ok"},
+{"ch":"deck.tests","ms":550,"line":"test combat_brain::triggers::tests::trigger_event_equality ... ok"},
+{"ch":"deck.tests","ms":550,"line":"test combat_live::tests::a_parried_foe_swing_costs_no_budget ... ok"},
+{"ch":"deck.tests","ms":550,"line":"test combat_live::tests::an_unparried_foe_swing_shrinks_the_time_budget_and_speaks ... ok"},
+{"ch":"deck.tests","ms":550,"line":"test combat_live::tests::attack_button_lands_a_strike_and_speaks ... ok"},
+{"ch":"deck.tests","ms":550,"line":"test combat_live::tests::enough_strikes_cap_heat_and_win ... ok"},
+{"ch":"deck.tests","ms":550,"line":"test combat_live::tests::flee_always_available ... ok"},
+{"ch":"deck.tests","ms":550,"line":"test combat_live::tests::foe_only_swings_on_its_own_cadence_not_every_tick ... ok"},
+{"ch":"deck.tests","ms":550,"line":"test combat_live::tests::idle_ticks_speak_nothing ... ok"},
+{"ch":"deck.tests","ms":550,"line":"test combat_live::tests::par_ticks_exhausted_without_hits_is_a_defeat ... ok"},
+{"ch":"deck.tests","ms":550,"line":"test combat_live::tests::perfect_parry_within_window_speaks_and_costs_no_heat_loss_beyond_decay ... ok"},
+{"ch":"deck.tests","ms":550,"line":"test consequence::tests::law_and_faction_are_the_seed ... ok"},
+{"ch":"deck.tests","ms":550,"line":"test consequence::tests::the_cascade_is_permyriad_exact ... ok"},
+{"ch":"deck.tests","ms":550,"line":"test consequence::tests::the_central_third_band_governs_growth ... ok"},
+{"ch":"deck.tests","ms":550,"line":"test consequence::tests::the_engine_is_deterministic ... ok"},
+{"ch":"deck.tests","ms":550,"line":"test consequence::tests::the_guard_ladder_is_the_drained_law ... ok"},
+{"ch":"deck.tests","ms":550,"line":"test consequence::tests::the_query_and_descriptor_codecs_are_bijections ... ok"},
+{"ch":"deck.tests","ms":550,"line":"test consequence::tests::the_standing_ladder_holds_the_drained_marks ... ok"},
+{"ch":"deck.tests","ms":550,"line":"test consequence::tests::the_streak_ladder_holds_the_packets_steps ... ok"},
+{"ch":"deck.tests","ms":550,"line":"test console::tests::parse_seed_handles_hex_prefixes_and_words ... ok"},
+{"ch":"deck.tests","ms":550,"line":"test console::tests::reseed_determinism_and_summary_repeat ... ok"},
+{"ch":"deck.tests","ms":550,"line":"test console::tests::reseed_keeps_earned_state_clears_heat_and_rehomes ... ok"},
+{"ch":"deck.tests","ms":550,"line":"test console::tests::reseed_via_star_name_is_deterministic ... ok"},
+{"ch":"deck.tests","ms":550,"line":"test console::tests::vixi_contract_round_trips_32_sampled_u32s ... ok"},
+{"ch":"deck.tests","ms":550,"line":"test console::tests::worlds_list_stars_has_no_digits ... ok"},
+{"ch":"deck.tests","ms":550,"line":"test console::tests::worlds_preview_clamps_and_is_deterministic ... ok"},
+{"ch":"deck.tests","ms":550,"line":"test content::accounts::tests::accounts_are_exactly_thirteen_and_word_only ... ok"},
+{"ch":"deck.tests","ms":550,"line":"test content::achievements::tests::milestone_names_are_exactly_sixteen_and_word_only ... ok"},
+{"ch":"deck.tests","ms":551,"line":"test content::achievements::tests::test_bosses_milestone ... ok"},
+{"ch":"deck.tests","ms":551,"line":"test content::alchemy::tests::brew_defense_reuses_the_real_vibration_law ... ok"},
+{"ch":"deck.tests","ms":551,"line":"test content::alchemy::tests::every_brew_has_exactly_one_reagent_row ... ok"},
+{"ch":"deck.tests","ms":551,"line":"test content::alchemy::tests::reagent_lookup_matches_the_table_by_index ... ok"},
+{"ch":"deck.tests","ms":551,"line":"test content::alchemy::tests::test_brews_valid ... ok"},
+{"ch":"deck.tests","ms":551,"line":"test content::fishing::tests::test_catches ... ok"},
+{"ch":"deck.tests","ms":551,"line":"test content::items::tests::test_items_valid ... ok"},
+{"ch":"deck.tests","ms":551,"line":"test content::moons::tests::moons_are_exactly_thirteen_and_word_only ... ok"},
+{"ch":"deck.tests","ms":551,"line":"test content::narrative::discovery::tests::cold_spot_is_hardest_to_find ... ok"},
+{"ch":"deck.tests","ms":551,"line":"test content::narrative::discovery::tests::collapsed_arch_is_most_obvious ... ok"},
+{"ch":"deck.tests","ms":551,"line":"test content::narrative::discovery::tests::completion_percentage ... ok"},
+{"ch":"deck.tests","ms":551,"line":"test content::narrative::discovery::tests::dynamic_overflow_scales_past_cap_and_is_deterministic ... ok"},
+{"ch":"deck.tests","ms":551,"line":"test content::narrative::discovery::tests::evidence_density_increases_per_act ... ok"},
+{"ch":"deck.tests","ms":551,"line":"test content::narrative::discovery::tests::tell_channels_are_assigned ... ok"},
+{"ch":"deck.tests","ms":551,"line":"test content::narrative::discovery::tests::zone_discovery_tracks_tells ... ok"},
+{"ch":"deck.tests","ms":551,"line":"test content::narrative::endings::tests::all_13_endings_have_unique_indices ... ok"},
+{"ch":"deck.tests","ms":551,"line":"test content::narrative::endings::tests::ending_pressure_tracks_dominant ... ok"},
+{"ch":"deck.tests","ms":551,"line":"test content::narrative::endings::tests::name_returned_on_high_integrity_integrate ... ok"},
+{"ch":"deck.tests","ms":551,"line":"test content::narrative::endings::tests::spirit_flood_on_max_leak ... ok"},
+{"ch":"deck.tests","ms":551,"line":"test content::narrative::endings::tests::thirteenth_overrides_pressure ... ok"},
+{"ch":"deck.tests","ms":551,"line":"test content::narrative::endings::tests::thirteenth_requires_all_flags ... ok"},
+{"ch":"deck.tests","ms":551,"line":"test content::narrative::entropy::tests::critical_threshold ... ok"},
+{"ch":"deck.tests","ms":551,"line":"test content::narrative::entropy::tests::debt_u8_clamps ... ok"},
+{"ch":"deck.tests","ms":551,"line":"test content::narrative::entropy::tests::entropy_accumulates ... ok"},
+{"ch":"deck.tests","ms":551,"line":"test content::narrative::entropy::tests::refusal_is_cheapest ... ok"},
+{"ch":"deck.tests","ms":551,"line":"test content::narrative::entropy::tests::resurrection_is_most_expensive ... ok"},
+{"ch":"deck.tests","ms":552,"line":"test content::narrative::erasure::tests::erasure_severity_scaling ... ok"},
+{"ch":"deck.tests","ms":552,"line":"test content::narrative::erasure::tests::major_erasure_phase_progression ... ok"},
+{"ch":"deck.tests","ms":552,"line":"test content::narrative::erasure::tests::ontological_erasure_is_catastrophic ... ok"},
+{"ch":"deck.tests","ms":552,"line":"test content::narrative::erasure::tests::prevention_reduces_damage ... ok"},
+{"ch":"deck.tests","ms":552,"line":"test content::narrative::erasure::tests::prevention_stops_progression ... ok"},
+{"ch":"deck.tests","ms":552,"line":"test content::narrative::event::tests::abandon_increases_volatility ... ok"},
+{"ch":"deck.tests","ms":552,"line":"test content::narrative::event::tests::apply_resolution_mutates_world ... ok"},
+{"ch":"deck.tests","ms":552,"line":"test content::narrative::event::tests::bind_unlocks_route ... ok"},
+{"ch":"deck.tests","ms":552,"line":"test content::narrative::event::tests::event_angle_discovery ... ok"},
+{"ch":"deck.tests","ms":552,"line":"test content::narrative::event::tests::expose_shifts_factions ... ok"},
+{"ch":"deck.tests","ms":552,"line":"test content::narrative::event::tests::kill_resolution_raises_fear ... ok"},
+{"ch":"deck.tests","ms":552,"line":"test content::narrative::event::tests::resolver_escalates_shadow ... ok"},
+{"ch":"deck.tests","ms":552,"line":"test content::narrative::event::tests::spare_resolution_lowers_fear ... ok"},
+{"ch":"deck.tests","ms":552,"line":"test content::narrative::event_sites::tests::cannot_resolve_twice ... ok"},
+{"ch":"deck.tests","ms":552,"line":"test content::narrative::event_sites::tests::init_assigns_factions ... ok"},
+{"ch":"deck.tests","ms":552,"line":"test content::narrative::event_sites::tests::resolve_unresolved_event ... ok"},
+{"ch":"deck.tests","ms":552,"line":"test content::narrative::identity::tests::erasing_name_and_grave_makes_vowless ... ok"},
+{"ch":"deck.tests","ms":552,"line":"test content::narrative::identity::tests::erasing_name_damages_identity ... ok"},
+{"ch":"deck.tests","ms":552,"line":"test content::narrative::identity::tests::fully_erased_has_no_relations ... ok"},
+{"ch":"deck.tests","ms":552,"line":"test content::narrative::identity::tests::graph_register_and_erase ... ok"},
+{"ch":"deck.tests","ms":552,"line":"test content::narrative::identity::tests::memory_surface_write_costs_entropy ... ok"},
+{"ch":"deck.tests","ms":552,"line":"test content::narrative::identity::tests::whole_identity_requires_name_and_relations ... ok"},
+{"ch":"deck.tests","ms":552,"line":"test content::narrative::lunar_harmonics::tests::test_apply_birth_modifiers_consistency ... ignored"},
+{"ch":"deck.tests","ms":552,"line":"test content::narrative::identity::tests::witness_add_remove ... ok"},
+{"ch":"deck.tests","ms":553,"line":"test content::narrative::lunar_harmonics::tests::test_birth_modifiers_sign_preservation ... ok"},
+{"ch":"deck.tests","ms":553,"line":"test content::narrative::lunar_harmonics::tests::test_day_harmonic_distribution ... ok"},
+{"ch":"deck.tests","ms":553,"line":"test content::narrative::lunar_harmonics::tests::test_combined_variance_reasonable ... ok"},
+{"ch":"deck.tests","ms":553,"line":"test content::narrative::lunar_harmonics::tests::test_day_variants_are_twentyeight ... ok"},
+{"ch":"deck.tests","ms":553,"line":"test content::narrative::lunar_harmonics::tests::test_different_days_different_outcomes ... ok"},
+{"ch":"deck.tests","ms":553,"line":"test content::narrative::lunar_harmonics::tests::test_different_moons_different_outcomes ... ok"},
+{"ch":"deck.tests","ms":553,"line":"test content::narrative::lunar_harmonics::tests::test_moon_1_day_1_consistent ... ok"},
+{"ch":"deck.tests","ms":553,"line":"test content::narrative::lunar_harmonics::tests::test_moon_variance_within_pool ... ok"},
+{"ch":"deck.tests","ms":553,"line":"test content::narrative::lunar_harmonics::tests::test_moon_variants_are_thirteen ... ok"},
+{"ch":"deck.tests","ms":553,"line":"test content::narrative::oath::tests::all_disciplines_have_profiles ... ok"},
+{"ch":"deck.tests","ms":553,"line":"test content::narrative::lunar_harmonics::tests::test_unique_combinations ... ok"},
+{"ch":"deck.tests","ms":553,"line":"test content::narrative::oath::tests::each_discipline_has_unique_combat_identity ... ok"},
+{"ch":"deck.tests","ms":553,"line":"test content::narrative::oath::tests::stat_bias_applies_correctly ... ok"},
+{"ch":"deck.tests","ms":553,"line":"test content::narrative::oath::tests::stat_bias_floors_at_zero ... ok"},
+{"ch":"deck.tests","ms":553,"line":"test content::narrative::oath_scaling::tests::all_disciplines_have_7stat_profiles ... ok"},
+{"ch":"deck.tests","ms":553,"line":"test content::narrative::oath_scaling::tests::clarity_is_never_dealt_at_birth ... ok"},
+{"ch":"deck.tests","ms":553,"line":"test content::narrative::oath_scaling::tests::each_discipline_has_lore_text ... ok"},
+{"ch":"deck.tests","ms":553,"line":"test content::narrative::oath_scaling::tests::each_discipline_has_unique_name ... ok"},
+{"ch":"deck.tests","ms":554,"line":"test content::narrative::oath_scaling::tests::edge_profile_prioritizes_momentum_logic ... ok"},
+{"ch":"deck.tests","ms":554,"line":"test content::narrative::oath_scaling::tests::from_index_wraps_eight_disciplines ... ok"},
+{"ch":"deck.tests","ms":554,"line":"test content::narrative::oath_scaling::tests::stat_profiles_use_7stat_model ... ok"},
+{"ch":"deck.tests","ms":554,"line":"test content::narrative::oath_scaling::tests::weight_profile_prioritizes_vigor_shadow ... ok"},
+{"ch":"deck.tests","ms":554,"line":"test content::narrative::persistence::tests::roundtrip_empty ... ok"},
+{"ch":"deck.tests","ms":554,"line":"test content::narrative::persistence::tests::roundtrip_with_data ... ok"},
+{"ch":"deck.tests","ms":554,"line":"test content::narrative::persistence::tests::version_mismatch_returns_none ... ok"},
+{"ch":"deck.tests","ms":554,"line":"test content::narrative::root_cycle::tests::combat_death_does_not_open_spirit_route ... ok"},
+{"ch":"deck.tests","ms":554,"line":"test content::narrative::root_cycle::tests::consumed_erasure_does_not_fire_again ... ok"},
+{"ch":"deck.tests","ms":554,"line":"test content::narrative::root_cycle::tests::cycle_end_records_event ... ok"},
+{"ch":"deck.tests","ms":554,"line":"test content::narrative::root_cycle::tests::cycle_generates_deterministic_schedule ... ok"},
+{"ch":"deck.tests","ms":554,"line":"test content::narrative::root_cycle::tests::death_opens_spirit_route_on_sacrifice ... ok"},
+{"ch":"deck.tests","ms":554,"line":"test content::narrative::root_cycle::tests::different_seed_different_schedule ... ok"},
+{"ch":"deck.tests","ms":554,"line":"test content::narrative::root_cycle::tests::erasure_schedule_within_bounds ... ok"},
+{"ch":"deck.tests","ms":554,"line":"test content::narrative::root_cycle::tests::pending_erasure_fires_at_scheduled_tick ... ok"},
+{"ch":"deck.tests","ms":554,"line":"test content::narrative::shadow_memory::tests::counter_responds_to_dodge_spam ... ok"},
+{"ch":"deck.tests","ms":554,"line":"test content::narrative::shadow_memory::tests::counter_responds_to_high_erasure ... ok"},
+{"ch":"deck.tests","ms":555,"line":"test content::narrative::shadow_memory::tests::counter_responds_to_parry_spam ... ok"},
+{"ch":"deck.tests","ms":555,"line":"test content::narrative::shadow_memory::tests::counterpart_derives_from_memory ... ok"},
+{"ch":"deck.tests","ms":555,"line":"test content::narrative::shadow_memory::tests::dominant_attack_direction ... ok"},
+{"ch":"deck.tests","ms":555,"line":"test content::narrative::shadow_memory::tests::shadow_classifies_blighted_on_repetition ... ok"},
+{"ch":"deck.tests","ms":555,"line":"test content::narrative::shadow_memory::tests::shadow_classifies_harbinger_on_executions ... ok"},
+{"ch":"deck.tests","ms":555,"line":"test content::narrative::shadow_memory::tests::shadow_classifies_stalker_by_default ... ok"},
+{"ch":"deck.tests","ms":555,"line":"test content::narrative::shadow_memory::tests::shadow_file_checksum_validates ... ok"},
+{"ch":"deck.tests","ms":555,"line":"test content::narrative::shadow_memory::tests::shadow_file_tampered_fails_checksum ... ok"},
+{"ch":"deck.tests","ms":555,"line":"test content::narrative::state::tests::player_bitset_operations ... ok"},
+{"ch":"deck.tests","ms":555,"line":"test content::narrative::state::tests::saturating_faction_pressure ... ok"},
+{"ch":"deck.tests","ms":555,"line":"test content::narrative::state::tests::world_state_ending_mask ... ok"},
+{"ch":"deck.tests","ms":555,"line":"test content::narrative::state::tests::world_state_faction_pressure ... ok"},
+{"ch":"deck.tests","ms":557,"line":"test content::npcs::tests::test_npcs_valid ... ok"},
+{"ch":"deck.tests","ms":557,"line":"test content::pets::tests::test_pets_valid ... ok"},
+{"ch":"deck.tests","ms":558,"line":"test content::shadow::tests::shadow_tiers_are_exactly_six_and_word_only ... ok"},
+{"ch":"deck.tests","ms":558,"line":"test content::skyboxes::tests::validate_skyboxes_and_vibes ... ok"},
+{"ch":"deck.tests","ms":558,"line":"test content::quests::tests::test_quests_valid ... ok"},
+{"ch":"deck.tests","ms":558,"line":"test content::relics::tests::materials_are_exactly_three_and_word_only ... ok"},
+{"ch":"deck.tests","ms":558,"line":"test content::talents::tests::test_talent_currents ... ok"},
+{"ch":"deck.tests","ms":558,"line":"test content::towns::tests::test_towns_valid ... ok"},
+{"ch":"deck.tests","ms":558,"line":"test dash_direction::tests::center_and_near_zero_input_snaps_to_zero ... ok"},
+{"ch":"deck.tests","ms":558,"line":"test dash_direction::tests::diagonal_directions_snap_to_both_axes ... ok"},
+{"ch":"deck.tests","ms":558,"line":"test dash_direction::tests::pack_and_unpack_direction_via_tritcell5d ... ok"},
+{"ch":"deck.tests","ms":558,"line":"test dash_direction::tests::bijection_round_trip_all_nine_directions ... ok"},
+{"ch":"deck.tests","ms":560,"line":"test dash_direction::tests::trit_direction_to_permyriad_inverse ... ok"},
+{"ch":"deck.tests","ms":560,"line":"test dash_direction::tests::threshold_boundary_behavior ... ok"},
+{"ch":"deck.tests","ms":560,"line":"test dash_direction::tests::cardinal_directions_snap_correctly ... ok"},
+{"ch":"deck.tests","ms":560,"line":"test dash_direction::tests::pararity_fold_negates_only_direction_lanes ... ok"},
+{"ch":"deck.tests","ms":560,"line":"test discipline_combat::tests::test_breath_perfect_parry_silence_window ... ok"},
+{"ch":"deck.tests","ms":560,"line":"test discipline_combat::tests::test_all_8_disciplines_120hz_combat_cycle ... ok"},
+{"ch":"deck.tests","ms":560,"line":"test dm::tests::abandon_increases_volatility ... ok"},
+{"ch":"deck.tests","ms":560,"line":"test discipline_combat::tests::test_layout_sizes ... ok"},
+{"ch":"deck.tests","ms":560,"line":"test dm::tests::an_ambiguous_margin_escalates_and_surfaces_the_real_error ... ok"},
+{"ch":"deck.tests","ms":560,"line":"test discipline_combat::tests::test_deterministic_rollback_and_replay_identity ... ok"},
+{"ch":"deck.tests","ms":567,"line":"test dm::tests::expose_shifts_factions ... ok"},
+{"ch":"deck.tests","ms":571,"line":"test discipline_combat::tests::test_weight_crushes_poise_faster_than_edge ... ok"},
+{"ch":"deck.tests","ms":571,"line":"test dm::tests::different_angle_sets_produce_different_vectors_at_matching_count ... ok"},
+{"ch":"deck.tests","ms":572,"line":"test dm::tests::encode_event_query_is_deterministic ... ok"},
+{"ch":"deck.tests","ms":572,"line":"test dm::tests::faction_owner_is_a_real_consequence_faction_index ... ok"},
+{"ch":"deck.tests","ms":572,"line":"test dm::tests::inherit_updates_the_ending_mask ... ok"},
+{"ch":"deck.tests","ms":572,"line":"test dm::tests::a_confident_margin_resolves_without_escalating ... ok"},
+{"ch":"deck.tests","ms":572,"line":"test dm::tests::a_fresh_event_is_unresolved ... ok"},
+{"ch":"deck.tests","ms":572,"line":"test dm::tests::encoded_query_is_pack_trits_compatible ... ok"},
+{"ch":"deck.tests","ms":572,"line":"test dm::tests::erase_costs_the_most_memory_integrity ... ok"},
+{"ch":"deck.tests","ms":572,"line":"test dm::tests::event_angle_discovery ... ok"},
+{"ch":"deck.tests","ms":572,"line":"test dm::tests::every_resolution_mode_has_a_distinct_centroid ... ok"},
+{"ch":"deck.tests","ms":572,"line":"test dm::tests::bind_unlocks_route ... ok"},
+{"ch":"deck.tests","ms":572,"line":"test dm::tests::faction_owner_encodes_as_presence_not_index ... ok"},
+{"ch":"deck.tests","ms":572,"line":"test dm::tests::a_combat_shadow_event_routes_toward_kill_over_spare ... ok"},
+{"ch":"deck.tests","ms":572,"line":"test dm::tests::kill_resolution_raises_fear ... ok"},
+{"ch":"deck.tests","ms":572,"line":"test dm::tests::no_escalation_always_refuses ... ok"},
+{"ch":"deck.tests","ms":572,"line":"test dm::tests::parse_resolution_mode_name_round_trips_every_mode ... ok"},
+{"ch":"deck.tests","ms":572,"line":"test dm::tests::resolution_mode_all_and_from_expert_id_agree ... ok"},
+{"ch":"deck.tests","ms":572,"line":"test dm::tests::resolution_router_has_seven_experts_matching_resolution_mode ... ok"},
+{"ch":"deck.tests","ms":572,"line":"test dm::tests::resolution_router_never_hits_a_sentinel ... ok"},
+{"ch":"deck.tests","ms":573,"line":"test dm::tests::spare_resolution_lowers_fear ... ok"},
+{"ch":"deck.tests","ms":573,"line":"test dm::tests::unowned_event_encodes_zero_faction_presence ... ok"},
+{"ch":"deck.tests","ms":573,"line":"test dream::journal::tests::fresh_journal_has_no_incidents ... ok"},
+{"ch":"deck.tests","ms":573,"line":"test dream::journal::tests::observe_quality_widens_the_range_only ... ok"},
+{"ch":"deck.tests","ms":573,"line":"test dream::journal::tests::sentinel_matches_the_cart_dialects_own_mapping ... ok"},
+{"ch":"deck.tests","ms":573,"line":"test dream::score::tests::day_quality_clamps_out_of_range_inputs ... ok"},
+{"ch":"deck.tests","ms":573,"line":"test dream::score::tests::day_quality_weights_match_the_spec_exactly ... ok"},
+{"ch":"deck.tests","ms":573,"line":"test dream::score::tests::quality_at_or_above_floor_never_counts ... ok"},
+{"ch":"deck.tests","ms":573,"line":"test dream::score::tests::rough_patch_fires_once_at_exactly_600_ticks ... ok"},
+{"ch":"deck.tests","ms":573,"line":"test dream::score::tests::rough_patch_resets_on_recovery ... ok"},
+{"ch":"deck.tests","ms":573,"line":"test dream::session_vault::tests::shred_before_deadline_seals_the_buffer ... ok"},
+{"ch":"deck.tests","ms":573,"line":"test dream::session_vault::tests::shred_past_deadline_is_expired_not_attested ... ok"},
+{"ch":"deck.tests","ms":573,"line":"test dream::session_vault::tests::zeroize_actually_clears_the_backing_bytes ... ok"},
+{"ch":"deck.tests","ms":573,"line":"test ecology::tests::activity_period_variants ... ok"},
+{"ch":"deck.tests","ms":573,"line":"test ecology::tests::fauna_behavior_variants ... ok"},
+{"ch":"deck.tests","ms":573,"line":"test ecology::tests::growth_type_variants ... ok"},
+{"ch":"deck.tests","ms":573,"line":"test ecology::tests::pine_dies_in_corruption ... ok"},
+{"ch":"deck.tests","ms":573,"line":"test ecology::tests::pine_dies_in_shade ... ok"},
+{"ch":"deck.tests","ms":573,"line":"test ecology::tests::pine_grows_in_light ... ok"},
+{"ch":"deck.tests","ms":574,"line":"test ecology::tests::wolf_flees_corruption ... ok"},
+{"ch":"deck.tests","ms":574,"line":"test ecology::tests::wolf_flees_high_danger ... ok"},
+{"ch":"deck.tests","ms":574,"line":"test ecology::tests::wolf_inhabits_safe_zone ... ok"},
+{"ch":"deck.tests","ms":574,"line":"test explore::tests::camp_advances_the_sky_and_is_deterministic ... ok"},
+{"ch":"deck.tests","ms":574,"line":"test explore::tests::day_phase_cycles_and_wraps ... ok"},
+{"ch":"deck.tests","ms":574,"line":"test explore::tests::edge_squares_never_offer_out_of_bounds_compass ... ok"},
+{"ch":"deck.tests","ms":574,"line":"test explore::tests::offers_are_deterministic ... ok"},
+{"ch":"deck.tests","ms":574,"line":"test field::canvas_bridge::tests::a_grain_already_on_the_floor_is_at_rest ... ok"},
+{"ch":"deck.tests","ms":574,"line":"test field::canvas_bridge::tests::a_painted_grain_falls_to_the_floor_with_its_colour ... ok"},
+{"ch":"deck.tests","ms":574,"line":"test explore::tests::the_climb_ladder_matches_height ... ok"},
+{"ch":"deck.tests","ms":574,"line":"test field::canvas_bridge::tests::a_zero_sized_canvas_is_a_no_op ... ok"},
+{"ch":"deck.tests","ms":574,"line":"test field::canvas_bridge::tests::an_empty_canvas_is_at_rest ... ok"},
+{"ch":"deck.tests","ms":574,"line":"test field::electricity::tests::charge_walks_the_wire_one_cell_per_tick ... ok"},
+{"ch":"deck.tests","ms":574,"line":"test explore::tests::offers_are_bounded_and_word_only ... ok"},
+{"ch":"deck.tests","ms":574,"line":"test field::layer_stack_tests::alpha_lock_allows_paint_over_existing_coverage ... ok"},
+{"ch":"deck.tests","ms":574,"line":"test field::layer_stack_tests::alpha_lock_blocks_paint_on_uncovered_cells ... ok"},
+{"ch":"deck.tests","ms":575,"line":"test field::electricity::tests::conduction_is_deterministic ... ok"},
+{"ch":"deck.tests","ms":575,"line":"test field::layer_stack_tests::delete_layer_clamps_active_index ... ok"},
+{"ch":"deck.tests","ms":576,"line":"test field::heat::tests::heat_crawls_half_the_sparks_pace_and_stone_insulates ... ok"},
+{"ch":"deck.tests","ms":576,"line":"test field::electricity::tests::the_wire_end_ignites_wood_and_stone_blocks_conduction ... ok"},
+{"ch":"deck.tests","ms":576,"line":"test field::electricity::tests::an_unfed_spark_fades_to_dark ... ok"},
+{"ch":"deck.tests","ms":576,"line":"test field::layer_stack_tests::delete_layer_never_empties_the_stack ... ok"},
+{"ch":"deck.tests","ms":576,"line":"test field::heat::tests::unfed_metal_cools_dark ... ok"},
+{"ch":"deck.tests","ms":576,"line":"test field::layer_stack_tests::flatten_to_rgba_applies_effective_coverage_from_opacity ... ok"},
+{"ch":"deck.tests","ms":576,"line":"test field::layer_stack_tests::flatten_to_rgba_lets_the_topmost_visible_painted_layer_win ... ok"},
+{"ch":"deck.tests","ms":576,"line":"test field::heat::tests::the_steel_pan_over_lava_lights_the_wood_on_top ... ok"},
+{"ch":"deck.tests","ms":576,"line":"test field::layer_stack_tests::add_layer_pushes_on_top_and_activates_it ... ok"},
+{"ch":"deck.tests","ms":576,"line":"test field::layer_stack_tests::move_layer_up_and_down_swap_order_and_track_active ... ok"},
+{"ch":"deck.tests","ms":576,"line":"test field::layer_stack_tests::toggle_visible_flips_the_flag_and_hides_from_flatten ... ok"},
+{"ch":"deck.tests","ms":578,"line":"test field::heat::tests::wind_leans_the_sandfall ... ok"},
+{"ch":"deck.tests","ms":578,"line":"test field::matter::tests::bloom_lifts_only_bright_regions_and_respects_gain_zero ... ok"},
+{"ch":"deck.tests","ms":578,"line":"test field::matter::tests::closed_world_still_boxes_byte_identical ... ok"},
+{"ch":"deck.tests","ms":578,"line":"test field::matter::tests::burnt_wood_becomes_charcoal_and_lava_is_eternal ... ok"},
+{"ch":"deck.tests","ms":579,"line":"test field::matter::tests::open_world_smoke_escapes_out_the_top ... ok"},
+{"ch":"deck.tests","ms":579,"line":"test field::matter::tests::open_world_sand_piles_on_a_painted_shelf ... ok"},
+{"ch":"deck.tests","ms":579,"line":"test field::matter::tests::resonance_rings_with_the_registry_physics ... ok"},
+{"ch":"deck.tests","ms":579,"line":"test field::matter::tests::fire_spreads_to_flammable_but_never_chains_in_one_tick ... ok"},
+{"ch":"deck.tests","ms":579,"line":"test field::matter::tests::open_world_water_pours_over_the_rim ... ok"},
+{"ch":"deck.tests","ms":579,"line":"test field::matter::tests::inert_stone_never_ignites ... ok"},
+{"ch":"deck.tests","ms":579,"line":"test field::matter::tests::sand_falls_one_cell_per_tick ... ok"},
+{"ch":"deck.tests","ms":579,"line":"test field::matter::tests::fire_exhales_smoke_that_rises_then_dissipates ... ok"},
+{"ch":"deck.tests","ms":586,"line":"test field::matter::tests::light_budget_shares_one_ceiling_never_stacks ... ok"},
+{"ch":"deck.tests","ms":586,"line":"test field::matter::tests::open_world_sand_falls_away_off_the_bottom ... ok"},
+{"ch":"deck.tests","ms":586,"line":"test field::reactions::tests::quench_water_on_lava_births_obsidian_and_steam ... ok"},
+{"ch":"deck.tests","ms":586,"line":"test field::reactions::tests::sand_beside_lava_vitrifies_to_glass ... ok"},
+{"ch":"deck.tests","ms":586,"line":"test field::matter::tests::sand_settles_to_rest_on_the_floor ... ok"},
+{"ch":"deck.tests","ms":586,"line":"test field::reactions::tests::snow_melts_beside_burning_wood_and_clay_fires_to_terracotta ... ok"},
+{"ch":"deck.tests","ms":586,"line":"test field::reactions::tests::granular_flag_still_reads_glass_as_solid ... ok"},
+{"ch":"deck.tests","ms":587,"line":"test field::reactions::tests::water_extinguishes_burning_wood_and_evaporates ... ok"},
+{"ch":"deck.tests","ms":587,"line":"test game::tests::a_failed_theft_heats_the_warrant_and_fires_the_cascade ... ok"},
+{"ch":"deck.tests","ms":587,"line":"test field::reactions::tests::the_full_field_chains_quench_across_ticks ... ok"},
+{"ch":"deck.tests","ms":587,"line":"test field::matter::tests::water_flows_laterally_when_stacked ... ok"},
+{"ch":"deck.tests","ms":587,"line":"test field::reactions::tests::one_reaction_per_cell_per_tick_and_deterministic_replay ... ok"},
+{"ch":"deck.tests","ms":587,"line":"test field::matter::tests::smoke_leaning_left_off_the_x0_wall_never_underflows ... ok"},
+{"ch":"deck.tests","ms":587,"line":"test game::tests::a_fight_victory_writes_a_real_kill_to_the_run_profile ... ok"},
+{"ch":"deck.tests","ms":587,"line":"test game::tests::brewing_falls_back_to_the_full_table_when_the_reagent_owns_no_brew ... ok"},
+{"ch":"deck.tests","ms":587,"line":"test game::tests::brewing_is_biased_by_the_nodes_dealt_reagent ... ok"},
+{"ch":"deck.tests","ms":587,"line":"test game::tests::camp_passes_the_night ... ok"},
+{"ch":"deck.tests","ms":587,"line":"test game::tests::cast_spell_advances_one_glyph_per_turn ... ok"},
+{"ch":"deck.tests","ms":587,"line":"test game::tests::casting_while_casting_is_refused ... ok"},
+{"ch":"deck.tests","ms":587,"line":"test game::tests::death_reseeds_and_keeps_xp ... ok"},
+{"ch":"deck.tests","ms":587,"line":"test game::tests::dying_writes_a_real_death_to_the_run_profile ... ok"},
+{"ch":"deck.tests","ms":587,"line":"test game::tests::delve_rare_encounter_speaks_hazard_and_heat ... ok"},
+{"ch":"deck.tests","ms":587,"line":"test game::tests::ecology_sieve_ticks_and_applies_births_each_command ... ok"},
+{"ch":"deck.tests","ms":588,"line":"test game::tests::identical_run_profiles_select_the_identical_warden_variant ... ok"},
+{"ch":"deck.tests","ms":588,"line":"test game::tests::kill_on_sight_closes_doors_and_heat_fades ... ok"},
+{"ch":"deck.tests","ms":588,"line":"test game::tests::law_clamp_holds_and_watch_line_stays_digit_free ... ok"},
+{"ch":"deck.tests","ms":588,"line":"test game::tests::look_offers_the_walk_and_new_verbs_answer ... ok"},
+{"ch":"deck.tests","ms":588,"line":"test game::tests::movement_interrupts_the_channel ... ok"},
+{"ch":"deck.tests","ms":588,"line":"test game::tests::oversleeping_past_the_ttl_is_risky ... ok"},
+{"ch":"deck.tests","ms":588,"line":"test game::tests::movement_lives_in_the_5d_word ... ok"},
+{"ch":"deck.tests","ms":588,"line":"test game::tests::process_line_returns_deterministic_response ... ok"},
+{"ch":"deck.tests","ms":588,"line":"test game::tests::every_content_verb_answers ... ok"},
+{"ch":"deck.tests","ms":588,"line":"test game::tests::refusal_out_of_range_speaks_and_does_not_panic ... ok"},
+{"ch":"deck.tests","ms":588,"line":"test game::tests::rename_biome_surfaces_in_look_off_town ... ok"},
+{"ch":"deck.tests","ms":588,"line":"test game::tests::rename_boss_surfaces_in_milestone ... ok"},
+{"ch":"deck.tests","ms":588,"line":"test game::tests::rename_faction_surfaces_in_talk ... ok"},
+{"ch":"deck.tests","ms":588,"line":"test game::tests::rename_pet_fish_brew_surfaces_in_their_verbs ... ok"},
+{"ch":"deck.tests","ms":589,"line":"test game::tests::rename_town_surfaces_in_look ... ok"},
+{"ch":"deck.tests","ms":589,"line":"test game::tests::reseed_accepts_the_interview_seed_and_keeps_xp ... ok"},
+{"ch":"deck.tests","ms":589,"line":"test game::tests::scope_matrix_node_operator_global ... ok"},
+{"ch":"deck.tests","ms":589,"line":"test game::tests::sheet_boxes_the_same_state_status_speaks ... ok"},
+{"ch":"deck.tests","ms":589,"line":"test game::tests::sleep_verb_stages_without_folding_the_journal ... ok"},
+{"ch":"deck.tests","ms":589,"line":"test game::tests::sleeping_twice_refuses ... ok"},
+{"ch":"deck.tests","ms":589,"line":"test game::tests::status_speaks_moon_account_and_shadow ... ok"},
+{"ch":"deck.tests","ms":589,"line":"test game::tests::the_abyss_gates_hold_and_vitality_speaks ... ok"},
+{"ch":"deck.tests","ms":589,"line":"test game::tests::the_birth_kit_is_dealt_and_deterministic ... ok"},
+{"ch":"deck.tests","ms":589,"line":"test game::tests::quit_saves_the_last_step ... ok"},
+{"ch":"deck.tests","ms":589,"line":"test game::tests::the_character_sheet_speaks_the_arts_and_use_trains_them ... ok"},
+{"ch":"deck.tests","ms":589,"line":"test game::tests::the_town_speaks_its_law_without_numbers ... ok"},
+{"ch":"deck.tests","ms":589,"line":"test game::tests::the_player_never_knows_they_are_making_a_mud ... ok"},
+{"ch":"deck.tests","ms":590,"line":"test game::tests::unknown_cast_word_is_refused ... ok"},
+{"ch":"deck.tests","ms":590,"line":"test game::tests::waking_inside_the_window_prints_a_worded_night_reply ... ok"},
+{"ch":"deck.tests","ms":590,"line":"test game::tests::waking_without_sleeping_refuses ... ok"},
+{"ch":"deck.tests","ms":590,"line":"test game::tests::weather_is_a_sensation_and_death_redeals_the_sky ... ok"},
+{"ch":"deck.tests","ms":590,"line":"test game::tests::weather_sieve_ticks_and_updates_history_each_command ... ok"},
+{"ch":"deck.tests","ms":590,"line":"test game::tests::xp_is_terminal_bytes_and_gates_name_bosses ... ok"},
+{"ch":"deck.tests","ms":590,"line":"test game::tests::witnessing_survives_the_reseed ... ok"},
+{"ch":"deck.tests","ms":590,"line":"test genesis::tests::anchors_obey_mask_and_lattice ... ok"},
+{"ch":"deck.tests","ms":590,"line":"test genesis::tests::discipline_rows_hold ... ok"},
+{"ch":"deck.tests","ms":590,"line":"test genesis::tests::genesis_is_deterministic_and_sovereign ... ok"},
+{"ch":"deck.tests","ms":590,"line":"test haunt::tests::aggression_level_clamps_0_to_10 ... ok"},
+{"ch":"deck.tests","ms":590,"line":"test haunt::tests::awareness_ladder_transitions_at_thresholds ... ok"},
+{"ch":"deck.tests","ms":590,"line":"test haunt::tests::codec_bijection_empty ... ok"},
+{"ch":"deck.tests","ms":590,"line":"test haunt::tests::codec_bijection_interior ... ok"},
+{"ch":"deck.tests","ms":591,"line":"test game::tests::the_beacon_rides_the_autosave ... ok"},
+{"ch":"deck.tests","ms":591,"line":"test haunt::tests::codec_bijection_max_entries ... ok"},
+{"ch":"deck.tests","ms":591,"line":"test game::tests::persistence_survives_a_fresh_game ... ok"},
+{"ch":"deck.tests","ms":591,"line":"test haunt::tests::different_scars_raise_awareness_differently ... ok"},
+{"ch":"deck.tests","ms":591,"line":"test haunt::tests::l18_sabotage_codec_magic_gate ... ok"},
+{"ch":"deck.tests","ms":591,"line":"test haunt::tests::pressure_q_clamps_0_to_10000 ... ok"},
+{"ch":"deck.tests","ms":591,"line":"test game::tests::milestone_fall_writes_an_academy_receipt ... ok"},
+{"ch":"deck.tests","ms":591,"line":"test haunt::tests::scar_accrual_determinism ... ok"},
+{"ch":"deck.tests","ms":591,"line":"test haunt::tests::vowless_confusion_overrides_the_ladder ... ok"},
+{"ch":"deck.tests","ms":591,"line":"test hermetics::astrolabe_modifier_tests::at_least_six_catalog_stars_carry_a_live_modifier ... ok"},
+{"ch":"deck.tests","ms":591,"line":"test hermetics::astrolabe_modifier_tests::clarity_carries_no_metal ... ok"},
+{"ch":"deck.tests","ms":591,"line":"test hermetics::astrolabe_modifier_tests::deneb_reads_vigor_plus_ten ... ok"},
+{"ch":"deck.tests","ms":591,"line":"test hermetics::astrolabe_modifier_tests::every_aligned_register_has_a_metal_colour ... ok"},
+{"ch":"deck.tests","ms":591,"line":"test hermetics::astrolabe_modifier_tests::the_shift_ops_are_integer_truncating ... ok"},
+{"ch":"deck.tests","ms":591,"line":"test hermetics::tests::an_art_boon_respects_the_skill_ceiling ... ok"},
+{"ch":"deck.tests","ms":591,"line":"test hermetics::tests::apply_natal_is_deterministic ... ok"},
+{"ch":"deck.tests","ms":591,"line":"test hermetics::tests::apply_natal_saturates_never_wraps ... ok"},
+{"ch":"deck.tests","ms":591,"line":"test hermetics::tests::boon_slots_are_in_range ... ok"},
+{"ch":"deck.tests","ms":592,"line":"test hermetics::tests::clarity_is_the_eighth_and_rules_no_planet ... ok"},
+{"ch":"deck.tests","ms":592,"line":"test hermetics::tests::every_star_moves_something ... ok"},
+{"ch":"deck.tests","ms":592,"line":"test hermetics::tests::law_formulas_are_integer_exact ... ok"},
+{"ch":"deck.tests","ms":592,"line":"test hermetics::tests::natal_survives_the_save_codec ... ok"},
+{"ch":"deck.tests","ms":592,"line":"test hermetics::tests::reagent_frequencies_match_the_lore ... ok"},
+{"ch":"deck.tests","ms":592,"line":"test hermetics::tests::sirius_grants_a_visible_vigor_boon ... ok"},
+{"ch":"deck.tests","ms":592,"line":"test hermetics::tests::spine_is_exactly_seven_and_unique ... ok"},
+{"ch":"deck.tests","ms":592,"line":"test hermetics::tests::the_bedrock_correspondences_hold ... ok"},
+{"ch":"deck.tests","ms":592,"line":"test hermetics::tests::the_connection_roll_is_the_seed ... ok"},
+{"ch":"deck.tests","ms":592,"line":"test hermetics::tests::the_deal_honours_the_register_law ... ok"},
+{"ch":"deck.tests","ms":592,"line":"test ironroot::affect::tests::a_crossed_state_rides_entropy_and_cannot_be_loved_away ... ok"},
+{"ch":"deck.tests","ms":592,"line":"test ironroot::affect::tests::a_crossing_is_exactly_zero_below_its_onset_share_and_accelerates_above ... ok"},
+{"ch":"deck.tests","ms":592,"line":"test hermetics::tests::the_wheel_has_no_dead_rows ... ok"},
+{"ch":"deck.tests","ms":592,"line":"test ironroot::affect::tests::a_deep_bond_outlasts_a_new_one_from_the_same_wound ... ok"},
+{"ch":"deck.tests","ms":592,"line":"test ironroot::affect::tests::a_memory_channel_that_never_fades_is_refused ... ok"},
+{"ch":"deck.tests","ms":592,"line":"test ironroot::affect::tests::a_field_either_settles_exactly_or_says_it_did_not ... ok"},
+{"ch":"deck.tests","ms":592,"line":"test ironroot::affect::tests::a_sampled_drive_is_stateless_and_inside_its_envelope ... ok"},
+{"ch":"deck.tests","ms":592,"line":"test ironroot::affect::tests::a_slight_suffered_once_fades_but_a_habit_settles ... ok"},
+{"ch":"deck.tests","ms":593,"line":"test ironroot::affect::tests::debt_rides_entropy_and_never_binds ... ok"},
+{"ch":"deck.tests","ms":593,"line":"test ironroot::affect::tests::every_claim_survives_the_coupling ... ok"},
+{"ch":"deck.tests","ms":593,"line":"test ironroot::affect::tests::every_crossing_goes_deaf_to_its_own_remedy ... ok"},
+{"ch":"deck.tests","ms":593,"line":"test ironroot::affect::tests::grievance_eats_trust_through_the_coupling ... ok"},
+{"ch":"deck.tests","ms":593,"line":"test ironroot::affect::tests::history_buoys_a_bond_against_the_leak_but_never_cancels_it ... ok"},
+{"ch":"deck.tests","ms":593,"line":"test ironroot::affect::tests::ignorance_crosses_into_denial_on_the_same_law_as_fear ... ok"},
+{"ch":"deck.tests","ms":593,"line":"test ironroot::affect::tests::the_claim_table_and_the_matrix_are_the_same_fact ... ok"},
+{"ch":"deck.tests","ms":593,"line":"test ironroot::affect::tests::the_coupling_is_a_bijection_between_drive_and_settled_field ... ok"},
+{"ch":"deck.tests","ms":593,"line":"test ironroot::affect::tests::the_house_coupling_converges_and_a_runaway_is_refused ... ok"},
+{"ch":"deck.tests","ms":593,"line":"test ironroot::affect::tests::the_mapping_reaches_all_three_dispositions ... ok"},
+{"ch":"deck.tests","ms":593,"line":"test ironroot::affect::tests::the_rooms_haunt_adds_to_entropy_and_is_bounded ... ok"},
+{"ch":"deck.tests","ms":593,"line":"test ironroot::affect::tests::the_whole_path_reaches_a_cry ... ok"},
+{"ch":"deck.tests","ms":594,"line":"test ironroot::affect::tests::trust_damps_fear_but_cannot_reach_terror ... ok"},
+{"ch":"deck.tests","ms":594,"line":"test ironroot::audio_bridge::tests::brand_and_era_pass_through ... ok"},
+{"ch":"deck.tests","ms":595,"line":"test ironroot::audio_bridge::tests::computation_is_deterministic ... ok"},
+{"ch":"deck.tests","ms":595,"line":"test ironroot::audio_bridge::tests::lightning_passes_through_from_weather ... ok"},
+{"ch":"deck.tests","ms":595,"line":"test ironroot::affect::tests::every_entry_moves_the_settled_field ... ok"},
+{"ch":"deck.tests","ms":595,"line":"test ironroot::audio_bridge::tests::permyriad_outputs_never_exceed_10000 ... ok"},
+{"ch":"deck.tests","ms":596,"line":"test ironroot::audio_bridge::tests::pitch_permyriad_stays_in_range ... ok"},
+{"ch":"deck.tests","ms":596,"line":"test ironroot::audio_bridge::tests::tick_seed_is_master_seed_plus_tick_count ... ok"},
+{"ch":"deck.census","ms":596,"line":"  trust      <- obligation     1000          4.26%          5.51%       11673              3614"},
+{"ch":"deck.tests","ms":596,"line":"test ironroot::bell_pit::tests::accepting_the_bell_arrives_at_a_real_ending ... ok"},
+{"ch":"deck.tests","ms":596,"line":"test ironroot::audio_bridge::tests::zone_element_truncates_at_8_bytes_no_alloc ... ok"},
+{"ch":"deck.tests","ms":596,"line":"test ironroot::bell_pit::tests::bell_pit_event_state_carries_its_cited_angles ... ok"},
+{"ch":"deck.tests","ms":596,"line":"test ironroot::affect::tests::the_span_column_shows_every_entry_doing_work_in_the_field ... ok"},
+{"ch":"deck.tests","ms":596,"line":"test ironroot::bell_pit::tests::root_masks_branch_is_locked_until_the_tag_is_held ... ok"},
+{"ch":"deck.tests","ms":599,"line":"test ironroot::bell_pit::tests::the_dialogue_graph_has_no_dangling_edges ... ok"},
+{"ch":"deck.tests","ms":599,"line":"test ironroot::bell_pit::tests::the_bell_pit_resolves_through_the_real_entry_point ... ok"},
+{"ch":"deck.tests","ms":599,"line":"test ironroot::bell_pit::tests::the_bell_pit_routes_live_through_the_resolution_router ... ok"},
+{"ch":"deck.tests","ms":610,"line":"test ironroot::affect::tests::the_coupling_is_scale_free_because_it_has_no_capacity_anywhere ... ok"},
+{"ch":"deck.tests","ms":610,"line":"test ironroot::bell_pit::tests::the_zone_carries_all_four_trigon_trials_in_order ... ok"},
+{"ch":"deck.tests","ms":610,"line":"test ironroot::bell_pit::tests::the_dialogue_graph_has_no_orphans ... ok"},
+{"ch":"deck.tests","ms":615,"line":"test ironroot::boss_sieve::tests::each_trigger_alone_selects_its_own_variant ... ok"},
+{"ch":"deck.tests","ms":615,"line":"test ironroot::boss_sieve::tests::a_fresh_profile_selects_the_first_listed_variant ... ok"},
+{"ch":"deck.tests","ms":615,"line":"test ironroot::boss_sieve::tests::all_eleven_manifestations_are_distinct ... ok"},
+{"ch":"deck.tests","ms":618,"line":"test ironroot::boss_sieve::tests::every_bell_warden_variant_has_a_unique_id_and_trigger ... ok"},
+{"ch":"deck.tests","ms":618,"line":"test ironroot::boss_sieve::tests::hardness_examples_all_name_a_behavior_and_consequence ... ok"},
+{"ch":"deck.tests","ms":618,"line":"test ironroot::boss_sieve::tests::just_under_threshold_never_triggers ... ok"},
+{"ch":"deck.tests","ms":618,"line":"test ironroot::boss_sieve::tests::an_earlier_trigger_wins_over_a_later_one ... ok"},
+{"ch":"deck.tests","ms":618,"line":"test ironroot::boss_sieve::tests::concession_examples_all_name_a_real_boss_and_condition ... ok"},
+{"ch":"deck.tests","ms":618,"line":"test ironroot::brand::tests::brand_navigation_wraps_within_bounds ... ok"},
+{"ch":"deck.tests","ms":619,"line":"test ironroot::brand::tests::attunement_gates_transformation ... ok"},
+{"ch":"deck.tests","ms":619,"line":"test ironroot::brand::tests::corruption_saturates_at_255 ... ok"},
+{"ch":"deck.tests","ms":619,"line":"test ironroot::brand::tests::brand_roster_is_unique_and_trigons_are_canon ... ok"},
+{"ch":"deck.tests","ms":619,"line":"test ironroot::brand::tests::forced_transform_at_255 ... ok"},
+{"ch":"deck.tests","ms":619,"line":"test ironroot::boss_sieve::tests::selection_is_deterministic ... ok"},
+{"ch":"deck.tests","ms":619,"line":"test ironroot::boss_sieve::tests::the_thirteen_bells_warden_is_the_one_that_answers_the_bell ... ok"},
+{"ch":"deck.tests","ms":619,"line":"test ironroot::brand::tests::tithe_decays_over_time ... ok"},
+{"ch":"deck.tests","ms":619,"line":"test ironroot::brand::tests::starvation_after_600_ticks ... ok"},
+{"ch":"deck.tests","ms":619,"line":"test ironroot::brand::tests::instability_at_128 ... ok"},
+{"ch":"deck.tests","ms":620,"line":"test ironroot::affect::tests::the_sim_reads_the_same_disposition_the_game_does ... ok"},
+{"ch":"deck.tests","ms":621,"line":"test ironroot::brand::tests::tithe_manifests_branded_at_255 ... ok"},
+{"ch":"deck.tests","ms":621,"line":"test ironroot::brand::tests::tithe_rises_on_kill ... ok"},
+{"ch":"deck.tests","ms":621,"line":"test ironroot::consequence::tests::equal_authority_keeps_input_order_for_determinism ... ok"},
+{"ch":"deck.tests","ms":621,"line":"test ironroot::consequence::tests::effective_authority_sums_every_named_input ... ok"},
+{"ch":"deck.tests","ms":622,"line":"test ironroot::consequence::tests::superior_dexter_uses_and_tas_de_charge_uses_are_the_cited_counts ... ok"},
+{"ch":"deck.tests","ms":622,"line":"test ironroot::consequence::tests::three_or_more_sources_converge_into_one_apex_query ... ok"},
+{"ch":"deck.tests","ms":622,"line":"test ironroot::brand::tests::projected_equilibrium_matches_the_leaky_permyriad_resolvent_directly ... ok"},
+{"ch":"deck.tests","ms":622,"line":"test ironroot::cyoa::tests::cyoa_arc_progression_gates_the_climax ... ok"},
+{"ch":"deck.tests","ms":624,"line":"test ironroot::cyoa::tests::cyoa_exclusion_and_visits_prune_the_sieve ... ok"},
+{"ch":"deck.tests","ms":624,"line":"test ironroot::brand::tests::quincunx_bijection_is_complete ... ok"},
+{"ch":"deck.tests","ms":624,"line":"test ironroot::consequence::tests::fewer_than_three_sources_do_not_converge ... ok"},
+{"ch":"deck.tests","ms":624,"line":"test ironroot::consequence::tests::highest_effective_authority_resolves_first ... ok"},
+{"ch":"deck.tests","ms":628,"line":"test ironroot::dialogue::graph_tests::a_choice_arrives_at_the_node_it_names ... ok"},
+{"ch":"deck.tests","ms":628,"line":"test ironroot::dialogue::graph_tests::a_dangling_edge_is_a_compile_error_before_the_conversation_plays ... ok"},
+{"ch":"deck.tests","ms":628,"line":"test ironroot::cyoa::tests::cyoa_vocabulary_counts_and_labels ... ok"},
+{"ch":"deck.tests","ms":629,"line":"test ironroot::cyoa::tests::cyoa_selection_is_seed_stable ... ok"},
+{"ch":"deck.tests","ms":629,"line":"test ironroot::dialogue::graph_tests::a_lock_demands_every_tag_and_an_open_door_needs_none ... ok"},
+{"ch":"deck.tests","ms":629,"line":"test ironroot::dialogue::graph_tests::a_filled_adventure_walks_from_root_to_an_ending ... ok"},
+{"ch":"deck.tests","ms":629,"line":"test ironroot::cyoa::tests::cyoa_origin_offers_exactly_the_seven_arc_openings ... ok"},
+{"ch":"deck.tests","ms":629,"line":"test ironroot::cyoa::tests::cyoa_scene_and_fact_ids_are_stable_and_unique ... ok"},
+{"ch":"deck.tests","ms":629,"line":"test ironroot::dialogue::graph_tests::a_node_nothing_points_at_is_an_orphan ... ok"},
+{"ch":"deck.tests","ms":629,"line":"test ironroot::dialogue::graph_tests::an_empty_bank_leaves_its_token_standing_rather_than_blank ... ok"},
+{"ch":"deck.tests","ms":629,"line":"test ironroot::dialogue::graph_tests::an_unknown_entry_point_is_refused_not_shown_blank ... ok"},
+{"ch":"deck.tests","ms":629,"line":"test ironroot::dialogue::graph_tests::choosing_before_the_reveal_finishes_arrives_nowhere ... ok"},
+{"ch":"deck.tests","ms":629,"line":"test ironroot::dialogue::graph_tests::filling_swaps_words_and_never_the_shape ... ok"},
+{"ch":"deck.tests","ms":629,"line":"test ironroot::dialogue::graph_tests::one_seed_retells_the_same_story_and_another_retells_a_different_one ... ok"},
+{"ch":"deck.tests","ms":629,"line":"test ironroot::dialogue::graph_tests::the_madlib_rewrites_labels_without_unlocking_a_door ... ok"},
+{"ch":"deck.tests","ms":629,"line":"test ironroot::dialogue::graph_tests::the_walk_is_deterministic_not_hash_order ... ok"},
+{"ch":"deck.tests","ms":629,"line":"test ironroot::dialogue::tests::choices_hidden_until_finished ... ok"},
+{"ch":"deck.tests","ms":630,"line":"test ironroot::dialogue::tests::dismiss_clears_state ... ok"},
+{"ch":"deck.tests","ms":630,"line":"test ironroot::dialogue::tests::fill_madlib_trit_grades_a_speaking_node_and_leaves_an_unspoken_one_neutral ... ok"},
+{"ch":"deck.tests","ms":630,"line":"test ironroot::dialogue::tests::inactive_by_default ... ok"},
+{"ch":"deck.tests","ms":630,"line":"test ironroot::dialogue::tests::reveal_is_tick_based ... ok"},
+{"ch":"deck.tests","ms":630,"line":"test ironroot::dialogue::tests::select_returns_next_node ... ok"},
+{"ch":"deck.tests","ms":630,"line":"test ironroot::discipline_overlay::tests::all_discipline_entries_have_operator_scope ... ok"},
+{"ch":"deck.tests","ms":630,"line":"test ironroot::discipline_overlay::tests::apply_discipline_overlay_adds_entries_to_ledger ... ok"},
+{"ch":"deck.tests","ms":630,"line":"test ironroot::discipline_overlay::tests::discipline_choice_zero_applies_edge_overlay ... ok"},
+{"ch":"deck.tests","ms":630,"line":"test ironroot::discipline_overlay::tests::discipline_entries_apply_correct_stat_values ... ok"},
+{"ch":"deck.tests","ms":630,"line":"test ironroot::discipline_overlay::tests::discipline_entries_creates_eight_entries ... ok"},
+{"ch":"deck.tests","ms":630,"line":"test ironroot::discipline_overlay::tests::edge_discipline_at_birth_has_correct_stats ... ok"},
+{"ch":"deck.tests","ms":630,"line":"test ironroot::discipline_overlay::tests::edge_discipline_entries_have_correct_flavor ... ok"},
+{"ch":"deck.tests","ms":630,"line":"test ironroot::lexicon::tests::a_corpus_with_a_repeated_digest_refuses_as_undeduplicated ... ok"},
+{"ch":"deck.tests","ms":630,"line":"test ironroot::lexicon::tests::a_dictionary_lands_each_word_in_its_own_trit_bank ... ok"},
+{"ch":"deck.tests","ms":630,"line":"test ironroot::lexicon::tests::a_merge_carries_every_refusal_its_sources_would_raise ... ok"},
+{"ch":"deck.tests","ms":630,"line":"test ironroot::lexicon::tests::a_word_carrying_a_slot_token_refuses_before_it_can_recurse ... ok"},
+{"ch":"deck.tests","ms":630,"line":"test ironroot::lexicon::tests::a_written_dictionary_reads_back_to_the_same_banks ... ok"},
+{"ch":"deck.tests","ms":630,"line":"test ironroot::lexicon::tests::an_unknown_class_or_register_refuses_with_its_line ... ok"},
+{"ch":"deck.tests","ms":631,"line":"test ironroot::lexicon::tests::an_over_long_or_empty_word_refuses ... ok"},
+{"ch":"deck.tests","ms":631,"line":"test ironroot::lexicon::tests::empty_banks_names_every_gap ... ok"},
+{"ch":"deck.tests","ms":631,"line":"test ironroot::lexicon::tests::merging_unions_where_reading_one_file_would_refuse ... ok"},
+{"ch":"deck.tests","ms":631,"line":"test ironroot::lexicon::tests::the_same_word_twice_in_one_bank_refuses_but_across_registers_stands ... ok"},
+{"ch":"deck.tests","ms":631,"line":"test ironroot::lexicon::tests::the_three_cries_grade_to_the_three_trits ... ok"},
+{"ch":"deck.tests","ms":631,"line":"test ironroot::platform::parallax_tests::spirit_keeps_the_shared_scroll_and_depth_ladder ... ok"},
+{"ch":"deck.tests","ms":631,"line":"test ironroot::platform::parallax_tests::spirit_resolves_its_own_backplates_not_the_void ... ok"},
+{"ch":"deck.tests","ms":631,"line":"test ironroot::platform::parallax_tests::unknown_elements_still_reach_the_void ... ok"},
+{"ch":"deck.tests","ms":631,"line":"test ironroot::platform::tests::different_seeds_different_layouts ... ok"},
+{"ch":"deck.tests","ms":631,"line":"test ironroot::platform::tests::layout_from_cartridge_has_ground ... ok"},
+{"ch":"deck.tests","ms":631,"line":"test ironroot::platform::tests::layout_has_triggers ... ok"},
+{"ch":"deck.tests","ms":631,"line":"test ironroot::platform::tests::layout_is_deterministic ... ok"},
+{"ch":"deck.tests","ms":631,"line":"test ironroot::platform::tests::layout_spawns_enemies ... ok"},
+{"ch":"deck.tests","ms":631,"line":"test ironroot::platform::tests::one_way_platforms_are_walls ... ok"},
+{"ch":"deck.tests","ms":631,"line":"test ironroot::platform::tests::parallax_has_4_layers ... ok"},
+{"ch":"deck.tests","ms":631,"line":"test ironroot::platform::tests::platform_material_friction ... ok"},
+{"ch":"deck.tests","ms":633,"line":"test ironroot::platform::tests::scene_entities_unmatched_enemy_id_falls_back_to_reference_human ... ok"},
+{"ch":"deck.tests","ms":642,"line":"test ironroot::affect::tests::a_model_does_not_diverge_from_itself ... ok"},
+{"ch":"deck.tests","ms":642,"line":"test ironroot::platform::tests::scene_entities_dummy_stats_come_from_derive_stats ... ok"},
+{"ch":"deck.tests","ms":642,"line":"test ironroot::platform::tests::scene_entities_enemies_from_spawns ... ok"},
+{"ch":"deck.tests","ms":642,"line":"test ironroot::platform::tests::surface_y_finds_ground ... ok"},
+{"ch":"deck.tests","ms":642,"line":"test ironroot::platform::tests::scene_entities_has_player_and_ground ... ok"},
+{"ch":"deck.tests","ms":642,"line":"test ironroot::platform::tests::scene_entities_player_on_ground ... ok"},
+{"ch":"deck.tests","ms":642,"line":"test ironroot::platform::tests::trigger_brand_spike_corrupts ... ok"},
+{"ch":"deck.tests","ms":642,"line":"test ironroot::platform::tests::trigger_dialogue_starts ... ok"},
+{"ch":"deck.tests","ms":643,"line":"test ironroot::platform::tests::void_platform_crumbles ... ok"},
+{"ch":"deck.tests","ms":643,"line":"test ironroot::platform::tests::zone_phase_carries_fields_the_old_stand_in_could_not ... ok"},
+{"ch":"deck.tests","ms":643,"line":"test ironroot::platform::tests::trigger_fires_once ... ok"},
+{"ch":"deck.tests","ms":643,"line":"test ironroot::run_profile::tests::a_between_wave_choice_writes_to_the_profile ... ok"},
+{"ch":"deck.tests","ms":643,"line":"test ironroot::platform::tests::trigger_outside_misses ... ok"},
+{"ch":"deck.tests","ms":643,"line":"test ironroot::run_profile::tests::a_fresh_profile_is_all_zero ... ok"},
+{"ch":"deck.tests","ms":643,"line":"test ironroot::run_profile::tests::each_recorder_advances_only_its_own_field ... ok"},
+{"ch":"deck.tests","ms":643,"line":"test ironroot::run_profile::tests::recorders_saturate_instead_of_wrapping ... ok"},
+{"ch":"deck.tests","ms":644,"line":"test ironroot::platform::tests::trigger_tithe_checkpoint_reduces_debt ... ok"},
+{"ch":"deck.tests","ms":644,"line":"test ironroot::platform::tests::trigger_repeatable ... ok"},
+{"ch":"deck.tests","ms":644,"line":"test ironroot::scene_loader::tests::dummy_lands_on_ground ... ok"},
+{"ch":"deck.tests","ms":644,"line":"test ironroot::scene_loader::tests::player_falls_to_ground ... ok"},
+{"ch":"deck.tests","ms":644,"line":"test ironroot::session::tests::cloning_preserves_state ... ok"},
+{"ch":"deck.tests","ms":645,"line":"test ironroot::session::tests::new_session_sets_seed_and_active ... ok"},
+{"ch":"deck.tests","ms":647,"line":"test ironroot::scene_loader::tests::player_jumps ... ok"},
+{"ch":"deck.tests","ms":647,"line":"test ironroot::scene_loader::tests::player_moves_left_right ... ok"},
+{"ch":"deck.tests","ms":647,"line":"test ironroot::session::tests::rng_is_deterministic_per_tick ... ok"},
+{"ch":"deck.tests","ms":648,"line":"test ironroot::session::tests::tick_is_noop_when_inactive ... ok"},
+{"ch":"deck.tests","ms":648,"line":"test ironroot::tags::tests::all_seven_source_tags_are_present_and_distinct ... ok"},
+{"ch":"deck.tests","ms":648,"line":"test ironroot::session::tests::tick_advances_count_when_active ... ok"},
+{"ch":"deck.tests","ms":648,"line":"test ironroot::trit_grammar::tests::fill_template_trit_grades_each_class_by_its_own_trit ... ok"},
+{"ch":"deck.tests","ms":648,"line":"test ironroot::trit_grammar::tests::balanced_add_is_total_and_matches_the_group_table ... ok"},
+{"ch":"deck.tests","ms":648,"line":"test ironroot::trit_grammar::tests::fill_template_trit_leaves_slot_visible_on_empty_bank_at_that_trit ... ok"},
+{"ch":"deck.tests","ms":648,"line":"test ironroot::trit_grammar::tests::inanimate_entity_reads_neutral_unconditionally ... ok"},
+{"ch":"deck.tests","ms":648,"line":"test ironroot::tags::tests::tag_names_match_the_design_packet_verbatim ... ok"},
+{"ch":"deck.tests","ms":649,"line":"test ironroot::trit_grammar::tests::inversion_is_exactly_the_lattice_corner ... ok"},
+{"ch":"deck.tests","ms":649,"line":"test ironroot::trit_grammar::tests::quantize_disposition_is_scale_free ... ok"},
+{"ch":"deck.tests","ms":649,"line":"test ironroot::tags::tests::every_tag_name_carries_the_src_prefix ... ok"},
+{"ch":"deck.tests","ms":649,"line":"test ironroot::trit_grammar::tests::a_reading_is_a_direction_and_survives_the_round_trip ... ok"},
+{"ch":"deck.tests","ms":649,"line":"test ironroot::trit_grammar::tests::quantize_disposition_reads_banded_direction_cosine ... ok"},
+{"ch":"deck.tests","ms":649,"line":"test ironroot::trit_grammar::tests::quantize_lineage_depth_buckets_hops_and_treats_none_as_deepest ... ok"},
+{"ch":"deck.tests","ms":649,"line":"test ironroot::trit_grammar::tests::animate_entity_reads_a_live_graded_triple ... ok"},
+{"ch":"deck.tests","ms":649,"line":"test ironroot::trit_grammar::tests::ta_zero_row_is_the_mutual_inverse_pair_plus_fixed_point ... ok"},
+{"ch":"deck.tests","ms":650,"line":"test ironroot::trit_grammar::tests::the_law_reaches_nine_of_twenty_seven_states_and_never_a_face ... ok"},
+{"ch":"deck.tests","ms":650,"line":"test ironroot::trit_grammar::tests::the_neutral_reading_is_the_refused_origin ... ok"},
+{"ch":"deck.tests","ms":650,"line":"test ironroot::trit_grammar::tests::the_quantizer_is_exactly_a_band_over_the_cosine ... ok"},
+{"ch":"deck.tests","ms":650,"line":"test ironroot::affect::tests::a_census_is_the_same_however_it_is_split ... ok"},
+{"ch":"deck.tests","ms":650,"line":"test ironroot::weather_state::tests::fire_reduced_in_rain ... ok"},
+{"ch":"deck.tests","ms":650,"line":"test ironroot::weather_state::tests::frozen_can_snow ... ok"},
+{"ch":"deck.tests","ms":650,"line":"test ironroot::weather_state::tests::lerp_moves_toward_target ... ok"},
+{"ch":"deck.tests","ms":650,"line":"test ironroot::weather_state::tests::golden_weather_is_mild ... ok"},
+{"ch":"deck.tests","ms":650,"line":"test ironroot::weather_state::tests::moon_phase_cycles ... ok"},
+{"ch":"deck.tests","ms":650,"line":"test ironroot::weather_state::tests::rain_helps_stealth ... ok"},
+{"ch":"deck.tests","ms":650,"line":"test ironroot::weather_state::tests::snow_slows_movement ... ok"},
+{"ch":"deck.tests","ms":650,"line":"test ironroot::weather_state::tests::void_has_high_fog_chance ... ok"},
+{"ch":"deck.tests","ms":650,"line":"test ironroot::weather_state::tests::visibility_reduced_in_fog ... ok"},
+{"ch":"deck.tests","ms":650,"line":"test itemforge::tests::a_lane_is_capped_in_both_directions ... ok"},
+{"ch":"deck.tests","ms":651,"line":"test itemforge::tests::fae_pressure_follows_the_player_across_a_reseed ... ok"},
+{"ch":"deck.tests","ms":651,"line":"test itemforge::tests::item_locked_band_is_exactly_thirteen_and_gates_composition ... ok"},
+{"ch":"deck.tests","ms":651,"line":"test itemforge::tests::every_fae_outcome_moves_the_standing_pressure ... ok"},
+{"ch":"deck.tests","ms":651,"line":"test itemforge::tests::boss_gate_has_thirteen_entries_and_refuses_out_of_range ... ok"},
+{"ch":"deck.tests","ms":651,"line":"test itemforge::tests::mint_item_id_increments_and_round_trips_through_a_real_ledger ... ok"},
+{"ch":"deck.tests","ms":651,"line":"test itemforge::tests::pressure_lanes_sit_above_every_mintable_id ... ok"},
+{"ch":"deck.tests","ms":651,"line":"test itemforge::tests::named_pop_is_deterministic_and_ticks_change_it ... ok"},
+{"ch":"deck.tests","ms":651,"line":"test itemforge::tests::rarity_bands_sum_to_ten_thousand ... ok"},
+{"ch":"deck.tests","ms":651,"line":"test itemforge::tests::refusing_walks_the_pressure_back_down ... ok"},
+{"ch":"deck.tests","ms":651,"line":"test itemforge::tests::provenance_covers_its_range_with_no_panic ... ok"},
+{"ch":"deck.tests","ms":651,"line":"test itemforge::tests::repeated_acquisition_accumulates_rather_than_replacing ... ok"},
+{"ch":"deck.tests","ms":651,"line":"test itemforge::tests::spoken_lines_carry_no_digits ... ok"},
+{"ch":"deck.tests","ms":651,"line":"test itemforge::tests::the_vocabulary_fits_the_trit_exponential ... ok"},
+{"ch":"deck.tests","ms":651,"line":"test itemforge::tests::rarity_distribution_over_100k_rolls_matches_permyriad_within_10_percent ... ok"},
+{"ch":"deck.tests","ms":651,"line":"test live::tests::a_resolution_changes_the_shadow_word_on_the_glass ... ok"},
+{"ch":"deck.tests","ms":651,"line":"test ironroot::affect::tests::crossings_gate_on_share_not_scale ... ok"},
+{"ch":"deck.tests","ms":652,"line":"test live::tests::hue_and_vibe_are_deterministic_and_hue_rgb_is_core ... ok"},
+{"ch":"deck.tests","ms":652,"line":"test live::tests::body_shape_is_dumb_split_parseable ... ok"},
+{"ch":"deck.tests","ms":652,"line":"test live::tests::no_cart_words_in_body ... ok"},
+{"ch":"deck.tests","ms":652,"line":"test live::tests::live_path_sits_beside_the_save ... ok"},
+{"ch":"deck.tests","ms":652,"line":"test live_encounter::tests::range_check_uses_squared_distance ... ok"},
+{"ch":"deck.tests","ms":652,"line":"test live_encounter::tests::standard_parry_when_parry_pressed_too_late ... ok"},
+{"ch":"deck.tests","ms":652,"line":"test live::tests::shadow_word_climbs_the_ladder_and_saturates ... ok"},
+{"ch":"deck.tests","ms":652,"line":"test live::tests::standing_word_is_total_over_all_tiers ... ok"},
+{"ch":"deck.tests","ms":652,"line":"test live_encounter::tests::multiple_attacks_with_parries_between ... ok"},
+{"ch":"deck.tests","ms":652,"line":"test live_encounter::tests::new_creates_encounter_with_default_resonance_pairing ... ok"},
+{"ch":"deck.tests","ms":653,"line":"test live::tests::atomic_write_replaces_and_leaves_no_tmp ... ok"},
+{"ch":"deck.tests","ms":653,"line":"test live_encounter::tests::tick_returns_noop_before_attack_period_elapses ... ok"},
+{"ch":"deck.tests","ms":653,"line":"test live_encounter::tests::tick_returns_parried_perfect_when_parry_pressed_1_tick_before_attack ... ok"},
+{"ch":"deck.tests","ms":653,"line":"test magic::loadout::tests::a_feminine_fireball_is_not_a_masculine_one ... ok"},
+{"ch":"deck.tests","ms":653,"line":"test live_encounter::tests::tick_resets_counter_on_attack_fired ... ok"},
+{"ch":"deck.tests","ms":653,"line":"test magic::loadout::tests::coloring_never_breaks_the_floor_or_the_room ... ok"},
+{"ch":"deck.tests","ms":653,"line":"test live_encounter::tests::tick_returns_attack_missed_when_player_out_of_range ... ok"},
+{"ch":"deck.tests","ms":653,"line":"test live_encounter::tests::tick_returns_parried_perfect_when_parry_pressed_before_attack ... ok"},
+{"ch":"deck.tests","ms":653,"line":"test live_encounter::tests::on_parry_pressed_records_activation_tick ... ok"},
+{"ch":"deck.tests","ms":653,"line":"test live_encounter::tests::tick_returns_parried_when_in_range_no_parry_pressed ... ok"},
+{"ch":"deck.tests","ms":653,"line":"test live_encounter::tests::new_creates_encounter_with_sensible_defaults ... ok"},
+{"ch":"deck.tests","ms":653,"line":"test magic::loadout::tests::currents_and_bar_ride_the_ledger_round_trip ... ok"},
+{"ch":"deck.tests","ms":653,"line":"test magic::loadout::tests::every_pole_pair_is_a_distinct_currents ... ok"},
+{"ch":"deck.tests","ms":654,"line":"test magic::loadout::tests::talent_names_resolve_case_blind_and_strangers_refuse ... ok"},
+{"ch":"deck.tests","ms":654,"line":"test magic::tests::a_body_that_lost_the_lane_cannot_reach_through_it ... ok"},
+{"ch":"deck.tests","ms":654,"line":"test magic::tests::a_v4_save_decodes_mortal_and_silent_and_corrupt_forms_refuse ... ok"},
+{"ch":"deck.tests","ms":654,"line":"test magic::tests::an_empty_ledger_changes_nothing_about_the_senses ... ok"},
+{"ch":"deck.tests","ms":654,"line":"test magic::tests::an_untaught_word_is_not_a_cast ... ok"},
+{"ch":"deck.tests","ms":654,"line":"test magic::tests::casting_twice_without_settling_costs_more ... ok"},
+{"ch":"deck.tests","ms":654,"line":"test magic::tests::every_canon_word_sings_and_lands_in_its_own_school ... ok"},
+{"ch":"deck.tests","ms":654,"line":"test magic::tests::every_school_owns_one_war_word ... ok"},
+{"ch":"deck.tests","ms":654,"line":"test magic::tests::every_school_reads_exactly_one_faculty_and_no_two_share ... ok"},
+{"ch":"deck.tests","ms":654,"line":"test magic::tests::no_canon_word_is_free_to_sing ... ok"},
+{"ch":"deck.tests","ms":654,"line":"test magic::tests::no_single_pressure_lane_carries_the_whole_fold ... ok"},
+{"ch":"deck.tests","ms":654,"line":"test magic::tests::senses_derive_and_carried_noise_rides_the_save ... ok"},
+{"ch":"deck.tests","ms":654,"line":"test magic::tests::singing_costs_you_the_room ... ok"},
+{"ch":"deck.tests","ms":654,"line":"test magic::tests::stealing_mutes_the_room_and_refusing_buys_it_back ... ok"},
+{"ch":"deck.tests","ms":654,"line":"test magic::tests::the_birth_school_gifts_five_words_and_they_sing ... ok"},
+{"ch":"deck.tests","ms":654,"line":"test magic::tests::the_cost_rises_with_the_note ... ok"},
+{"ch":"deck.tests","ms":654,"line":"test magic::tests::the_first_cast_is_believed_and_wisdom_is_the_thief ... ok"},
+{"ch":"deck.tests","ms":654,"line":"test magic::tests::the_same_word_in_the_same_body_casts_the_same_forever ... ok"},
+{"ch":"deck.tests","ms":656,"line":"test magic::umwelt::tests::a_bad_actor_can_take_it_all ... ok"},
+{"ch":"deck.tests","ms":656,"line":"test magic::umwelt::tests::a_blank_body_sits_at_the_floor ... ok"},
+{"ch":"deck.tests","ms":656,"line":"test magic::tests::the_trade_tier_carries_rights_and_a_faster_hand ... ok"},
+{"ch":"deck.tests","ms":656,"line":"test magic::tests::worded_ladders_hold_no_digits ... ok"},
+{"ch":"deck.tests","ms":665,"line":"test magic::umwelt::tests::a_roaring_body_is_harder_to_find_than_a_grunting_one ... ok"},
+{"ch":"deck.tests","ms":665,"line":"test magic::umwelt::tests::changing_bodies_changes_what_can_reach_you ... ok"},
+{"ch":"deck.tests","ms":665,"line":"test magic::umwelt::tests::the_room_itself_grants_sightlines ... ok"},
+{"ch":"deck.tests","ms":665,"line":"test magic::umwelt::tests::some_things_cannot_be_boxed_in ... ok"},
+{"ch":"deck.tests","ms":665,"line":"test magic::umwelt::tests::suppressors_stack_by_multiplying ... ok"},
+{"ch":"deck.tests","ms":665,"line":"test magic::umwelt::tests::each_grant_moves_it_and_none_of_them_owns_it ... ok"},
+{"ch":"deck.tests","ms":665,"line":"test magic::umwelt::tests::no_body_is_strictly_better_than_the_one_you_left ... ok"},
+{"ch":"deck.tests","ms":665,"line":"test magic::umwelt::tests::the_watcher_reach_decides_the_miss ... ok"},
+{"ch":"deck.tests","ms":666,"line":"test magic_words::tests::magic_words_schools_ride_the_sevenfold_spine ... ok"},
+{"ch":"deck.tests","ms":667,"line":"test magic_words::tests::magic_words_every_canon_word_sings_in_scale ... ok"},
+{"ch":"deck.gemma","ms":670,"line":"[LOCAL GEMMA] Initializing 0-Spend Local Prompt & Manifold Cache..."},
+{"ch":"deck.gemma","ms":670,"line":"[LOCAL GEMMA] Prompt Cache & 1.58-Bit Ternary ALU: READY ($0.00 / 0 Network Calls)"},
+{"ch":"deck.tests","ms":673,"line":"test magic_words::tests::magic_words_subclasses_are_unique_and_honestly_proven ... ok"},
+{"ch":"deck.tests","ms":673,"line":"test ironroot::lexicon::tests::the_landed_corpus_reads_and_is_deduplicated ... ok"},
+{"ch":"deck.tests","ms":673,"line":"test memory::tests::awakening_word_covers_the_ladder_without_digits ... ok"},
+{"ch":"deck.tests","ms":673,"line":"test magic::umwelt::tests::what_you_carry_silences_without_blinding ... ok"},
+{"ch":"deck.tests","ms":673,"line":"test magic::umwelt::tests::where_you_were_raised_answers_one_of_them ... ok"},
+{"ch":"deck.tests","ms":673,"line":"test memory::tests::direction_word_reads_the_geometry ... ok"},
+{"ch":"deck.tests","ms":673,"line":"test magic_words::tests::magic_words_canon_is_unique_and_aperture_bounded ... ok"},
+{"ch":"deck.tests","ms":673,"line":"test magic_words::tests::magic_words_canonical_trio_is_schooled ... ok"},
+{"ch":"deck.tests","ms":673,"line":"test memory::tests::witness_count_reads_the_zone_ledger ... ok"},
+{"ch":"deck.tests","ms":673,"line":"test mind::tests::all_factions_choose_actions ... ok"},
+{"ch":"deck.tests","ms":673,"line":"test mind::tests::thornguard_cleanses_under_pressure ... ok"},
+{"ch":"deck.tests","ms":674,"line":"test mind::tests::verdant_pact_opens_routes ... ok"},
+{"ch":"deck.tests","ms":674,"line":"test operator::tests::a_resolution_raises_the_walkers_watch_heat ... ok"},
+{"ch":"deck.tests","ms":674,"line":"test operator::tests::a_resolution_saturates_heat_and_never_widens_the_save ... ok"},
+{"ch":"deck.tests","ms":674,"line":"test operator::tests::an_exposed_event_moves_standing_with_its_owner_only ... ok"},
+{"ch":"deck.tests","ms":674,"line":"test operator::tests::birth_is_deterministic_and_death_reseeds ... ok"},
+{"ch":"deck.tests","ms":674,"line":"test operator::tests::malformed_saves_are_refused_whole ... ok"},
+{"ch":"deck.tests","ms":674,"line":"test memory::tests::unmarked_ground_is_rare_but_present ... ok"},
+{"ch":"deck.tests","ms":674,"line":"test operator::tests::operator_genesis_token_and_anchors_derive_cleanly ... ok"},
+{"ch":"deck.tests","ms":674,"line":"test operator::tests::standing_moves_only_on_an_owned_shift ... ok"},
+{"ch":"deck.tests","ms":674,"line":"test operator::tests::the_save_codec_is_a_bijection ... ok"},
+{"ch":"deck.tests","ms":674,"line":"test operator::tests::npe_base_cart_moon_and_day_counts_match_operator_constants ... ok"},
+{"ch":"deck.tests","ms":674,"line":"test operator::tests::unknown_future_version_is_refused ... ok"},
+{"ch":"deck.tests","ms":674,"line":"test operator::tests::v3_save_still_opens ... ok"},
+{"ch":"deck.tests","ms":674,"line":"test operator::tests::v4_bijection_at_skill_edges ... ok"},
+{"ch":"deck.tests","ms":674,"line":"test memory::tests::nearest_unmarked_is_deterministic_and_present ... ok"},
+{"ch":"deck.tests","ms":674,"line":"test organs::nde_chat::tests::test_emit_chat_organ_html_contains_components ... ok"},
+{"ch":"deck.tests","ms":675,"line":"test organs::nde_chat::tests::test_emit_verb_pills_html_contains_all_verbs_and_postmessage ... ok"},
+{"ch":"deck.tests","ms":675,"line":"test organs::nde_chat::tests::test_nde_infer_zero_budget_refuses_without_connecting ... ok"},
+{"ch":"deck.tests","ms":675,"line":"test organs::nde_chat::tests::test_broadcast_hud_telemetry_failopen ... ok"},
+{"ch":"deck.tests","ms":675,"line":"test overlay::tests::domain_try_from_refuses_out_of_range ... ok"},
+{"ch":"deck.tests","ms":675,"line":"test overlay::tests::malformed_ledgers_are_refused_whole ... ok"},
+{"ch":"deck.tests","ms":675,"line":"test memory::tests::witness_lines_are_dignified_and_exact ... ok"},
+{"ch":"deck.tests","ms":675,"line":"test overlay::tests::resolver_semantics ... ok"},
+{"ch":"deck.tests","ms":676,"line":"test organs::nde_chat::tests::test_nde_infer_real_wire_round_trip ... ok"},
+{"ch":"deck.tests","ms":676,"line":"test overlay::tests::the_codec_is_a_bijection_over_interior_and_edges ... ok"},
+{"ch":"deck.tests","ms":676,"line":"test physics_telemetry::tests::body_blocked_hit_populates_the_hit_ring ... ok"},
+{"ch":"deck.tests","ms":676,"line":"test overlay::tests::atomic_save_load_round_trip ... ok"},
+{"ch":"deck.tests","ms":676,"line":"test physics_telemetry::tests::body_blocked_miss_does_not_populate_the_hit_ring ... ok"},
+{"ch":"deck.tests","ms":676,"line":"test organs::nde_chat::tests::prompt_cache_test::test_cache_roundtrip ... ok"},
+{"ch":"deck.tests","ms":676,"line":"test physics_telemetry::tests::ground_y_hit_does_not_populate_the_miss_ring ... ok"},
+{"ch":"deck.tests","ms":676,"line":"test physics_tune::tests::default_has_exact_hardcoded_values ... ok"},
+{"ch":"deck.tests","ms":676,"line":"test physics_telemetry::tests::ring_wraps_past_capacity_without_panicking ... ok"},
+{"ch":"deck.tests","ms":676,"line":"test physics_telemetry::tests::the_process_wide_singleton_is_reachable ... ok"},
+{"ch":"deck.tests","ms":676,"line":"test physics_tune::tests::load_nonexistent_file_falls_back_to_default ... ok"},
+{"ch":"deck.tests","ms":676,"line":"test reactions::tests::every_pressure_lane_is_balanced_ternary ... ok"},
+{"ch":"deck.tests","ms":676,"line":"test physics_tune::tests::load_malformed_ron_falls_back_to_default ... ok"},
+{"ch":"deck.tests","ms":676,"line":"test reactions::tests::every_substrate_hides_what_it_is ... ok"},
+{"ch":"deck.tests","ms":677,"line":"test reactions::tests::exactly_one_path_is_fixed_and_it_is_preserve ... ok"},
+{"ch":"deck.tests","ms":677,"line":"test reactions::tests::the_binding_pair_mirrors_on_obligation ... ok"},
+{"ch":"deck.tests","ms":677,"line":"test reactions::tests::refusing_mirrors_claiming_on_four_lanes_and_severs_a_bond_on_the_fifth ... ok"},
+{"ch":"deck.tests","ms":677,"line":"test reactions::tests::both_catalogs_round_trip_through_ron ... ok"},
+{"ch":"deck.tests","ms":677,"line":"test reactions::tests::stealing_is_claiming_only_louder_and_detectable ... ok"},
+{"ch":"deck.tests","ms":677,"line":"test physics_tune::tests::save_and_load_round_trip ... ok"},
+{"ch":"deck.tests","ms":677,"line":"test reactions::tests::the_ethical_ladder_is_the_authored_one ... ok"},
+{"ch":"deck.tests","ms":677,"line":"test reactions::tests::the_ethical_mirror_is_an_involution ... ok"},
+{"ch":"deck.tests","ms":677,"line":"test reactions::tests::the_ethics_catalog_holds_all_five_paths ... ok"},
+{"ch":"deck.tests","ms":677,"line":"test reactions::tests::the_fae_reward_catalog_holds_all_five_outcomes ... ok"},
+{"ch":"deck.tests","ms":677,"line":"test reactions::tests::the_fixed_point_pushes_no_pressure ... ok"},
+{"ch":"deck.tests","ms":677,"line":"test rng::tests::below_stays_in_range_including_zero_bound ... ok"},
+{"ch":"deck.tests","ms":677,"line":"test reactions::tests::the_substrate_catalog_holds_all_seven ... ok"},
+{"ch":"deck.tests","ms":677,"line":"test reactions::tests::the_taking_and_giving_poles_negate_each_other ... ok"},
+{"ch":"deck.tests","ms":677,"line":"test rng::tests::permyriad_stays_in_bounds ... ok"},
+{"ch":"deck.tests","ms":677,"line":"test rng::tests::different_seeds_usually_differ ... ok"},
+{"ch":"deck.tests","ms":678,"line":"test rng::tests::same_seed_same_sequence ... ok"},
+{"ch":"deck.tests","ms":678,"line":"test shadow_counterpart::tests::a_fresh_shadow_is_a_stalker ... ok"},
+{"ch":"deck.tests","ms":678,"line":"test shadow_counterpart::tests::behavioral_table_has_the_cited_six_rows_all_populated ... ok"},
+{"ch":"deck.tests","ms":678,"line":"test shadow_counterpart::tests::grudge_accrues_and_clamps_at_the_ceiling ... ok"},
+{"ch":"deck.tests","ms":678,"line":"test shadow_counterpart::tests::grudge_decays_and_floors_at_zero ... ok"},
+{"ch":"deck.tests","ms":678,"line":"test shadow_counterpart::tests::harbinger_outranks_blighted_when_both_conditions_hold ... ok"},
+{"ch":"deck.tests","ms":678,"line":"test shadow_counterpart::tests::high_execution_count_promotes_to_harbinger ... ok"},
+{"ch":"deck.tests","ms":678,"line":"test shadow_counterpart::tests::promotion_tier_climbs_the_cited_ladder ... ok"},
+{"ch":"deck.gemma","ms":683,"line":"JOB EXIT 0"},
+{"ch":"deck.tests","ms":685,"line":"test shadow_counterpart::tests::repeated_attacks_or_gear_reliance_promotes_to_blighted ... ok"},
+{"ch":"deck.tests","ms":685,"line":"test shadow_counterpart::tests::shadow_form_names_and_punishes_match_the_design_bible_table ... ok"},
+{"ch":"deck.tests","ms":685,"line":"test skills::tests::rank_words_carry_no_digits ... ok"},
+{"ch":"deck.tests","ms":685,"line":"test shadow_counterpart::tests::three_or_more_refusals_stop_mirroring ... ok"},
+{"ch":"deck.tests","ms":685,"line":"test skills::tests::expected_uses_lands_in_the_1000_hour_band ... ok"},
+{"ch":"deck.tests","ms":685,"line":"test skills::tests::gain_curve_is_monotonic_and_slows_with_height ... ok"},
+{"ch":"deck.tests","ms":689,"line":"test memory::tests::star_line_is_night_only_and_matches_the_geometry ... ok"},
+{"ch":"deck.tests","ms":689,"line":"test ironroot::affect::tests::neutral_register_is_reachable ... ok"},
+{"ch":"deck.tests","ms":690,"line":"test socketing::tests::socketing_fills_and_reports_full_at_the_weapon_cap ... ok"},
+{"ch":"deck.tests","ms":690,"line":"test socketing::tests::socketing_permyriad_and_flat_stack ... ok"},
+{"ch":"deck.tests","ms":690,"line":"test skills::tests::training_is_deterministic ... ok"},
+{"ch":"deck.tests","ms":690,"line":"test socketing::tests::socketing_matrix_compatibility_law_holds ... ok"},
+{"ch":"deck.tests","ms":691,"line":"test spell_gems::tests::all_prestige_classes_have_affinity ... ok"},
+{"ch":"deck.tests","ms":691,"line":"test spell_gems::tests::prestige_class_affinity_primary_schools ... ok"},
+{"ch":"deck.tests","ms":691,"line":"test spell_gems::tests::prestige_class_affinity_opposition ... ok"},
+{"ch":"deck.tests","ms":691,"line":"test socketing::tests::socketing_gem_changes_the_stat_and_reverts ... ok"},
+{"ch":"deck.tests","ms":691,"line":"test spell_gems::tests::spell_bar_bounds_check ... ok"},
+{"ch":"deck.tests","ms":691,"line":"test spell_gems::tests::spell_bar_load_overwrites ... ok"},
+{"ch":"deck.tests","ms":691,"line":"test socketing::tests::socketing_legendary_gem_hits_far_harder ... ok"},
+{"ch":"deck.tests","ms":691,"line":"test spell_gems::tests::spell_bar_encode_decode_bijection ... ok"},
+{"ch":"deck.tests","ms":691,"line":"test spell_gems::tests::spell_bar_load_unload ... ok"},
+{"ch":"deck.tests","ms":691,"line":"test spell_gems::tests::spell_bar_new_standard ... ok"},
+{"ch":"deck.tests","ms":691,"line":"test spell_gems::tests::spell_gem_empty ... ok"},
+{"ch":"deck.tests","ms":691,"line":"test spell_gems::tests::spell_gem_new_invalid ... ok"},
+{"ch":"deck.tests","ms":691,"line":"test spell_gems::tests::spell_gem_new_valid ... ok"},
+{"ch":"deck.tests","ms":691,"line":"test spell_gems::tests::spell_set_manager_advance_tier ... ok"},
+{"ch":"deck.tests","ms":691,"line":"test spell_gems::tests::spell_set_manager_new ... ok"},
+{"ch":"deck.tests","ms":691,"line":"test spell_gems::tests::spell_sieve_advance_tier ... ok"},
+{"ch":"deck.tests","ms":692,"line":"test topology::tests::from_rooms_keys_and_defaults_to_first ... ok"},
+{"ch":"deck.tests","ms":692,"line":"test spell_gems::tests::spell_sieve_validate_empty_bar ... ok"},
+{"ch":"deck.tests","ms":692,"line":"test spell_gems::tests::spell_sieve_new ... ok"},
+{"ch":"deck.tests","ms":692,"line":"test spell_gems::tests::spell_set_manager_save_load_preset ... ok"},
+{"ch":"deck.tests","ms":692,"line":"test spell_gems::tests::spell_sieve_is_word_available ... ok"},
+{"ch":"deck.tests","ms":692,"line":"test vendor::tests::buy_price_cha14_discount ... ok"},
+{"ch":"deck.tests","ms":692,"line":"test vendor::tests::buy_price_cha20_larger_discount ... ok"},
+{"ch":"deck.tests","ms":692,"line":"test vendor::tests::buy_price_exact_cha10 ... ok"},
+{"ch":"deck.tests","ms":692,"line":"test topology::tests::transition_follows_a_real_exit_and_refuses_a_missing_one ... ok"},
+{"ch":"deck.tests","ms":692,"line":"test vendor::tests::repair_cost_full_durability_zero ... ok"},
+{"ch":"deck.tests","ms":692,"line":"test vendor::tests::repair_cost_half_damaged ... ok"},
+{"ch":"deck.tests","ms":692,"line":"test vendor::tests::repair_cost_nearly_destroyed ... ok"},
+{"ch":"deck.tests","ms":692,"line":"test skills::tests::total_cap_holds ... ok"},
+{"ch":"deck.tests","ms":692,"line":"test vendor::tests::sell_price_no_destroy_none ... ok"},
+{"ch":"deck.tests","ms":692,"line":"test vendor::tests::sell_price_normal_vendor_cha10 ... ok"},
+{"ch":"deck.tests","ms":692,"line":"test vendor::tests::sell_price_soulbound_none ... ok"},
+{"ch":"deck.tests","ms":692,"line":"test vendor::tests::sell_price_stolen_fence_50percent ... ok"},
+{"ch":"deck.tests","ms":693,"line":"test vendor::tests::sell_price_stolen_normal_vendor_zero ... ok"},
+{"ch":"deck.tests","ms":693,"line":"test vendor::tests::sell_price_unstolen_fence_cha10 ... ok"},
+{"ch":"deck.tests","ms":693,"line":"test weapon_wireframes::tests::weapon_act1_corpus_matches_the_json_donor ... ok"},
+{"ch":"deck.tests","ms":693,"line":"test weapon_wireframes::tests::weapon_wireframes_match_the_godot_donor ... ok"},
+{"ch":"deck.tests","ms":693,"line":"test weather::tests::era_cycle_wraps ... ok"},
+{"ch":"deck.tests","ms":693,"line":"test weather::tests::intensity_never_exceeds_ceiling ... ok"},
+{"ch":"deck.tests","ms":693,"line":"test weather::tests::model_is_deterministic ... ok"},
+{"ch":"deck.tests","ms":693,"line":"test weather::tests::mulberry32_below_in_range ... ok"},
+{"ch":"deck.tests","ms":693,"line":"test ironroot::affect::tests::the_live_house_matrix_fails_to_settle_on_a_measurable_slice_of_its_own_space ... ok"},
+{"ch":"deck.tests","ms":693,"line":"test weather::tests::mulberry32_deterministic ... ok"},
+{"ch":"deck.tests","ms":693,"line":"test weather::tests::signature_weather_per_era ... ok"},
+{"ch":"deck.tests","ms":693,"line":"test weather::tests::sky_from_roll_modulo ... ok"},
+{"ch":"deck.tests","ms":693,"line":"test weather::tests::weather_ticks_increment_counter ... ok"},
+{"ch":"deck.tests","ms":699,"line":"test ironroot::affect::tests::a_crossing_onset_must_be_a_threshold_something_reacts_to ... ok"},
+{"ch":"deck.tests","ms":707,"line":"test world5d::tests::apply_impulse_sets_velocities_proportional_to_direction ... ok"},
+{"ch":"deck.tests","ms":709,"line":"test world5d::tests::apply_impulse_refuses_when_cooldown_active ... ok"},
+{"ch":"deck.tests","ms":709,"line":"test world5d::tests::gravity_pulls_the_walker_onto_the_island_and_stops ... ok"},
+{"ch":"deck.tests","ms":710,"line":"test world5d::tests::a_second_blast_does_not_reopen_an_earlier_one ... ok"},
+{"ch":"deck.tests","ms":711,"line":"test world5d::tests::falling_off_the_world_lands_on_bedrock_not_forever ... ok"},
+{"ch":"deck.tests","ms":711,"line":"test world5d::tests::ground_is_under_the_spawn ... ok"},
+{"ch":"deck.tests","ms":716,"line":"test world5d::tests::lattice_mirrors_through_the_centre ... ok"},
+{"ch":"deck.tests","ms":716,"line":"test world5d::tests::different_seeds_differ ... ok"},
+{"ch":"deck.tests","ms":716,"line":"test world5d::tests::sin_pmy_matches_cardinal_angles ... ok"},
+{"ch":"deck.tests","ms":716,"line":"test world5d::tests::sin_pmy_wraps_negative_and_past_360 ... ok"},
+{"ch":"deck.tests","ms":716,"line":"test world5d::tests::origin_is_a_real_cell ... ok"},
+{"ch":"deck.tests","ms":717,"line":"test world5d::tests::body_blocked_baseline_perf_row_major_index ... ok"},
+{"ch":"deck.tests","ms":728,"line":"test world5d::tests::sync_tick_sets_the_walker_tick_directly_not_incrementally ... ok"},
+{"ch":"deck.tests","ms":729,"line":"test world5d::tests::generation_is_deterministic ... ok"},
+{"ch":"deck.tests","ms":729,"line":"test world5d::tests::solids_stay_inside_the_hypersphere ... ok"},
+{"ch":"deck.tests","ms":731,"line":"test world5d::tests::mined_rock_closes_its_tick_window_instead_of_vanishing ... ok"},
+{"ch":"deck.tests","ms":732,"line":"test world5d::tests::the_island_breaches_its_own_waterline ... ok"},
+{"ch":"deck.tests","ms":742,"line":"test world5d::tests::the_medium_slows_the_wade ... ok"},
+{"ch":"deck.tests","ms":742,"line":"test world5d::tests::tick_impulse_decays_velocity_toward_zero_without_oscillation ... ok"},
+{"ch":"deck.tests","ms":742,"line":"test world5d::tests::the_scale_lane_is_exercised_not_declared ... ok"},
+{"ch":"deck.tests","ms":742,"line":"test world5d::tests::the_shore_is_dry_and_the_seabed_is_drowned ... ok"},
+{"ch":"deck.tests","ms":742,"line":"test world5d::tests::the_tick_lane_is_exercised_not_declared ... ok"},
+{"ch":"deck.tests","ms":743,"line":"test world::tests::a_seed_is_a_world_and_a_new_seed_is_a_new_world ... ok"},
+{"ch":"deck.tests","ms":743,"line":"test world::tests::a_deed_bias_leans_the_world_toward_its_family ... ok"},
+{"ch":"deck.tests","ms":744,"line":"test world::tests::the_town_is_on_the_map ... ok"},
+{"ch":"deck.tests","ms":744,"line":"test zone::tests::abyss_composition_descending_increases_pressure ... ok"},
+{"ch":"deck.tests","ms":744,"line":"test world::tests::the_world_chart_is_the_radix3_zoom ... ok"},
+{"ch":"deck.tests","ms":744,"line":"test zone::tests::air_zone_is_always_dry ... ok"},
+{"ch":"deck.tests","ms":744,"line":"test world::tests::the_viewport_renders_and_clamps ... ok"},
+{"ch":"deck.tests","ms":744,"line":"test zone::tests::cartridge_cells_resize_dynamically ... ok"},
+{"ch":"deck.tests","ms":745,"line":"test zone::tests::cartridge_empty_cells_produce_no_override ... ok"},
+{"ch":"deck.tests","ms":745,"line":"test zone::tests::cartridge_override_water_level ... ok"},
+{"ch":"deck.tests","ms":745,"line":"test zone::tests::cartridge_water_level_get_set_round_trips ... ok"},
+{"ch":"deck.tests","ms":745,"line":"test zone::tests::density_scales_with_depth ... ok"},
+{"ch":"deck.tests","ms":745,"line":"test zone::tests::depth_field_is_deterministic ... ok"},
+{"ch":"deck.tests","ms":745,"line":"test zone::tests::dry_submersion_is_identity ... ok"},
+{"ch":"deck.tests","ms":745,"line":"test zone::tests::different_seeds_usually_produce_different_zones ... ok"},
+{"ch":"deck.tests","ms":745,"line":"test zone::tests::in_sphere_implies_in_cube ... ok"},
+{"ch":"deck.tests","ms":745,"line":"test zone::tests::island_parameters_are_sensible ... ok"},
+{"ch":"deck.tests","ms":745,"line":"test zone::tests::island_terrain_is_deterministic ... ok"},
+{"ch":"deck.tests","ms":746,"line":"test zone::tests::light_level_floors_at_abyssal_floor ... ok"},
+{"ch":"deck.tests","ms":746,"line":"test zone::tests::origin_is_at_radius_zero ... ok"},
+{"ch":"deck.tests","ms":746,"line":"test zone::tests::sabotage_sphere_boundary_is_enforced ... ok"},
+{"ch":"deck.tests","ms":746,"line":"test zone::tests::emit_gpu_produces_power_of_two_box ... ok"},
+{"ch":"deck.tests","ms":746,"line":"test zone::tests::same_seed_produces_identical_zone ... ok"},
+{"ch":"deck.tests","ms":746,"line":"test zone::tests::save_load_zone_with_cartridge_override ... ok"},
+{"ch":"deck.tests","ms":746,"line":"test zone::tests::water_level_stays_in_range ... ok"},
+{"ch":"deck.tests","ms":746,"line":"test zone::tests::emit_gpu_is_deterministic ... ok"},
+{"ch":"deck.tests","ms":747,"line":"test zone::tests::wire_mesh_is_deterministic ... ok"},
+{"ch":"deck.tests","ms":750,"line":"test world5d::tests::tick_impulse_decrements_timers_to_exactly_zero ... ok"},
+{"ch":"deck.tests","ms":750,"line":"test world5d::tests::walker_stands_on_the_island_not_in_it ... ok"},
+{"ch":"deck.tests","ms":752,"line":"test world5d::tests::walker_spawns_in_open_air ... ok"},
+{"ch":"deck.tests","ms":754,"line":"test world5d::tests::walking_never_ends_inside_rock ... ok"},
+{"ch":"deck.tests","ms":757,"line":"test world5d::tests::to_grid_bakes_solid_cells_at_density_solid_and_air_at_density_air ... ok"},
+{"ch":"deck.tests","ms":758,"line":"test world5d::tests::to_grid_respects_the_mining_tick_window ... ok"},
+{"ch":"deck.tests","ms":773,"line":"test dm::tests::nde_escalator_reports_unreachable_when_nothing_is_listening ... ok"},
+{"ch":"deck.census","ms":826,"line":"  trust      <- ignorance     -1500          3.38%          6.74%       17049              3578"},
+{"ch":"deck.census","ms":1018,"line":"  fear       <- trust         -1500          4.71%          5.75%       16760              5002"},
+{"ch":"deck.census","ms":1195,"line":"  fear       <- grievance      2000          5.35%         14.33%       31385              4419"},
+{"ch":"deck.census","ms":1385,"line":"  fear       <- ignorance      2000          4.33%          9.95%       25118              4456"},
+{"ch":"deck.census","ms":1573,"line":"  debt       <- obligation     2000          5.86%         12.63%       19508              3964"},
+{"ch":"deck.census","ms":1763,"line":"  grievance  <- fear           1500          3.23%          6.68%       22909              4104"},
+{"ch":"deck.tests","ms":1882,"line":"test organs::nde_chat::tests::test_handle_ipc_message ... ok"},
+{"ch":"deck.tests","ms":1883,"line":"test organs::nde_chat::tests::test_execute_gemma_slice_falls_back_when_daemon_unreachable ... ok"},
+{"ch":"deck.tests","ms":1922,"line":"test ironroot::affect::tests::every_authored_entry_changes_a_real_reading ... ok"},
+{"ch":"deck.census","ms":1947,"line":"  grievance  <- debt           2500          6.45%         16.62%       31075              2922"},
+{"ch":"deck.census","ms":2095,"line":"  grievance  <- ignorance      1000          2.43%          4.48%       12734              3165"},
+{"ch":"deck.census","ms":2236,"line":"  obligation <- trust          2000          3.32%          4.83%       12289              3325"},
+{"ch":"deck.census","ms":2411,"line":"  obligation <- debt           1500          1.81%          3.17%        9468              3723"},
+{"ch":"deck.census","ms":2551,"line":"  ignorance  <- trust         -1000          1.36%          1.84%        4996              4501"},
+{"ch":"deck.tests","ms":2604,"line":"test dm::tests::an_nde_escalator_wired_ambiguous_resolution_surfaces_the_real_wire_result ... ok"},
+{"ch":"deck.tests","ms":2604,"line":"test dm::tests::nde_escalator_reaches_the_real_door_and_gets_a_well_formed_result ... ok"},
+{"ch":"deck.tests","ms":2604,"line":""},
+{"ch":"deck.tests","ms":2604,"line":"test result: ok. 1196 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 2.12s"},
+{"ch":"deck.tests","ms":2604,"line":""},
+{"ch":"deck.tests","ms":2606,"line":"     Running unittests src\\main.rs (target\\debug\\deps\\mud-99b2df45f0c3b710.exe)"},
+{"ch":"deck.tests","ms":2618,"line":""},
+{"ch":"deck.tests","ms":2618,"line":"running 0 tests"},
+{"ch":"deck.tests","ms":2618,"line":""},
+{"ch":"deck.tests","ms":2618,"line":"test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s"},
+{"ch":"deck.tests","ms":2618,"line":""},
+{"ch":"deck.tests","ms":2619,"line":"     Running tests\\magic_word_chain.rs (target\\debug\\deps\\magic_word_chain-f16d74380c4e2f73.exe)"},
+{"ch":"deck.tests","ms":2626,"line":""},
+{"ch":"deck.tests","ms":2626,"line":"running 3 tests"},
+{"ch":"deck.tests","ms":2635,"line":"test the_note_is_always_in_scale ... ok"},
+{"ch":"deck.tests","ms":2635,"line":"test the_line_carries_its_own_note ... ok"},
+{"ch":"deck.tests","ms":2635,"line":"test the_chain_is_deterministic ... ok"},
+{"ch":"deck.tests","ms":2635,"line":""},
+{"ch":"deck.tests","ms":2635,"line":"test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s"},
+{"ch":"deck.tests","ms":2635,"line":""},
+{"ch":"deck.tests","ms":2636,"line":"   Doc-tests forge_mud_v3"},
+{"ch":"deck.census","ms":2716,"line":"  ignorance  <- fear           1500          1.32%          2.44%       10216              4442"},
+{"ch":"deck.census","ms":2716,"line":""},
+{"ch":"deck.census","ms":2716,"line":"== 3. every crossing onset, swept, over the same space =="},
+{"ch":"deck.census","ms":2716,"line":"  crossing   authored   sparse-flips    dense-flips   worst-gap"},
+{"ch":"deck.census","ms":2903,"line":"  terror        30100          1.10%          1.54%       25284"},
+{"ch":"deck.census","ms":3091,"line":"  denial        30300          2.35%          2.00%       23799"},
+{"ch":"deck.census","ms":3091,"line":""},
+{"ch":"deck.census","ms":3091,"line":"== 4. onsets MEASURED against the space the field actually reaches =="},
+{"ch":"deck.census","ms":3091,"line":"  A threshold most of the space is already past is not a threshold. Binary-searching"},
+{"ch":"deck.census","ms":3091,"line":"  the smallest onset that holds each crossing at a target rate turns an authored"},
+{"ch":"deck.census","ms":3091,"line":"  number into one the model itself decides."},
+{"ch":"deck.census","ms":3091,"line":""},
+{"ch":"deck.census","ms":3091,"line":"  crossing   regime   authored  rate@authored   target      measured   rate@measured"},
+{"ch":"deck.tests","ms":3167,"line":""},
+{"ch":"deck.tests","ms":3167,"line":"running 2 tests"},
+{"ch":"deck.tests","ms":3167,"line":"test crates\\forge-mud-v3\\src\\content\\narrative\\lunar_harmonics.rs - content::narrative::lunar_harmonics::apply_birth_modifiers (line 191) ... ignored"},
+{"ch":"deck.tests","ms":3167,"line":"test crates\\forge-mud-v3\\src\\ironroot\\discipline_overlay.rs - ironroot::discipline_overlay (line 32) ... ignored"},
+{"ch":"deck.tests","ms":3167,"line":""},
+{"ch":"deck.tests","ms":3167,"line":"test result: ok. 0 passed; 0 failed; 2 ignored; 0 measured; 0 filtered out; finished in 0.00s"},
+{"ch":"deck.tests","ms":3167,"line":""},
+{"ch":"deck.tests","ms":3189,"line":"JOB EXIT 0"},
+{"ch":"deck.census","ms":3269,"line":"  terror     Sparse      30100          5.31%    5.00%         30113          5.00%"},
+{"ch":"deck.census","ms":3424,"line":"  terror     Sparse      30100          5.31%   20.00%         20036         20.00%"},
+{"ch":"deck.census","ms":3604,"line":"  terror     Dense       30100          0.00%    5.00%         22333          5.00%"},
+{"ch":"deck.census","ms":3781,"line":"  terror     Dense       30100          0.00%   20.00%         19318         19.98%"},
+{"ch":"deck.census","ms":3939,"line":"  denial     Sparse      30300          2.94%    5.00%         30236          4.98%"},
+{"ch":"deck.census","ms":4102,"line":"  denial     Sparse      30300          2.94%   20.00%         17963         20.00%"},
+{"ch":"deck.census","ms":4267,"line":"  denial     Dense       30300          0.00%    5.00%         19823          5.00%"},
+{"ch":"deck.census","ms":4453,"line":"  denial     Dense       30300          0.00%   20.00%         16257         20.00%"},
+{"ch":"deck.census","ms":4453,"line":""},
+{"ch":"deck.census","ms":4453,"line":"[mudlex] 6840000 resolves in 4.4s (plus the calibration bisections)"},
+{"ch":"deck.census","ms":4453,"line":"[mudlex] every authored entry changes a reading somewhere in sparse drive space."},
+{"ch":"deck.census","ms":4454,"line":"JOB EXIT 0"},
+{"ch":"deck.meta","ms":4454,"line":"all jobs closed"}
+] };</script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {950:'#020306',900:'#060911',850:'#090e1a',800:'#0d1527'},
+                        brass: '#d3af37',
+                        verdigris: '#5e9e73',
+                        rust: '#8a4b2b'
+                    },
+                    fontFamily: {
+                        mono: ['JetBrains Mono', 'Fira Code', 'Courier New', 'monospace'],
+                        sans: ['Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .mono-font { font-family: 'JetBrains Mono', monospace; }
+        .glass-panel {
+            background: rgba(9,14,26,0.78);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(27,43,74,0.65);
+        }
+        .pulse-dot { animation: pulse 2s cubic-bezier(0.4,0,0.6,1) infinite; }
+        @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .5; } }
+        .astrolabe-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        #astrolabeCanvas {
+            filter: drop-shadow(0 0 20px rgba(26,224,255,0.1));
+            transition: filter 0.3s ease;
+        }
+        .astrolabe-state {
+            text-xs font-mono text-slate-400 tracking-wide uppercase;
+        }
+        .log-container {
+            height: 240px;
+            overflow-y: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            line-height: 1.4;
+            background: rgba(0,0,0,0.3);
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            color: #94a3b8;
+        }
+        .log-line {
+            margin: 0;
+            word-break: break-word;
+        }
+        .log-line.lifecycle { color: #60a5fa; }
+        .log-line.error { color: #ef4444; }
+        .derived-strip {
+            background: rgba(15,23,42,0.5);
+            border: 1px solid rgba(51,65,85,0.4);
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            color: #cbd5e1;
+            min-height: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            font-size: 0.75rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            padding: 0.375rem 0.75rem;
+            border-radius: 0.375rem;
+            border: 1px solid;
+        }
+        .chip.live { background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.3); color: #10b981; }
+        .chip.dead { background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.3); color: #ef4444; }
+        .chip.running { background: rgba(59,130,246,0.1); border-color: rgba(59,130,246,0.3); color: #3b82f6; }
+        .chip.exit-ok { background: rgba(34,197,94,0.1); border-color: rgba(34,197,94,0.3); color: #22c55e; }
+        .chip.exit-fail { background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.3); color: #ef4444; }
+        .chip.skipped { background: rgba(217,119,6,0.1); border-color: rgba(217,119,6,0.3); color: #d97706; }
+        .dot { display: inline-block; width: 0.375rem; height: 0.375rem; border-radius: 50%; }
+        .dot.live { background: #10b981; }
+        .dot.dead { background: #ef4444; }
+    </style>
+</head>
+<body class="min-h-screen bg-[#090a0f] overflow-x-hidden">
+    <!-- Ambient Grid Overlay -->
+    <div class="pointer-events-none fixed inset-0 z-0 bg-[linear-gradient(to_right,#141622_1px,transparent_1px),linear-gradient(to_bottom,#141622_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
+
+    <!-- Content -->
+    <div class="relative z-10">
+        <!-- Header -->
+        <header class="border-b border-slate-800/80 bg-dark-950/90 backdrop-blur-md sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <span class="font-extrabold tracking-tight text-white mono-font text-base flex items-center gap-2">
+                        <span class="h-2 w-2 rounded-full bg-teal-400 pulse-dot"></span>
+                        13FORGE.COM / LIVE DECK
+                    </span>
+                    <span class="ml-3 px-2.5 py-1 rounded-full border border-sky-500/40 bg-sky-500/10 text-sky-300 text-[11px] mono-font font-semibold tracking-wide">
+                        Gemini 3.7 Flash · Gemma Triad · Google Cloud Vertex AI
+                    </span>
+                </div>
+                <div class="flex items-center gap-3 text-xs mono-font">
+                    <div id="wireStatusChip" class="chip dead">
+                        <span class="dot dead"></span>
+                        <span id="wireStatus">DEAD</span>
+                    </div>
+                    <div class="px-3 py-1 rounded-lg bg-dark-900 border border-slate-800 text-slate-300">
+                        Elapsed: <span id="elapsedMs">0</span>ms
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Astrolabe Masthead -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+            <div class="astrolabe-container">
+                <canvas id="astrolabeCanvas" width="380" height="380" class="rounded-lg"></canvas>
+                <div class="astrolabe-state" id="astrolabeState">sleep</div>
+            </div>
+        </section>
+
+        <!-- Panel Grid -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Panel: Test Wall -->
+                <div class="glass-panel rounded-2xl p-5 shadow-2xl space-y-3 flex flex-col">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-sm font-bold text-white mono-font uppercase">Test Wall</h2>
+                        <div id="tests-status" class="chip dead">
+                            <span class="dot dead"></span>
+                            <span>DEAD</span>
+                        </div>
+                    </div>
+                    <div id="tests-log" class="log-container flex-1"></div>
+                    <div id="tests-strip" class="derived-strip">— awaiting wire —</div>
+                </div>
+
+                <!-- Panel: Affect Census -->
+                <div class="glass-panel rounded-2xl p-5 shadow-2xl space-y-3 flex flex-col">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-sm font-bold text-white mono-font uppercase">Affect Census</h2>
+                        <div id="census-status" class="chip dead">
+                            <span class="dot dead"></span>
+                            <span>DEAD</span>
+                        </div>
+                    </div>
+                    <div id="census-log" class="log-container flex-1"></div>
+                    <div id="census-strip" class="derived-strip">— awaiting wire —</div>
+                </div>
+
+                <!-- Panel: Ironroot Merge -->
+                <div class="glass-panel rounded-2xl p-5 shadow-2xl space-y-3 flex flex-col">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-sm font-bold text-white mono-font uppercase">Ironroot Merge</h2>
+                        <div id="ironroot-status" class="chip dead">
+                            <span class="dot dead"></span>
+                            <span>DEAD</span>
+                        </div>
+                    </div>
+                    <div id="ironroot-log" class="log-container flex-1"></div>
+                    <div id="ironroot-strip" class="derived-strip">— awaiting wire —</div>
+                </div>
+
+                <!-- Panel: Gemma Triad (local) -->
+                <div class="glass-panel rounded-2xl p-5 shadow-2xl space-y-3 flex flex-col">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-sm font-bold text-white mono-font uppercase">Gemma Triad (local)</h2>
+                        <div id="gemma-status" class="chip dead">
+                            <span class="dot dead"></span>
+                            <span>DEAD</span>
+                        </div>
+                    </div>
+                    <div id="gemma-log" class="log-container flex-1"></div>
+                    <div id="gemma-strip" class="derived-strip">— awaiting wire —</div>
+                </div>
+
+                <!-- Panel: Gemini 3.7 Flash (governed) -->
+                <div class="glass-panel rounded-2xl p-5 shadow-2xl space-y-3 flex flex-col">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-sm font-bold text-white mono-font uppercase">Gemini 3.7 Flash (governed)</h2>
+                        <div id="flash-status" class="chip dead">
+                            <span class="dot dead"></span>
+                            <span>DEAD</span>
+                        </div>
+                    </div>
+                    <div id="flash-log" class="log-container flex-1"></div>
+                    <div id="flash-strip" class="derived-strip">— awaiting wire —</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="max-w-7xl mx-auto px-4 sm:px-6 py-12 border-t border-slate-800/60 text-center space-y-4">
+            <p class="text-xs text-slate-400 mono-font leading-relaxed max-w-2xl mx-auto">
+                Every number on this page arrived over <code class="text-cyan-300 bg-cyan-950/20 px-1 py-0.5 rounded">ws://127.0.0.1:13013&#8203;/13016</code> (loopback — this machine talking to itself, never a public address) from a live process. Load this page without the conductor and it is honest about being dead.
+            </p>
+            <div class="text-xs text-slate-500 mono-font space-y-1">
+                <div class="font-semibold text-slate-400">Channels:</div>
+                <div>deck.meta (ticks) · deck.tests · deck.census · deck.ironroot · deck.gemma · deck.flash</div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        const channels = {
+            tests: { el: 'tests', name: 'deck.tests', lines: [], status: 'DEAD', parseRegex: /test result: (ok|FAILED)\. (\d+) passed; (\d+) failed/ },
+            census: { el: 'census', name: 'deck.census', lines: [], status: 'DEAD', keywords: ['bound', 'neutral', 'torn', 'permyriad'] },
+            ironroot: { el: 'ironroot', name: 'deck.ironroot', lines: [], status: 'DEAD', keywords: ['merkle', 'sha256', '.ron'] },
+            gemma: { el: 'gemma', name: 'deck.gemma', lines: [], status: 'DEAD' },
+            flash: { el: 'flash', name: 'deck.flash', lines: [], status: 'DEAD' }
+        };
+
+        let maxMs = 0;
+        let astrolabeState = 'sleep';
+        let jobsActive = 0;
+        let wsConnected = false;
+        let reconnectAttempt = 0;
+        let astrolabeAngle = 0;
+        const astroCanvas = document.getElementById('astrolabeCanvas');
+        const astroCtx = astroCanvas.getContext('2d');
+        const centerX = astroCanvas.width / 2;
+        const centerY = astroCanvas.height / 2;
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        const DECK_PORTS = [13013, 13016];
+        function connectWs() {
+            try {
+                const port = DECK_PORTS[reconnectAttempt % DECK_PORTS.length];
+                const ws = new WebSocket('ws://127.0.0.1:' + port);
+                const guard = setTimeout(() => {
+                    if (ws.readyState !== WebSocket.OPEN) { try { ws.close(); } catch (e) {} }
+                }, 1500);
+                ws.onopen = () => {
+                    clearTimeout(guard);
+                    wsConnected = true;
+                    reconnectAttempt = 0;
+                    astrolabeState = 'previewing';
+                    updateAstrolabeState();
+                    updateWireStatus();
+                };
+                ws.onmessage = (e) => handleFrame(e.data);
+                ws.onclose = () => {
+                    wsConnected = false;
+                    updateWireStatus();
+                    astrolabeState = 'sleep';
+                    updateAstrolabeState();
+                    setTimeout(() => {
+                        reconnectAttempt++;
+                        if (reconnectAttempt < 50) connectWs();
+                    }, 3000);
+                };
+                return ws;
+            } catch (err) { console.error('WS connect error:', err); return null; }
+        }
+
+        function handleFrame(data) {
+            try {
+                const msg = typeof data === 'string' ? JSON.parse(data) : data;
+                const ch = (msg.ch || '').startsWith('deck.') ? msg.ch.slice(5) : msg.ch;
+                const ms = msg.ms || 0;
+                const line = msg.line || '';
+                if (ms > maxMs) maxMs = ms;
+                if (channels[ch]) {
+                    channels[ch].lines.push(line);
+                    if (channels[ch].lines.length > 200) channels[ch].lines.shift();
+                    if (line.includes('JOB START')) {
+                        jobsActive++;
+                        updateAstrolabeState();
+                        channels[ch].status = 'RUNNING';
+                    } else if (line.includes('JOB EXIT')) {
+                        jobsActive = Math.max(0, jobsActive - 1);
+                        updateAstrolabeState();
+                        const code = line.match(/JOB EXIT (-?\d+)/)?.[1] || '0';
+                        channels[ch].status = code === '0' ? 'EXIT_OK' : 'EXIT_FAIL';
+                    } else if (line.includes('SKIPPED')) {
+                        channels[ch].status = 'SKIPPED';
+                    } else if (channels[ch].status === 'DEAD') {
+                        channels[ch].status = 'RUNNING';
+                    }
+                    updatePanel(ch);
+                }
+            } catch (err) { console.error('Parse error:', err); }
+        }
+
+        function updateWireStatus() {
+            if (window.__DECK_REPLAY) return; // replay chip is set once by playReplay
+            const chip = document.getElementById('wireStatusChip');
+            const text = document.getElementById('wireStatus');
+            if (wsConnected && maxMs > 0) {
+                chip.className = 'chip live';
+                text.textContent = 'LIVE';
+            } else {
+                chip.className = 'chip dead';
+                text.textContent = 'DEAD';
+            }
+        }
+
+        function updateAstrolabeState() {
+            let newState = 'sleep';
+            if (wsConnected || window.__DECK_REPLAY) {
+                if (jobsActive > 0) newState = 'executing';
+                else if (maxMs > 0) newState = 'previewing';
+                else newState = 'listening';
+            } else {
+                newState = 'sleep';
+            }
+            astrolabeState = newState;
+            document.getElementById('astrolabeState').textContent = astrolabeState;
+        }
+
+        function drawAstrolabe() {
+            const w = astroCanvas.width, h = astroCanvas.height;
+            astroCtx.fillStyle = '#030509';
+            astroCtx.fillRect(0, 0, w, h);
+            const r1 = 100, r2 = 58, r3 = 33;
+            const brassColor = '#d3af37', verdigrisColor = '#5e9e73', rustColor = '#8a4b2b';
+
+            for (let i = 0; i < 3; i++) {
+                const r = [r1, r2, r3][i];
+                const col = [brassColor, verdigrisColor, rustColor][i];
+                const thick = [2, 1.5, 1][i];
+                astroCtx.strokeStyle = col;
+                astroCtx.lineWidth = thick;
+                astroCtx.beginPath();
+                astroCtx.arc(centerX, centerY, r, 0, Math.PI * 2);
+                astroCtx.stroke();
+            }
+
+            const speedMap = { listening: 0.2, previewing: 0.5, executing: 3, sleep: 0 };
+            const speed = speedMap[astrolabeState] || 0;
+            astrolabeAngle += speed;
+
+            const strikeThickness = { listening: 0.5, previewing: 1, executing: 2.5, sleep: 0.5 };
+            astroCtx.strokeStyle = astrolabeState === 'sleep' ? '#3f3f3f' : brassColor;
+            astroCtx.lineWidth = strikeThickness[astrolabeState] || 1;
+            const ax = centerX + r1 * Math.cos(astrolabeAngle);
+            const ay = centerY + r1 * Math.sin(astrolabeAngle);
+            astroCtx.beginPath();
+            astroCtx.moveTo(centerX, centerY);
+            astroCtx.lineTo(ax, ay);
+            astroCtx.stroke();
+
+            const alidadeAngle = astrolabeAngle * 0.7;
+            astroCtx.strokeStyle = astrolabeState === 'sleep' ? '#2f2f2f' : rustColor;
+            astroCtx.lineWidth = 1.5;
+            const naX = centerX + r2 * Math.cos(alidadeAngle);
+            const naY = centerY + r2 * Math.sin(alidadeAngle);
+            astroCtx.beginPath();
+            astroCtx.moveTo(centerX, centerY);
+            astroCtx.lineTo(naX, naY);
+            astroCtx.stroke();
+
+            if (astrolabeState !== 'sleep') requestAnimationFrame(drawAstrolabe);
+        }
+        drawAstrolabe();
+
+        function updatePanel(ch) {
+            const cfg = channels[ch];
+            const logEl = document.getElementById(ch + '-log');
+            const stripEl = document.getElementById(ch + '-strip');
+            const statusEl = document.getElementById(ch + '-status');
+
+            logEl.innerHTML = cfg.lines.map(ln => {
+                const isLC = /^(JOB|SKIPPED)/.test(ln);
+                const isErr = /^JOB EXIT [^0]/.test(ln);
+                return `<div class="log-line${isLC ? ' lifecycle' : ''}${isErr ? ' error' : ''}">${escapeHtml(ln)}</div>`;
+            }).join('');
+            logEl.scrollTop = logEl.scrollHeight;
+
+            let statusClass = 'chip dead', statusText = 'DEAD', statusDot = 'dead';
+            if (cfg.status === 'RUNNING') {
+                statusClass = 'chip running'; statusText = 'RUNNING'; statusDot = 'live';
+            } else if (cfg.status === 'EXIT_OK') {
+                statusClass = 'chip exit-ok'; statusText = 'EXIT 0'; statusDot = 'live';
+            } else if (cfg.status === 'EXIT_FAIL') {
+                statusClass = 'chip exit-fail'; statusText = /JOB EXIT (\d+)/.exec(cfg.lines[cfg.lines.length-1])?.[1] || 'FAIL'; statusDot = 'dead';
+            } else if (cfg.status === 'SKIPPED') {
+                statusClass = 'chip skipped'; statusText = 'SKIPPED'; statusDot = 'live';
+            }
+            statusEl.className = statusClass;
+            statusEl.innerHTML = `<span class="dot ${statusDot}"></span><span>${statusText}</span>`;
+
+            if (ch === 'tests' && cfg.parseRegex) {
+                let matched = false;
+                for (const ln of cfg.lines) {
+                    const m = cfg.parseRegex.exec(ln);
+                    if (m) {
+                        stripEl.textContent = `${m[2]} passed, ${m[3]} failed`;
+                        matched = true;
+                        break;
+                    }
+                }
+                if (!matched) stripEl.textContent = '— awaiting wire —';
+            } else if ((ch === 'census' || ch === 'ironroot') && cfg.keywords) {
+                const matches = cfg.lines.filter(ln => cfg.keywords.some(kw => ln.toLowerCase().includes(kw)));
+                if (matches.length > 0) {
+                    stripEl.textContent = matches.slice(-1)[0];
+                } else {
+                    stripEl.textContent = '— awaiting wire —';
+                }
+            } else if (ch === 'gemma' || ch === 'flash') {
+                const nonLC = cfg.lines.filter(ln => !/^(JOB|SKIPPED)/.test(ln));
+                if (nonLC.length > 0) {
+                    stripEl.textContent = nonLC.slice(-1)[0];
+                } else {
+                    stripEl.textContent = '— awaiting wire —';
+                }
+            }
+        }
+
+        function updateAllPanels() {
+            for (const ch in channels) updatePanel(ch);
+        }
+
+        setInterval(() => {
+            document.getElementById('elapsedMs').textContent = maxMs;
+            updateWireStatus();
+        }, 100);
+
+        function playReplay(replay) {
+            const chip = document.getElementById('wireStatusChip');
+            const text = document.getElementById('wireStatus');
+            chip.className = 'chip skipped';
+            const when = new Date(replay.baked_unix * 1000).toISOString().slice(0, 16).replace('T', ' ');
+            text.textContent = 'REPLAY ×10 — live run ' + when + 'Z';
+            wsConnected = false;
+            document.getElementById('astrolabeState').textContent = 'previewing';
+            replay.frames.forEach((frame) => {
+                setTimeout(() => handleFrame(frame), Math.floor((frame.ms || 0) / 10));
+            });
+        }
+
+        if (window.__DECK_REPLAY) {
+            // Baked page: replay the recorded run at 10x, labeled, no wire.
+            playReplay(window.__DECK_REPLAY);
+        } else {
+            connectWs();
+        }
+        updateAllPanels();
+    </script>
+</body>
+</html>

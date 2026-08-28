@@ -1,0 +1,9 @@
+// Worked example of the `Empty` payload kind (verb author's checklist:
+// 1. this .ron, 2. `cargo xtask weld example_empty` for the stub,
+// 3. fill the handler body, 4. register in ORDER.tsv, 5. `cargo xtask
+// check-lanes && cargo xtask gen-verbs`). Not wired into live dispatch.
+(
+    name: "example_empty",
+    payload: Empty,
+    mutating: false,
+)

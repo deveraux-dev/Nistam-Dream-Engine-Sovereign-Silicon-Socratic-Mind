@@ -1,0 +1,70 @@
+# Foreman-promoted from a gated sidecar draft (MIGRATION §M2).
+[package]
+name = "forge-daemon-door"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[dependencies]
+bytemuck = { version = "1", features = ["derive"] }
+forge-ump-v3 = { path = "../forge-ump-v3" }
+forge-ml-bqrouter = { path = "../forge-ml-bqrouter" }
+# write_vixi's parse+gate (door.rs) — zero-dep leaf, no new transitive surface.
+forge-vix-syntax-v3 = { path = "../forge-vix-syntax-v3" }
+forge-vix-v3 = { path = "../forge-vix-v3" }
+# river_set_head/river_set_aperture (door.rs) — river.idx's one home (L05),
+# extracted from xtask 2026-08-19 precisely so this crate could depend on
+# it. Zero-dep leaf, no new transitive surface.
+forge-river-v3 = { path = "../forge-river-v3" }
+# Plan step 6 (see-where-it-breaks-snuggly-hopper.md), river.idx slice only
+# (aspire.rs stays gated behind peer review per the plan's own text): routes
+# river.idx writes through forge-vcs-v3's existing commit-lock + Trit
+# fork-verdict machinery instead of inventing new conflict detection.
+# blake3 (its hash dep) is already vetted workspace-wide (forge-cart-v3
+# links it too) — no new transitive surface class.
+forge-vcs-v3 = { path = "../forge-vcs-v3" }
+forge-core-v3 = { path = "../forge-core-v3" }
+# hook_* door verbs (door.rs): the compiled `foreman hook <event>` handlers,
+# called straight, so one long-lived daemon holds this logic instead of
+# `foreman.exe` being re-spawned fresh per Claude Code tool call (replaces
+# `.claude/settings.json`'s PreToolUse/PostToolUse hook chain, 2026-08-21).
+forge-foreman-v3 = { path = "../forge-foreman-v3" }
+# ast_parse (door.rs): VixiScript's hand-rolled recursive-descent parser,
+# called straight — no nom/pest/tree-sitter, pure function over a source
+# string, no fs I/O (2026-08-21 door-wiring wave).
+forge-ast-v3 = { path = "../forge-ast-v3" }
+# lsp_diagnostics/lsp_hover (door.rs): forge-vix-lsp-v3's handlers are
+# already pure functions decoupled from its stdio transport — this crate
+# calls them directly, the stdio server is untouched (2026-08-21).
+forge-vix-lsp-v3 = { path = "../forge-vix-lsp-v3" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+# codegen.rs (2026-08-22, two-lane door-verb doctrine): parses `src/verbs/*.ron`
+# specs — the SAME crate+version already vetted in forge-mud-v3/
+# forge-massops-wire-v3/forge-cart-v3, no new dependency class.
+ron = "0.8"
+# R2 nostr lane (Sean "go R2" 2026-08-16 = the ARCH000 nod PRIME-MIRROR §4A
+# named; DRAFT_DEPS: all three already sit in the workspace lock via
+# forge-audio-v3's optional set — zero new transitive surface). The daemon is
+# the comms owner (ADR-0025), so the crypto lives HERE; `beat_batch.rs` itself
+# stays one-homed in forge-audio-v3 and is textually mounted (see lib.rs) —
+# a cargo edge to it would drag the whole audio engine in for one codec file.
+k256 = "0.13"
+sha2 = "0.10"
+rand_core = { version = "0.6", features = ["getrandom"] }
+gemma-s13 = { path = "../gemma-s13" }
+zeroize = { version = "1.7", default-features = false, features = ["alloc"] }
+
+[target.'cfg(windows)'.dependencies]
+windows-sys = { version = "0.59", features = ["Win32_Foundation", "Win32_System_Threading", "Win32_System_Diagnostics_ToolHelp", "Win32_System_ProcessStatus"] }
+
+[[bin]]
+name = "forgedaemon"
+path = "src/bin/forgedaemon.rs"
+
+[build-dependencies]
+forge-vcs-v3 = { path = "../forge-vcs-v3" }
+
+[lints]
+workspace = true

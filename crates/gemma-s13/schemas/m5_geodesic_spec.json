@@ -1,0 +1,25 @@
+{
+  "title": "DiscretizedGeodesicHaikuSetup",
+  "version": "1.0.0-s13",
+  "concept": {
+    "domain": "Discrete Riemannian Optimization",
+    "target": "5D Manifold (M5) Ternary Lattice",
+    "bypassed_technique": "Straight-Through Estimator (STE)"
+  },
+  "haiku": {
+    "line_1": "Five dimensions turn,",
+    "line_2": "Ternary steps find the path,",
+    "line_3": "Gradients now rest.",
+    "metrics": {
+      "syllables": [5, 7, 5],
+      "total_syllables": 17
+    }
+  },
+  "manifold_parameters": {
+    "axes_count": 5,
+    "valid_trit_states": 243,
+    "metric_tensor_symbol": "g_ij",
+    "geodesic_traversal": "min_energy_lattice_hop"
+  },
+  "sha256_seal": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

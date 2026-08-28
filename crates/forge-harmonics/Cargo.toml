@@ -1,0 +1,21 @@
+# Foreman-promoted from a gated sidecar draft (MIGRATION §M2).
+[package]
+name = "forge-harmonics"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[features]
+# Default build stays one-dependency. MusicXML import is opt-in because it is
+# the only thing here that needs an XML parser.
+default = []
+musicxml = ["dep:roxmltree"]
+
+[dependencies]
+bytemuck = { version = "1", features = ["derive"] }
+roxmltree = { version = "0.20", optional = true }
+serde = { version = "1", features = ["derive"] }
+
+[lints]
+workspace = true

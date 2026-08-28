@@ -1,0 +1,1 @@
+{"event":"asset","action":"attest","tick":1001,"payload":{"nace_compliance_level":3,"s13_state_vector":"S13:CRV.A3.072.FAIL","detected_defects":["Excessive Curvature","Roughness","Potential Blistering"],"mean_curvature_mm":0.72,"cost_usd":0.0004,"model":"gemini-2.5-flash","project":"nde1-493505","region":"us-central1"}}

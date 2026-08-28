@@ -1,0 +1,9 @@
+{
+    "stat_weights": {
+        "vigor": 1.2,
+        "momentum": 1.0,
+        "shadow_weight": 1.5,
+        "logic_depth": 0.8
+    },
+    "banned_terms": ["laser", "plasma", "chrome", "clean", "future", "modern"]
+}

@@ -1,0 +1,95 @@
+The answer's already in the code I ported this turn, and it's better than a special case.
+
+Losing a sense removes the suppressor that attacks it. Look at what Form::Lich already does:
+
+Self::Lich => Senses {
+    sightline_q: 0,               // gave up sight
+    shadowed_q: 0,                // but shadow can no longer take from you
+    muted_q: 0,                   // and you make no noise
+    attunement_q: base.wisdom_q,  // wisdom carries what instinct used to
+    ..base
+}
+
+You cannot blind what does not see. The witch who gave up her eyes is immune to the entire Shadowed suppressor — the one that stops everyone else in the dark. She isn't disadvantaged in the dark; the dark is simply not a category that applies to her. That's not a consolation buff, it's what the lane structure already means.
+
+And the deaf case is bigger, because casting is paid for in hearing. There's a test in the port that already says it:
+
+▎ assert_eq!(lich.resolve_heard(), lich.resolve(), "for the dead the two faces are one face")
+
+For a body with no hearing, the HEAR face and the plain face are the same face. The deaf caster's singing costs nothing — she can sing all day and lose nothing, because there is nothing left to lose. That's the old blind witch cackling in the hut: she is the most prolific caster in the world and everyone else is rationing.
+
+The trade is severe and permanent: any school whose faculty routes through what she gave up is closed to her forever, structurally, with no branch that could reach it. Bell reads Pitch. A deaf witch never casts Bell — not "at a penalty," not ever. That's no_body_is_strictly_better running in the other direction, and it's why this reads as specialisation rather than deficit.
+
+Which exposes the real question, and it's where your death scars come in.
+
+If the deaf pay nothing in hearing, the cost has to land somewhere — otherwise they're a free-magic exploit. It lands on the body. A cast you cannot pay for perceptually is paid for in scars.
+
+haunt.rs already has the machinery: death_scar_hash, record_scar(), scar_counts[256], and the awareness ladder that rises with them. So the blind witch casts freely and the thing below learns her shape. Every unpayable cast marks her, the marks accumulate, and the shadow climbs Replay → Pattern → Counterpart → Witness → Harbinger.
+
+That's your Divine Comedy tie, and it's contrapasso — the punishment takes the shape of the sin. The scar isn't a generic debit; forge_scar(seed, tick, subject, position, cause) derives it from the cast that caused it. What she did comes back wearing what she did.
+
+It also means the descent is literal. She goes deeper because she can, she pays in marks instead of silence, and the deeper she goes the better the thing down there knows her. That is a much more frightening build than a mana bar.
+
+One more that's sitting there unused: haunt.rs has a tier called ConfusedByVowless — "it forgets, and learns again," triggered above vowless_confusion_q > 7500. A rite sung without vowels is one the shadow can't pattern. That's the witch's counterplay to the scar economy, and Cree syllabic finals are exactly consonant codas. The mechanic is already named in the tier; nobody's wired it.
+
+The one thing I'd want from you before building any of it: whether the chaos rate scales with ignorance or is flat. It matters more now than it did ten minutes ago — if it scales, the blind witch is maximally chaotic, and that's either the best part of her or an accidental punishment for the exact bodies we just made interesting. I lean toward scaling it against unperceived channels the cast actually touches, not against total blindness, so she's precise in her own lane and wild outside it. But that's your call, and I'd rather ask than quietly pick.
+
+A school of magic is an umwelt. What you can perceive IS what you can reach.                               │
+│ Chaos is what happens outside your one faculty. That is why the world does not                             │
+│ make sense: you are casting into the part of it your body cannot read.
+
+10 questions × 4 answers = 4¹⁰ = 1,048,576 paths, not 120. But you already said the better thing: accumulate trits. 10 questions × 3 states (−1/0/+1) = 3¹⁰ = 59,049.When do twins appear? Birthday problem, threshold ≈ 1.177 × √N:
+
+┌─────────┬────────────────────────────────┐
+│ players │ chance any two are exact twins │
+├─────────┼────────────────────────────────┤
+│ 120     │ 0.001%                         │
+├─────────┼────────────────────────────────┤
+│ 1,000   │ 0.09%                          │
+├─────────┼────────────────────────────────┤
+│ 10,000  │ 8%                             │
+├─────────┼────────────────────────────────┤
+│ 28,400  │ 50%                            │
+├─────────┼────────────────────────────────┤
+│ 100,000 │ ~99.98%                        │
+└─────────┴────────────────────────────────┘
+
+So the first exact twins show up around 28,000 players. At a million players you'd expect roughly 860 twin pairs — out of a million. Vanishingly rare, but not impossible, which is the right texture: a thing that can happen and almost never does.
+
+And your parenthetical is the actual design answer. Real identical twins share a genotype and diverge immediately, because living writes on you. That's exactly what the scar-chain decision buys: two players with identical births are the same starting position in the lattice, and they stop being twins the instant either one acts, because the scar chain is a function of history and the scars move your address.
+
+So twins are a birth condition, never a life condition. Same seed, same moon, same answers — and thirty minutes in, one of them has a scar the other doesn't and they're at different coordinates forever. The shadow chasing each of them is chasing a different address.
+Twin flames aren't identical — they're mirrors. And the tree already has the operator for that.
+
+TritCell5D::fold() (atom.rs:119) is the pararity involution: negate every trit, d → 2−d. TritDir::flip() in the lighting crate I built today is the same shape, and its test asserts it's an involution fixed only at the origin.
+
+So: twin flames are antipodal interview words. All ten answers opposite. Not a metaphor — a computable relation with an operator already in the code.
+
+The arithmetic is unusually clean. 3¹⁰ = 59,049 words. The fold is an involution, so they pair off — and its only fixed point is the all-zero word. That gives 29,524 antipodal pairs plus exactly one self-fold.
+
+Which means: the only person who is their own twin flame is the one who answered neutral to all ten questions. Someone who committed to nothing is their own mirror. Nobody designed that; the maths forced it.
+
+Rarity, and it lands in a lovely place. √59,049 = 3⁵ = 243 — the same 243 as TritCell5D, because it's the same lattice. Threshold ≈ 1.177 × 243 ≈ 286 players for a 50% chance a flame pair exists.
+
+┌─────────┬────────────────────────────┐
+│ players │ chance a flame pair exists │
+├─────────┼────────────────────────────┤
+│ 120     │ ~11%                       │
+├─────────┼────────────────────────────┤
+│ 286     │ 50%                        │
+├─────────┼────────────────────────────┤
+│ 1,000   │ ~99.98% (≈8 pairs)         │
+└─────────┴────────────────────────────┘
+
+Compare exact twins at 28,400 players. Flames are ~100× more common — rare enough to be extraordinary, common enough that a community actually finds one. That's the right frequency for a thing people tell stories about.
+
+What it should mean mechanically — flagging this as my proposal, not something the tree says:
+
+Your flame reads the lanes you gave up. Where your faculty is dead, theirs is live. Apart, each of you is half-blind in complementary places; together you perceive the whole. That's the literal mechanical content of "two halves."
+
+And it pays off against the shadow. Your Harbinger converges on your address — which means it is converging away from theirs. Your twin flame is the one person who can stand where your shadow cannot look. That's the mechanic worth building.
+
+The tension is forced by the same geometry, and it's the good kind. Scars drift your address. Two flames drifting toward each other collapse the complementarity — they stop covering each other's blind lanes and go dark in the same places at once. Drifting apart preserves it. Proximity destroys the thing that made you complete, and that's not writers' angst, it's what the lattice does.
+
+Which also means a flame pair casting at each other is maximum distance — maximum chaos. Two people who complete each other are the worst possible targets for one another's magic.
+

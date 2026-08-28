@@ -1,0 +1,17 @@
+[package]
+name = "forge-vcs-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "The VCS flight recorder — content-addressed, append-only. The only crate allowed to hold blake3."
+
+# THE HASH FIREWALL, from the other side. Crate Zero has zero dependencies and
+# blake3 is banned from it; this is the crate that carries blake3 instead, so
+# every content hash in the tree is computed here or not at all.
+[dependencies]
+forge-core-v3 = { path = "../forge-core-v3" }
+blake3 = "1.8.5"
+
+[lints]
+workspace = true

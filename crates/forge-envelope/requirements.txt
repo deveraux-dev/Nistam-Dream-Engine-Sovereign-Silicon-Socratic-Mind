@@ -1,0 +1,4 @@
+google-genai
+pydantic
+google-cloud-firestore
+google-cloud-storage
