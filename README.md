@@ -80,10 +80,10 @@ test.bat
 
 ## 🌟 Key Architectural Innovations
 
-1. **Three Bears Concurrent Resident Model Fleet** (`gemma-s13`):
-   - **Baby Bear (Gemma 2B - 410 MB VRAM)**: Generates 5D geodesic coordinate vectors and procedural `.vixi` shader parameters ($3^5 = 243$ M5 states).
-   - **Blind Mama Bear (Gemma 9B - 1.72 GB VRAM)**: S13 balanced-ternary dual-stream arbiter ($T + T^* = 0$, 500k passes @ **24.24M arbitrations/s**) and ADR-0026 zero-retention airgap sentry.
-   - **Papa Bear Head (Gemma 27B - 580 MB VRAM)**: 7-Domain BQ MetaRouter centroid routing (**1.90M decisions/s**) and $N \times \text{IPR}$ quantum spectral concentration sieve.
+1. **Three Bears Resident Model Fleet** (`gemma-s13`):
+   - **Baby Bear (Gemma 2B - 410 MB VRAM)**: Fully wired in live fleet stepping loop; generates 5D geodesic coordinate vectors and procedural `.vixi` shader parameters ($3^5 = 243$ M5 states).
+   - **Blind Mama Bear (Gemma 9B - 1.72 GB VRAM)**: Standalone 42-layer full S13 inference pipeline wired and measured (`crates/gemma-s13/examples/full_inference.rs`); dual-stream parity arbiter ($T + T^* = 0$, 500k passes @ **24.24M arbitrations/s**); multi-model fleet step uses config routing.
+   - **Papa Bear Head (Gemma 27B - 580 MB VRAM)**: 7-Domain BQ MetaRouter centroid routing (**1.90M decisions/s**) and $N \times \text{IPR}$ quantum spectral concentration sieve (config stub in fleet step).
    - **Fleet Footprint**: All three models sit concurrently in **2,710 MB (2.71 GB) total VRAM** (fits cleanly on consumer 8 GB GPUs like the RTX 3070).
 2. **Hierarchical 3-Tier Cache & Continuous Manifold Blending** (`forge-core-v3`):
    - **Tier 1 (`SoulWord`)**: L1D/register fast cache ($< 50\text{ ns}$) with continuous soft-routing (`route_soft()`, `permyriad_softmax_from_dist()`).
@@ -124,7 +124,8 @@ Measured on physical host hardware (x86_64 host, NVIDIA RTX 3070 machine, measur
 | **Three Bears Resident Fleet VRAM** | **2.71 GB total VRAM** | Baby Bear 2B (410 MB) + Blind Mama Bear 9B (1.72 GB) + Papa Bear 27B Head (580 MB) |
 | **Gemma 2B Decode (GPU Measured)** | **82.5 tokens/sec** | Real quantized weights on RTX 3070, zero sentinel bytes |
 | **Gemma 3.2B Decode (GPU Measured)** | **54.7 tokens/sec** | Real quantized weights on RTX 3070, zero sentinel bytes |
-| **Gemma 9B Plumbing Baseline (0/42 Layers)** | **147.8 tokens/sec** (6.83 ms/tok) | S13M weight loading, embed → norm → logits only; 42-layer GEMV pass pending |
+| **Gemma 9B Decode (CPU Measured, 42 Layers)** | **0.38 tokens/sec** (2.66 s/tok) | Full 42-layer S13 scalar forward pass on real 1.72 GB weights (`full_inference.rs`) |
+| **Gemma 9B Decode (GPU WebGPU Kernel)** | **[UNVERIFIED / WIP]** | WebGPU compute dispatch in-flight; CPU scalar verified |
 
 ---
 

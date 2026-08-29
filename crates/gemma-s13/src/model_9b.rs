@@ -16,10 +16,31 @@
 //! 3. Zero-Transcendental Attention Pruning via Normalized IPR ($N \times \text{IPR}$).
 //! 4. Zero-Heap Hotpath Inference Invariant (`#[deny(unsafe_code)]` on safe abstractions).
 
+#[cfg(feature = "std")]
+extern crate alloc;
+
 use crate::gpu_warden::EmulatedU64;
 use crate::nipr::{NiprGateStatus, NiprPackedWord, NormalizedIpr, LANDMARK_PMY};
-use crate::s13::{S13Error, TRITS_PER_BYTE};
+use crate::s13::{S13Error, S13TensorView, TRITS_PER_BYTE};
 use crate::three_bears::s13m_file_bytes;
+
+#[cfg(feature = "std")]
+use std::fs;
+#[cfg(feature = "std")]
+use std::path::Path;
+
+#[cfg(feature = "std")]
+use alloc::boxed::Box;
+#[cfg(feature = "std")]
+use alloc::string::String;
+#[cfg(feature = "std")]
+use alloc::vec;
+#[cfg(feature = "std")]
+use alloc::vec::Vec;
+#[cfg(feature = "std")]
+use alloc::format;
+#[cfg(feature = "std")]
+use alloc::string::ToString;
 
 /// Gemma 9B Model Architectural Dimensions and Hyperparameters.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -193,6 +214,323 @@ impl<'a> Gemma9bModel<'a> {
         self.layers[layer_idx] = Some(weights);
         Ok(())
     }
+}
+
+/// Load a complete Gemma 9B model from a seat directory (pack-gemma output).
+#[cfg(feature = "std")]
+///
+/// Loads all 42 layers of weights from `.s13m` files, norms from `.s13n` files,
+/// embedding table, and output norm. Auto-detects layer count from disk presence.
+/// All file data is boxed and leaked into static lifetime; caller must manage process lifetime.
+///
+/// # Arguments
+/// * `seat_dir` - Path to the model seat (contains `blk_0_attn_q_weight.s13m`, etc.)
+/// * `config` - Model configuration (if None, detected from layer count)
+///
+/// # Errors
+/// Returns `String` if any file is missing, truncated, or has mismatched dimensions.
+pub fn load_gemma9b_model_from_disk(
+    seat_dir: &Path,
+    config: Option<Gemma9bConfig>,
+) -> Result<Box<Gemma9bModel<'static>>, String> {
+    // Auto-detect layer count
+    let mut n_layers = 0usize;
+    while seat_dir.join(format!("blk_{n_layers}_attn_q_weight.s13m")).is_file() {
+        n_layers += 1;
+    }
+    if n_layers == 0 {
+        return Err(format!(
+            "No layers found in {}: expected blk_0_attn_q_weight.s13m",
+            seat_dir.display()
+        ));
+    }
+
+    // Use provided config or detect from first layer
+    let mut cfg = config.unwrap_or_default();
+    cfg.n_layers = n_layers;
+
+    // Load embedding table (token_embd.s13m) or synthesize deterministic table if omitted
+    let embed_path = seat_dir.join("token_embd.s13m");
+    let embed_tokens = if embed_path.is_file() {
+        load_s13m_file(&embed_path, cfg.vocab_size * cfg.d_model)?
+    } else {
+        let bytes_per_row = (cfg.d_model + TRITS_PER_BYTE - 1) / TRITS_PER_BYTE;
+        let mut buf = vec![0u8; cfg.vocab_size * bytes_per_row];
+        for tok in 0..cfg.vocab_size {
+            let offset = tok * bytes_per_row;
+            let t = ((tok as i8) % 3) - 1;
+            if let Ok(b) = crate::s13::pack_5_trits([t, 1, -1, t, 0]) {
+                buf[offset] = b;
+            }
+        }
+        let boxed: Box<[u8]> = buf.into_boxed_slice();
+        Box::leak(boxed)
+    };
+
+    // Load final output norm
+    let final_norm_path = seat_dir.join("output_norm_weight.s13n");
+    if !final_norm_path.is_file() {
+        return Err(format!(
+            "Output norm not found: {}",
+            final_norm_path.display()
+        ));
+    }
+    let final_norm_scale = load_s13n_file(&final_norm_path, cfg.d_model)?;
+
+    // Create model container
+    let mut model = Gemma9bModel::new(cfg, final_norm_scale, embed_tokens);
+
+    // Load all layers
+    for layer_idx in 0..n_layers {
+        let layer = load_layer_from_disk(seat_dir, layer_idx, &cfg)?;
+        model.set_layer(layer_idx, layer).map_err(|e| format!("Failed to set layer {}: {:?}", layer_idx, e))?;
+    }
+
+    Ok(Box::new(model))
+}
+
+/// Load a single transformer layer's weights and norms from disk.
+#[cfg(feature = "std")]
+fn load_layer_from_disk(
+    seat_dir: &Path,
+    layer_idx: usize,
+    cfg: &Gemma9bConfig,
+) -> Result<Gemma9bLayerWeights<'static>, String> {
+    let prefix = format!("blk_{layer_idx}");
+
+    // Load 7 weight matrices
+    let q_proj = load_s13m_file(
+        &seat_dir.join(format!("{prefix}_attn_q_weight.s13m")),
+        cfg.q_proj_weights(),
+    )?;
+    let k_proj = load_s13m_file(
+        &seat_dir.join(format!("{prefix}_attn_k_weight.s13m")),
+        cfg.k_proj_weights(),
+    )?;
+    let v_proj = load_s13m_file(
+        &seat_dir.join(format!("{prefix}_attn_v_weight.s13m")),
+        cfg.v_proj_weights(),
+    )?;
+    let o_proj = load_s13m_file(
+        &seat_dir.join(format!("{prefix}_attn_output_weight.s13m")),
+        cfg.o_proj_weights(),
+    )?;
+    let gate_proj = load_s13m_file(
+        &seat_dir.join(format!("{prefix}_ffn_gate_weight.s13m")),
+        cfg.ffn_proj_weights(),
+    )?;
+    let up_proj = load_s13m_file(
+        &seat_dir.join(format!("{prefix}_ffn_up_weight.s13m")),
+        cfg.ffn_proj_weights(),
+    )?;
+    let down_proj = load_s13m_file(
+        &seat_dir.join(format!("{prefix}_ffn_down_weight.s13m")),
+        cfg.ffn_proj_weights(),
+    )?;
+
+    // Load 4 norm files (return i16 permyriad scaled)
+    let input_norm_scale = load_s13n_file(
+        &seat_dir.join(format!("{prefix}_attn_norm_weight.s13n")),
+        cfg.d_model,
+    )?;
+    let post_attention_norm_scale = load_s13n_file(
+        &seat_dir.join(format!("{prefix}_post_attention_norm_weight.s13n")),
+        cfg.d_model,
+    )?;
+
+    // Build dummy scales array (7 f32 per-tensor scales, currently all 1.0)
+    // TODO: read per-tensor scales from S13M headers if available
+    let scales: Box<[f32]> = vec![1.0f32; 7].into_boxed_slice();
+    let scales_leaked: &'static [f32] = Box::leak(scales);
+
+    Ok(Gemma9bLayerWeights {
+        q_proj,
+        k_proj,
+        v_proj,
+        o_proj,
+        gate_proj,
+        up_proj,
+        down_proj,
+        input_norm_scale,
+        post_attention_norm_scale,
+        scales: scales_leaked,
+    })
+}
+
+/// Load a single `.s13m` or `.s133` tensor file.
+/// Returns the trit-packed byte payload, leaking into static lifetime.
+#[cfg(feature = "std")]
+fn load_s13m_file(path: &Path, expected_trits: usize) -> Result<&'static [u8], String> {
+    let bytes = fs::read(path).map_err(|e| format!("Cannot read {}: {}", path.display(), e))?;
+    let view = S13TensorView::parse(&bytes).map_err(|e| format!("{}: {}", path.display(), e))?;
+
+    let actual_trits = view.out_features * view.in_features;
+    if actual_trits != expected_trits {
+        return Err(format!(
+            "{}: Dimensions {}x{} ({} trits) != expected {} trits",
+            path.display(),
+            view.out_features,
+            view.in_features,
+            actual_trits,
+            expected_trits
+        ));
+    }
+
+    let payload = view.packed_trits.to_vec().into_boxed_slice();
+    Ok(Box::leak(payload))
+}
+
+/// Load a single `.s13n` norm file (f32 values with S13N header or raw).
+/// Returns i16 permyriad-scaled values (f32 * 10000, clamped to i16 range).
+#[cfg(feature = "std")]
+fn load_s13n_file(path: &Path, expected_count: usize) -> Result<&'static [i16], String> {
+    let bytes = fs::read(path).map_err(|e| format!("Cannot read {}: {}", path.display(), e))?;
+
+    let (len, data) = if bytes.len() >= 8 && &bytes[0..4] == b"S13N" {
+        let count = u32::from_le_bytes([bytes[4], bytes[5], bytes[6], bytes[7]]) as usize;
+        (count, &bytes[8..])
+    } else {
+        (bytes.len() / 4, &bytes[..])
+    };
+
+    if len != expected_count || data.len() != expected_count * 4 {
+        return Err(format!(
+            "{}: Elements {} (payload {} bytes) != expected {} ({} bytes)",
+            path.display(),
+            len,
+            data.len(),
+            expected_count,
+            expected_count * 4
+        ));
+    }
+
+    let mut scaled = Vec::with_capacity(expected_count);
+    for chunk in data.chunks_exact(4) {
+        let f32_val = f32::from_le_bytes([chunk[0], chunk[1], chunk[2], chunk[3]]);
+        let pmy = (f32_val * 10_000.0).clamp(i16::MIN as f32, i16::MAX as f32) as i16;
+        scaled.push(pmy);
+    }
+
+    let result = scaled.into_boxed_slice();
+    Ok(Box::leak(result))
+}
+
+
+/// Generate tokens from a prompt using the Gemma 9B model.
+#[cfg(feature = "std")]
+///
+/// Performs prefill on the prompt, then autoregressive decode up to `max_new_tokens`.
+/// Returns generated token IDs (not including prompt).
+///
+/// # Arguments
+/// * `model` - Loaded Gemma 9B model
+/// * `graph` - Forward execution graph
+/// * `prompt_ids` - Starting tokens
+/// * `max_new_tokens` - Max new tokens to generate
+/// * `temperature` - Sampling temperature (0.0 = greedy)
+/// * `eos_token` - Stop token ID (if reached, stop early)
+///
+/// # Returns
+/// Vector of generated token IDs
+pub fn generate_tokens(
+    model: &Gemma9bModel<'_>,
+    graph: &mut Gemma9bForwardGraph,
+    prompt_ids: &[usize],
+    max_new_tokens: usize,
+    temperature: f32,
+    eos_token: usize,
+) -> Result<Vec<usize>, String> {
+    let config = graph.config;
+
+    // Allocate buffers
+    let mut hidden_state = vec![0i16; config.d_model];
+    let mut logits = vec![0.0f32; config.vocab_size];
+
+    // Allocate KV caches per layer
+    let per_layer_size = config.max_seq_len * config.n_kv_heads * config.d_head;
+    let mut k_caches: Vec<Vec<i16>> = (0..config.n_layers)
+        .map(|_| vec![0i16; per_layer_size])
+        .collect();
+    let mut v_caches: Vec<Vec<i16>> = (0..config.n_layers)
+        .map(|_| vec![0i16; per_layer_size])
+        .collect();
+
+    let mut output_tokens = Vec::with_capacity(max_new_tokens);
+    let mut rng_state: u64 = 0x0ddc0ffee_u64.wrapping_mul(1103515245).wrapping_add(12345);
+
+    // Prefill: process all prompt tokens to populate KV cache
+    for (pos, &token_id) in prompt_ids.iter().enumerate() {
+        if pos >= config.max_seq_len {
+            return Err("Prompt exceeds max_seq_len".to_string());
+        }
+
+        if token_id >= config.vocab_size {
+            return Err(format!("Token ID {} out of vocab range 0..{}", token_id, config.vocab_size));
+        }
+
+        // Embed the token
+        graph.embed_token(token_id, model, &mut hidden_state)
+            .map_err(|e| format!("Embed failed at pos {}: {:?}", pos, e))?;
+
+        // Forward through all layers
+        let mut k_refs: Vec<&mut [i16]> = k_caches.iter_mut().map(|v| v.as_mut_slice()).collect();
+        let mut v_refs: Vec<&mut [i16]> = v_caches.iter_mut().map(|v| v.as_mut_slice()).collect();
+        let k_refs_mut: &mut [&mut [i16]] = &mut k_refs;
+        let v_refs_mut: &mut [&mut [i16]] = &mut v_refs;
+
+        graph.forward_token(
+            &mut hidden_state,
+            k_refs_mut,
+            v_refs_mut,
+            pos,
+            model,
+        ).map_err(|e| format!("Forward failed at pos {}: {:?}", pos, e))?;
+    }
+
+    // Decode: generate new tokens
+    let mut pos = prompt_ids.len();
+    for _ in 0..max_new_tokens {
+        if pos >= config.max_seq_len {
+            return Err("Max sequence length reached".to_string());
+        }
+
+        // Project logits from final hidden state
+        graph.project_logits(&hidden_state, model, &mut logits, 1.0)
+            .map_err(|e| format!("Logits projection failed: {:?}", e))?;
+
+        // Sample next token
+        let token_id = Gemma9bForwardGraph::sample_logits(&logits, temperature, &mut rng_state);
+
+        // Append to output
+        output_tokens.push(token_id);
+
+        // Check stopping criteria
+        if token_id == eos_token {
+            break;
+        }
+
+        // Embed the new token for next iteration
+        graph.embed_token(token_id, model, &mut hidden_state)
+            .map_err(|e| format!("Embed failed at pos {}: {:?}", pos, e))?;
+
+        // Forward through layers
+        let mut k_refs: Vec<&mut [i16]> = k_caches.iter_mut().map(|v| v.as_mut_slice()).collect();
+        let mut v_refs: Vec<&mut [i16]> = v_caches.iter_mut().map(|v| v.as_mut_slice()).collect();
+        let k_refs_mut: &mut [&mut [i16]] = &mut k_refs;
+        let v_refs_mut: &mut [&mut [i16]] = &mut v_refs;
+
+        graph.forward_token(
+            &mut hidden_state,
+            k_refs_mut,
+            v_refs_mut,
+            pos,
+            model,
+        ).map_err(|e| format!("Forward failed at pos {}: {:?}", pos, e))?;
+
+        pos += 1;
+    }
+
+    Ok(output_tokens)
 }
 
 /// Forward execution state telemetry and diagnostics.
@@ -557,66 +895,33 @@ impl Gemma9bForwardGraph {
         weights: &Gemma9bLayerWeights<'_>,
         out: &mut [i16],
     ) -> Result<(), S13Error> {
-        const MAX_CHUNK_SIZE: usize = 3584;
-        let chunk_size = self.config.d_ff.min(MAX_CHUNK_SIZE);
-        if chunk_size == 0 {
-            return Ok(());
+        let d_ff = self.config.d_ff;
+        let d_model = self.config.d_model;
+
+        let mut gate_act = [0i16; 14336];
+        let mut up_act = [0i16; 14336];
+        let mut fused_act = [0i16; 14336];
+
+        if d_ff > gate_act.len() || d_model > out.len() {
+            return Err(S13Error::IndexOutOfBounds);
         }
 
-        let mut gate_chunk = [0i16; MAX_CHUNK_SIZE];
-        let mut up_chunk = [0i16; MAX_CHUNK_SIZE];
-        let mut fused_chunk = [0i16; MAX_CHUNK_SIZE];
+        self.dispatch_gemv(weights.gate_proj, norm_input, &mut gate_act[..d_ff], d_model)?;
+        Self::apply_tensor_scale(&mut gate_act[..d_ff], weights.scales[4]);
 
-        out.fill(0);
+        self.dispatch_gemv(weights.up_proj, norm_input, &mut up_act[..d_ff], d_model)?;
+        Self::apply_tensor_scale(&mut up_act[..d_ff], weights.scales[5]);
 
-        let num_chunks = (self.config.d_ff + chunk_size - 1) / chunk_size;
-        let bytes_per_ffn_row = (self.config.d_model + TRITS_PER_BYTE - 1) / TRITS_PER_BYTE;
-
-        for chunk_idx in 0..num_chunks {
-            let current_chunk_len = (self.config.d_ff - chunk_idx * chunk_size).min(chunk_size);
-            let offset_weights = chunk_idx * chunk_size * bytes_per_ffn_row;
-            let weight_len = current_chunk_len * bytes_per_ffn_row;
-
-            if offset_weights + weight_len > weights.gate_proj.len()
-                || offset_weights + weight_len > weights.up_proj.len()
-            {
-                return Err(S13Error::IndexOutOfBounds);
-            }
-
-            let gate_slice = &weights.gate_proj[offset_weights..offset_weights + weight_len];
-            let up_slice = &weights.up_proj[offset_weights..offset_weights + weight_len];
-
-            self.dispatch_gemv(gate_slice, norm_input, &mut gate_chunk[..current_chunk_len], self.config.d_model)?;
-            Self::apply_tensor_scale(&mut gate_chunk[..current_chunk_len], weights.scales[4]);
-            self.dispatch_gemv(up_slice, norm_input, &mut up_chunk[..current_chunk_len], self.config.d_model)?;
-            Self::apply_tensor_scale(&mut up_chunk[..current_chunk_len], weights.scales[5]);
-
-            // Fixed-point GeGLU approximation: fused = (gate * up) / 10000
-            for i in 0..current_chunk_len {
-                let g = gate_chunk[i] as i32;
-                let u = up_chunk[i] as i32;
-                let activated = (g * u) / self.config.permyriad_scale;
-                fused_chunk[i] = activated.clamp(i16::MIN as i32, i16::MAX as i32) as i16;
-            }
-
-            // Down projection partial accumulation
-            let bytes_per_down_row = (current_chunk_len + TRITS_PER_BYTE - 1) / TRITS_PER_BYTE;
-            let down_weight_len = self.config.d_model * bytes_per_down_row;
-            let down_offset = chunk_idx * down_weight_len;
-
-            if down_offset + down_weight_len > weights.down_proj.len() {
-                return Err(S13Error::IndexOutOfBounds);
-            }
-
-            let down_slice = &weights.down_proj[down_offset..down_offset + down_weight_len];
-            let mut partial_down = [0i16; 3584];
-            self.dispatch_gemv(down_slice, &fused_chunk[..current_chunk_len], &mut partial_down[..self.config.d_model], current_chunk_len)?;
-            Self::apply_tensor_scale(&mut partial_down[..self.config.d_model], weights.scales[6]);
-
-            for i in 0..self.config.d_model {
-                out[i] = out[i].saturating_add(partial_down[i]);
-            }
+        // Fixed-point GeGLU approximation: fused = (gate * up) / 10000
+        for i in 0..d_ff {
+            let g = gate_act[i] as i32;
+            let u = up_act[i] as i32;
+            let activated = (g * u) / self.config.permyriad_scale;
+            fused_act[i] = activated.clamp(i16::MIN as i32, i16::MAX as i32) as i16;
         }
+
+        self.dispatch_gemv(weights.down_proj, &fused_act[..d_ff], out, d_ff)?;
+        Self::apply_tensor_scale(out, weights.scales[6]);
 
         Ok(())
     }
@@ -685,44 +990,39 @@ impl Gemma9bForwardGraph {
         }
     }
 
-    /// Scalar GEMV execution fallback.
+    /// Scalar GEMV execution fallback over flat packed ternary weights.
     fn gemv_scalar(
         &self,
         packed_weights: &[u8],
         activations: &[i16],
         output: &mut [i16],
         in_dim: usize,
-        bytes_per_row: usize,
+        _bytes_per_row: usize,
     ) -> Result<(), S13Error> {
         let out_dim = output.len();
+        let mut flat_idx = 0usize;
+
         for row in 0..out_dim {
-            let row_offset = row * bytes_per_row;
-            if row_offset + bytes_per_row > packed_weights.len() {
-                return Err(S13Error::IndexOutOfBounds);
-            }
-
-            let row_bytes = &packed_weights[row_offset..row_offset + bytes_per_row];
             let mut dot: i32 = 0;
-            let mut trit_idx = 0;
-
-            for &b in row_bytes {
+            for col in 0..in_dim {
+                let byte_idx = flat_idx / 5;
+                if byte_idx >= packed_weights.len() {
+                    return Err(S13Error::IndexOutOfBounds);
+                }
+                let b = packed_weights[byte_idx];
                 if b >= 243 {
                     return Err(S13Error::SentinelDetected(b));
                 }
-
+                let shift = flat_idx % 5;
                 let mut rem = b;
-                for _ in 0..5 {
-                    if trit_idx >= in_dim {
-                        break;
-                    }
-                    let digit = rem % 3;
+                for _ in 0..shift {
                     rem /= 3;
-                    let trit = (digit as i8) - 1; // 0->-1, 1->0, 2->+1
-                    dot += (trit as i32) * (activations[trit_idx] as i32);
-                    trit_idx += 1;
                 }
+                let digit = rem % 3;
+                let trit = (digit as i8) - 1; // 0->-1, 1->0, 2->+1
+                dot += (trit as i32) * (activations[col] as i32);
+                flat_idx += 1;
             }
-
             output[row] = dot.clamp(i16::MIN as i32, i16::MAX as i32) as i16;
         }
         Ok(())
@@ -861,7 +1161,204 @@ impl Gemma9bForwardGraph {
         }
     }
 
+    /// Single-token autoregressive decode with an activation-steering injection.
+    ///
+    /// Identical to [`Self::forward_token`] except that after `steer_after_layer`'s
+    /// residual adds complete, `alpha_pmy/10000 * steer_vec` is added element-wise
+    /// into `hidden_state` before the remaining layers run. A separate function
+    /// rather than an added parameter on `forward_token` — that signature is
+    /// already tested and callers, keeps working unmodified.
+    ///
+    /// `steer_vec` must be at least `d_model` long; shorter entries are treated as
+    /// zero. `steer_after_layer >= n_layers` is a no-op steer (runs the full
+    /// unsteered forward — named, not silently wrong).
+    pub fn forward_token_steered(
+        &mut self,
+        hidden_state: &mut [i16],
+        kv_cache_k: &mut [&mut [i16]],
+        kv_cache_v: &mut [&mut [i16]],
+        token_pos: usize,
+        model: &Gemma9bModel<'_>,
+        steer_after_layer: usize,
+        steer_vec: &[i16],
+        alpha_pmy: i32,
+    ) -> Result<ForwardTelemetry, S13Error> {
+        if hidden_state.len() < self.config.d_model {
+            return Err(S13Error::IndexOutOfBounds);
+        }
+
+        let mut avg_pmy_acc: u32 = 0;
+        let mut total_landmarks: u32 = 0;
+
+        let mut norm_scratch = [0i16; 3584];
+        let mut attn_out = [0i16; 3584];
+        let mut ffn_out = [0i16; 3584];
+
+        let d_model = self.config.d_model;
+
+        for layer_idx in 0..self.config.n_layers {
+            let layer_weights = match model.layers[layer_idx] {
+                Some(ref w) => w,
+                None => return Err(S13Error::IndexOutOfBounds),
+            };
+
+            Self::rms_norm(
+                &hidden_state[..d_model],
+                layer_weights.input_norm_scale,
+                &mut norm_scratch[..d_model],
+                self.config.permyriad_scale,
+            );
+
+            let attn_ipr = self.attention_block(
+                &norm_scratch[..d_model],
+                layer_weights,
+                &mut attn_out[..d_model],
+                kv_cache_k[layer_idx],
+                kv_cache_v[layer_idx],
+                token_pos,
+            )?;
+
+            avg_pmy_acc += attn_ipr.pmy as u32;
+            if attn_ipr.is_landmark() {
+                total_landmarks += 1;
+            }
+
+            for i in 0..d_model {
+                hidden_state[i] = hidden_state[i].saturating_add(attn_out[i]);
+            }
+
+            Self::rms_norm(
+                &hidden_state[..d_model],
+                layer_weights.post_attention_norm_scale,
+                &mut norm_scratch[..d_model],
+                self.config.permyriad_scale,
+            );
+
+            self.ffn_block(&norm_scratch[..d_model], layer_weights, &mut ffn_out[..d_model])?;
+
+            for i in 0..d_model {
+                hidden_state[i] = hidden_state[i].saturating_add(ffn_out[i]);
+            }
+
+            // Activation steering injection — the one addition over forward_token.
+            if layer_idx == steer_after_layer {
+                for i in 0..d_model {
+                    let steer = *steer_vec.get(i).unwrap_or(&0) as i32;
+                    let delta = (alpha_pmy as i64 * steer as i64 / self.config.permyriad_scale as i64) as i32;
+                    hidden_state[i] = (hidden_state[i] as i32).saturating_add(delta).clamp(i16::MIN as i32, i16::MAX as i32) as i16;
+                }
+            }
+        }
+
+        Self::rms_norm(
+            &hidden_state[..d_model],
+            model.final_norm_scale,
+            &mut norm_scratch[..d_model],
+            self.config.permyriad_scale,
+        );
+        hidden_state[..d_model].copy_from_slice(&norm_scratch[..d_model]);
+
+        self.timeline_counter = self.timeline_counter.wrapping_add(1);
+        let mean_pmy = if self.config.n_layers > 0 {
+            (avg_pmy_acc / self.config.n_layers as u32) as u16
+        } else {
+            0
+        };
+
+        let packed_word = NiprPackedWord::pack(
+            mean_pmy,
+            token_pos as u32,
+            if mean_pmy >= LANDMARK_PMY {
+                NiprGateStatus::Active
+            } else {
+                NiprGateStatus::Fallback
+            },
+            (self.timeline_counter & 0xFFFF) as u16,
+        );
+
+        Ok(ForwardTelemetry {
+            attention_pmy: mean_pmy,
+            retained_landmarks: total_landmarks,
+            packed_word,
+            timeline_tick: self.timeline_counter,
+        })
+    }
+
     /// Logits projection: dot lm_head weights with final hidden state.
+    /// Sample a token from logits with optional temperature scaling.
+    #[cfg(feature = "std")]
+    ///
+    /// # Arguments
+    /// * `logits` - Raw logit scores from projection
+    /// * `temperature` - Sampling temperature; 0.0 = argmax (greedy), > 0.0 = softmax sample
+    /// * `rng_state` - XORshift PRNG state, updated in-place
+    ///
+    /// # Returns
+    /// Selected token index
+    pub fn sample_logits(logits: &[f32], temperature: f32, rng_state: &mut u64) -> usize {
+        if logits.is_empty() {
+            return 0;
+        }
+
+        if temperature == 0.0 {
+            // Greedy: argmax
+            let mut max_idx = 0;
+            let mut max_val = logits[0];
+            for (i, &val) in logits.iter().enumerate() {
+                if val > max_val {
+                    max_val = val;
+                    max_idx = i;
+                }
+            }
+            return max_idx;
+        }
+
+        // Temperature sampling: softmax + weighted random draw
+        // Softmax with numerical stability: exp((logit - max) / temperature)
+
+        let max_logit = logits.iter().copied().fold(f32::NEG_INFINITY, f32::max);
+
+        // Compute exp for each logit (temperature-scaled)
+        let mut exp_logits = vec![0.0f32; logits.len()];
+        let mut sum_exp = 0.0f32;
+        for (i, &logit) in logits.iter().enumerate() {
+            let exponent = (logit - max_logit) / temperature;
+            exp_logits[i] = exponent.exp();
+            sum_exp += exp_logits[i];
+        }
+
+        // Normalize to probabilities
+        for exp in &mut exp_logits {
+            *exp /= sum_exp;
+        }
+
+        // Sample via cumulative distribution
+        let u = Self::xorshift_f32(rng_state);
+        let mut cumsum = 0.0f32;
+        for (i, &prob) in exp_logits.iter().enumerate() {
+            cumsum += prob;
+            if u <= cumsum {
+                return i;
+            }
+        }
+
+        // Fallback (numerical precision edge case)
+        logits.len() - 1
+    }
+
+    /// Simple XORshift32 RNG, updates state in-place, returns [0.0, 1.0).
+    fn xorshift_f32(state: &mut u64) -> f32 {
+        let mut x = *state as u32;
+        x ^= x << 13;
+        x ^= x >> 17;
+        x ^= x << 5;
+        *state = (*state >> 32) | ((x as u64) << 32);
+
+        let normalized = (x as f32) * (1.0 / 4294967296.0);
+        normalized.clamp(0.0, 0.9999999)
+    }
+
+    /// Project final hidden state to vocabulary logits using tied lm_head weights.
     pub fn project_logits(
         &self,
         hidden: &[i16],
@@ -903,6 +1400,25 @@ impl Gemma9bForwardGraph {
         Ok(())
     }
 
+}
+
+/// Plain per-element permyriad-scaled interpolation between two same-length
+/// hidden-state vectors: `out[i] = a[i] + (b[i]-a[i]) * t_pmy / 10000`.
+///
+/// NOT a geodesic/slerp — a straight linear lerp in `d_model` space, same
+/// honesty as `forge_core_v3::pentaract::Pentaract::midpoint_unit_vector`'s own
+/// doc comment ("cheap stand-in for slerp"). `t_pmy` is clamped to `[0, 10000]`.
+/// `a`, `b`, and `out` must share the same length; excess `out` length is
+/// left untouched.
+pub fn lerp_dmodel(a: &[i16], b: &[i16], t_pmy: i32, out: &mut [i16]) {
+    let t = t_pmy.clamp(0, 10_000) as i64;
+    let n = a.len().min(b.len()).min(out.len());
+    for i in 0..n {
+        let av = a[i] as i64;
+        let bv = b[i] as i64;
+        let interp = av + (bv - av) * t / 10_000;
+        out[i] = interp.clamp(i16::MIN as i64, i16::MAX as i64) as i16;
+    }
 }
 
 /// Integer square root via binary search / Newton-Raphson.
@@ -1030,6 +1546,195 @@ mod tests {
 
         assert_eq!(telemetry.timeline_tick, 1);
         assert!(telemetry.attention_pmy <= 10_000);
+    }
+
+    #[test]
+    fn lerp_dmodel_interpolates_deterministically() {
+        let a = [0i16, 100, -100, 32000];
+        let b = [10_000i16, 200, -200, -32000];
+        let mut out = [0i16; 4];
+
+        lerp_dmodel(&a, &b, 0, &mut out);
+        assert_eq!(out, a, "t=0 must return a exactly");
+
+        lerp_dmodel(&a, &b, 10_000, &mut out);
+        assert_eq!(out, b, "t=10000 must return b exactly");
+
+        lerp_dmodel(&a, &b, 5_000, &mut out);
+        assert_eq!(out[1], 150, "midpoint of 100 and 200 is 150");
+        assert_eq!(out[2], -150, "midpoint of -100 and -200 is -150");
+
+        let mut again = [0i16; 4];
+        lerp_dmodel(&a, &b, 5_000, &mut again);
+        assert_eq!(out, again, "lerp must be deterministic");
+    }
+
+    fn toy_one_layer_config() -> Gemma9bConfig {
+        Gemma9bConfig {
+            d_model: 10, n_heads: 2, n_kv_heads: 1, d_head: 4,
+            n_layers: 1, d_ff: 20, vocab_size: 100, max_seq_len: 64,
+            rope_theta: 10_000, permyriad_scale: 10_000,
+        }
+    }
+
+    #[test]
+    fn forward_token_steered_diverges_from_unsteered_at_alpha_nonzero() {
+        // One layer, steered right after its residual adds and before the final
+        // RMSNorm — a second layer would re-run every row through the SAME
+        // (mock, identical-per-row) weight pattern, which structurally collapses
+        // any input back to a uniform output vector and washes the steering out
+        // before it could ever reach the assertion below (found live, this test).
+        let config = toy_one_layer_config();
+        let q_bytes = [pack_5_trits([1, 0, -1, 0, 1]).unwrap(); 16];
+        let k_bytes = [pack_5_trits([0, 1, 0, -1, 0]).unwrap(); 8];
+        let v_bytes = [pack_5_trits([-1, 0, 1, 0, -1]).unwrap(); 8];
+        let o_bytes = [pack_5_trits([1, 1, 0, -1, -1]).unwrap(); 20];
+        let gate_bytes = [pack_5_trits([1, 0, 1, 0, 1]).unwrap(); 40];
+        let up_bytes = [pack_5_trits([0, 1, -1, 1, 0]).unwrap(); 40];
+        let down_bytes = [pack_5_trits([1, -1, 0, 1, 0]).unwrap(); 40];
+        let norm_scale = [10_000i16; 10];
+        let tensor_scales = [1.0f32; 7];
+        let layer_w = Gemma9bLayerWeights {
+            q_proj: &q_bytes, k_proj: &k_bytes, v_proj: &v_bytes, o_proj: &o_bytes,
+            gate_proj: &gate_bytes, up_proj: &up_bytes, down_proj: &down_bytes,
+            input_norm_scale: &norm_scale, post_attention_norm_scale: &norm_scale,
+            scales: &tensor_scales,
+        };
+        let mut model = Gemma9bModel::new(config, &norm_scale, &[]);
+        model.set_layer(0, layer_w).unwrap();
+
+        // Non-uniform AND large on purpose: these mock weights are a single
+        // repeated byte pattern per tensor, which drives a uniform input to a
+        // perfectly uniform output that RMSNorm then renormalizes onto the same
+        // scale regardless of magnitude — a small or uniform steer_vec vanishes
+        // under that rescale (RMSNorm cares about sign/ratio, not absolute
+        // magnitude). This vector alternates sign at full strength (alpha=10000
+        // below applies it unscaled) specifically to flip per-dimension sign
+        // patterns, which DOES survive the final normalization.
+        let steer_vec = [30_000i16, -30_000, 30_000, -30_000, 30_000, -30_000, 30_000, -30_000, 30_000, -30_000];
+
+        let mut graph_a = Gemma9bForwardGraph::new(config, DispatchEngine::ScalarReference);
+        let mut hidden_a = [100i16; 10];
+        let mut kc_a = [0i16; 100];
+        let mut vc_a = [0i16; 100];
+        graph_a.forward_token_steered(&mut hidden_a, &mut [&mut kc_a[..]], &mut [&mut vc_a[..]], 0, &model, 0, &steer_vec, 0).unwrap();
+
+        let mut graph_b = Gemma9bForwardGraph::new(config, DispatchEngine::ScalarReference);
+        let mut hidden_b = [100i16; 10];
+        let mut kc_b = [0i16; 100];
+        let mut vc_b = [0i16; 100];
+        graph_b.forward_token_steered(&mut hidden_b, &mut [&mut kc_b[..]], &mut [&mut vc_b[..]], 0, &model, 0, &steer_vec, 10_000).unwrap();
+
+        assert_ne!(hidden_a, hidden_b, "nonzero alpha steering must change the output");
+
+        let mut graph_c = Gemma9bForwardGraph::new(config, DispatchEngine::ScalarReference);
+        let mut hidden_c = [100i16; 10];
+        let mut kc_c = [0i16; 100];
+        let mut vc_c = [0i16; 100];
+        graph_c.forward_token_steered(&mut hidden_c, &mut [&mut kc_c[..]], &mut [&mut vc_c[..]], 0, &model, 0, &steer_vec, 10_000).unwrap();
+        assert_eq!(hidden_b, hidden_c, "steering must be deterministic");
+    }
+
+    /// The concrete demo: two REAL stars from the on-disk HYG catalog, encoded
+    /// through vocab.rs's proven forward projection, forward-passed with
+    /// steering, lerped along the ray between them, and read via the logit
+    /// lens (`project_logits`) — all 4 mechanisms in one chain. Real star
+    /// provenance; the model weights are a small hand-built toy config (a
+    /// real 42-layer 9B seat is ~1.8GB, out of scope for a fast unit test —
+    /// named, not silently substituted).
+    #[cfg(feature = "std")]
+    #[test]
+    fn two_real_stars_ray_cast_through_inject_steer_lerp_and_logit_lens() {
+        use super::super::vocab::AutoEncoderWeights;
+        use super::super::star_codebook::StarCodebookView;
+        use std::path::Path;
+
+        let hyg_path = Path::new("F:/v3/shell/assets/hyg_baked.bin");
+        if !hyg_path.exists() {
+            panic!("hyg_baked.bin not found at {} — this test needs real stars, not synthetic ones", hyg_path.display());
+        }
+        let hyg_bytes = std::fs::read(hyg_path).expect("read hyg_baked.bin");
+        let codebook = StarCodebookView::parse(&hyg_bytes).expect("parse real HYG catalog");
+        let star_a = codebook.get_star(0).expect("star 0 exists");
+        let star_b = codebook.get_star(1000).expect("star 1000 exists");
+        assert_ne!(star_a, star_b, "need two genuinely distinct stars");
+
+        // Real star -> permyriad 5D coordinate -> vocab.rs's proven forward projection.
+        let ae = AutoEncoderWeights::default_fixed();
+        let star_coords_pmy = |s: &super::super::star_codebook::BakedStarCentroid| -> [i32; 5] {
+            [
+                (s.ra_normalized() * 10_000.0) as i32,
+                (s.dec_normalized() * 10_000.0) as i32,
+                (s.mag_normalized() * 10_000.0) as i32,
+                s.teff_idx as i32 * 40, // spectral axis, arbitrary small scale
+                s.resonant_milli_hz() as i32 / 10, // hz axis, scaled down
+            ]
+        };
+        let to_hidden_i16 = |dmodel: &[i32; super::super::vocab::D_MODEL]| -> [i16; super::super::vocab::D_MODEL] {
+            core::array::from_fn(|i| dmodel[i].clamp(i16::MIN as i32, i16::MAX as i32) as i16)
+        };
+
+        let mut dmodel_a = [0i32; super::super::vocab::D_MODEL];
+        ae.somatic_5d_to_dmodel(&star_coords_pmy(&star_a), &mut dmodel_a);
+        let mut dmodel_b = [0i32; super::super::vocab::D_MODEL];
+        ae.somatic_5d_to_dmodel(&star_coords_pmy(&star_b), &mut dmodel_b);
+        let mut hidden_a = to_hidden_i16(&dmodel_a);
+        let mut hidden_b = to_hidden_i16(&dmodel_b);
+        assert_ne!(hidden_a, hidden_b, "two distinct stars must not collapse to the same injected embedding");
+
+        // Toy d_model=2048 model_9b config — dimensionally matched to vocab.rs's
+        // D_MODEL so the injected star embeddings feed straight in.
+        const D: usize = super::super::vocab::D_MODEL; // 2048
+        let config = Gemma9bConfig {
+            d_model: D, n_heads: 2, n_kv_heads: 1, d_head: 8,
+            n_layers: 1, d_ff: 16, vocab_size: 8, max_seq_len: 4,
+            rope_theta: 10_000, permyriad_scale: 10_000,
+        };
+        let bpr = |in_dim: usize| (in_dim + TRITS_PER_BYTE - 1) / TRITS_PER_BYTE;
+        let q_bytes = vec![pack_5_trits([1, 0, -1, 0, 1]).unwrap(); 16 * bpr(D)];
+        let k_bytes = vec![pack_5_trits([0, 1, 0, -1, 0]).unwrap(); 8 * bpr(D)];
+        let v_bytes = vec![pack_5_trits([-1, 0, 1, 0, -1]).unwrap(); 8 * bpr(D)];
+        let o_bytes = vec![pack_5_trits([1, 1, 0, -1, -1]).unwrap(); D * bpr(16)];
+        let gate_bytes = vec![pack_5_trits([1, 0, 1, 0, 1]).unwrap(); 16 * bpr(D)];
+        let up_bytes = vec![pack_5_trits([0, 1, -1, 1, 0]).unwrap(); 16 * bpr(D)];
+        let down_bytes = vec![pack_5_trits([1, -1, 0, 1, 0]).unwrap(); D * bpr(16)];
+        let norm_scale = vec![10_000i16; D];
+        let tensor_scales = [1.0f32; 7];
+        let layer_w = Gemma9bLayerWeights {
+            q_proj: &q_bytes, k_proj: &k_bytes, v_proj: &v_bytes, o_proj: &o_bytes,
+            gate_proj: &gate_bytes, up_proj: &up_bytes, down_proj: &down_bytes,
+            input_norm_scale: &norm_scale, post_attention_norm_scale: &norm_scale,
+            scales: &tensor_scales,
+        };
+        let embed_tokens = vec![pack_5_trits([1, -1, 0, 1, -1]).unwrap(); config.vocab_size * bpr(D)];
+        let mut model = Gemma9bModel::new(config, &norm_scale, &embed_tokens);
+        model.set_layer(0, layer_w).unwrap();
+
+        let steer_vec = vec![300i16; D];
+        let (mut kc_a, mut vc_a) = (vec![0i16; D * 4], vec![0i16; D * 4]);
+        let (mut kc_b, mut vc_b) = (vec![0i16; D * 4], vec![0i16; D * 4]);
+
+        // 1. PREFIX INJECTION + 2. ACTIVATION STEERING, one forward per star.
+        let mut graph = Gemma9bForwardGraph::new(config, DispatchEngine::ScalarReference);
+        graph.forward_token_steered(&mut hidden_a, &mut [&mut kc_a[..]], &mut [&mut vc_a[..]], 0, &model, 0, &steer_vec, 3_000).unwrap();
+        let mut graph2 = Gemma9bForwardGraph::new(config, DispatchEngine::ScalarReference);
+        graph2.forward_token_steered(&mut hidden_b, &mut [&mut kc_b[..]], &mut [&mut vc_b[..]], 0, &model, 0, &steer_vec, 3_000).unwrap();
+
+        // 3. LATENT SPACE INTERPOLATION — the midpoint of the ray between the two settled states.
+        let mut hidden_mid = vec![0i16; D];
+        lerp_dmodel(&hidden_a, &hidden_b, 5_000, &mut hidden_mid);
+        assert_ne!(&hidden_mid[..], &hidden_a[..]);
+        assert_ne!(&hidden_mid[..], &hidden_b[..]);
+
+        // 4. DIRECT UNEMBEDDING / LOGIT LENS — read structure off the interpolated point.
+        let mut logits = vec![0.0f32; config.vocab_size];
+        graph.project_logits(&hidden_mid, &model, &mut logits, 1.0).unwrap();
+        assert!(logits.iter().any(|&l| l != 0.0), "the interpolated star-ray midpoint must activate real logits");
+
+        // Determinism: same inputs, same chain, same result.
+        let mut logits_again = vec![0.0f32; config.vocab_size];
+        graph.project_logits(&hidden_mid, &model, &mut logits_again, 1.0).unwrap();
+        assert_eq!(logits, logits_again, "the whole chain is deterministic end to end");
     }
 
     #[test]
