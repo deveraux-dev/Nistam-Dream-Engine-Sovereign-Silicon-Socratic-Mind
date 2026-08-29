@@ -60,9 +60,24 @@ pub mod mersenne31;
 pub mod cognitive_watchdog;
 pub mod ump_flux;
 pub mod fredholm_resolvent;
+pub mod somatic_profile;
+pub mod model_27b;
+pub mod accessibility_gate;
 
 pub use mersenne31::{reduce_m31, Mersenne31, Morton8_2D, MERSENNE_31_MODULUS};
 pub use cognitive_watchdog::{CognitiveWatchdog, TikhonovClamp, WatchdogDecision};
 pub use ump_flux::{UmpFluxStream, UmpMessageType, UmpPacket};
 pub use fredholm_resolvent::{FredholmKernel, FredholmResolventEngine, MORTON8_TILE_DIM};
+pub use somatic_profile::{
+    BlindnessProfile, CognitiveElderProfile, DeafnessProfile, MotorImpairmentProfile,
+    NeurodivergentProfile, SomaticAccessibilityProfile, SpeechNonverbalProfile,
+    TraumaRecoveryProfile,
+};
+pub use model_27b::{
+    Gemma27bConfig, Somatic27bProjectionWeights, D_FF_27B, D_HEAD_27B, D_MODEL_27B,
+    N_HEADS_27B, N_KV_HEADS_27B, N_LAYERS_27B,
+};
+pub use accessibility_gate::{
+    AccessibilityGateEngine, AccessibilityOutput, TriStateChoice,
+};
 
