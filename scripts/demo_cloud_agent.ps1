@@ -9,14 +9,14 @@ if (-not $env:GOOGLE_CLOUD_PROJECT) {
     $env:GOOGLE_CLOUD_PROJECT = (gcloud config get-value project 2>$null).Trim()
 }
 if (-not $env:GOOGLE_CLOUD_PROJECT) { throw "GOOGLE_CLOUD_PROJECT unset and gcloud has no default project" }
-if (-not $env:GOOGLE_CLOUD_LOCATION) { $env:GOOGLE_CLOUD_LOCATION = "northamerica-northeast1" }
+if (-not $env:GOOGLE_CLOUD_LOCATION) { $env:GOOGLE_CLOUD_LOCATION = "us-central1" }
 if (-not $env:INBOX_BUCKET) { $env:INBOX_BUCKET = "$($env:GOOGLE_CLOUD_PROJECT)-s13-inbox" }
 
 Write-Host "=== Surface Ledger — live cloud agent ===" -ForegroundColor Cyan
 Write-Host "  project  : $($env:GOOGLE_CLOUD_PROJECT)"
 Write-Host "  location : $($env:GOOGLE_CLOUD_LOCATION)"
 Write-Host "  inbox    : gs://$($env:INBOX_BUCKET)"
-Write-Host "  model    : $(if ($env:GEMINI_MODEL) { $env:GEMINI_MODEL } else { 'gemini-3.7-flash' })"
+Write-Host "  model    : $(if ($env:GEMINI_MODEL) { $env:GEMINI_MODEL } else { 'gemini-2.5-flash' })"
 
 Write-Host "`n[1/3] Building the attestation binary..." -ForegroundColor Yellow
 Push-Location $Envelope

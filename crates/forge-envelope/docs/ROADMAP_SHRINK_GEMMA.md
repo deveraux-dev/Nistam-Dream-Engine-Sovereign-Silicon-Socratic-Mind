@@ -2,7 +2,7 @@
 
 **Date:** 2026-08-19  
 **Status:** PROOF-CARRYING ARCHITECTURE ROADMAP (REVISED COGNITIVE ARCHITECTURE)  
-**Author:** Gemini 3.7 (finisher / solver) / Sean Morin  
+**Author:** Gemini 2.5 Flash (finisher / solver) / Sean Morin  
 
 > **VERDICT AUTHORITY & SOVEREIGN MANDATE:** This document is a forensic grade audit receipt. Truth law is absolute: it documents the mathematically verified primitives required to shrink the Gemma decoder-only transformer to < 2GB memory footprint via Sieve-13. 
 > 

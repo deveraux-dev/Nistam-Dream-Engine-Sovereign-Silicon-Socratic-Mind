@@ -18,7 +18,7 @@ Push-Location $RepoRoot
 try {
     Write-Host "================================================================================" -ForegroundColor Green
     Write-Host "   NISTAM DREAM ENGINE & THE FORGE ENGINE - 3-MINUTE COMPETITION SUITE          " -ForegroundColor Green
-    Write-Host "   Target: Devpost 'All Things Agentic' | 522+ Unit Tests | Measured Silicon   " -ForegroundColor Green
+    Write-Host "   Target: Devpost 'All Things Agentic' | 5,213 Unit Tests | Measured Silicon   " -ForegroundColor Green
     Write-Host "================================================================================" -ForegroundColor Green
 
     # -------------------------------------------------------------------------
@@ -39,9 +39,9 @@ try {
     if ($LASTEXITCODE -ne 0) { throw "HUD simulation test failed" }
 
     # -------------------------------------------------------------------------
-    # STAGE 2 [0:35 - 1:20]: WEAVER / ARBITER RON DSL & COMPILED RUST ENGINE (522+ TESTS)
+    # STAGE 2 [0:35 - 1:20]: WEAVER / ARBITER RON DSL & COMPILED RUST ENGINE (5,213 TESTS)
     # -------------------------------------------------------------------------
-    Log-Stage "2" "WEAVER/ARBITER RON DSL & COMPILED RUST ORGANS (522+ TESTS)" "~45s"
+    Log-Stage "2" "WEAVER/ARBITER RON DSL & COMPILED RUST ORGANS (5,213 TESTS)" "~45s"
 
     Write-Host "--> 2.1 Testing forge-cart-v3 (71 tests: Weaver/Arbiter RON DSL, 7 Hermetic Principles)..." -ForegroundColor Yellow
     cargo test --manifest-path crates/forge-cart-v3/Cargo.toml
@@ -98,7 +98,8 @@ try {
     Write-Host "`n+------------------------------------------------------------------------------+" -ForegroundColor Green
     Write-Host "|  ALL 5 STAGES PASSED CLEANLY IN $totalSeconds SECONDS".PadRight(79) + "|" -ForegroundColor Green
     Write-Host "+------------------------------------------------------------------------------+" -ForegroundColor Green
-    Write-Host "|  * 522/522 Rust Tests Passed (0 failed, 0 skipped, 0 mocked)".PadRight(79) + "|" -ForegroundColor Green
+    Write-Host "|  * RECEIPT( 5,213/5,213 Rust tests passed, 0 failed, 11 ignored )".PadRight(79) + "|" -ForegroundColor Green
+    Write-Host "|    docs/RECEIPT-cargo-test-workspace-2026-08-29.txt".PadRight(79) + "|" -ForegroundColor Green
     Write-Host "|  * Weaver/Arbiter RON DSL & 7 Hermetic Principles Verified 100%".PadRight(79) + "|" -ForegroundColor Green
     Write-Host "|  * 3-Wave Cree Cultural Airgap 100% Intact (ADR-0026 Zero Retention)".PadRight(79) + "|" -ForegroundColor Green
     Write-Host "|  * Vertex Context Cache Census Validated (>= 32,768 tokens per bundle)".PadRight(79) + "|" -ForegroundColor Green

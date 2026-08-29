@@ -6,7 +6,7 @@
 **Timecode:** 00:00:00 → 00:15:900 (drop everything after 15.88s)  
 **Transcript:**  
 - Q (0:00–5.8s): "Which models did you use for the Google AI all things agentic competition?"  
-- A (5.8–15.9s): "Gemma 2, 9b, Gemma 3, Gemini 3.7 Flash, and Gemini 1.5 Flash."  
+- A (5.8–15.9s): "Gemma 2, 9b, Gemma 3, Gemini 2.5 Flash, and Gemini 1.5 Flash."  
 
 **Visual:** Plays over Live Deck Astrolabe masthead with Google/Gemini/Gemma badge visible.  
 **Duration:** 15.9s (locked)
@@ -69,7 +69,7 @@
 **Why:** Stateless, ephemeral-interaction system visually embodies the "zeroize" philosophy. No cookies, no state retention—canvas resets per session.
 
 ### Beat 4: Tool Philosophy (Cues 17-19)
-**Panel:** Gemini 3.7 Flash Governed Panel  
+**Panel:** Gemini 2.5 Flash Governed Panel  
 **Why:** Sean emphasizes tool-neutrality and governance constraints. Governed panel shows how design enforces boundaries without dictating downstream use.
 
 ### Beat 5: Competition & Future (Cues 20-27)

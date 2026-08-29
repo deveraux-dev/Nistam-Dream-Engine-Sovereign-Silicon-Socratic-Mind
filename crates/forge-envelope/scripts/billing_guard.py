@@ -99,7 +99,7 @@ class BillingGuard:
             print("[CIRCUIT BREAKER] Vertex AI dispatch blocked: Budget safety threshold reached.")
             return False
 
-        # Vertex AI Gemini 3.7 / 1.5 Flash rates
+        # Vertex AI Gemini 2.5 Flash / 1.5 Flash rates
         # Uncached: $0.000075 / 1k, Cached: $0.00001875 / 1k, Output: $0.000300 / 1k
         query_cost = (
             (cached_input_tokens / 1000.0) * 0.00001875 +

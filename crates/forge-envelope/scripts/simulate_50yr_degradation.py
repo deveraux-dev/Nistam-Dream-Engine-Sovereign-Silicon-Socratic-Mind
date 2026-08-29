@@ -9,7 +9,7 @@ Calculates 50-year structural condition ratings and fiscal liability curves inco
 3. Government Budget Deferrals & Maintenance Debt Avalanche
 4. Skilled Trades Deficit & Rework Multiplier (Substrate fatigue & latent defects)
 
-Wires with Gemini 3.7 Flash Context Caching & Vertex AI GenAI App Builder.
+Wires with Gemini 2.5 Flash Context Caching & Vertex AI GenAI App Builder.
 """
 
 import os

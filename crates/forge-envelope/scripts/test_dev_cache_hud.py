@@ -64,8 +64,10 @@ def test_airgap_scanner():
 def test_loud_visual_receipt_rendering():
     print("======================================================================")
     print(" [3/3] TESTING LOUD VISUAL TELEMETRY BOX HUD RENDERING")
+    print(" SYNTHETIC INPUTS — the two receipts below are rendered from invented")
+    print(" token counts to exercise the layout. They are NOT measurements.")
     print("======================================================================")
-    
+
     # 1. Simulate 98.7% Cache Hit (Typical recurring dev query)
     mock_usage_hit = SimpleNamespace(
         prompt_token_count=48732,
@@ -73,7 +75,7 @@ def test_loud_visual_receipt_rendering():
         candidates_token_count=380,
         total_token_count=49112,
     )
-    print("--- SIMULATION 1: 98.9% Cache Hit on PaTeX 5D Query ---")
+    print("--- SIMULATION 1: 98.9% Cache Hit on PaTeX 5D Query [SYNTHETIC] ---")
     vfc.render_loud_visual_receipt(mock_usage_hit, cache_name="cachedContents/forge_lean_7a8f9b2c", tag="lean")
 
     # 2. Simulate Cold Query (0% Cache Hit)

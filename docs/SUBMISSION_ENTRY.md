@@ -1,6 +1,6 @@
 # Nistam Dream Engine & the Forge Engine — Competition Entry
 
-**Project:** 1.58-bit balanced-ternary Gemma inference — a 9B backbone in 1.72 GB, 2.0 Gweights/s per CPU core, and a GPU kernel measured at 22.9 tok/s on an RTX 3070 (bit-identical to the CPU reference; 268 tok/s bandwidth roofline named) — with a 3-model resident quantized fleet (2.71 GB total VRAM), a 7-centroid BQ MetaRouter MoE, a Google Cloud Vertex AI gemini-3.7-flash cloud governor, and a playable **Tauri v2 demo shell**: a full-window 5D star sky (119,625-star HYG catalog, WebGL2 bloom + godrays), a birth-rite / CYOA narrative arc that completes at the Toll Gate and persists to disk, an M5 worldbuilder canvas, and a ConPTY glass terminal.
+**Project:** 1.58-bit balanced-ternary Gemma inference — a 9B backbone in 1.72 GB, 2.0 Gweights/s per CPU core, and a GPU kernel measured at 22.9 tok/s on an RTX 3070 (bit-identical to the CPU reference; 268 tok/s bandwidth roofline named) — with a 3-model resident quantized fleet (2.71 GB total VRAM), a 7-centroid BQ MetaRouter MoE, a Google Cloud Vertex AI gemini-2.5-flash cloud governor, and a playable **Tauri v2 demo shell**: a full-window 5D star sky (119,625-star HYG catalog, WebGL2 bloom + godrays), a birth-rite / CYOA narrative arc that completes at the Toll Gate and persists to disk, an M5 worldbuilder canvas, and a ConPTY glass terminal.
 
 **Author:** Sean Morin, Edmonton, Alberta.
 **License:** MIT OR Apache-2.0. **Research DOI:** [10.5281/zenodo.22020676](https://doi.org/10.5281/zenodo.22020676) — *Pararity: the fixed-point residue of an involution, and why we need it* (Zenodo, 2026).
@@ -16,8 +16,8 @@
    - **Three Bears fleet** (`gemma-s13`): 3 models concurrently resident in GPU VRAM (Baby Bear 2B, Blind Mama Bear 9B, Papa Bear 27B head = **2.71 GB total** VRAM, fits an 8 GB consumer GPU) with 59.62 GB/s staging memory rotation and 7-centroid BQ MetaRouter MoE dispatch.
 
 3. **Transport & Autonomous Agent**:
-   - `crates/forge-envelope/scripts/agent_loop.py` — an autonomous watcher, not a chat interface: polls a Cloud Storage inbox, runs deterministic ByteSieve triage, requests a schema-locked audit from gemini-3.7-flash on Vertex AI at temperature 0.0, cross-checks against a degradation model, writes the evidence-chain head to Firestore, and wipes local staging only after acknowledgement. No human in the loop.
-   - Cloud Governor: serverless Vertex AI context cache (`gemini-3.7-flash`, temperature 0.0, `$0.0004/call` governor ceiling).
+   - `crates/forge-envelope/scripts/agent_loop.py` — an autonomous watcher, not a chat interface: polls a Cloud Storage inbox, runs deterministic ByteSieve triage, requests a schema-locked audit from gemini-2.5-flash on Vertex AI at temperature 0.0, cross-checks against a degradation model, writes the evidence-chain head to Firestore, and wipes local staging only after acknowledgement. No human in the loop.
+   - Cloud Governor: serverless Vertex AI context cache (`gemini-2.5-flash`, temperature 0.0, `$0.0004/call` governor ceiling).
    - Demo shell (`crates/studio-tauri`): 5D star sky, CYOA arc, M5 canvas, and ConPTY glass terminal. Builds with plain `cargo build --release` (no Node).
 
 ## Measured receipts
@@ -33,7 +33,7 @@ Every number below is a command you can run yourself; method and raw stdout are 
 | Three Bears resident fleet VRAM | 2.71 GB total (Baby Bear 2B + Blind Mama Bear 9B + Papa Bear 27B head) |
 | Gemma 2B / 3.2B / 9B decode (GPU, RTX 3070) | 82.5 / 54.7 / 22.9 tok/s |
 | 5D star sky projection (119,625 HYG stars) | 44.45 M stars/sec, zero heap |
-| Airgap red/green | 5/5 red vectors blocked (`scripts/test_sovereign_airgap_red_green.py`) |
+| Airgap red/green | 5/5 red vectors blocked (`crates/forge-envelope/scripts/test_sovereign_airgap_red_green.py`) |
 
 ## Demo
 

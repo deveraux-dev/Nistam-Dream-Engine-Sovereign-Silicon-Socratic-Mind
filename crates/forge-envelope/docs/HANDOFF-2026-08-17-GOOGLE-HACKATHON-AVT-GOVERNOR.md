@@ -1,4 +1,4 @@
-# HANDOFF — Google Hackathon: `candle-core` Somatic Tokenizer & Gemini 3.5/3+ Pro Thermodynamic Governor
+# HANDOFF — Google Hackathon: `candle-core` Somatic Tokenizer & Gemini 2.5 Flash / 2.5 Pro Thermodynamic Governor
 **Date:** 2026-08-17  
 **Author:** Sean Everett Morin 
 **Status:** READY_FOR_SUBMISSION / NEXT_SESSION_PICKUP  
@@ -16,7 +16,7 @@ This session designed, formalized, and hardened the submission architecture for 
    - Added kinematic derivative accumulation ($\mathbf{v} = \frac{d\mathbf{x}}{dt}$, $\mathbf{a} = \frac{d^2\mathbf{x}}{dt^2}$) on the 120 Hz CPU metronome to eliminate derivative loss across lock-free `TripleBuffer` hops.
 3. **Strategic Pivot — The Active Thermodynamic Entropy Governor:**
    - Avoided the "Sidecar Trap" (relegating Gemini to an offline lore generator).
-   - Positioned **Gemini 3.5 Flash** (sub-100ms structured output) and **Gemini 3+ Pro** (macro-reasoning/audit) as the **Active Thermodynamic Entropy Governor** dynamically injecting Fredholm-Dante attention bias masks ($\mathbf{M}_{\text{Dante}}$) and Laughter Kernel damping factors ($\lambda_{\text{laugh}}$).
+   - Positioned **Gemini 2.5 Flash** (sub-100ms structured output) and **Gemini 3+ Pro** (macro-reasoning/audit) as the **Active Thermodynamic Entropy Governor** dynamically injecting Fredholm-Dante attention bias masks ($\mathbf{M}_{\text{Dante}}$) and Laughter Kernel damping factors ($\lambda_{\text{laugh}}$).
 4. **Granular Hybrid Architecture:**
    - **`ash` (Vulkan):** Hardware queues, timeline semaphores (`VK_KHR_timeline_semaphore`), splitshader kernel dispatch (`matmul_q4.spv`).
    - **`candle-core`:** Real-time zero-heap somatic tokenization, 2GB quantized Gemma 2B forward passes, sliding-window KV-caches.

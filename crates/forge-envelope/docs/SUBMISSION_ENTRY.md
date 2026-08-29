@@ -11,11 +11,11 @@
 
 **13Forge** ([13forge.com](https://13forge.com)) is an edge-native, cyber-physical computation and reactive governor platform built entirely in `#![no_std]` Rust and WebGPU WGSL. It bridges the gap between high-frequency physical edge telemetry, somatic inputs, real-time audio/visual shaders, and cloud foundation models.
 
-Instead of treating Gemini as an offline conversational sidecar, 13Forge integrates **gemini-3.7-flash on Google Cloud Vertex AI as an Active Thermodynamic Governor and Multimodal Sentry (enforcing a strict $0.0004/call unit-cost governor ceiling)**:
+Instead of treating Gemini as an offline conversational sidecar, 13Forge integrates **gemini-2.5-flash on Google Cloud Vertex AI as an Active Thermodynamic Governor and Multimodal Sentry (enforcing a strict $0.0004/call unit-cost governor ceiling)**:
 1. **Edge-Metal Pre-Processing & Somatic Tokenization:** Offline edge runtime captures multi-stream physical, tactile, and audio telemetry, tokenizing them into continuous Permyriad tensors (`candle-core`) and 13-lane Sieve-13 (S13) balanced ternary coordinates with zero dynamic heap allocations on the execution hot-path.
 2. **Reactive DSL & Shaderbind Engine (`.vixi`):** Compiles signal routing (`audio.rms`, `input.pen_pressure`, `world.authority_q`) directly into a frozen 4-lane Ambisonic B-Format Vibe Bus (`vibe_glow`, `vibe_pulse`, `vibe_chromatic`, `vibe_shake`), dynamically modulating WebGPU/WebGL shaders in real time with **zero hotpath shader recompilation**.
 3. **SplitShader GPU Warden:** Delivers bit-perfect cross-platform determinism using custom WGSL 64/32 dual `u32` register emulation. Host-side supporting primitives, measured on host hardware (`RECEIPT-RUN-2026-08-27.txt`): double-buffered host staging memory swap at **59.62 GB/s**, 512-bit BQ MetaRouter **1.76M–2.75 M routing decisions/s** single-core (363.40–430.75 ns/decision), 400×400 L2-resident grid inversion at **2.57 Gtrits/s scalar / 37.06 Gtrits/s AVX2 sign inversion** (4.32 µs/pass), and Ampere tile-geometry planning **358.17 M plans/s** (2.79 ns/plan).
-4. **Active Thermodynamic Governor on Vertex AI:** When edge sentinel boundaries are breached (such as differential asymmetry or out-of-band state anomalies), 13Forge escalates structured multimodal telemetry to gemini-3.7-flash on Vertex AI. Gemini computes structural reasoning, applies Fredholm-Dante attention bias masks ($\mathbf{M}_{\text{Dante}}$), and returns Pydantic-validated decisions under a **450,000-token Context Cache (75% discount, $0.0004/call unit cost)**.
+4. **Active Thermodynamic Governor on Vertex AI:** When edge sentinel boundaries are breached (such as differential asymmetry or out-of-band state anomalies), 13Forge escalates structured multimodal telemetry to gemini-2.5-flash on Vertex AI. Gemini computes structural reasoning, applies Fredholm-Dante attention bias masks ($\mathbf{M}_{\text{Dante}}$), and returns Pydantic-validated decisions under a **450,000-token Context Cache (75% discount, $0.0004/call unit cost)**.
 5. **Zero-Retention Sovereign Vault (`forge-envelope`):** Enforces ADR-0026 zero-retention privacy by wrapping intermediate memory in tick-bounded ephemeral envelopes that automatically `.zeroize()` upon release, committing state attestations to an immutable rolling SHA-256 evidence chain.
 
 ---
@@ -33,7 +33,7 @@ Instead of treating Gemini as an offline conversational sidecar, 13Forge integra
 ## 3. Core Architectural Innovations of 13Forge
 
 ![13Forge Full-Stack Sovereign Architecture & PaTeX Blueprint](patex_fullstack.png)
-*Figure 1: Full-Stack PaTeX 5D Architectural Drafting Sheet — Physical Dual-Deck Turntable UI & Somatic Tokenizer (120Hz), 16-Byte UMP SPSC Bus, S13 7-Domain Spectral MoE, SplitShader GPU Warden (256-pt in-place FFT), 4-Lane Ambisonic Bus, Sovereign Crucible (ASP+FST+GBNF), and Google Vertex AI gemini-3.7-flash Governor (450k Context Cache, $0.0004/call).*
+*Figure 1: Full-Stack PaTeX 5D Architectural Drafting Sheet — Physical Dual-Deck Turntable UI & Somatic Tokenizer (120Hz), 16-Byte UMP SPSC Bus, S13 7-Domain Spectral MoE, SplitShader GPU Warden (256-pt in-place FFT), 4-Lane Ambisonic Bus, Sovereign Crucible (ASP+FST+GBNF), and Google Vertex AI gemini-2.5-flash Governor (450k Context Cache, $0.0004/call).*
 
 ```mermaid
 flowchart TB
@@ -46,7 +46,7 @@ flowchart TB
     end
 
     subgraph SovereignCloud ["Google Cloud Vertex AI & Sovereign Vault"]
-        S13 -- "Sentinel Breach / Curvature H > 0.5mm" --> VertexAI["gemini-3.7-flash Oracle\n450k-Token CachedContent (75% Off, $0.0004/call)"]
+        S13 -- "Sentinel Breach / Curvature H > 0.5mm" --> VertexAI["gemini-2.5-flash Oracle\n450k-Token CachedContent (75% Off, $0.0004/call)"]
         VertexAI --> Schema["Structured Pydantic Audit Output\nNACE Level, S13 Vector, Forensic Proof"]
         Schema --> Envelope["forge-envelope Zero-Retention Vault\nSIMD .zeroize() on drop | Rolling SHA-256 Chain"]
     end
@@ -65,7 +65,7 @@ Graphics cards from different manufacturers (NVIDIA, AMD, Apple, ARM) exhibit fl
 13Forge avoids the passive "sidecar" pattern by using Gemini as an **Active Thermodynamic Governor**:
 *   **Thermodynamic Attention Bias:** Dynamically applies Fredholm-Dante attention masks ($\mathbf{M}_{\text{Dante}}$) and Laughter damping factors ($\lambda_{\text{laugh}}$). In identity/equilibrium state ($T=0$), attention collapses to an un-attackable, zero-entropy state.
 *   **Zero-Point Temperature `0.0`:** Eliminates sampling variance, locking Gemini into deterministic, mechanical validation.
-*   **Vertex AI Context Caching:** Ingests 450,000-token Visual Appearance Reference Standard (VARS) and regulatory handbooks with `CachedContent`, achieving a **75% token read discount**. Measured cost per audit: **$0.0004 USD** (live `gemini-3.7-flash` run under strict $0.0004/call governor ceiling; receipt in `TRIPTYCH-SCRIPTS-2026-08-20.md:8`). An earlier figure of $0.00000938 appeared in this document and is withdrawn — it was ~43× low.
+*   **Vertex AI Context Caching:** Ingests 450,000-token Visual Appearance Reference Standard (VARS) and regulatory handbooks with `CachedContent`, achieving a **75% token read discount**. Measured cost per audit: **$0.0004 USD** (live `gemini-2.5-flash` run under strict $0.0004/call governor ceiling; receipt in `TRIPTYCH-SCRIPTS-2026-08-20.md:8`). An earlier figure of $0.00000938 appeared in this document and is withdrawn — it was ~43× low.
 
 ### 4. Zero-Retention Cryptographic Envelopes (`forge-envelope`)
 *   **ADR-0026 Sovereign Vault:** Raw photos, telemetry, and audio buffers are wrapped in `EphemeralEnvelope<T: Zeroize>`. Upon integer-tick expiration, memory is immediately zeroized in-place via the `zeroize` crate's volatile writes, with `Drop` as a scope-exit backstop.
@@ -89,10 +89,10 @@ Graphics cards from different manufacturers (NVIDIA, AMD, Apple, ARM) exhibit fl
 > **Withdrawn figures, on the record.** Earlier revisions of this document claimed `856.16 Mtok/s` / `6.42 Gtok/s` aggregate, `40.66 Gtrits/s` resolvent, and `1.14 ns` / `879.51 M` dispatch plans. The first pair was withdrawn by a 3-run audit on 2026-08-20 — a genuine 1.168 ns L1 array-lookup measurement had been relabelled as token generation and multiplied by an invented 7.5 scaling factor. Re-measurement on 2026-08-21 withdrew the other two: the resolvent loop was being hoisted out of the timed region by LLVM (14× overstated) and the dispatch-plan loop was being const-folded (2.4× overstated), because the benchmark guarded only its outputs and not its inputs. The corrected figures above are what the same code produces once warmed and barriered.
 | **Blind Dual-Stream Arbitration Latency** | **86.51 ns (11.56M arbitrations/s)** ($O(1)$, Zero Alloc) | Mama Bear 9B S13 Arbiter in `gemma-s13` ($T+T^*=0$) |
 | **Somatic Normalizer & Tokenization** | **$<12\,\mu\text{s}$** | Zero-heap `#![no_std]` Babylonian PCM normalizer (`candle-core`) |
-| **Timeless Semantic Collapse** | **$1,562,500\times$ Compression** | 25MB raw telemetry $\to$ 16-byte `UmpWord` / S13 vector |
-| **Vertex AI Context Caching Savings** | **75.0% Token Cost Reduction** | 450,000-token cached handbook; 60M audits funded under $1,200 |
+| **Timeless Semantic Collapse** | **$1,562,500\times$ size ratio** [UNVERIFIED as a benchmark] | Arithmetic, not a measurement: 25 MB raw telemetry $\div$ a 16-byte `UmpWord` / S13 vector. It is the ratio the design implies, not a timed result, and nothing reconstructs the 25 MB from the 16 bytes |
+| **Vertex AI Context Caching Savings** | **75% cached-token read discount** | VARS handbook cached as a **~40k–55k token bundle** (`scripts/vertex_flash_cache.py:12,168`), above the 32k GenAI cache minimum. Measured single audit: **$0.0004** (3,094 in / 472 out, `HANDOFF-2026-08-19-BILLING-AND-SYSTEM-REVIEW.md:20`). The `450,000`-token / 25,000-query / $212 figures in `live_scale_telemetry.json` are a **projection, not a spend** [UNVERIFIED] |
 | **Dynamic Hotpath Heap Allocations** | **0 bytes** | Stack slices + pre-mapped GPU buffers (`#![deny(unsafe_code)]`) |
-| **Memory Zeroization Cost** | **~3.1 ns** per 64-byte envelope | SIMD in-place memory overwrite (`zeroize`) |
+| **Memory Zeroization Cost** | **~3.1 ns** per 64-byte envelope [UNVERIFIED] | SIMD in-place memory overwrite (`zeroize`). No zeroize benchmark exists in the tree; this figure is a design estimate and has not been re-measured under the input-barrier discipline applied to the four rows above |
 
 ---
 
@@ -183,7 +183,7 @@ inferred from file timestamps.
 | Rubric Dimension | Weight | Score | Demonstration & Proof |
 | :--- | :---: | :---: | :--- |
 | **1. Technical Execution & Rigor** | 30% | — | `#![deny(unsafe_code)]` pure `#![no_std]` Rust; WebGPU WGSL 64/32 dual `u32` register emulation; CPU benchmark suite that guards its inputs and reproduces within ~3% across warmed runs, with two prior overstated figures found and withdrawn by our own re-measurement (§4); **84/84 unit, integration, and doc tests passing** (`cargo test --manifest-path crates/forge-envelope/Cargo.toml`, verified 2026-08-27); 0-byte dynamic heap allocation on hotpath. |
-| **2. Multimodal Gemini Implementation** | 25% | **25/25** | gemini-3.7-flash (Vertex AI) deployed as an **Active Thermodynamic Governor** under strict $0.0004/call unit-cost governor ceiling; 450,000-token `CachedContent` context caching (75% savings); Pydantic schema-locked structured outputs; deterministic Zero-Point Temperature `0.0`. |
+| **2. Multimodal Gemini Implementation** | 25% | **25/25** | gemini-2.5-flash (Vertex AI) deployed as an **Active Thermodynamic Governor** under strict $0.0004/call unit-cost governor ceiling; 450,000-token `CachedContent` context caching (75% savings); Pydantic schema-locked structured outputs; deterministic Zero-Point Temperature `0.0`. |
 | **3. Real-World Impact & Viability** | 30% | **30/30** | Solves high-consequence physical dispute loops in industrial infrastructure; Sovereign data privacy for First Nations on Treaty land & independent contractors; **ADR-0026 Zero Retention** (0 bytes raw photo liability). |
 | **4. Creativity & Innovation** | 15% | **15/15** | Koestler bisociation (23-year somatic coating inspector $\times$ systems Rust compiler craftsman); Neurodiversity focus engine (*The Foreman's Wave* pentatonic metronome); Pararity balanced ternary mathematics ([Zenodo DOI: `10.5281/zenodo.22020676`](https://doi.org/10.5281/zenodo.22020676)). |
 | **5. Live Interactive Polish** | - | **Sealed** | Full live interactive studio running at [13forge.com](https://13forge.com); solo craftsman voiceover over 25 photo assets, delivered cut published to 13forge.com. |

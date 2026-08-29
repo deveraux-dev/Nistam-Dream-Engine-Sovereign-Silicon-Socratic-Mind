@@ -28,8 +28,8 @@
       • Asynchronous GCS inbox watcher listens for arriving sensor readings, photo buffers, or somatic inspector records.
   2. Stage 2: Deterministic Byte-Sieve Triage (agent_loop.py:94)
       • ByteSieve.validate_file() verifies file extensions (.png, .jpg, .s13, .ump), enforces the 10 MB size ceiling, and validates header magic bytes.
-  3. Stage 3: Schema-Locked Gemini 3.7 Flash Audit (agent_loop.py:10)
-      • Dispatches payloads to Gemini 3.7 Flash on Vertex AI locked to PhysicalInspectionAudit Pydantic schema at deterministic temperature 0.0, extracting NACE rust metrics and structural risk scores.
+  3. Stage 3: Schema-Locked Gemini 2.5 Flash Audit (agent_loop.py:10)
+      • Dispatches payloads to Gemini 2.5 Flash on Vertex AI locked to PhysicalInspectionAudit Pydantic schema at deterministic temperature 0.0, extracting NACE rust metrics and structural risk scores.
   4. Stage 4: Degradation Cross-Check (agent_loop.py:145)
       • get_expected_nace_level(tick) compares the model’s observed corrosion level against the mathematical 50-year fixed-point trajectory for Alberta municipal baselines.
   5. Stage 5: Rust Attestation Subprocess (agent_loop.py:112)
@@ -108,7 +108,7 @@
   2. Act 2: Shō (承 — Development / Sovereign Edge Engine) [0:24 – 0:48]app
       • Theme: #![no_std] Rust; 1.58-bit ternary S13 quantization; 2.3–2.8 Mtok/s single-core hardware baseline; 0  bytes heap allocation in arbitration DFA.
   3. Act 3: Ten (転 — Twist / The Sentinel Breach & Cloud Oracle) [0:48 – 1:08]
-      • Theme: Sabotage injected on wire; 13 Moons sentinel halts decoding in 35  ns; Vertex AI Gemini 3.7 Flash active context caching slashes costs by 75% while locking structured audit schemas.
+      • Theme: Sabotage injected on wire; 13 Moons sentinel halts decoding in 35  ns; Vertex AI Gemini 2.5 Flash active context caching slashes costs by 75% while locking structured audit schemas.
   4. Act 4: Ketsu (結 — Resolution / The Immutable Evidence Lock) [1:08 – 1:20]
       • Theme: State resolution folded onto rolling SHA-256 evidence chain; ADR-0026 zero-retention memory shred; non-repudiable cyber-physical trust.
 

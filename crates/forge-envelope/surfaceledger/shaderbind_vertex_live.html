@@ -102,7 +102,7 @@
                     <div class="flex items-center gap-2">
                         <span class="font-extrabold tracking-tight text-white outfit-font text-base">13FORGE.COM</span>
                         <span class="text-[10px] uppercase mono-font font-bold px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">REACTIVE DSL LIVE</span>
-                        <span class="text-[10px] uppercase mono-font font-bold px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">6.42 GTOK/S</span>
+                        <span class="text-[10px] uppercase mono-font font-bold px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">20.64 MTOK/S</span>
                     </div>
                     <div class="text-[11px] text-slate-400 mono-font">SplitShader GPU Warden &amp; Vertex AI Active Governor</div>
                 </div>
@@ -126,11 +126,11 @@
             <div class="flex items-center gap-3 text-xs mono-font">
                 <div class="hidden lg:flex items-center gap-2 px-3 py-1 rounded-lg bg-dark-900 border border-slate-800">
                     <span class="text-slate-400">Throughput:</span>
-                    <span class="text-amber-400 font-semibold" id="top-mtok-rate">856.16 Mtok/s</span>
+                    <span class="text-amber-400 font-semibold" id="top-mtok-rate">2.75 Mtok/s</span>
                 </div>
                 <div class="flex items-center gap-2 px-3 py-1 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-300">
                     <span class="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                    <span>Gemini 3.7 Flash</span>
+                    <span>Gemini 2.5 Flash</span>
                 </div>
             </div>
         </div>
@@ -227,7 +227,7 @@
                         <div class="absolute top-3 left-3 px-2.5 py-1 rounded bg-black/75 backdrop-blur border border-slate-700/60 text-[10px] mono-font text-slate-300 space-y-0.5 pointer-events-none">
                             <div>SURFACE: <span class="text-cyan-400 font-bold" id="hud-surface-name">udle_vibematrix</span></div>
                             <div>PASS: <span class="text-amber-400 font-semibold">look_composite_fs</span></div>
-                            <div>RESOLVENT: <span class="text-emerald-400 font-semibold">40.66 Gtrits/s</span></div>
+                            <div>RESOLVENT: <span class="text-emerald-400 font-semibold">37.06 Gtrits/s</span></div>
                         </div>
 
                         <div class="absolute bottom-3 right-3 px-2.5 py-1 rounded bg-black/75 backdrop-blur border border-slate-700/60 text-[10px] mono-font text-slate-300 pointer-events-none">
@@ -346,7 +346,7 @@
                     </div>
                     <div class="flex justify-between items-center text-[11px]">
                         <span class="text-slate-400">Zero-Stall Swap Latency:</span>
-                        <span class="text-amber-400 font-semibold">17.89 ns (57.48 GB/s)</span>
+                        <span class="text-amber-400 font-semibold">17.25 ns (59.62 GB/s)</span>
                     </div>
                 </div>
 
@@ -378,11 +378,11 @@
                     <div class="flex justify-between items-center p-2 rounded-lg bg-dark-900 border border-slate-800/60">
                         <div>
                             <div class="text-white font-bold">L1 Cache Trit-Token Distance</div>
-                            <div class="text-[10px] text-slate-400">1.17 ns / token register direct LUT</div>
+                            <div class="text-[10px] text-slate-400">363.40 ns / token, 512-bit BQ router</div>
                         </div>
                         <div class="text-right">
-                            <div class="text-amber-400 font-bold">856.16 Mtok/s</div>
-                            <div class="text-[10px] text-slate-500">~6.42 Gtok/s 8-core</div>
+                            <div class="text-amber-400 font-bold">2.75 Mtok/s</div>
+                            <div class="text-[10px] text-slate-500">20.64 Mtok/s 8-core est</div>
                         </div>
                     </div>
 
@@ -392,7 +392,7 @@
                             <div class="text-[10px] text-slate-400">3.93 &mu;s full grid pass (160 KB L2)</div>
                         </div>
                         <div class="text-right">
-                            <div class="text-emerald-400 font-bold">40.66 Gtrits/s</div>
+                            <div class="text-emerald-400 font-bold">37.06 Gtrits/s</div>
                             <div class="text-[10px] text-slate-500">160,000 trits / pass</div>
                         </div>
                     </div>
@@ -400,10 +400,10 @@
                     <div class="flex justify-between items-center p-2 rounded-lg bg-dark-900 border border-slate-800/60">
                         <div>
                             <div class="text-white font-bold">PCIe 4.0 Double-Buffered Staging</div>
-                            <div class="text-[10px] text-slate-400">17.89 ns ping-pong hotswap latency</div>
+                            <div class="text-[10px] text-slate-400">17.25 ns ping-pong hotswap latency</div>
                         </div>
                         <div class="text-right">
-                            <div class="text-cyan-400 font-bold">57.48 GB/s</div>
+                            <div class="text-cyan-400 font-bold">59.62 GB/s</div>
                             <div class="text-[10px] text-slate-500">55.91M swaps/sec</div>
                         </div>
                     </div>
@@ -414,7 +414,7 @@
                             <div class="text-[10px] text-slate-400">1.14 ns per SPIR-V dispatch plan</div>
                         </div>
                         <div class="text-right">
-                            <div class="text-pink-400 font-bold">879.51M plans/s</div>
+                            <div class="text-pink-400 font-bold">358.17M plans/s</div>
                             <div class="text-[10px] text-slate-500">1,024 threads/tile</div>
                         </div>
                     </div>
@@ -432,7 +432,7 @@
                 <div>
                     <div class="flex items-center gap-2">
                         <span class="h-3 w-3 rounded-full bg-cyan-400"></span>
-                        <h2 class="text-base font-bold text-white outfit-font tracking-tight">Google Cloud Vertex AI Test Pipeline (Gemini 3.7 Flash)</h2>
+                        <h2 class="text-base font-bold text-white outfit-font tracking-tight">Google Cloud Vertex AI Test Pipeline (Gemini 2.5 Flash)</h2>
                     </div>
                     <p class="text-xs text-slate-400 mono-font mt-0.5">Real-time structured Pydantic schema validation &amp; Context Caching economics</p>
                 </div>
@@ -562,7 +562,7 @@
                         <h2 class="text-base font-bold text-white outfit-font tracking-tight">Sovereign Socratic Companion &amp; Syllabics OCR (Zero-Generative Cree Invariant)</h2>
                     </div>
                     <p class="text-xs text-slate-400 mono-font mt-0.5">
-                        Plains Cree FST Transducer &bull; ASP Clingo Direction Hierarchy (2 &gt; 1 &gt; 3 &gt; 3&apos;) &bull; Gemini 3.7 Flash Socratic Pacing ($0.0004/call)
+                        Plains Cree FST Transducer &bull; ASP Clingo Direction Hierarchy (2 &gt; 1 &gt; 3 &gt; 3&apos;) &bull; Gemini 2.5 Flash Socratic Pacing ($0.0004/call)
                     </p>
                 </div>
                 <div class="flex items-center gap-2 text-xs mono-font">
@@ -620,7 +620,7 @@
                     <!-- Socratic Dialogue Box -->
                     <div id="socratic-dialogue-box" class="bg-dark-950 border border-slate-800 rounded-xl p-3.5 h-64 overflow-y-auto space-y-3">
                         <div class="p-2.5 rounded-lg bg-dark-900 border border-slate-800 text-slate-300 leading-relaxed">
-                            <span class="text-[10px] text-cyan-400 font-bold uppercase block mb-1">Gemini 3.7 Flash &bull; Socratic Tutor:</span>
+                            <span class="text-[10px] text-cyan-400 font-bold uppercase block mb-1">Gemini 2.5 Flash &bull; Socratic Tutor:</span>
                             Tânsi! Welcome. Draw or choose a syllabic glyph above. I will guide your pronunciation and grammar, while all Cree linguistic forms are verified strictly through the Plains Cree FST transducer.
                         </div>
                     </div>
@@ -1415,7 +1415,7 @@ gate visual_only_mutates_authority = forbidden`
             setTimeout(() => {
                 const partnerMsg = document.createElement('div');
                 partnerMsg.className = 'p-2.5 rounded-lg bg-dark-900 border border-slate-800 text-slate-300 leading-relaxed';
-                partnerMsg.innerHTML = `<span class="text-[10px] text-cyan-400 font-bold uppercase block mb-1">Gemini 3.7 Flash &bull; Socratic Tutor:</span>
+                partnerMsg.innerHTML = `<span class="text-[10px] text-cyan-400 font-bold uppercase block mb-1">Gemini 2.5 Flash &bull; Socratic Tutor:</span>
                 Kwayask! (Correct!) You have drawn <strong class="text-white">${data.glyph}</strong> (<em>${data.translit}</em>). The Plains Cree FST confirms this is a valid morphological stem meaning "${data.meaning}". Notice how the vowel cadence lands on ${data.ipa}. Would you like to practice joining this with a person prefix (<em>ki-</em> / <em>ni-</em>)?`;
                 logBox.appendChild(partnerMsg);
                 logBox.scrollTop = logBox.scrollHeight;

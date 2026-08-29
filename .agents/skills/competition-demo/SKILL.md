@@ -18,7 +18,7 @@ This skill guides the automated execution, receipt validation, and screen-record
 ```
  ┌─────────────────────────────────────────────────────────────────────────────┐
  │                      1. CLOUD MACRO-PLANNER (Vertex AI)                     │
- │  • Model: gemini-3.7-flash @ deterministic temp 0.0, top_k 1               │
+ │  • Model: gemini-2.5-flash @ deterministic temp 0.0, top_k 1               │
  │  • Governor: $0.0004/call unit-cost ceiling under 450k-token VARS context   │
  │  • Role: Generates lawful RON Cartridges, Weaver ASTs, and VIXI Shaders     │
  └──────────────────────────────────────┬──────────────────────────────────────┘
@@ -54,9 +54,9 @@ This skill guides the automated execution, receipt validation, and screen-record
 
 ### Act II: The ConPTY Terminal Glass Dock & Cloud Agent Loop `[0:35 - 1:10]`
 1. **Visual**: Click the **▲ OPEN** tab at the bottom to expand the glass ConPTY terminal dock running `agy` (Antigravity).
-2. **Action**: Invoke Gemini 3.7 Flash via Antigravity to generate a procedural RON cartridge.
+2. **Action**: Invoke Gemini 2.5 Flash via Antigravity to generate a procedural RON cartridge.
 3. **Airgap Verification**: Enter standard engineering text $\to$ passes `CLEARED`. Enter Cree syllabics (e.g. `ᑖᐻ`) $\to$ triggers instant `AIRGAP REFUSAL: Wave 1 caught 'ᑖᐻ' | MEMORY ZEROIZED`.
-4. **Narrative**: *"ConPTY hosts Antigravity driven by Gemini 3.7 Flash on Google Cloud Vertex AI under a strict $0.0004 per call governor. Local Mama Bear enforces the sovereign airgap: zero Cree words or cultural syllabics ever leave local memory for the cloud."*
+4. **Narrative**: *"ConPTY hosts Antigravity driven by Gemini 2.5 Flash on Google Cloud Vertex AI under a strict $0.0004 per call governor. Local Mama Bear enforces the sovereign airgap: zero Cree words or cultural syllabics ever leave local memory for the cloud."*
 
 ### Act III: The Three Bears Gemma Fleet & 7-Domain BQ MetaRouter `[1:10 - 1:45]`
 1. **Visual**: Click **`🐻 FLEET TRIAD`** in the top navigation bar to open the telemetry glass dossier.
@@ -79,8 +79,15 @@ This skill guides the automated execution, receipt validation, and screen-record
    ```powershell
    powershell -ExecutionPolicy Bypass -File scripts/run_competition_tests_3min.ps1
    ```
-2. **Action**: Display the green passing receipts across all 522+ Rust tests, BIP-340 Schnorr signatures, and sub-45ns Merkle roots.
-3. **Narrative**: *"No mocks. No smoke and mirrors. 522 compiled Rust tests pass clean with measured hardware receipts: 52.6 tok/s GPU decode, 363 ns BQ router decisions, 37.06 Gtrits per second AVX2 sign inversion, and 59.62 GB per second memory swap."*
+2. **Action**: Display the green passing receipts across all 5,213 Rust tests, BIP-340 Schnorr signatures, and sub-45ns Merkle roots.
+3. **Narrative**: *"No mocks. No smoke and mirrors. 5,213 compiled Rust tests pass clean — 0 failed, 11 ignored — with measured hardware receipts: 568.28 ns BQ router decisions (1.76 M/s), 37.06 Gtrits per second AVX2 sign inversion, and 59.62 GB per second memory swap."*
+
+   Receipts backing that narrative:
+   `docs/RECEIPT-cargo-test-workspace-2026-08-29.txt` (test count, host + scope stamped)
+   `docs/_archive-benchmarks-2026-08-27/RECEIPT-RUN-2026-08-27.txt` (silicon figures)
+
+   GPU decode tok/s is deliberately absent: no receipt on disk backs a single headline
+   figure, and the README table already reports per-model rates (82.5 / 54.7 / 22.9).
 
 ---
 
@@ -98,7 +105,7 @@ python crates/forge-envelope/scripts/test_sovereign_airgap_red_green.py
 python scripts/vertex_flash_cache.py --strict --profile lean "Explain the zero-heap memory contract in Forge v3"
 ```
 
-### 2. Compiled Rust Engine Receipts (522+ Tests)
+### 2. Compiled Rust Engine Receipts (5,213 Tests)
 ```powershell
 # Gemma S13 Balanced Ternary & WebGPU Kernel (138 tests)
 cargo test --manifest-path crates/gemma-s13/Cargo.toml

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Nistam — narrate</title>
+<style>
+:root{
+  --bg:#0b0908; --ink:#ece2d8; --dim:#6d5f55; --rust:#c85a2c;
+  --ki:#1ae0ff; --sho:#ffd23f; --ten:#ff3b6e; --ketsu:#4dffb0; --pillow:#9a8fff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:var(--bg); color:var(--ink);
+  font:16px/1.5 ui-monospace,"Cascadia Mono",Consolas,monospace;
+  display:flex; flex-direction:column; overflow:hidden;
+}
+body::after{
+  content:""; position:fixed; inset:0; pointer-events:none; opacity:.035; z-index:99;
+  background-image:repeating-linear-gradient(0deg,#fff 0 1px,transparent 1px 3px);
+}
+header{display:flex;align-items:center;gap:1.5rem;padding:.7rem 1.2rem;
+  border-bottom:1px solid #1e1815;font-size:13px;flex:0 0 auto}
+.clock{font-size:26px;font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.clock small{font-size:13px;color:var(--dim)}
+.drift{font-variant-numeric:tabular-nums;padding:.15rem .5rem;border:1px solid currentColor;border-radius:2px}
+.ok{color:#4dffb0}.warn{color:#ffd23f}.bad{color:#ff3b6e}
+.sect{font-weight:700;letter-spacing:.22em}
+.spacer{margin-left:auto;display:flex;gap:1.2rem;align-items:center;color:var(--dim)}
+.spacer b{color:var(--ink);font-variant-numeric:tabular-nums}
+button{background:none;border:1px solid #2c2320;color:var(--dim);font:inherit;font-size:12px;
+  padding:.25rem .6rem;cursor:pointer;border-radius:2px}
+button:hover{color:var(--ink);border-color:var(--rust)}
+button.on{color:var(--bg);background:var(--rust);border-color:var(--rust)}
+
+main{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;
+  padding:2rem 6vw;text-align:center;position:relative;min-height:0}
+.dir{color:var(--dim);font-size:14px;letter-spacing:.06em;margin-bottom:2rem;max-width:70ch}
+.vo{font-size:clamp(24px,3.6vw,50px);line-height:1.34;white-space:pre-wrap;font-weight:600;
+  letter-spacing:-.01em;max-width:26ch;text-wrap:balance}
+.vo.pillow{font-size:clamp(20px,2.6vw,34px);font-weight:400;font-style:italic;color:var(--pillow);max-width:34ch}
+.vo.hold{font-size:clamp(16px,1.8vw,22px);font-weight:400;color:var(--dim);letter-spacing:.4em}
+.next{position:absolute;bottom:1.4rem;color:#3a312c;font-size:14px;max-width:60ch;
+  white-space:pre-wrap;text-align:center}
+body.read .dir,body.read .next{display:none}
+
+.ring{width:64px;height:64px;margin:2rem auto 0}
+.ring circle{fill:none;stroke-width:3}
+.ring .bg{stroke:#241d19}
+.ring .fg{stroke:var(--rust);transform:rotate(-90deg);transform-origin:50% 50%;transition:stroke-dashoffset .1s linear}
+
+footer{flex:0 0 auto;border-top:1px solid #1e1815}
+.bars{display:flex;height:5px}
+.bars i{display:block;height:100%;opacity:.28;transition:opacity .2s}
+.bars i.done{opacity:.85}
+.beatbar{height:2px;background:#1e1815}
+.beatbar i{display:block;height:100%;background:var(--rust);width:0}
+.keys{display:flex;gap:1.4rem;padding:.55rem 1.2rem;color:#453a34;font-size:11.5px;flex-wrap:wrap}
+kbd{color:var(--dim);border:1px solid #2c2320;border-radius:2px;padding:0 .35rem}
+</style>
+
+<header>
+  <span class="sect" id="sect">KI</span>
+  <span class="clock"><span id="elapsed">0:00</span><small> / 3:05 cap</small></span>
+  <span class="drift ok" id="drift">on grid</span>
+  <span class="spacer">
+    <span>wpm <b id="wpm">145</b></span>
+    <span>script <b id="total">—</b></span>
+    <button id="bAuto" class="on">auto</button>
+    <button id="bShort">short cut</button>
+    <button id="bRead">read mode</button>
+  </span>
+</header>
+
+<main>
+  <div class="dir" id="dir"></div>
+  <div class="vo" id="vo">Space to start.</div>
+  <svg class="ring" id="ring" viewBox="0 0 64 64" style="display:none">
+    <circle class="bg" cx="32" cy="32" r="29"></circle>
+    <circle class="fg" id="ringfg" cx="32" cy="32" r="29" stroke-dasharray="182.2" stroke-dashoffset="182.2"></circle>
+  </svg>
+  <div class="next" id="next"></div>
+</main>
+
+<footer>
+  <div class="bars" id="bars"></div>
+  <div class="beatbar"><i id="beatbar"></i></div>
+  <div class="keys">
+    <span><kbd>space</kbd> play / pause</span>
+    <span><kbd>→</kbd> next</span>
+    <span><kbd>←</kbd> back</span>
+    <span><kbd>R</kbd> reset</span>
+    <span><kbd>A</kbd> auto / manual</span>
+    <span><kbd>S</kbd> short cut (~90s)</span>
+    <span><kbd>+</kbd> <kbd>−</kbd> wpm</span>
+    <span><kbd>F</kbd> fullscreen</span>
+    <span><kbd>H</kbd> read mode</span>
+  </div>
+</footer>
+
+<script>
+// Voice from _Hamster.16k.txt + _30mPODCAST.16k.txt. Holds mostly removed —
+// Sean's measured 125 wpm already contains his own pauses.
+// Google/Gemini lands at 0:05, not 2:00. Judging weights Gemini implementation 25%.
+// cut:1 beats drop in SHORT mode (key S). Full ~2:33, short ~2:00 at 145 wpm.
+const ALL = [
+ {s:'KI',d:'FRAME 1 · VRAM ledger filling, five rows. Vertex AI console alongside it. Both at once.',
+  x:'Five models on one graphics card, all loaded at once.\nAnd Gemini 2.5 Flash on Vertex AI\ngoverning every one of them from the cloud.'},
+ {s:'KI',x:"That shouldn't fit.\nThat should not fit."},
+
+ {s:'KI',d:'FRAME 2 · a page of floating-point notation. Then it clears.',
+  x:"I never got the math.\nBut geometry I got. I can touch it, I can feel it, I can see it."},
+ {s:'KI',d:'FRAME 3 · three states, drawn big.',
+  x:'So I stopped writing the weights as numbers.\n\nMinus one. Zero. Plus one.'},
+ {s:'KI',d:'FRAME 4 · 243 slots lit. 13 stay dark, then turn red.',
+  x:"Five of those fit in a byte.\nTwo hundred forty three combinations,\nand a byte holds two hundred fifty six.\n\nThirteen left over.\nThirteen values that can never be a weight."},
+ {s:'KI',hold:1.5,d:'the thirteen turn red. no voice.'},
+ {s:'KI',x:'So I made them alarms.'},
+
+ {s:'SHŌ',d:'GATE 1 · the sentinel fires. Inference halts.',
+  x:"Bad byte comes in, there's no state it can be.\nNothing gets in."},
+ {s:'SHŌ',d:'GATE 2 · refused at a fixed header offset, before any parse or alloc.',
+  x:"Malformed envelope, refused at a fixed spot in the header\nbefore anything's even parsed.\nNothing gets in."},
+ {s:'SHŌ',cut:1,d:"GATE 3 · a phrase table. The rows for light aren't greyed out. They're absent.",
+  x:"A body with no eyes has no words for light.\nNot forbidden. Not checked. No branch to get to.\nNothing gets in."},
+ {s:'SHŌ',cut:1,d:'FRAME 5 · a steel beam. Rust under the coating.',
+  x:"I spent twenty three years around guys who'd sign off on bad steel,\nand guys who wouldn't.\nThe paperwork looked the same either way."},
+ {s:'SHŌ',x:"So I don't want a system that checks.\nI want one that can't do it wrong."},
+
+ {s:'SHŌ',d:'FRAME 6 · demo_cloud_agent.ps1 live. Cloud Storage, Vertex AI, Firestore, scrub.',
+  x:"What the five can't settle goes up.\n\nA watcher on a Cloud Storage bucket. Not a chatbot.\nIt filters before it spends a token, asks Gemini 2.5 Flash\non Vertex AI at temperature zero, locked to a schema,\nwrites the chain head to Firestore, wipes its own staging."},
+ {s:'SHŌ',x:"Nobody's in the loop."},
+
+ {s:'TEN',d:'FRAME 7 · BENCHMARKS.md. A table of commands. The Result column is empty.',
+  x:'Then it came back around on me.\n\nI’m not putting a benchmark number on this screen.'},
+ {s:'TEN',hold:1.5,d:'the empty column, held.'},
+ {s:'TEN',x:"Every one of them was true on my machine.\nOne day. One temperature.\nIn a pitch it stops being a measurement. It becomes a claim."},
+ {s:'TEN',cut:1,x:"I didn't delete the old ones. They're in the repo, dated.\nSuperseded, not removed."},
+ {s:'TEN',x:"So the write up has no figures.\nIt's got commands."},
+
+ {s:'PILLOW',pillow:1,tag:'openframe',x:'outer frame left open\non purpose — the moral walks\nout and finds the reader'},
+
+ {s:'KETSU',d:'FRAME 8 · cargo test --workspace scrolling. Music enters.',
+  x:'Built by one guy in a room.'},
+ {s:'KETSU',d:'FRAME 9 · dark. Title card and DOI.',
+  x:"Clone it, run it.\nThe only number you have to trust\nis the one your machine prints."},
+ {s:'KETSU',x:"That's the whole thing. If I had to call it anything."},
+ {s:'KETSU',hold:2.5,end:1,d:'hold in the dark.'},
+];
+let short = false;
+let B = ALL;                                  // rebuilt by setShort()
+
+const TARGET = 180, CAP = 185, PILLOW_SEC = 4;
+const $ = id => document.getElementById(id);
+let wpm = 145, i = 0, t = 0, beatT = 0, playing = false, auto = true, last = 0;
+
+const words = b => b.x ? b.x.trim().split(/\s+/).length : 0;
+const dur = b => b.hold ? b.hold : b.pillow ? PILLOW_SEC : words(b) / wpm * 60;
+const scriptLen = () => B.reduce((a, b) => a + dur(b), 0);
+const startOf = n => B.slice(0, n).reduce((a, b) => a + dur(b), 0);
+const mmss = s => (s < 0 ? '-' : '') + Math.floor(Math.abs(s) / 60) + ':' + String(Math.floor(Math.abs(s) % 60)).padStart(2, '0');
+const hue = s => 'var(--' + ({ 'KI': 'ki', 'SHŌ': 'sho', 'TEN': 'ten', 'KETSU': 'ketsu', 'PILLOW': 'pillow' })[s] + ')';
+
+const bars = $('bars');
+function buildBars() {
+  bars.textContent = '';
+  B.forEach(b => { const el = document.createElement('i'); el.style.background = hue(b.s); bars.appendChild(el); });
+}
+const syncBars = () => [...bars.children].forEach((e, n) => {
+  e.style.flex = dur(B[n]); e.classList.toggle('done', n < i);
+});
+
+// SHORT mode drops every cut:1 beat — the ~90s cut of the same script.
+function setShort(v) {
+  short = v; B = short ? ALL.filter(b => !b.cut) : ALL;
+  i = Math.min(i, B.length - 1); t = startOf(i); beatT = 0;
+  $('bShort').classList.toggle('on', short);
+  buildBars(); draw();
+}
+
+function draw() {
+  const b = B[i], d = dur(b);
+  $('sect').textContent = b.pillow ? 'PILLOW · ' + b.tag + (b.cut ? ' · CUT ME FIRST' : '') : b.s;
+  $('sect').style.color = hue(b.s);
+  $('dir').textContent = b.d || '';
+
+  const vo = $('vo');
+  vo.className = 'vo' + (b.pillow ? ' pillow' : b.hold ? ' hold' : '');
+  vo.textContent = b.hold ? (b.end ? 'HOLD IN THE DARK' : 'SILENCE') : b.x;
+
+  $('ring').style.display = b.hold ? '' : 'none';
+  if (b.hold) $('ringfg').setAttribute('stroke-dashoffset', 182.2 * (1 - beatT / d));
+
+  const nb = B[i + 1];
+  $('next').textContent = nb ? (nb.hold ? '↓  silence ' + nb.hold + 's' : '↓  ' + nb.x.split('\n')[0]) : '';
+
+  $('elapsed').textContent = mmss(t);
+  $('elapsed').className = t > CAP ? 'bad' : '';
+  $('beatbar').style.width = (100 * Math.min(1, beatT / d)) + '%';
+
+  const should = startOf(i) + beatT, off = t - should, dr = $('drift');
+  dr.textContent = Math.abs(off) < 1 ? 'on grid' : (off > 0 ? '+' : '') + off.toFixed(1) + 's';
+  dr.className = 'drift ' + (Math.abs(off) < 2 ? 'ok' : Math.abs(off) < 5 ? 'warn' : 'bad');
+
+  const L = scriptLen(), room = CAP - L;
+  $('total').textContent = mmss(L) + '  ' + (room >= 0 ? '(' + room.toFixed(0) + 's under cap)' : '(OVER CAP ' + (-room).toFixed(0) + 's)');
+  $('total').className = room < 0 ? 'bad' : room < 2 ? 'warn' : 'ok';
+  $('wpm').textContent = wpm;
+  syncBars();
+}
+
+function step(n) { i = Math.max(0, Math.min(B.length - 1, i + n)); t = startOf(i); beatT = 0; draw(); }
+
+function tick(now) {
+  if (playing) {
+    const dt = (now - last) / 1000;
+    t += dt; beatT += dt;
+    if (auto && beatT >= dur(B[i])) {
+      if (i < B.length - 1) { beatT -= dur(B[i]); i++; }
+      else { playing = false; beatT = dur(B[i]); }
+    }
+    draw();
+  }
+  last = now;
+  requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
+
+addEventListener('keydown', e => {
+  const k = e.key;
+  if (k === ' ') { e.preventDefault(); playing = !playing; }
+  else if (k === 'ArrowRight') { e.preventDefault(); step(1); }
+  else if (k === 'ArrowLeft') { e.preventDefault(); step(-1); }
+  else if (k === 'r' || k === 'R') { i = 0; t = 0; beatT = 0; playing = false; }
+  else if (k === 'a' || k === 'A') { auto = !auto; $('bAuto').classList.toggle('on', auto); }
+  else if (k === 's' || k === 'S') { setShort(!short); return; }
+  else if (k === 'h' || k === 'H') { document.body.classList.toggle('read'); }
+  else if (k === 'f' || k === 'F') { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); }
+  else if (k === '+' || k === '=') { wpm = Math.min(220, wpm + 5); }
+  else if (k === '-' || k === '_') { wpm = Math.max(90, wpm - 5); }
+  else return;
+  draw();
+});
+$('bAuto').onclick = () => { auto = !auto; $('bAuto').classList.toggle('on', auto); draw(); };
+$('bShort').onclick = () => setShort(!short);
+$('bRead').onclick = () => { document.body.classList.toggle('read'); $('bRead').classList.toggle('on'); };
+
+buildBars();
+draw();
+</script>

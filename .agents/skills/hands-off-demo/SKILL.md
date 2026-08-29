@@ -4,8 +4,9 @@ description: >-
   Automated, hands-off 180-second live competition demo driver for the Nistam Dream Engine.
   Executes the complete 5-Act showcase with zero human intervention: 5D Astrolabe,
   Blindfolded Cybernetic Autopilot, Resident 3-Model Gemma Fleet (2.71 GB VRAM),
-  Vertex AI Gemini 3.7 Flash with 3-Wave Airgap Defense, GPU Singularity Tikhonov
-  Self-Healing Test, and 523+ compiled Rust hardware test receipts.
+  Vertex AI Gemini 2.5 Flash with 3-Wave Airgap Defense, GPU Singularity Tikhonov
+  Self-Healing Test, and 5,213 compiled Rust tests (0 failed, 11 ignored;
+receipt: docs/RECEIPT-cargo-test-workspace-2026-08-29.txt).
 ---
 
 # 🎬 Hands-Off Competition Demo Driver
@@ -46,15 +47,15 @@ python scripts/hands_off_demo_driver.py
  │   • Papa Bear (27B - 580 MB):  7-Domain BQ MetaRouter (363 ns)              │
  │   • Total Resident VRAM: 2,710 MB (Fits in 8 GB consumer GPU)               │
  ├─────────────────────────────────────────────────────────────────────────────┤
- │   ACT IV [1:45 - 2:20]: GOOGLE CLOUD VERTEX AI & GEMINI 3.7 FLASH           │
- │   • Model: gemini-3.7-flash @ temp 0.0 under $0.0004/call governor ceiling  │
+ │   ACT IV [1:45 - 2:20]: GOOGLE CLOUD VERTEX AI & GEMINI 2.5 FLASH           │
+ │   • Model: gemini-2.5-flash @ temp 0.0 under $0.0004/call governor ceiling  │
  │   • Context Caching: >= 32,768 tokens VARS knowledge base pre-indexed       │
  │   • 3-Wave Cultural Airgap Sentry: Zero Cree on Cloud (ADR-0026 zeroize)    │
  ├─────────────────────────────────────────────────────────────────────────────┤
  │   ACT V [2:20 - 3:00]: LIVE GPU PANIC TEST & HARDWARE RECEIPTS              │
  │   • Stress Trigger: β -> 0.99999 spikes N x IPR metric to singularity       │
  │   • Self-Healing: Dynamic Tikhonov Clamp (ε = 1e-4) locks 120 FPS           │
- │   • 523+ Compiled Rust Test Receipts passed clean (0 failures)              │
+ │   • 5,213 Rust tests passed clean (0 failed, 11 ignored)                    │
  └─────────────────────────────────────────────────────────────────────────────┘
 ```
 

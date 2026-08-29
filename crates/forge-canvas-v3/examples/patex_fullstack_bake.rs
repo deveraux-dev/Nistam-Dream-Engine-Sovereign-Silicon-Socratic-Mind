@@ -36,7 +36,7 @@ const FULLSTACK: &str = "\
 ║  └───────────[4-LANE AMBISONIC / LABAN EFFORT BUS]─────────────┘  ║
 ║  ┌───[SOVEREIGN CRUCIBLE]───┐  ┌──────────[CLOUD GOVERNOR]─────┐  ║
 ║  │ ┌─────────┐ ┌──────────┐ │  │ ┌───────────┐ ┌─────────────┐ │  ║
-║  │ │ASP/FST  │ │ADR-0026  │ │  │ │GEMINI 3.7 │ │450K CONTEXT │ │  ║
+║  │ │ASP/FST  │ │ADR-0026  │ │  │ │GEMINI 2.5 │ │450K CONTEXT │ │  ║
 ║  │ │GBNF MASK│ │0-RETENTION│ │  │ │FLASH T=0  │ │$0.0004/CALL│ │  ║
 ║  │ └─────────┘ └──────────┘ │  │ └───────────┘ └─────────────┘ │  ║
 ║  └───────[TAPE E: FAILSAFE]─┘  └───────[WASIBOX SANDBOX]───────┘  ║
@@ -153,7 +153,7 @@ fn main() {
         (22, "[CLOUD GOVERNOR]"),
         (24, "ASP/FST"),
         (24, "ADR-0026"),
-        (24, "GEMINI 3.7"),
+        (24, "GEMINI 2.5"),
         (24, "450K CONTEXT"),
         (25, "GBNF MASK"),
         (25, "0-RETENTION"),

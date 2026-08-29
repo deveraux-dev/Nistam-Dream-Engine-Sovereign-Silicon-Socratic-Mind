@@ -15,7 +15,7 @@
 | Criteria | Your Stack (`forge-envelope`) | Typical Competitor | Hackathon Judge Score Impact |
 | :--- | :--- | :--- | :--- |
 | **Engineering Quality** | `#![no_std]` Rust + 1.58-bit ternary S13 primitives | Python / LangChain wrapper | **S-Tier** (Out-engine 99% of entries) |
-| **Google AI Depth** | Edge pre-processor + Gemini 3.7 Flash Cloud Oracle | Direct Gemini API calls | **Strategic Focus** (Must prove active API draw & schema locking) |
+| **Google AI Depth** | Edge pre-processor + Gemini 2.5 Flash Cloud Oracle | Direct Gemini API calls | **Strategic Focus** (Must prove active API draw & schema locking) |
 | **Economic ROI Story** | 75% Context Caching savings ($562 for 60M audits) | Unoptimized standard token bills | **S-Tier** (Google Marketing case study) |
 | **Judge Clarity (3 min)** | Clean plain-English narrative & live console proof | Over-abstracted math or simple chat | **High Clarity** (Immediate visceral hook) |
 
@@ -25,7 +25,7 @@
 
 1. **The "DSP Engine" Misconception:**
    * *Trap:* Skimming judges misclassifying low-level Rust systems code as an unrelated DSP/audio library.
-   * *Solution:* **Lead with Gemini.** Start the video directly inside the Google Cloud / Vertex AI dashboard showing live Gemini 3.7 Flash structured schema outputs before showing terminal logs.
+   * *Solution:* **Lead with Gemini.** Start the video directly inside the Google Cloud / Vertex AI dashboard showing live Gemini 2.5 Flash structured schema outputs before showing terminal logs.
 2. **Jargon Overload:**
    * *Trap:* Terms like "Fredholm-Dante attention masks" causing cognitive fatigue in 2 minutes.
    * *Solution:* Plain-English positioning: *"Sub-millisecond local telemetry pre-filtering paired with Google Cloud multimodal reasoning."*
@@ -48,7 +48,7 @@
 
 * **0:00 – 0:45: The Physical Defect & The Cloud Oracle:**
   * Show real photograph of Walterdale Bridge steel showing localized blistering and micro-curvature.
-  * Instant dispatch to Gemini 3.7 Flash returning structured `PhysicalInspectionAudit` JSON with zero hallucinations.
+  * Instant dispatch to Gemini 2.5 Flash returning structured `PhysicalInspectionAudit` JSON with zero hallucinations.
 * **0:45 – 1:45: Edge Sentinel & Chaos Monkey Defense:**
   * Terminal running `chaos_monkey` and `s13.rs`.
   * Triggering the "Oh Shit" Moon Sentinel (`252` - Kaskatinowipisim Freeze-Up) and demonstrating instant 35ns stream halt and memory zeroization.

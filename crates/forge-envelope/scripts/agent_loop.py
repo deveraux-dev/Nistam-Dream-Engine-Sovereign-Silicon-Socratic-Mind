@@ -7,14 +7,14 @@ This script implements the asynchronous Cloud Run watcher as per K07b.
 It performs the evidence flywheel:
 1. Polls GCS inbox.
 2. Deterministic byte-sieve triage.
-3. Gemini 3.7 Flash schema-locked audit.
+3. Gemini 2.5 Flash schema-locked audit.
 4. Cross-check vs degradation expectation.
 5. Subprocess call to forge-envelope for attestation.
 6. Firestore sharded chain-head write.
 7. Zero-retention wipe of staging.
 
 Ensures absolute determinism, no hallucinations, and pure validated JSON responses
-directly from Vertex AI / Gemini 3.7 Flash.
+directly from Vertex AI / Gemini 2.5 Flash.
 """
 
 import asyncio
@@ -174,7 +174,7 @@ class EvidenceFlywheel:
     def __init__(self, manual: bool = False, require_cloud: bool = False):
         self.manual = manual
         self.require_cloud = require_cloud
-        self.model = os.environ.get("GEMINI_MODEL", "gemini-3.7-flash")
+        self.model = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
         self.chain_state_path = "evidence-chain.json"
 
         if require_cloud:

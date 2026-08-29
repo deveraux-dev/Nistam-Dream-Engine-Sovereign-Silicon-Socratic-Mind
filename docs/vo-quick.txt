@@ -1,0 +1,27 @@
+Five models on one graphics card, all loaded at once. And Gemini 2.5 Flash on Vertex AI, governing every one of them from the cloud.
+
+That shouldn't fit. That should not fit.
+
+I never got the math. But geometry, I got. I can touch it. I can feel it. I can see it.
+
+So I stopped writing the weights as numbers. Minus one. Zero. Plus one.
+
+Five fit in a byte. Two hundred forty three combinations. A byte holds two hundred fifty six. Thirteen left over. Thirteen values that can never be a weight.
+
+So I made them alarms.
+
+Bad byte comes in. There's no state it can be. Nothing gets in.
+
+Malformed envelope. Refused at a fixed spot in the header, before anything's even parsed. Nothing gets in.
+
+I don't want a system that checks. I want one that can't do it wrong.
+
+What the five can't settle goes up. A watcher on a Cloud Storage bucket. Not a chatbot. Asks Gemini 2.5 Flash on Vertex AI at temperature zero, locked to a schema. Writes the chain head to Firestore. Wipes its own staging.
+
+Nobody's in the loop.
+
+Then it came back around on me. I'm not putting a benchmark number on this screen. Every one was true on my machine. One day. One temperature. In a pitch it stops being a measurement. It becomes a claim.
+
+So the write up has no figures. It's got commands.
+
+Built by one guy in a room. Clone it, run it. The only number you have to trust is the one your machine prints.

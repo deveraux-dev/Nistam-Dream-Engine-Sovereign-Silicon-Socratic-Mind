@@ -208,7 +208,7 @@ def run_1hr_tracker(
             time.sleep(sleep_chunk)
 
     print("\n" + "=" * 80)
-    print("1-HOUR TEST HARNESS COMPLETE — SUMMARY AUDIT")
+    print(f"1-HOUR TEST HARNESS {'LIVE' if not dry_run else 'DRY-RUN'} COMPLETE — SUMMARY AUDIT")
     print("=" * 80)
     print(f"Total Test Elapsed Time:  {format_duration(time.time() - start_time)}")
     print(f"Total Audits Dispatched:  {iteration}")

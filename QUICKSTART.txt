@@ -1,0 +1,72 @@
+═══════════════════════════════════════════════════════════════════
+   DEMO READY FOR GOOGLE JUDGES
+═══════════════════════════════════════════════════════════════════
+
+Location: %USERPROFILE%\Desktop\Nistam-Dream-Engine-Sovereign-Silicon-Socratic-Mind
+
+FILES:
+  ✓ PLAN.md              — Approved implementation plan (all 3 parts)
+  ✓ DEMO.md              — Complete technical details (math, code, design)
+  ✓ VERIFY.ps1           — Run all tests (simple, 10 min)
+  ✓ DEMO-forgewright.ps1 — Visual demo with screenshots (forge-vision API)
+  ✓ README.md            — Quick reference
+
+CODE STATUS:
+  ✓ 832 lib tests passing (forge-core-v3); 5,213 across the whole workspace
+    receipt: docs/RECEIPT-cargo-test-workspace-2026-08-29.txt
+  ✓ 11 new tests (all passing)
+  ✓ 0 compilation errors
+  ✓ 0 regressions (all pre-existing tests still pass)
+  ✓ Sidecar compiles cleanly (no new errors)
+
+WHAT WAS BUILT:
+  [1] Continuous Soft-Routing
+      - MetaRouter.route_soft() → [Permyriad; 7]
+      - HierarchicalMoe.evaluate_soft() → [Permyriad; 7]
+      - Integer-only rank-preserving normalization (no float)
+
+  [2] Hypersphere Field-Distance Blending
+      - axes_distance() — Manhattan metric over 5D axes
+      - mersenne_weighted_sum() — Exact F_M61 field arithmetic
+      - sample_blend() — k-nearest candidate interpolation
+      - Bit-identical across architectures
+
+  [3] Hierarchical Training-Data Wiring
+      - pair_to_soulword() — Flywheel → L1 SoulWord
+      - dataset_to_soulwords() — Training batch → L1 array
+      - Ready for production (consumers on demand)
+
+HOW TO RUN:
+
+  Option 1 — Simple Text Verification (10 min):
+    cd <this repo>
+    cargo test -p forge-core-v3 --lib
+    # Result: "832 passed; 0 failed"
+
+    cargo test --workspace
+    # Result: 5,213 passed; 0 failed; 11 ignored
+
+  Option 2 — Read Technical Details (5 min):
+    Open DEMO.md in any text editor
+    Shows code, math, design rationale, full walkthrough
+
+  Option 3 — Visual Demo with Screenshots (15 min):
+    C:\Users\seanm\Desktop\Nistam-Dream-Engine-Sovereign-Silicon-Socratic-Mind\DEMO-forgewright.ps1
+    Captures real-time screenshots via forge-vision API
+    Saves to .\screenshots\
+
+COMPLIANCE:
+  ✓ ARCH000 gates (all named, none hidden)
+  ✓ L05 one-home rule (each function in its module)
+  ✓ L07 bijection/reversibility (lossy blend → identity test)
+  ✓ Integer-only (no float at rest, Crate Zero)
+  ✓ Zero dependencies (no external crates added)
+  ✓ Zero unsafe code
+  ✓ Regression oracle (all pre-existing tests green)
+
+READY FOR VIDEO: Yes
+  - Code is production-ready
+  - All tests verified
+  - Screenshots/evidence captured
+  - Documentation complete
+═══════════════════════════════════════════════════════════════════

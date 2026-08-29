@@ -7,7 +7,7 @@ Key Invariants & Guarantees:
    crates (e.g. gemma-s13, cree_grammar.rs) are strictly excluded and blocked from cloud upload.
 2. 100% SERVERLESS / ZERO DEDICATED ENDPOINTS: Strictly uses Google GenAI SDK Context Caching
    (`cached_contents`). Zero dedicated GCE/Vertex Endpoint provisioning ($0.00 idle cost).
-3. GOVERNOR & CIRCUIT BREAKER (Rule G19): Locks model to `gemini-3.7-flash` at temperature 0.0,
+3. GOVERNOR & CIRCUIT BREAKER (Rule G19): Locks model to `gemini-2.5-flash` at temperature 0.0,
    top_k 1, enforces strict budget caps, and calculates real-time sub-cent cost receipts.
 4. LEAN DEV PROFILE: Right-sized ~40k–55k token context bundle clearing the 32k GenAI cache minimum
    while ensuring >98% cache hit ratios on recurring queries.
@@ -19,8 +19,21 @@ import os
 import sys
 import re
 import json
+import socket
 import hashlib
 import argparse
+
+# Dead IPv6 route stalls googleapis TCP connect ~168s before v4 fallback.
+# VERTEX_ALLOW_IPV6=1 restores dual-stack resolution.
+if os.environ.get("VERTEX_ALLOW_IPV6") != "1":
+    _getaddrinfo = socket.getaddrinfo
+
+    def _getaddrinfo_v4(host, port, family=0, *args, **kwargs):
+        if family == 0:
+            family = socket.AF_INET
+        return _getaddrinfo(host, port, family, *args, **kwargs)
+
+    socket.getaddrinfo = _getaddrinfo_v4
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import List, Dict, Tuple, Optional, Any
@@ -49,12 +62,12 @@ except ImportError:
     BillingGuard = None
 
 # Model & Engine Defaults (Rule G19 Mandate)
-DEFAULT_MODEL = os.environ.get("VERTEX_FLASH_MODEL", "gemini-3.7-flash")
+DEFAULT_MODEL = os.environ.get("VERTEX_FLASH_MODEL", "gemini-2.5-flash")
 DEFAULT_TTL = "3600s"
 MAX_OUTPUT_TOKENS = 2048
 GOVERNOR_COST_CEILING = 0.0004  # $0.0004 per call unit-cost governor ceiling
 
-# Pricing constants for gemini-3.7-flash / gemini-1.5-flash (per 1,000,000 tokens)
+# Pricing constants for gemini-2.5-flash / gemini-1.5-flash (per 1,000,000 tokens)
 PRICE_INPUT_1M = 0.075          # $0.075 / 1M uncached input tokens
 PRICE_CACHED_INPUT_1M = 0.01875 # $0.01875 / 1M cached input tokens (75% discount)
 PRICE_OUTPUT_1M = 0.30          # $0.30 / 1M output tokens
@@ -297,15 +310,25 @@ def get_genai_client() -> Tuple[Optional[Any], Optional[str]]:
     location = os.environ.get("GOOGLE_CLOUD_LOCATION", "us-central1")
     api_key = os.environ.get("GEMINI_API_KEY")
 
+    # Hard socket deadline: without it a stalled aiplatform connection hangs
+    # caches.list() forever with no output, which reads as a dead script.
+    timeout_ms = int(os.environ.get("VERTEX_TIMEOUT_MS", "45000"))
+    try:
+        from google.genai import types as _gt
+        http_opts = _gt.HttpOptions(timeout=timeout_ms)
+    except Exception:
+        http_opts = None
+
     try:
         if project_id:
-            client = genai.Client(vertexai=True, project=project_id, location=location)
+            client = genai.Client(vertexai=True, project=project_id,
+                                  location=location, http_options=http_opts)
             return client, None
         elif api_key:
-            client = genai.Client(api_key=api_key)
+            client = genai.Client(api_key=api_key, http_options=http_opts)
             return client, None
         else:
-            client = genai.Client()
+            client = genai.Client(http_options=http_opts)
             return client, None
     except Exception as e:
         return None, (
@@ -403,7 +426,8 @@ def get_or_create_serverless_cache(
 def render_loud_visual_receipt(
     usage_metadata: Any,
     cache_name: Optional[str] = None,
-    tag: str = "lean"
+    tag: str = "lean",
+    sovereign_skipped: Optional[int] = None
 ):
     """
     Renders a high-contrast, colorized ANSI/Unicode box receipt showing token hit ratio,
@@ -416,30 +440,36 @@ def render_loud_visual_receipt(
     cached_tokens = getattr(usage_metadata, "cached_content_token_count", 0) or 0
     candidates_tokens = getattr(usage_metadata, "candidates_token_count", 0) or 0
     total_tokens = getattr(usage_metadata, "total_token_count", 0) or 0
+    total_tokens = max(total_tokens, prompt_tokens + cached_tokens + candidates_tokens
+                       if prompt_tokens < cached_tokens else total_tokens)
 
-    uncached_input = max(0, prompt_tokens - cached_tokens)
-    
+    # prompt_token_count may or may not already include the cached prefix.
+    uncached_input = prompt_tokens - cached_tokens if prompt_tokens >= cached_tokens else prompt_tokens
+    total_input = uncached_input + cached_tokens
+
     # Cost calculations
     cost_uncached = uncached_input * (PRICE_INPUT_1M / 1_000_000)
     cost_cached = cached_tokens * (PRICE_CACHED_INPUT_1M / 1_000_000)
     cost_output = candidates_tokens * (PRICE_OUTPUT_1M / 1_000_000)
     actual_cost = cost_uncached + cost_cached + cost_output
 
-    standard_uncached_cost = (prompt_tokens * (PRICE_INPUT_1M / 1_000_000)) + cost_output
+    standard_uncached_cost = (total_input * (PRICE_INPUT_1M / 1_000_000)) + cost_output
     savings = max(0.0, standard_uncached_cost - actual_cost)
     savings_pct = (savings / standard_uncached_cost * 100.0) if standard_uncached_cost > 0 else 0.0
 
-    hit_ratio_pct = (cached_tokens / prompt_tokens * 100.0) if prompt_tokens > 0 else 0.0
+    hit_ratio_pct = (cached_tokens / total_input * 100.0) if total_input > 0 else 0.0
+    hit_ratio_pct = min(100.0, max(0.0, hit_ratio_pct))
 
     # Build visual progress bar (46 characters wide)
     bar_width = 46
-    filled_len = int(bar_width * (hit_ratio_pct / 100.0))
+    filled_len = min(bar_width, max(0, int(bar_width * (hit_ratio_pct / 100.0))))
     bar_str = "█" * filled_len + "░" * (bar_width - filled_len)
 
-    # Governor ceiling bar
-    gov_ratio = min(1.0, actual_cost / GOVERNOR_COST_CEILING)
-    gov_filled = int(20 * gov_ratio)
+    # Bar saturates for layout; the printed ratio does not, so overage stays visible.
+    gov_ratio_true = (actual_cost / GOVERNOR_COST_CEILING) if GOVERNOR_COST_CEILING > 0 else 0.0
+    gov_filled = int(20 * min(1.0, gov_ratio_true))
     gov_bar = "=" * gov_filled + ">" + " " * max(0, 19 - gov_filled)
+    gov_state = "OVER" if gov_ratio_true > 1.0 else "under"
 
     handle_disp = (cache_name.split("/")[-1] if cache_name else "DIRECT_MODE (NO CACHE)")[:38]
     status_text = "🟢 CACHE HIT (EXPLICIT SERVERLESS)" if cached_tokens > 0 else "⚪ DIRECT UNCACHED INFERENCE"
@@ -449,7 +479,10 @@ def render_loud_visual_receipt(
     print("╠" + "═"*78 + "╣")
     print(f"║  [STATUS]          {status_text}".ljust(79) + "║")
     print(f"║  [PROFILE/HANDLE]  profile: {tag} | handle: {handle_disp}".ljust(79) + "║")
-    print(f"║  [AIRGAP GUARD]    🛡️ 100% SOVEREIGN ISOLATION ENFORCED (ADR-0026)".ljust(79) + "║")
+    airgap_txt = (f"{sovereign_skipped} sovereign file(s) withheld from upload (ADR-0026)"
+                  if sovereign_skipped is not None
+                  else "[UNVERIFIED] withheld-file count not reported to this receipt (ADR-0026)")
+    print(f"║  [AIRGAP GUARD]    🛡️ {airgap_txt}".ljust(79) + "║")
     print("╠" + "═"*78 + "╣")
     print("║  📊 TOKEN EFFICIENCY RATIO:".ljust(79) + "║")
     print(f"║  {bar_str}  {hit_ratio_pct:>5.1f}% CACHED".ljust(79) + "║")
@@ -463,7 +496,7 @@ def render_loud_visual_receipt(
     print(f"║  • Standard Uncached Cost:   ${standard_uncached_cost:>10.6f}".ljust(79) + "║")
     print(f"║  • Actual Billed Cost    :   ${actual_cost:>10.6f}".ljust(79) + "║")
     print(f"║  • Exact Session Savings :   ${savings:>10.6f} ({savings_pct:>4.1f}% Cost Reduction)".ljust(79) + "║")
-    print(f"║  • Governor Budget Check :   [{gov_bar}] {gov_ratio*100:>4.1f}% of ${GOVERNOR_COST_CEILING:.4f} Ceiling".ljust(79) + "║")
+    print(f"║  • Cost Monitor (Soft)   :   [{gov_bar}] {gov_ratio_true*100:>6.1f}% of ${GOVERNOR_COST_CEILING:.4f} soft ceiling ({gov_state}, not enforced)".ljust(79) + "║")
     print("╚" + "═"*78 + "╝\n")
 
 
@@ -709,7 +742,8 @@ def main():
             print("="*70)
             print(answer)
             print("="*70)
-            render_loud_visual_receipt(usage, cache_name=cache_name, tag=tag_name)
+            render_loud_visual_receipt(usage, cache_name=cache_name, tag=tag_name,
+                                       sovereign_skipped=len(skipped))
             
             if args.require_cache:
                 cached_tokens = getattr(usage, "cached_content_token_count", 0) or 0
@@ -733,7 +767,8 @@ def main():
                     print("\n" + "="*70)
                     print(answer)
                     print("="*70)
-                    render_loud_visual_receipt(usage, cache_name=cache_name, tag=tag_name)
+                    render_loud_visual_receipt(usage, cache_name=cache_name, tag=tag_name,
+                                       sovereign_skipped=len(skipped))
             except KeyboardInterrupt:
                 print("\n\nSession terminated by user.")
                 break

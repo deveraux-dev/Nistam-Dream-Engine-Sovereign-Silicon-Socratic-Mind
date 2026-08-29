@@ -21,7 +21,7 @@ def main():
     s13_query_tokens = 500              # S13 coordinate prompt size
     total_inspection_queries = 60_000_000 # Max audits under $1,200 budget
 
-    # Uncached prices (Vertex AI Gemini 3.5 Flash base)
+    # Uncached prices (Vertex AI Gemini 2.5 Flash base)
     price_base_input_per_1k = 0.000075
     price_base_output_per_1k = 0.000300
 
@@ -52,7 +52,7 @@ def main():
     print(f"[OK] Net Dollar Savings:                 ${(uncached_total_cost - cached_total_cost):,.2f} USD")
     print(f"[OK] Caching Cost Reduction:             {savings_pct:.2f}% Savings")
     print("-" * 80)
-    print(f"  Result: Your $1,200.00 credit budget fully funds 60,000,000 verified on-site")
+    print(f"  [UNVERIFIED] Result: Your $1,200.00 credit budget fully funds {total_inspection_queries:,} verified on-site")
     print("  inspections, proving planetary-scale trust with absolute economic viability.")
     print("=" * 80)
 

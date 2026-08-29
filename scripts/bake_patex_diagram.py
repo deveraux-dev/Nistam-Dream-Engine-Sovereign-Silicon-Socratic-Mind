@@ -123,7 +123,7 @@ def main():
 
     # Cloud Governor Box
     draw_rounded_panel(draw, (800, y3_0, 1160, y3_1), "GOOGLE CLOUD GOVERNOR", border=GOLD_COLOR, font=font_header)
-    draw.text((815, 540), "• Google Cloud Project: nde1-493505\n• Gemini 3.7 Flash @ temp 0.0\n• Context Caching: >= 32,768 Tokens\n• Unit Cost Governor: $0.0004/call\n• Cloud Run Flywheel (agent_loop.py)\n• Firestore Immutable Proof Ledger", fill=TEXT_WHITE, font=font_small)
+    draw.text((815, 540), "• Google Cloud Project: nde1-493505\n• Gemini 2.5 Flash @ temp 0.0\n• Context Caching: >= 32,768 Tokens\n• Unit Cost Governor: $0.0004/call\n• Cloud Run Flywheel (agent_loop.py)\n• Firestore Immutable Proof Ledger", fill=TEXT_WHITE, font=font_small)
 
     # ── Right Major Column: Axonometric & Title Block (x: 1210 to 1880) ────────
     
@@ -183,7 +183,7 @@ def main():
         ("• 7-DOMAIN MoE & 49-SLOT MoM BUS: 120Hz Schaeffer DSP, 16B UmpWord Ring Buffer", TEXT_WHITE, font_body),
         ("• 5D ASTROLABE: 119,625 HYG Stars, SO(5) Givens, Relativistic Lorentz Aberration", TEXT_WHITE, font_body),
         ("• SOVEREIGN AIRGAP: 3-Wave Cree Defense, BIP-340 Schnorr, ADR-0026 Zero-Retention", GREEN_COLOR, font_body),
-        ("• GOOGLE CLOUD: Gemini 3.7 Flash, 450k Context Caching, $0.0004/Call Governor", GOLD_COLOR, font_body),
+        ("• GOOGLE CLOUD: Gemini 2.5 Flash, 450k Context Caching, $0.0004/Call Governor", GOLD_COLOR, font_body),
         ("• MEASURED HARDWARE: 11.56M arbitrations/s, 2.75M BQ routes/s, 37.06 Gtrits/s AVX2", TEXT_WHITE, font_body),
         ("--------------------------------------------------------------------------------", BOX_MUTED, font_small),
         ("BAKED BY PATEX 5D GEOMETRIC TYPESETTING ENGINE", GOLD_COLOR, font_header),

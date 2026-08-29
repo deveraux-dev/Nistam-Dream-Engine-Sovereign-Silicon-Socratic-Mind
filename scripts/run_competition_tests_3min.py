@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
 """
 run_competition_tests_3min.py — 3-Minute Comprehensive Competition Test Suite & Live Demo Runner
-Target: Devpost 'All Things Agentic' (401+ Unit Tests | Measured Silicon | Zero Mocks)
+Target: Devpost 'All Things Agentic' (5,213 Unit Tests | Measured Silicon | Zero Mocks)
+Full-workspace receipt: docs/RECEIPT-cargo-test-workspace-2026-08-29.txt
+This 3-minute suite runs a SUBSET; its banner reports the subset's own live tally.
 Duration: ~180 Seconds structured pipeline across all 5 engine organs.
 """
 
 import os
+import re
 import sys
 import time
 import subprocess
@@ -32,23 +35,46 @@ def log_stage(num: int, title: str, est: str, start_time: float):
     print(f"║ [{num}/5] {title} ({est}) [T+{elapsed}s]".ljust(79) + "║")
     print("╚" + "═" * 78 + "╝\n")
 
+TEST_RESULT = re.compile(r"test result:\s*(ok|FAILED)\..*?(\d+) passed;\s*(\d+) failed;.*?(\d+) ignored", re.S)
+
+TALLY = {"passed": 0, "failed": 0, "ignored": 0}
+CAPTURED = []
+
+
 def run_step(cmd: list, cwd: Path, desc: str, env: dict = None) -> bool:
     print(f"--> {desc}...")
     run_env = os.environ.copy()
     if env:
         run_env.update(env)
-    
-    res = subprocess.run(cmd, cwd=str(cwd), env=run_env)
+
+    res = subprocess.run(cmd, cwd=str(cwd), env=run_env,
+                         stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                         text=True, encoding="utf-8", errors="replace")
+    out = res.stdout or ""
+    print(out, end="")
+    CAPTURED.append(out)
+
+    for _verdict, passed, failed, ignored in TEST_RESULT.findall(out):
+        TALLY["passed"] += int(passed)
+        TALLY["failed"] += int(failed)
+        TALLY["ignored"] += int(ignored)
+
     if res.returncode != 0:
         print(f"\n[FAIL] Step failed with exit code {res.returncode}: {' '.join(cmd)}", file=sys.stderr)
         return False
     return True
 
+
+def measured(pattern: str) -> str:
+    """Pull a figure out of captured step output, or mark it unverified."""
+    m = re.search(pattern, "\n".join(CAPTURED))
+    return m.group(0).strip() if m else "[UNVERIFIED — not emitted by any step this run]"
+
 def main():
     start_time = time.time()
     print("================================================================================")
     print("   NISTAM DREAM ENGINE & THE FORGE ENGINE — 3-MINUTE COMPETITION SUITE          ")
-    print("   Target: Devpost 'All Things Agentic' | 401+ Unit Tests | Measured Silicon   ")
+    print("   Target: Devpost 'All Things Agentic' | 5,213 Unit Tests | Measured Silicon  ")
     print("================================================================================")
 
     # -------------------------------------------------------------------------
@@ -66,9 +92,9 @@ def main():
         sys.exit(1)
 
     # -------------------------------------------------------------------------
-    # STAGE 2 [0:35 - 1:20]: RUST ENGINE TESTS (401 TESTS TOTAL)
+    # STAGE 2 [0:35 - 1:20]: RUST ENGINE TESTS (subset of the 5,213 workspace total)
     # -------------------------------------------------------------------------
-    log_stage(2, "COMPILED RUST ENGINE VERIFICATION (401+ TESTS & 500K BLIND ORACLE)", "~45s", start_time)
+    log_stage(2, "COMPILED RUST ENGINE VERIFICATION (SUBSET OF 5,213 & 500K BLIND ORACLE)", "~45s", start_time)
 
     if not run_step(["cargo", "test", "--manifest-path", "crates/forge-envelope/Cargo.toml"], REPO_ROOT, "2.1 Testing forge-envelope (84 tests: Hearthkeeper, Cree parity, scale)"):
         sys.exit(1)
@@ -116,15 +142,23 @@ def main():
     log_stage(5, "CRYPTOGRAPHIC RECEIPT LEDGER & TIMING SUMMARY", "~25s", start_time)
 
     total_seconds = round(time.time() - start_time, 2)
+    ran = TALLY["passed"] + TALLY["failed"]
+    verdict = "ALL 5 STAGES PASSED CLEANLY" if TALLY["failed"] == 0 else f"{TALLY['failed']} TEST(S) FAILED"
+
     print("\n" + "╔" + "═" * 78 + "╗")
-    print(f"║  🏆 ALL 5 STAGES PASSED CLEANLY IN {total_seconds} SECONDS".ljust(79) + "║")
+    print(f"║  🏆 {verdict} IN {total_seconds} SECONDS".ljust(79) + "║")
     print("╠" + "═" * 78 + "╣")
-    print("║  • 401/401 Rust Tests Passed (0 failed, 0 skipped, 0 mocked)".ljust(79) + "║")
-    print("║  • 3-Wave Cree Cultural Airgap 100% Intact (ADR-0026 Zero Retention)".ljust(79) + "║")
-    print("║  • Vertex Context Cache Census Validated (>= 32,768 tokens per bundle)".ljust(79) + "║")
-    print("║  • BIP-340 Schnorr / Sub-45ns Merkle Gate Verified (1-bit attacks blocked)".ljust(79) + "║")
-    print("║  • Measured Silicon: >1.76M routings/s, >2.57 Gtrits/s, 59.62 GB/s Memcpy".ljust(79) + "║")
+    print(f"║  • {TALLY['passed']}/{ran} Rust tests passed "
+          f"({TALLY['failed']} failed, {TALLY['ignored']} ignored) — counted from this run".ljust(79) + "║")
+    print("║  • 3-Wave Cree Cultural Airgap (ADR-0026) — see stage 1.2 verdict above".ljust(79) + "║")
+    print(f"║  • Vertex Context Cache Census Validated ({measured(r'(?<=Cached Tokens\s*:\s*)[\d,]+')})".ljust(79) + "║")
+    print("║  • BIP-340 Schnorr / Merkle Gate — see stage 3.1 output above".ljust(79) + "║")
+    print(f"║  • Routings/s this run : {measured(r'[\d,.]+\s*[MK]?\s*routings/s')}".ljust(79) + "║")
+    print(f"║  • Memcpy this run     : {measured(r'[\d,.]+\s*GB/s')}".ljust(79) + "║")
     print("╚" + "═" * 78 + "╝\n")
+
+    if TALLY["failed"]:
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()

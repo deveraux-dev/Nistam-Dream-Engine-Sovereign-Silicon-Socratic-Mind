@@ -107,20 +107,22 @@ def test_live_vertex_cache_hit(model_name: str = vfc.DEFAULT_MODEL):
 def main():
     parser = argparse.ArgumentParser(description="Strict Vertex Context Cache Test Harness")
     parser.add_argument("--live", "--require-cloud", action="store_true", help="Execute live call against Vertex AI and strictly require non-zero cache hit.")
+    parser.add_argument("--offline", action="store_true", help="Skip the live Vertex leg; offline checks only. Verifies no cache.")
     parser.add_argument("--model", type=str, default=vfc.DEFAULT_MODEL, help=f"Model name (default: {vfc.DEFAULT_MODEL})")
     args = parser.parse_args()
 
     try:
         test_offline_token_census()
         test_offline_airgap_guard()
-        
-        if args.live:
-            test_live_vertex_cache_hit(model_name=args.model)
+
+        if args.offline and not args.live:
+            print("=" * 72)
+            print(" [2/3 OFFLINE CHECKS PASSED] — live Vertex cache leg SKIPPED (--offline).")
+            print(" This run verified NO cache hit and made NO cloud call.")
+            print("=" * 72)
         else:
-            print("=" * 72)
-            print(" [OFFLINE VERIFICATION PASSED — Pass '--live' to test live Vertex cache hit]")
-            print("=" * 72)
-            
+            test_live_vertex_cache_hit(model_name=args.model)
+
     except Exception as e:
         print(f"\n❌ STRICT VERIFICATION FAILED:\n{e}\n", file=sys.stderr)
         sys.exit(1)

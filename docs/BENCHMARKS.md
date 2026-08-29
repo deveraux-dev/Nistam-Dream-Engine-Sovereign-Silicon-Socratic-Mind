@@ -50,7 +50,7 @@ from a clean clone.
 | Check | Command | Result |
 |---|---|---|
 | MMA-over-Nostr: BIP-340 attestation, O(1) Merkle gate, Byzantine injection refused, ADR-0026 scrub | `cargo run --release --example mma_nostr_live_demo -p forge-daemon-door` | _(prints on run)_ |
-| Airgap red/green vectors | `python scripts/test_sovereign_airgap_red_green.py` | _(prints on run)_ |
+| Airgap red/green vectors | `python crates/forge-envelope/scripts/test_sovereign_airgap_red_green.py` | _(prints on run)_ |
 
 The airgap script imports `vertex_flash_cache` from the same directory and needs the
 Python dependencies in `crates/forge-envelope/requirements.txt`

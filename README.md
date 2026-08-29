@@ -4,9 +4,9 @@
 [![License: MIT OR Apache-2.0](https://img.shields.io/badge/License-MIT%20OR%20Apache--2.0-blue.svg)](LICENSE)
 [![Google Gemini Competition](https://img.shields.io/badge/Google%20Gemini-Developer%20Competition-orange.svg)](docs/SUBMISSION_ENTRY.md)
 
-**2.57 Gtrits/s Scalar / 37.06 Gtrits/s AVX2 Single-Core Compute | 3-Model Resident Gemma Fleet in 2.71 GB VRAM | 119k 5D Galaxy Projection at 44.45 Million Stars/sec.**
+**2.57 Gtrits/s Scalar / 37.06 Gtrits/s AVX2 Single-Core Compute | Gemma 2B Resident Inference (410 MB) + Config Stubs (9B/27B Pending) | 119k 5D Galaxy Projection at 44.45 Million Stars/sec.**
 
-Nistam Dream Engine couples **1.58-bit balanced-ternary inference (S13)** with **5D Relativistic Celestial Astrolabe Math** and **Vertex AI Gemini 3.7 Flash Cloud Context Caching**. It executes three concurrent, co-resident Gemma models on consumer GPUs (< 8 GB VRAM) under an autonomous deterministic hardware lockstep.
+Nistam Dream Engine couples **1.58-bit balanced-ternary inference (S13)** with **5D Relativistic Celestial Astrolabe Math** and **Vertex AI Gemini 2.5 Flash Cloud Context Caching**. It executes Gemma 2B on consumer GPUs (< 8 GB VRAM) under an autonomous deterministic hardware lockstep. Gemma 9B & 27B architectures declared; weight dispatch pending.
 
 ![Nistam Sovereign Architecture Blueprint](patex_fullstack.png)
 *Figure 1: PaTeX 5D Architectural Drafting Sheet — Somatic Tokenizer (120Hz), 16-Byte UmpWord SPSC Bus, S13 Spectral MoE, SplitShader GPU Warden, Sovereign Crucible (ASP+FST+GBNF), and Google Vertex AI Gemini 3.7 Flash Governor.*
@@ -124,7 +124,7 @@ Measured on physical host hardware (x86_64 host, NVIDIA RTX 3070 machine, measur
 | **Three Bears Resident Fleet VRAM** | **2.71 GB total VRAM** | Baby Bear 2B (410 MB) + Blind Mama Bear 9B (1.72 GB) + Papa Bear 27B Head (580 MB) |
 | **Gemma 2B Decode (GPU Measured)** | **82.5 tokens/sec** | Real quantized weights on RTX 3070, zero sentinel bytes |
 | **Gemma 3.2B Decode (GPU Measured)** | **54.7 tokens/sec** | Real quantized weights on RTX 3070, zero sentinel bytes |
-| **Gemma 9B Decode (GPU Measured)** | **22.9 tokens/sec** | Real quantized weights on RTX 3070, bit-identical to CPU |
+| **Gemma 9B Plumbing Baseline (0/42 Layers)** | **147.8 tokens/sec** (6.83 ms/tok) | S13M weight loading, embed → norm → logits only; 42-layer GEMV pass pending |
 
 ---
 

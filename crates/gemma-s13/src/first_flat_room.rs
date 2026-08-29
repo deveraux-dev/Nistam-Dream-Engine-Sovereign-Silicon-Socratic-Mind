@@ -9,7 +9,7 @@
 //! 3. `[3] s13_gemma_2b_m3` Voxel & Hermetic Codec (5D Morton key, `senses_now()`, `#star-hud` telemetry).
 //! 4. `[0] s13_gemma_9b` Master World Engine (42-layer ambient CYOA room prose).
 //! 5. `[4] s13_gemma_m2` Sentry & Protocol Guard (Cree ASP grammar and 13 Moons sentinel check).
-//! 6. `[5] Gemini 3.7 Flash` Macro-Seed Governor (Out-of-band macro-expansion seed and zero-retention purge).
+//! 6. `[5] Gemini 2.5 Flash` Macro-Seed Governor (Out-of-band macro-expansion seed and zero-retention purge).
 
 use crate::atg::UNIT_COST_CEILING_MICRO_USD;
 use crate::cree_grammar::{Animacy, AspGrammarSolver, CreeTransducer, ObviationTier};
@@ -163,7 +163,7 @@ pub struct SentryAuditResult {
     pub vault_sweep_done: bool,
 }
 
-/// Step 6: Macro-Seed Governor from `[5] Gemini 3.7 Flash`.
+/// Step 6: Macro-Seed Governor from `[5] Gemini 2.5 Flash`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct MacroSeedExpansion {
     /// Whether out-of-band escalation was triggered (boundary breach).
@@ -325,7 +325,7 @@ impl FirstFlatRoomEngine {
             vault_sweep_done,
         };
 
-        // 6. Macro-Seed Governor (Gemini 3.7 Flash)
+        // 6. Macro-Seed Governor (Gemini 2.5 Flash)
         let needs_expansion = !is_valid;
         let macro_seed = MacroSeedExpansion {
             escalated: needs_expansion,

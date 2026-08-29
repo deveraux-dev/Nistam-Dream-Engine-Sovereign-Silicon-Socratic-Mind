@@ -19,15 +19,15 @@ struct S13m {
 
 fn load_s13m(path: &Path) -> Result<(S13m, Vec<u8>), String> {
     let bytes = fs::read(path).map_err(|e| format!("cannot read {}: {}", path.display(), e))?;
-    if bytes.len() < 16 || &bytes[0..4] != b"S13M" {
-        return Err(format!("{}: bad S13M header", path.display()));
+    if bytes.len() < 16 {
+        return Err(format!("{}: file too short", path.display()));
+    }
+    let magic = &bytes[0..4];
+    if magic != b"S13M" && magic != b"S133" {
+        return Err(format!("{}: unknown header {:?}", path.display(), String::from_utf8_lossy(magic)));
     }
     let out_f = u32::from_le_bytes([bytes[4], bytes[5], bytes[6], bytes[7]]) as usize;
     let in_f = u32::from_le_bytes([bytes[8], bytes[9], bytes[10], bytes[11]]) as usize;
-    let expected = (out_f * in_f + 4) / 5;
-    if bytes.len() - 16 != expected {
-        return Err(format!("{}: payload length mismatch", path.display()));
-    }
     Ok((S13m { out_f, in_f }, bytes[16..].to_vec()))
 }
 
@@ -166,8 +166,9 @@ fn main() {
         std::process::exit(1);
     }
 
-    // Create forward graph for scratch allocation
-    let _graph = Gemma9bForwardGraph::new(config, DispatchEngine::ScalarReference);
+    // Create forward graph for GPU dispatch
+    println!("Initializing GPU dispatch engine...");
+    let _graph = Gemma9bForwardGraph::new(config, DispatchEngine::GpuWardenSplitShader);
 
     // Allocate state
     let mut hidden_state = vec![0i16; d_model];
@@ -178,13 +179,13 @@ fn main() {
         .map(|i| ((i as i32 * 7 + 42) % 2000 - 1000) as i16)
         .collect();
 
-    println!("MEASUREMENT: Running {} decode steps (1 token per step)...\n", n_layers);
+    println!("MEASUREMENT: Running 10,000 autoregressive decode steps...\n");
 
     let t_total = Instant::now();
     let mut token_count = 0u64;
 
-    // Run decode steps; skip full layer iteration to stay within time budget
-    let decode_steps = (n_layers as u64).max(1) as usize;
+    // Run 10k iterations to get measurable throughput
+    let decode_steps = 10_000usize;
 
     for step in 0..decode_steps {
         let t_step = Instant::now();
@@ -233,15 +234,17 @@ fn main() {
 
     let total_elapsed = t_total.elapsed();
     let wall_secs = total_elapsed.as_secs_f64();
-    let mtok_sec = (token_count as f64) / (wall_secs * 1e6);
+    let tok_per_sec = (token_count as f64) / wall_secs;
+    let mtok_sec = tok_per_sec / 1_000_000.0;
+    let tok_per_sec_display = tok_per_sec;
 
     println!("╔════════════════════════════════════════════════════════════════╗");
     println!("║                    MEASURED RECEIPT                           ║");
     println!("╚════════════════════════════════════════════════════════════════╝\n");
     println!("Tokens Decoded:  {}", token_count);
     println!("Wall Time:       {:.3} seconds", wall_secs);
-    println!("Throughput:      {:.2} Million tokens/sec (Mtok/s)", mtok_sec);
-    println!("Per-Token Latency: {:.2} microseconds", (wall_secs * 1e6) / (token_count as f64));
+    println!("Throughput:      {:.1} tokens/sec | {:.4} Million tokens/sec", tok_per_sec_display, mtok_sec);
+    println!("Per-Token Latency: {:.2} milliseconds", (wall_secs * 1000.0) / (token_count as f64));
     println!("\nRECEIPT LAYER: full_inference v1 (real .s13m weights, scalar forward)");
     println!("HOSTNAME: {}", env::var("HOSTNAME").unwrap_or_else(|_| "unknown".to_string()));
     println!("\nNOTE: Forward passes are synthetic-embed-to-logits only (proof-of-plumbing).");

@@ -152,13 +152,19 @@ def run_green_test() -> tuple[bool, dict]:
     bundle_hash = bundle_hasher.hexdigest()
 
     est_tokens = total_chars // 4
+    syllabics = sum(1 for c in "".join(clean_bundle.values()) if 0x1400 <= ord(c) <= 0x167F)
+    leak_pct = (syllabics / total_chars * 100.0) if total_chars else 0.0
+
     print(f"\n Clean Bundle Signature: flash_cache_{bundle_hash[:16]}")
     print(f" Total Spec Volume:      {total_chars:,} chars (~{est_tokens:,} tokens)")
-    print(" Cree Syllabic Leak:     0.00% (Strict Zero-Leak Guarantee)")
-    print(" [GREEN TEST PASSED]: Clean worldbuilding & architecture specs validated.")
+    print(f" Cree Syllabic Leak:     {leak_pct:.2f}% ({syllabics} syllabic chars counted in bundle)")
+    if syllabics:
+        print(" [GREEN TEST FAILED]: sovereign syllabics present in an approved bundle.")
+        return False, {}
+    print(f" [GREEN TEST PASSED]: Clean specs validated (syllabic scan: {syllabics} chars found).")
     return True, clean_bundle
 
-def setup_cloud_database_and_wipe_staging(project_id: str = "nde1-493505"):
+def setup_cloud_database_and_wipe_staging(project_id: str = "nde1-493505", red_ok: bool = False, green_ok: bool = False):
     """
     Sets up the cloud database metadata record for nde1-493505
     and strictly enforces the ADR-0026 Staging Wipe Rule (Rule G20).
@@ -177,22 +183,25 @@ def setup_cloud_database_and_wipe_staging(project_id: str = "nde1-493505"):
         "receipt_status": "ACKNOWLEDGED",
     }
 
-    print(f" Cloud Datastore Configured:")
+    print(" LOCAL POLICY DECLARATION — no cloud call is made by this script:")
     print(f"   - Project ID:     {db_receipt['project_id']}")
     print(f"   - Datastore:      {db_receipt['datastore_schema']}")
     print(f"   - Airgap Policy:  {db_receipt['airgap_policy']}")
     print(f"   - Cree Syllabics: PERMANENTLY BARRED (0 Cloud Retention)")
     print(f"   - Unit Governor:  ${db_receipt['governor_cost_cap_per_call_usd']:.4f} / call")
     print(f"   - Model Lock:     {db_receipt['model_lock']}")
+    print("   [UNVERIFIED] Datastore state not read back; verify in the GCP console.")
 
     # Enforce Rule G20: Wipe staging directory upon receipt acknowledgment
     print("\n Enforcing Rule G20 (Staging Wipe Rule / ADR-0026 Zero-Retention)...")
     if TEST_STAGING_DIR.exists():
         shutil.rmtree(TEST_STAGING_DIR, ignore_errors=True)
-        print(" [WIPED] Local staging test directory completely purged.")
-        print(f"   --> Staging path exists: {TEST_STAGING_DIR.exists()}")
+        if TEST_STAGING_DIR.exists():
+            print(f" [WIPE FAILED] Staging directory still present: {TEST_STAGING_DIR}")
+            sys.exit(1)
+        print(" [WIPED] Local staging test directory purged; path confirmed absent.")
 
-    print("\n [ALL SYSTEMS SECURED & GREEN]")
+    print(f"\n [RED {'PASSED' if red_ok else 'FAILED'} + GREEN {'PASSED' if green_ok else 'FAILED'}]")
 
 def main():
     setup_mock_staging_files()
@@ -208,7 +217,7 @@ def main():
         sys.exit(1)
 
     # 3. Cloud Database Setup & Rule G20 Wipe
-    setup_cloud_database_and_wipe_staging(project_id="nde1-493505")
+    setup_cloud_database_and_wipe_staging(project_id="nde1-493505", red_ok=red_ok, green_ok=green_ok)
 
 if __name__ == "__main__":
     main()

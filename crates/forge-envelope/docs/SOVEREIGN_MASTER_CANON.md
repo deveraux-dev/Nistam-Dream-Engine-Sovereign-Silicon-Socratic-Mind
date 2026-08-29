@@ -257,5 +257,5 @@ cargo test --test scale_test --manifest-path F:\v3\crates\forge-envelope\Cargo.t
 python scripts/planetary_scale_calculator.py
 
 # Run Vertex AI billing draw test with your promo credits
-python scripts/verify_billing_draw.py --queries 5 --model gemini-3.7-flash
+python scripts/verify_billing_draw.py --queries 5 --model gemini-2.5-flash
 ```

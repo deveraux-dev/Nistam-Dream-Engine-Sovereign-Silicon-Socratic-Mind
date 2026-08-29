@@ -28,8 +28,8 @@ use std::io::Write as _;
 /// Named by ROLE, not by ladder position — `route_ladder` escalates UP to flash,
 /// so a bare value swap would send fat corpora to lite alone. PRO is OUT
 /// (Sean 07-29): no rung, no `--model` reachability.
-pub const LITE_MODEL: &str = "gemini-3.1-flash-lite";
-pub const FLASH_MODEL: &str = "gemini-3.5-flash";
+pub const LITE_MODEL: &str = "gemini-2.5-flash-lite";
+pub const FLASH_MODEL: &str = "gemini-2.5-flash";
 
 /// The BOUNDED-SCOPE read rung (Sean 08-06): a scoped sweep inside the lite
 /// ceilings rides `claude -p --model haiku` instead of gemini-lite, which

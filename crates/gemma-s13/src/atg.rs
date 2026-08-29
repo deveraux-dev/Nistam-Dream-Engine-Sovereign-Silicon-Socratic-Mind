@@ -14,7 +14,7 @@
 use crate::sentinel::{SentinelBand, UmpWord16};
 
 /// Locked Gemini Model identifier.
-pub const TARGET_MODEL: &str = "gemini-3.7-flash";
+pub const TARGET_MODEL: &str = "gemini-2.5-flash";
 
 /// Locked deterministic thermodynamic temperature (0.0).
 pub const TEMPERATURE_ZERO_POINT: i32 = 0;
@@ -135,7 +135,7 @@ mod tests {
 
     #[test]
     fn test_atg_context_token_window_constants() {
-        assert_eq!(TARGET_MODEL, "gemini-3.7-flash");
+        assert_eq!(TARGET_MODEL, "gemini-2.5-flash");
         assert_eq!(VARS_CONTEXT_TOKENS, 450_000);
         assert_eq!(CACHE_DISCOUNT_PCT, 75);
     }

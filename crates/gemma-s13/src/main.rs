@@ -89,7 +89,7 @@ fn main() {
 
     // 9. Active Thermodynamic Governor
     let atg = ThermodynamicGovernor::new_zero_point(0xCAFE);
-    assert_eq!(TARGET_MODEL, "gemini-3.7-flash");
+    assert_eq!(TARGET_MODEL, "gemini-2.5-flash");
     assert_eq!(VARS_CONTEXT_TOKENS, 450_000);
     let packet = atg
         .intercept_sentinel_breach(band, 1, 120)
