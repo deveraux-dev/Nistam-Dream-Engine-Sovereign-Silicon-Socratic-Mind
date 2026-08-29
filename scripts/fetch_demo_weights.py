@@ -15,7 +15,7 @@ import urllib.error
 import json
 from pathlib import Path
 
-HF_REPO = "deveraux-dev/s13-gemma-quantized"
+HF_REPO = "13forge/s13_gemma_2b_m34"
 HF_API = f"https://huggingface.co/api/repos/info/{HF_REPO}"
 DOWNLOAD_BASE = f"https://huggingface.co/{HF_REPO}/resolve/main"
 
