@@ -31,6 +31,8 @@ pub mod nipr;
 pub mod prompt_cache;
 pub mod s13;
 pub mod sentinel;
+#[cfg(feature = "std")]
+pub mod speculative;
 pub mod star_codebook;
 pub mod three_bears;
 pub mod vault;
@@ -53,4 +55,14 @@ pub use three_bears::{
 pub use s13::{MerkleMorinHeader, MerkleMorinMatrix, S13Error, S13_MERKLE_MAGIC, S13TensorView, S13M_MAGIC, S133_MAGIC};
 #[cfg(feature = "std")]
 pub use prompt_cache::{load_s13n_norms, S13N_MAGIC};
+
+pub mod mersenne31;
+pub mod cognitive_watchdog;
+pub mod ump_flux;
+pub mod fredholm_resolvent;
+
+pub use mersenne31::{reduce_m31, Mersenne31, Morton8_2D, MERSENNE_31_MODULUS};
+pub use cognitive_watchdog::{CognitiveWatchdog, TikhonovClamp, WatchdogDecision};
+pub use ump_flux::{UmpFluxStream, UmpMessageType, UmpPacket};
+pub use fredholm_resolvent::{FredholmKernel, FredholmResolventEngine, MORTON8_TILE_DIM};
 

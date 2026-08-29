@@ -228,6 +228,40 @@ impl AutoEncoderWeights {
         self.unproject_dmodel_to_latent(dmodel, &mut latent);
         self.decode_latent_to_5d(&latent, out_coords_pmy);
     }
+
+    /// Resolve a settled $d_{\text{model}}$ state to the nearest star in
+    /// `codebook` — the full inverse-projection chain in one call:
+    /// `dmodel -> latent -> 5D somatic coordinate -> star lookup`.
+    ///
+    /// Closes the gap named 2026-08-28: `dmodel_to_somatic_5d` and
+    /// `star_codebook::StarCodebookView::detokenize_embedding` were each
+    /// proven and tested in isolation but never wired to each other — the
+    /// coordinate convention matches by construction (`encode_somatic_5d`'s
+    /// own test inputs are permyriad-scaled ~[-10000, 10000], the same
+    /// convention `pmy_to_normalized` reads here), so no resolvent/coupling
+    /// operator is needed for this leg; `forge_core_v3::resolvent::Field5D`
+    /// stays the documented escape hatch if independent-axis treatment is
+    /// ever observed to diverge in practice (see this file's `encode_somatic_5d`
+    /// doc comment).
+    pub fn resolve_star(
+        &self,
+        dmodel: &[i32; D_MODEL],
+        codebook: &super::star_codebook::StarCodebookView,
+    ) -> Option<super::star_codebook::BakedStarCentroid> {
+        let mut coords_pmy = [0i32; 5];
+        self.dmodel_to_somatic_5d(dmodel, &mut coords_pmy);
+        let coords_norm: [f32; 5] = core::array::from_fn(|i| pmy_to_normalized(coords_pmy[i]));
+        codebook.detokenize_embedding(&coords_norm)
+    }
+}
+
+/// Convert a permyriad-scaled coordinate (`PERMYRIAD_ONE` = 1.0) to the
+/// normalized `f32` form `star_codebook::StarCodebookView::detokenize_embedding`
+/// expects. The inverse of the scaling `encode_somatic_5d`'s own tests apply
+/// to their input coordinates — same convention, both directions.
+#[inline(always)]
+pub fn pmy_to_normalized(pmy: i32) -> f32 {
+    pmy as f32 / PERMYRIAD_ONE as f32
 }
 
 /// Static Vocab Table with fixed-size layout.
@@ -372,6 +406,48 @@ mod tests {
             }
         }
         assert!(has_nonzero);
+    }
+
+    #[test]
+    fn pmy_to_normalized_boundary_values() {
+        assert_eq!(pmy_to_normalized(0), 0.0);
+        assert_eq!(pmy_to_normalized(PERMYRIAD_ONE), 1.0);
+        assert_eq!(pmy_to_normalized(-PERMYRIAD_ONE), -1.0);
+        // Out-of-band values pass through unclamped — nearest_centroid_l2's L2
+        // distance still behaves sanely on an out-of-range query, and clamping
+        // here would hide a genuinely divergent decode rather than surface it.
+        assert_eq!(pmy_to_normalized(20_000), 2.0);
+    }
+
+    #[cfg(feature = "std")]
+    #[test]
+    fn resolve_star_closes_the_dmodel_to_star_loop() {
+        use std::path::Path;
+        // Same absolute path convention as examples/somatic_astrolabe_demo.rs —
+        // the repo's established location for the baked HYG catalog.
+        let hyg_path = Path::new("F:/v3/shell/assets/hyg_baked.bin");
+        if !hyg_path.exists() {
+            panic!(
+                "hyg_baked.bin not found at {} — this test proves the dmodel->star \
+                 chain against the real catalog, not a synthetic stand-in; if the \
+                 asset genuinely moved, update this path, don't skip the assertion",
+                hyg_path.display()
+            );
+        }
+        let hyg_bytes = std::fs::read(hyg_path).expect("read hyg_baked.bin");
+        let codebook = super::super::star_codebook::StarCodebookView::parse(&hyg_bytes)
+            .expect("parse real HYG catalog");
+
+        let ae = AutoEncoderWeights::default_fixed();
+        let mut dmodel = [0i32; D_MODEL];
+        ae.byte_to_dmodel(65, &mut dmodel); // ASCII 'A', deterministic
+
+        let star = ae.resolve_star(&dmodel, &codebook);
+        assert!(star.is_some(), "a real dmodel state must resolve to a real star");
+
+        // Determinism: same dmodel, same star, every time.
+        let again = ae.resolve_star(&dmodel, &codebook);
+        assert_eq!(star, again, "star resolution must be deterministic");
     }
 
     #[test]
