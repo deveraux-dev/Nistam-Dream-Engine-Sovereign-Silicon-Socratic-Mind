@@ -61,7 +61,11 @@ build/
 **/.cache/
 *.cache
 **/*.cache
-.forge/
+# .forge/ is internal, EXCEPT the directives fixture that a shipped test reads:
+# forge-foreman-v3 directives::tests::the_real_directives_file_parses walks up for it,
+# and without it `cargo test --workspace` fails on a fresh clone.
+.forge/*
+!.forge/v3-directives.ron
 _attic*/
 _archive*/
 _archive-2026-08-27/

@@ -1,0 +1,192 @@
+// V3 DIRECTIVES — tunable mechanisms. Values change freely; KEY NAMES DO NOT.
+// The law file's RESOLVES-TO targets point at these keys. Rename a key and the law dangles.
+// Home: F:\v3\.forge\v3-directives.ron — already in place, nothing to install.
+// NOT F:\NewRepo — that is the condemned v2 tree and is never a destination.
+(
+    version: 3,
+    origin: "ground-zero",          // v3 inherits no tree
+    config_format: "ron",
+
+    // --- per agent call --------------------------------------------------
+    // L11 resolves here. work_split is BACKEND / VISUAL-UI-UX / MAINTENANCE.
+    // Not pipeline stages. The 50 is visual because visual is the product.
+    work_split:  ( backend: 30, visual: 50, maintenance: 20 ),
+    context_cap: 250000,
+    turn_cap:    ( min: 1, max: 10 ),
+
+    // L11 — the mechanism. Law holds "bounded and scoped"; this holds the tool.
+    // ARCH000 2026-08-09: a bare `claude -p` is cold, unbounded, tool-open and
+    // receipt-free — noise. `oneshot` is the enforced form for pure-inference
+    // delegation: 1 turn, no tools, JSON receipt (total_cost_usd, tokens,
+    // duration). Fires that need tools use `cmd` + explicit scoping per call.
+    delegate: (
+        cmd:     "claude -p",
+        oneshot: "claude -p --max-turns 1 --output-format json --disallowedTools \"Bash,PowerShell,Read,Write,Edit,Glob,Grep,WebFetch,WebSearch,Task,Agent,TodoWrite,NotebookEdit\"",
+        model:   "haiku",
+        bounded: true,
+        scoped:  true,
+    ),
+
+    // --- build loop ------------------------------------------------------
+    pipeline: (
+        // Out-of-process. In-proc was deport.S2 and the 2048MB RSS governor
+        // evicted it (forge-daemon/src/tiers.rs:303-304). Do not move it back
+        // without re-measuring against the governor.
+        generator:            "gemma-sidecar",
+        gemma_endpoint:       "http://127.0.0.1:13017",
+        orchestrator_owns_fs: true,
+
+        // L06 + L07 resolve here. MUST be `cargo test`, not `cargo check`.
+        // `check --tests` type-checks test code and never runs it, which would
+        // leave the f_inv(f(x))==x bijection unverified behind a green gate.
+        gate:      "cargo test -p {crate}",
+        dag_root:  "crates/forge-core-v3",
+
+        on_green:  "commit && advance_dag",
+        on_red:    "retry_generator(max: 3) || escalate_to_claude",
+    ),
+
+    // --- M1 sidecar budget -------------------------------------------------
+    // ARCH000 2026-08-09 (live-fire): 12288. Measured commit is 9,363 MB —
+    // candle dequantizes the 262k-vocab embedding to f32 at load
+    // (quantized_gemma3.rs:319); hot inference set is only 2,382 MB. The first
+    // ceiling ("double 2048" = 4096) sat below the real floor and exit-42'd
+    // every INFER — proven live, then re-named from the measurement. When the
+    // M2+ GPU lane moves the cold 9 GB to VRAM, this can drop back to 4096.
+    // AMENDED 2026-08-10 (candle-rate wave): the dequant + per-layer rope
+    // tables were the VRAM spill (~9.5 GB GPU for a 2.31 GiB model, 4.77 GB
+    // paged to WDDM shared) — fixed in the vendored sidecar/src/gemma3.rs
+    // (embedding table now CPU-resident, two shared rope tables). Measured
+    // after: decode 9→49 tok/s, resident RSS ~3,011 MB. 12288 stands with
+    // wide margin; revisit downward when re-measured under a full weld run.
+    // RE-MEASURED 2026-08-12 (clean CUDA 13.3 rebuild; the two env facts —
+    // cl.exe on PATH for nvcc, /Zc:preprocessor for CCCL — captured in
+    // build-gpu.cmd): resident on CudaDevice(1), INFER round-trip 175 ms,
+    // RSS 3,040 MB after first INFER, VRAM 5,083 MiB used / 2,936 free.
+    // The 4096 revisit condition (full weld run) still stands.
+    // max_output_tokens: v2's 16000 clamp met the CPU lane 2026-08-09 and lost
+    // — the M2 live-fire's first INFER was still generating at 27 minutes,
+    // blowing through all three of the foreman's 600s reply windows (the run
+    // queued fail-closed, as designed). 4096 fits a ~100-line crate draft and
+    // forces EOS inside the window. Raise it when the GPU lane (M2+) lands.
+    sidecar: (
+        rss_budget_mb:     12288,
+        max_output_tokens: 4096,
+        // WAVE-WELD W3: INFER_WELD candidate-walk depth. The constrained
+        // decoder scans tokens in descending logit order and emits the first
+        // whose full byte sequence the weld PDA accepts; exhausting this depth
+        // is a loud error, never a silent best-effort.
+        constrain_top_k:   64,
+        // WAVE-WELD sampling knobs (permyriad; 1500 = 0.15). Greedy (temp 0)
+        // was measured 2026-08-09: three ladder attempts, three byte-identical
+        // wrong welds — the rut. Entropy is SEEDED from the prompt hash
+        // (fnv1a → xorshift64), never platform RNG: same prompt, same weld,
+        // forever (v2 gate law seed_required + no_platform_rng). top_p clamps
+        // the nucleus to the high-confidence head.
+        weld_temp_pmy:     1500,
+        weld_top_p_pmy:    9000,
+        // Deviation 4 (2026-08-10, sidecar/src/gemma3.rs docs item 4): prompt
+        // tokens per prefill forward. Monolithic prefill materializes
+        // per-layer seq×seq attention — measured CUDA_ERROR_OUT_OF_MEMORY at
+        // the ~20k-token forge-tui brief on the 8 GB card. 512 bounds the
+        // live attention buffer at chunk × kv_len; raise only re-measured.
+        prefill_chunk:     512,
+        gguf_path:         "F:\\NewRepo\\llm\\models\\gemma-3-4b-it-Q4_K_M.gguf",
+        // S13 ternary model and dose: v1 seat <=8, m2 seat <=10, m2_g256 <=8;
+        // all seats fail dose=all. Bisect 2026-08-26, pinned to m2 seat with dose 10.
+        // S13 seat + dose. Dose is CONTEXT-DEPENDENT, measured 2026-08-26 on the
+        // m2 seat via `gemma-sidecar --stop-gate` (slots=layers; this seat carries
+        // no output_weight.s13m, so lm_head is NOT dosed and is NOT the cause):
+        //   dose 10, one-word prompt, cap 32  -> eos hit step 13,  881ms, coherent
+        //   dose 10, 3134-char prompt, cap 128 -> eos MISS, best rank 49, 17376ms,
+        //                                         degenerate repetition
+        //   dose  0, 3134-char prompt, cap 128 -> eos hit step 4, 1203ms, "ANSWER=#"
+        // The long prompt is not the problem; the dosed layers are. Pinned to 0
+        // (pure GGUF) because the readback lane runs long lattice prompts. Raise
+        // only after the layer-dose break is fixed and re-measured at LENGTH.
+        s13_seat:          "F:\\v3\\s13_gemma_m2",
+        s13_dose:          "0",
+    ),
+
+    // --- M1b NDE sidecar (2026-08-23: real .nde weights on disk had no
+    // serving daemon — F:\v3\nde-models\{student,teacher,master}.nde sat
+    // next to a tested-in-isolation InferEngine/TierDispatcher with nothing
+    // wired to a socket). Own port, own model dir, distinct from `sidecar`'s
+    // Gemma keys above — Gemma owns 13017.
+    nde: (
+        nde_endpoint:                "http://127.0.0.1:13018",
+        nde_model_dir:               "F:\\v3\\nde-models",
+        nde_rss_budget_mb:           8192,
+        // Permyriad (7000 = 0.70), matching this file's weld_temp_pmy /
+        // weld_top_p_pmy convention — the hand-rolled parser has no float
+        // path, only extract_number_value's ASCII-digit scan.
+        nde_confidence_threshold_pmy: 7000,
+    ),
+
+    // --- M2 foreman ------------------------------------------------------
+    // WAVE-WELD keys. reply_timeout_s was a client.rs const (600); promoted
+    // after two live measurements (CPU 08-09 afternoon, GPU 08-09 evening)
+    // proved the window and the payload size must be co-measured. The sip
+    // caps are the seam-sip law: a weld prompt over the cap is REFUSED before
+    // any INFER is sent (v2 receipt: outland/src/lib.rs, 803 lines read whole
+    // to check a 20-line fn — forge-daemon/src/gate.rs:90).
+    foreman: (
+        reply_timeout_s:          600,
+        sip_cap_bytes:            2048,
+        sip_anchor_context_lines: 8,
+        // Run-lane RETRY sampling (2026-08-10): greedy retries were measured
+        // byte-identical across differing retry prompts (forge-intent-v3) —
+        // the weld lane's rut, same fix: seeded from the prompt hash, never
+        // platform RNG. Attempt 1 stays pure greedy; only retries sample.
+        retry_temp_pmy:           1500,
+        retry_top_p_pmy:          9000,
+    ),
+
+    // --- oracle: the governed Gemini lane (2026-08-16, Sean: "plan, set a ---
+    // limit, stay within it"). Free tier orients; paid ONLY inside a declared
+    // .forge/oracle-workloads/<id>.ron. Keys are oracle_-prefixed and read by
+    // forge-foreman-v3::oracle's flat line scan; every one is required, fail-
+    // closed. Cap values are Sean's declared budget, [ASSUMED] vs Google's
+    // real quotas — the CLI is the auth holder, this file never carries keys.
+    oracle: (
+        // 2026-08-16: node CLI is LOTO-blocked (node.exe egress firewall rule);
+        // shim speaks raw REST from pwsh, same interface, auth stays in the shim's env.
+        oracle_cli_path:        "F:\\v3\\.forge\\tools\\gemini-rest.cmd",
+        oracle_model_free:      "gemini-3.1-flash-lite",
+        oracle_model_paid:      "gemini-3.5-flash",
+        oracle_free_calls_day:  20,
+        oracle_free_tokens_day: 500000,
+    ),
+
+    // --- W5 weld flywheel --------------------------------------------------
+    // ARCH000 2026-08-10: "W5 approved as drafted" (WAVE-WELD-PROPOSAL §W5).
+    // Every weld-ladder attempt journals one distill pair (sipped prompt,
+    // emitted weld, typed verdict); the attempt-0 resolution row — a later
+    // green or a hand fix via `foreman weld --resolve` — retroactively labels
+    // the session's reds. journal_enabled false is a LOUD refusal of the weld
+    // verb, never a silent skip: a dark flywheel is the defect W5 kills.
+    flywheel: (
+        weld_pairs_path: ".forge/distill/weld-pairs.ndjson",
+        bqr_path: ".forge/distill/router.bqr",
+        journal_enabled: true,
+    ),
+
+    // --- L09 readback contract -------------------------------------------
+    // Any drift here and every pixel read aborts.
+    readback: (
+        format:          "R8G8B8A8_UINT",
+        sample_count:    1,
+        mip_level_count: 1,
+        filter:          "nearest",
+        srgb_transform:  false,
+        compression:     "none",
+    ),
+
+    // --- notebook brief ---------------------------------------------------
+    // tools/sync-notebook-brief.ps1 resolves here. The ceiling is the notebook's
+    // custom-instructions limit, not ours — raise the value, never inline it.
+    notebook: ( brief_max_chars: 10000 ),
+
+    // --- L14 ablation harness --------------------------------------------
+    ablate: ( cmd: "claude --bare", note: "requires ANTHROPIC_API_KEY; bills at API rates" ),
+)

@@ -13,23 +13,46 @@ HEDGE = (
 )
 
 UNRECEIPTED = {
-    "6.42 gtok": "no bench in tree; only prose in 08-17/08-19 handoffs",
-    "856.16": "no bench in tree",
-    "40.66 gtrits": "no bench in tree",
-    "57.48 gb": "no bench in tree",
-    "879.51": "no bench in tree",
-    "17.89 ns": "no bench in tree",
-    "1.17 ns": "no bench in tree",
+    "6.42 gtok": "withdrawn 2026-08-20; L1 lookup relabelled as token gen x invented 7.5 factor. use 20.64 mtok/s 8-core",
+    "856.16": "withdrawn 2026-08-20; ~311x over. use 2.75 mtok/s single-core (mtok_bench_receipt.txt:16)",
+    "40.66 gtrits": "withdrawn 2026-08-21; LLVM hoisted the loop, 14x over. use 37.06 gtrits/s avx2",
+    "879.51": "withdrawn 2026-08-21; const-folded, 2.4x over. use 358.17 m plans/s (RECEIPT-RUN-2026-08-27.txt:32)",
+    "17.89 ns": "superseded; measured 17.25 ns (RECEIPT-RUN-2026-08-27.txt:26)",
+    "57.48 gb": "superseded; measured 59.62 gb/s (RECEIPT-RUN-2026-08-27.txt:27)",
+    "1.17 ns": "real L1-lookup measurement, wrong label. it is not per-token. use 363.40 ns/token",
     "35.12 ns": "measured value is 37.3633 ns (live_scale_telemetry.json:8)",
     "3.1 ns": "no zeroize bench exists",
-    "gemini 3.7": "no such model; live receipt says gemini-2.5-flash",
-    "gemini-3.7": "no such model; live receipt says gemini-2.5-flash",
-    "gemma 4": "no such release",
-    "1,562,500": "compression ratio unbenched",
+    "gemini 3.7": "real model; this repo calls gemini-2.5-flash (vertex_flash_cache.py:65)",
+    "gemini-3.7": "real model; this repo calls gemini-2.5-flash (vertex_flash_cache.py:65)",
+    "gemini 3.5": "real model; this repo calls gemini-2.5-flash (vertex_flash_cache.py:65)",
+    "gemini-3.5": "real model; this repo calls gemini-2.5-flash (vertex_flash_cache.py:65)",
+    "gemini 3.1": "real model; this repo calls gemini-2.5-flash (vertex_flash_cache.py:65)",
+    "gemini-3.1": "real model; this repo calls gemini-2.5-flash (vertex_flash_cache.py:65)",
+    "1,562,500": "a size ratio, not a timed benchmark; nothing reconstructs the 25 mb",
     "440.6": "arithmetic disagrees with its own inputs by ~77x",
+    "60 million gemini audits": "projection, never run at that volume",
+    "60m audits": "projection, never run at that volume",
 }
 
-MEASURED = ("37.36", "37.3633", "49/49", "12,048,323", "12.05m", "40,000", "0.0004", "0.083")
+# Figures with a dated machine receipt behind them.
+# Sources: docs/_archive-benchmarks-2026-08-27/RECEIPT-RUN-2026-08-27.txt
+#          crates/forge-envelope/surfaceledger/mtok_bench_receipt.txt
+MEASURED = (
+    "37.36", "37.3633", "49/49", "12,048,323", "12.05m", "40,000", "0.083",
+    "1.76 million", "1.76m", "568.28", "2.57 gtrits", "2,570.07", "37.06 gtrits",
+    "17.25", "59.62", "59,615.01", "358.17", "2.79 ns", "2.75 mtok", "20.64 mtok",
+    "363.40", "874.13", "338", "191 passed", "122 passed", "25 passed",
+)
+
+# The real VARS cache is a ~40k-55k token bundle (vertex_flash_cache.py:12,168).
+# $0.0004 is a real measured single audit (3,094 in / 472 out,
+# HANDOFF-2026-08-19-BILLING-AND-SYSTEM-REVIEW.md:20).
+# live_scale_telemetry.json's 450,000-token / 25,000-query / $212 block is a
+# PROJECTION, never a spend, and its cache size is ~10x the real bundle.
+UNRECEIPTED["450,000-token"] = "cache bundle is ~40k-55k tokens; 450k is a projection"
+UNRECEIPTED["450,000 tokens"] = "cache bundle is ~40k-55k tokens; 450k is a projection"
+UNRECEIPTED["212.20"] = "projected spend, never billed"
+UNRECEIPTED["843.75"] = "projected spend, never billed"
 
 SPEECH_WPM = 155.0
 
