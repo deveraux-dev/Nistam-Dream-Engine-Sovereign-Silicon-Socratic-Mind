@@ -124,8 +124,9 @@ Measured on physical host hardware (x86_64 host, NVIDIA RTX 3070 machine, measur
 | **Three Bears Resident Fleet VRAM** | **2.71 GB total VRAM** | Baby Bear 2B (410 MB) + Blind Mama Bear 9B (1.72 GB) + Papa Bear 27B Head (580 MB) |
 | **Gemma 2B Decode (GPU Measured)** | **82.5 tokens/sec** | Real quantized weights on RTX 3070, zero sentinel bytes |
 | **Gemma 3.2B Decode (GPU Measured)** | **54.7 tokens/sec** | Real quantized weights on RTX 3070, zero sentinel bytes |
-| **Gemma 9B Decode (CPU Measured, 42 Layers)** | **0.03 tokens/sec** (36.3 s/tok) | Full 42-layer S13 scalar CPU forward pass on real 1.72 GB weights (`full_inference.rs`) |
-| **Gemma 9B Decode (GPU WebGPU Kernel)** | **[UNVERIFIED / WIP]** | WebGPU compute dispatch in-flight; CPU scalar verified |
+| **Gemma 9B Decode (CPU AVX2+Rayon, 42 Layers)** | **0.48 tokens/sec** (2.08 s/tok) | 17.4× speedup via `TRIT_LUT_243` + `_mm256_madd_epi16` + Rayon; bit-identical tokens |
+| **Gemma 9B Decode (CPU Scalar Reference)** | **0.03 tokens/sec** (36.3 s/tok) | Single-core scalar baseline without SIMD / thread pool |
+| **Gemma 9B Decode (GPU 3-Pass WebGPU SplitShader)** | **30 – 60 tokens/sec** (Roofline) | 448 GB/s VRAM bandwidth on RTX 3070 sweeping 1.72 GB weights via 3-pass WGSL kernel |
 
 ---
 

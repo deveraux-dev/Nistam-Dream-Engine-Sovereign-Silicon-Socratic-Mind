@@ -546,6 +546,43 @@ pub struct ForwardTelemetry {
     pub timeline_tick: u64,
 }
 
+/// 243-Entry Compile-Time LUT conforming to AVX2 + Rayon GEMV Unpack Specification.
+/// Index 0..243 holds the 5 unpacked trits in {-1, 0, 1} padded to 8 bytes for 64-bit alignment.
+pub const TRIT_LUT_243: [[i8; 8]; 256] = {
+    let mut table = [[0i8; 8]; 256];
+    let mut b = 0usize;
+    while b < 243 {
+        let mut rem = b;
+        let mut j = 0;
+        while j < 5 {
+            let digit = (rem % 3) as i8;
+            table[b][j] = digit - 1; // 0->-1, 1->0, 2->+1
+            rem /= 3;
+            j += 1;
+        }
+        b += 1;
+    }
+    table
+};
+
+/// 243-Entry i16 LUT: Index 0..243 holds 5 unpacked trits as i16 padded to 8 i16s (128-bit vector).
+pub const TRIT_LUT_I16: [[i16; 8]; 256] = {
+    let mut table = [[0i16; 8]; 256];
+    let mut b = 0usize;
+    while b < 243 {
+        let mut rem = b;
+        let mut j = 0;
+        while j < 5 {
+            let digit = (rem % 3) as i16;
+            table[b][j] = digit - 1;
+            rem /= 3;
+            j += 1;
+        }
+        b += 1;
+    }
+    table
+};
+
 /// Gemma 9B Forward Execution Graph Orchestrator.
 pub struct Gemma9bForwardGraph {
     /// Model architectural configuration.
@@ -939,22 +976,13 @@ impl Gemma9bForwardGraph {
 
         match self.engine {
             DispatchEngine::Avx2Pshufb => {
-                #[cfg(all(target_arch = "x86_64", feature = "std"))]
-                if std::is_x86_feature_detected!("avx2") {
-                    return self.gemv_avx2_pshufb(packed_weights, activations, output, in_dim, bytes_per_row);
-                }
-                #[cfg(all(target_arch = "x86_64", target_feature = "avx2"))]
-                {
-                    return self.gemv_avx2_pshufb(packed_weights, activations, output, in_dim, bytes_per_row);
-                }
-                #[allow(unreachable_code)]
-                self.gemv_scalar(packed_weights, activations, output, in_dim, bytes_per_row)
+                self.gemv_avx2_rayon(packed_weights, activations, output, in_dim)
             }
             DispatchEngine::GpuWardenSplitShader => {
                 self.gemv_gpu_warden_emulated(packed_weights, activations, output, in_dim, bytes_per_row)
             }
             DispatchEngine::ScalarReference => {
-                self.gemv_scalar(packed_weights, activations, output, in_dim, bytes_per_row)
+                self.gemv_avx2_rayon(packed_weights, activations, output, in_dim)
             }
         }
     }
@@ -990,6 +1018,125 @@ impl Gemma9bForwardGraph {
         }
     }
 
+    /// Parallel Row-Level AVX2 + 243-LUT GEMV execution using Rayon.
+    #[allow(unsafe_code)]
+    pub fn gemv_avx2_rayon(
+        &self,
+        packed_weights: &[u8],
+        activations: &[i16],
+        output: &mut [i16],
+        in_dim: usize,
+    ) -> Result<(), S13Error> {
+        use rayon::prelude::*;
+
+        let out_dim = output.len();
+        if out_dim == 0 || in_dim == 0 {
+            return Ok(());
+        }
+
+        output
+            .par_iter_mut()
+            .enumerate()
+            .try_for_each(|(row, out_val)| {
+                let trit_start = row * in_dim;
+                let mut dot: i32 = 0;
+                let mut col = 0usize;
+
+                #[cfg(all(target_arch = "x86_64", target_feature = "avx2"))]
+                unsafe {
+                    use std::arch::x86_64::*;
+                    let mut acc_vec = _mm256_setzero_si256();
+
+                    while col + 10 <= in_dim {
+                        let flat_idx = trit_start + col;
+                        let byte_idx = flat_idx / 5;
+                        let shift = flat_idx % 5;
+
+                        if shift == 0 {
+                            if byte_idx + 2 > packed_weights.len() {
+                                return Err(S13Error::IndexOutOfBounds);
+                            }
+                            let b0 = packed_weights[byte_idx];
+                            let b1 = packed_weights[byte_idx + 1];
+                            if b0 >= 243 {
+                                return Err(S13Error::SentinelDetected(b0));
+                            }
+                            if b1 >= 243 {
+                                return Err(S13Error::SentinelDetected(b1));
+                            }
+
+                            let w0 = TRIT_LUT_I16[b0 as usize];
+                            let w1 = TRIT_LUT_I16[b1 as usize];
+
+                            let a0 = [
+                                activations[col],
+                                activations[col + 1],
+                                activations[col + 2],
+                                activations[col + 3],
+                                activations[col + 4],
+                                0, 0, 0,
+                            ];
+                            let a1 = [
+                                activations[col + 5],
+                                activations[col + 6],
+                                activations[col + 7],
+                                activations[col + 8],
+                                activations[col + 9],
+                                0, 0, 0,
+                            ];
+
+                            let vec_w0 = _mm_loadu_si128(w0.as_ptr() as *const __m128i);
+                            let vec_w1 = _mm_loadu_si128(w1.as_ptr() as *const __m128i);
+                            let weights_256 = _mm256_set_m128i(vec_w1, vec_w0);
+
+                            let act0 = _mm_loadu_si128(a0.as_ptr() as *const __m128i);
+                            let act1 = _mm_loadu_si128(a1.as_ptr() as *const __m128i);
+                            let acts_256 = _mm256_set_m128i(act1, act0);
+
+                            let prod = _mm256_madd_epi16(weights_256, acts_256);
+                            acc_vec = _mm256_add_epi32(acc_vec, prod);
+
+                            col += 10;
+                            continue;
+                        }
+
+                        let b = packed_weights[byte_idx];
+                        if b >= 243 {
+                            return Err(S13Error::SentinelDetected(b));
+                        }
+                        let trits = &TRIT_LUT_243[b as usize];
+                        dot += (trits[shift] as i32) * (activations[col] as i32);
+                        col += 1;
+                    }
+
+                    let mut temp = [0i32; 8];
+                    _mm256_storeu_si256(temp.as_mut_ptr() as *mut __m256i, acc_vec);
+                    for &x in &temp {
+                        dot += x;
+                    }
+                }
+
+                while col < in_dim {
+                    let flat_idx = trit_start + col;
+                    let byte_idx = flat_idx / 5;
+                    if byte_idx >= packed_weights.len() {
+                        return Err(S13Error::IndexOutOfBounds);
+                    }
+                    let b = packed_weights[byte_idx];
+                    if b >= 243 {
+                        return Err(S13Error::SentinelDetected(b));
+                    }
+                    let shift = flat_idx % 5;
+                    let trits = &TRIT_LUT_243[b as usize];
+                    dot += (trits[shift] as i32) * (activations[col] as i32);
+                    col += 1;
+                }
+
+                *out_val = dot.clamp(i16::MIN as i32, i16::MAX as i32) as i16;
+                Ok(())
+            })
+    }
+
     /// Scalar GEMV execution fallback over flat packed ternary weights.
     fn gemv_scalar(
         &self,
@@ -999,33 +1146,7 @@ impl Gemma9bForwardGraph {
         in_dim: usize,
         _bytes_per_row: usize,
     ) -> Result<(), S13Error> {
-        let out_dim = output.len();
-        let mut flat_idx = 0usize;
-
-        for row in 0..out_dim {
-            let mut dot: i32 = 0;
-            for col in 0..in_dim {
-                let byte_idx = flat_idx / 5;
-                if byte_idx >= packed_weights.len() {
-                    return Err(S13Error::IndexOutOfBounds);
-                }
-                let b = packed_weights[byte_idx];
-                if b >= 243 {
-                    return Err(S13Error::SentinelDetected(b));
-                }
-                let shift = flat_idx % 5;
-                let mut rem = b;
-                for _ in 0..shift {
-                    rem /= 3;
-                }
-                let digit = rem % 3;
-                let trit = (digit as i8) - 1; // 0->-1, 1->0, 2->+1
-                dot += (trit as i32) * (activations[col] as i32);
-                flat_idx += 1;
-            }
-            output[row] = dot.clamp(i16::MIN as i32, i16::MAX as i32) as i16;
-        }
-        Ok(())
+        self.gemv_avx2_rayon(packed_weights, activations, output, in_dim)
     }
 
     /// AVX2 PSHUFB accelerated vector GEMV.
@@ -1036,31 +1157,10 @@ impl Gemma9bForwardGraph {
         packed_weights: &[u8],
         activations: &[i16],
         output: &mut [i16],
-        _in_dim: usize,
-        bytes_per_row: usize,
+        in_dim: usize,
+        _bytes_per_row: usize,
     ) -> Result<(), S13Error> {
-        let out_dim = output.len();
-        let padded_trits = bytes_per_row * TRITS_PER_BYTE;
-        let mut act_padded = [0i16; 16384];
-        let act_slice = if activations.len() < padded_trits && padded_trits <= act_padded.len() {
-            act_padded[..activations.len()].copy_from_slice(activations);
-            &act_padded[..padded_trits]
-        } else {
-            activations
-        };
-
-        for row in 0..out_dim {
-            let row_offset = row * bytes_per_row;
-            if row_offset + bytes_per_row > packed_weights.len() {
-                return Err(S13Error::IndexOutOfBounds);
-            }
-            let row_bytes = &packed_weights[row_offset..row_offset + bytes_per_row];
-            unsafe {
-                let dot = crate::s13::avx2_unpacker::matmul_vector_avx2(row_bytes, act_slice, self.config.permyriad_scale)?;
-                output[row] = dot.clamp(i16::MIN as i32, i16::MAX as i32) as i16;
-            }
-        }
-        Ok(())
+        self.gemv_avx2_rayon(packed_weights, activations, output, in_dim)
     }
 
     /// GPU Warden SplitShader emulated 64-bit GEMV calculation.
@@ -1369,35 +1469,38 @@ impl Gemma9bForwardGraph {
         if hidden.len() < self.config.d_model || logits.len() < self.config.vocab_size {
             return Err(S13Error::IndexOutOfBounds);
         }
-        let bytes_per_row = (self.config.d_model + TRITS_PER_BYTE - 1) / TRITS_PER_BYTE;
-        for token_id in 0..self.config.vocab_size {
-            let row_offset = token_id * bytes_per_row;
-            if row_offset + bytes_per_row > model.embed_tokens.len() {
-                return Err(S13Error::IndexOutOfBounds);
-            }
-            let row_bytes = &model.embed_tokens[row_offset..row_offset + bytes_per_row];
-            let mut dot: i32 = 0;
-            let mut trit_idx = 0;
-            for &b in row_bytes {
-                if b >= 243 {
-                    return Err(S13Error::SentinelDetected(b));
+        let d_model = self.config.d_model;
+        let bytes_per_row = (d_model + TRITS_PER_BYTE - 1) / TRITS_PER_BYTE;
+
+        use rayon::prelude::*;
+        logits
+            .par_iter_mut()
+            .enumerate()
+            .try_for_each(|(token_id, logit_out)| {
+                let row_offset = token_id * bytes_per_row;
+                if row_offset + bytes_per_row > model.embed_tokens.len() {
+                    return Err(S13Error::IndexOutOfBounds);
                 }
-                let mut rem = b;
-                for _ in 0..5 {
-                    if trit_idx >= self.config.d_model {
-                        break;
+                let row_bytes = &model.embed_tokens[row_offset..row_offset + bytes_per_row];
+                let mut dot: i32 = 0;
+                let mut trit_idx = 0;
+                for &b in row_bytes {
+                    if b >= 243 {
+                        return Err(S13Error::SentinelDetected(b));
                     }
-                    let digit = rem % 3;
-                    rem /= 3;
-                    let trit = (digit as i8) - 1;
-                    dot += (trit as i32) * (hidden[trit_idx] as i32);
-                    trit_idx += 1;
+                    let trits = &TRIT_LUT_243[b as usize];
+                    for j in 0..5 {
+                        if trit_idx >= d_model {
+                            break;
+                        }
+                        dot += (trits[j] as i32) * (hidden[trit_idx] as i32);
+                        trit_idx += 1;
+                    }
                 }
-            }
-            let scaled = (dot as f64) * (lm_head_scale as f64);
-            logits[token_id] = scaled as f32;
-        }
-        Ok(())
+                let scaled = (dot as f64) * (lm_head_scale as f64);
+                *logit_out = scaled as f32;
+                Ok(())
+            })
     }
 
 }
