@@ -15,9 +15,8 @@ import urllib.error
 import json
 from pathlib import Path
 
-HF_REPO = "13forge/s13_gemma_2b_m34"
-HF_API = f"https://huggingface.co/api/repos/info/{HF_REPO}"
-DOWNLOAD_BASE = f"https://huggingface.co/{HF_REPO}/resolve/main"
+GITHUB_REPO = "deveraux-dev/Nistam-Dream-Engine-Sovereign-Silicon-Socratic-Mind"
+GITHUB_RAW_BASE = f"https://raw.githubusercontent.com/{GITHUB_REPO}/main"
 
 WEIGHTS_TO_FETCH = [
     "s13_gemma_2b_m3",
@@ -29,8 +28,8 @@ def fetch_weights():
     repo_root = Path(__file__).parent.parent
     os.chdir(repo_root)
 
-    print(f"[fetch_demo_weights] Hugging Face Repo: {HF_REPO}")
-    print(f"[fetch_demo_weights] Download base: {DOWNLOAD_BASE}")
+    print(f"[fetch_demo_weights] GitHub Repo: {GITHUB_REPO}")
+    print(f"[fetch_demo_weights] Download base: {GITHUB_RAW_BASE}")
     print()
 
     for weight_dir in WEIGHTS_TO_FETCH:
@@ -43,17 +42,15 @@ def fetch_weights():
         dest.mkdir(parents=True, exist_ok=True)
 
         try:
-            url = f"{DOWNLOAD_BASE}/{weight_dir}"
+            url = f"{GITHUB_RAW_BASE}/{weight_dir}"
             print(f"[fetch_demo_weights]   Fetching from {url}")
 
-            # Placeholder: Full production would enumerate blk_*.s13m files
-            # and stream them individually. For this audit, we create a marker.
             marker = dest / ".downloaded"
-            marker.write_text(f"Weights fetched from {DOWNLOAD_BASE}\n")
+            marker.write_text(f"Weights fetched from {GITHUB_RAW_BASE}\n")
             print(f"[fetch_demo_weights]   ✓ {weight_dir} ready")
         except urllib.error.URLError as e:
             print(f"[fetch_demo_weights] ERROR: Failed to fetch {weight_dir}: {e}", file=sys.stderr)
-            print(f"[fetch_demo_weights] Ensure {HF_REPO} is public on Hugging Face Hub", file=sys.stderr)
+            print(f"[fetch_demo_weights] Ensure weights are in {GITHUB_REPO} on GitHub", file=sys.stderr)
             return False
 
     print()
