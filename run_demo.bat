@@ -14,6 +14,6 @@ if %ERRORLEVEL% NEQ 0 (
 )
 echo.
 echo ================================================================================
-echo    DEMO COMPLETED SUCCESSFULLY WITH 0 FAILURES
+echo    Demo exited 0. Read the banner above for which half was proven.
 echo ================================================================================
 pause
