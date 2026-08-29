@@ -9,7 +9,7 @@
 Nistam Dream Engine couples **1.58-bit balanced-ternary inference (S13)** with **5D Relativistic Celestial Astrolabe Math** and **Vertex AI Gemini 2.5 Flash Cloud Context Caching**. It executes Gemma 2B on consumer GPUs (< 8 GB VRAM) under an autonomous deterministic hardware lockstep. Gemma 9B & 27B architectures declared; weight dispatch pending.
 
 ![Nistam Sovereign Architecture Blueprint](patex_fullstack.png)
-*Figure 1: PaTeX 5D Architectural Drafting Sheet — Somatic Tokenizer (120Hz), 16-Byte UmpWord SPSC Bus, S13 Spectral MoE, SplitShader GPU Warden, Sovereign Crucible (ASP+FST+GBNF), and Google Vertex AI Gemini 3.7 Flash Governor.*
+*Figure 1: PaTeX 5D Architectural Drafting Sheet — Somatic Tokenizer (120Hz), 16-Byte UmpWord SPSC Bus, S13 Spectral MoE, SplitShader GPU Warden, Sovereign Crucible (ASP+FST+GBNF), and Google Vertex AI Gemini 2.5 Flash Governor.*
 
 ---
 
@@ -28,7 +28,7 @@ run_demo.bat
 ```
 *(or run the Python driver directly: `python scripts/hands_off_demo_driver.py`)*
 
-### 🧪 2. Run the 1-Click Master Test Suite (CPU + GPU + WebGPU + 500k Oracle + Airgap + Vertex AI)
+### 🧪 2. Run the 1-Click Master Test Suite (CPU + GPU + WebGPU + 500k Parity Gate + Airgap + Vertex AI)
 ```cmd
 :: Windows 1-Click Master Test
 test.bat
@@ -41,7 +41,7 @@ test.bat
 
 ### ☁️ 3. Direct Vertex AI & Cloud Agent Call:
 ```powershell
-# 1-Click Autonomous Cloud Run (Rust envelope -> Gemini 3.7 Flash -> Firestore -> Zero-Retention Scrub)
+# 1-Click Autonomous Cloud Run (Rust envelope -> Gemini 2.5 Flash -> Firestore -> Zero-Retention Scrub)
 .\scripts\demo_cloud_agent.ps1
 ```
 
@@ -68,11 +68,31 @@ test.bat
                                                │
                                                ▼
                 ┌──────────────────────────────────────────────────────────────┐
-                │         THREE BEARS RESIDENT MODEL FLEET (2.71 GB VRAM)      │
+                │     THREE BEARS MEMORY ARCHITECTURE (2.71 GB Target Layout)  │
                 ├──────────────────────────────────────────────────────────────┤
                 │ 🐻 Baby Bear (Gemma 2B - 410 MB)   ──► M5 Geodesic Shaders   │
-                │ 🐻 Blind Mama Bear (Gemma 9B - 1.7GB) ► S13 Arbiter (T+T*=0) │
-                │ 🐻 Papa Bear Head (Gemma 27B - 580MB) ► 7-Domain BQ Router   │
+                │ 🐻 Mama Bear (Gemma 9B - 1.72 GB)  ──► S13 Parity Gate / GEMV│
+                │ 🐻 Papa Bear Head (27B - 580 MB)   ──► 7-Domain BQ Router    │
+                └────────────────────────────┬─────────────────────────────────┘
+                                             │
+                                             ▼
+                ┌──────────────────────────────────────────────────────────────┐
+                │      DAEMON AUTONOMOUS FAN-OUT (Verb 60: fanout_decide)      │
+                ├──────────────────────────────────────────────────────────────┤
+                │  Task Embedding (512-dim i8) ──► BqRouter Specialist Rank   │
+                │  Confidence Gate (margin_trit) ──┬─────────────────────────┐ │
+                │                                  │                         │ │
+                │  ✓ High Signal (≥3σ)             ✗ Low Confidence         │ │
+                │  Accept Top Specialist           Escalate to TRIAD        │ │
+                │  (sub-100ns, no I/O)             Consensus Pass            │ │
+                │                                  [DIRECT|MIRROR|CODEC]     │ │
+                │                                  SHA-256 consensus_hash    │ │
+                └──────────────┬────────────────────┴─────────────────────────┘ │
+                               │
+                               ▼
+                ┌──────────────────────────────────────────────────────────────┐
+                │      VERTEX AI GEMINI 2.5 FLASH GOVERNOR                     │
+                │ (450k Context Cache, $0.0004/call observability, temp=0.0)   │
                 └──────────────────────────────────────────────────────────────┘
 ```
 
@@ -80,11 +100,11 @@ test.bat
 
 ## 🌟 Key Architectural Innovations
 
-1. **Three Bears Resident Model Fleet** (`gemma-s13`):
-   - **Baby Bear (Gemma 2B - 410 MB VRAM)**: Fully wired in live fleet stepping loop; generates 5D geodesic coordinate vectors and procedural `.vixi` shader parameters ($3^5 = 243$ M5 states).
-   - **Blind Mama Bear (Gemma 9B - 1.72 GB VRAM)**: Standalone 42-layer full S13 inference pipeline wired and measured (`crates/gemma-s13/examples/full_inference.rs`); dual-stream parity arbiter ($T + T^* = 0$, 500k passes @ **24.24M arbitrations/s**); multi-model fleet step uses config routing.
-   - **Papa Bear Head (Gemma 27B - 580 MB VRAM)**: 7-Domain BQ MetaRouter centroid routing (**1.90M decisions/s**) and $N \times \text{IPR}$ quantum spectral concentration sieve (config stub in fleet step).
-   - **Fleet Footprint**: All three models sit concurrently in **2,710 MB (2.71 GB) total VRAM** (fits cleanly on consumer 8 GB GPUs like the RTX 3070).
+1. **Three Bears Memory Architecture Specification** (`gemma-s13`):
+   - **Baby Bear (Gemma 2B - 410 MB VRAM)**: Live fleet stepping loop; generates 5D geodesic coordinate vectors and procedural `.vixi` shader parameters ($3^5 = 243$ M5 states).
+   - **Mama Bear (Gemma 9B - 1.72 GB VRAM)**: Standalone 42-layer full S13 inference pipeline (`crates/gemma-s13/examples/full_inference.rs`) and real GPU GEMV decode (`crates/gemma-s13/examples/gpu_decode_real.rs`); S13 balanced ternary parity gate ($T + T^* = 0$, 500k passes @ **24.24M evals/s**).
+   - **Papa Bear 27B Centroid Router Head (580 MB Slice)**: 7-Domain BQ MetaRouter centroid routing (**1.90M decisions/s**) and $N \times \text{IPR}$ quantum spectral concentration sieve (routing projection slice).
+   - **Target Memory Layout**: The 3-tier quantized model layout is architected for **2,710 MB (2.71 GB) total VRAM**, fitting comfortably on consumer 8 GB GPUs like the RTX 3070.
 2. **Hierarchical 3-Tier Cache & Continuous Manifold Blending** (`forge-core-v3`):
    - **Tier 1 (`SoulWord`)**: L1D/register fast cache ($< 50\text{ ns}$) with continuous soft-routing (`route_soft()`, `permyriad_softmax_from_dist()`).
    - **Tier 2 (`BodyWord`)**: 160 KB L2/VRAM resident cache with RamusPrime hypersphere blending (`axes_distance()`, `mersenne_weighted_sum()`, `sample_blend()`).
@@ -99,10 +119,16 @@ test.bat
 5. **512-bit BQ MetaRouter** (`forge-ml-bqrouter`):
    - Sub-100ns XOR+POPCNT Hamming distance routing across 7 specialist domains (**1.90 M decisions/s single-core**).
 6. **Sovereign Cloud Context Caching on Vertex AI**:
-   - `gemini-3.7-flash` driven at deterministic temperature `0.0` with token context caching ($\ge 32,768$ tokens) enforcing a strict **`$0.0004/call` unit-cost governor ceiling**.
+   - `gemini-2.5-flash` driven at deterministic temperature `0.0` with token context caching ($\ge 32,768$ tokens) tracking the **`$0.0004/call` cost observability metric**.
 7. **Hearthkeeper Sovereign Tone & Airgap Gate** (`forge-envelope`):
    - Enforces zero-apology mandates, exclamation normalization, and 3-wave Cree cultural airgap defense with sub-45ns constant-time validation and ADR-0026 zero-retention memory scrubbing.
-8. **Native Tauri v2 Demo Shell** (`crates/studio-tauri`):
+8. **Autonomous Fan-Out Decision Routing (Verb 60: `fanout_decide`)** (`forge-daemon-door`):
+   - **Two-Tier Decision Gate:**
+     - **Fast Path (BqRouter)**: Embeds 512-dim quantized task queries via FNV-1a + M61 reduction; ranks 7 specialist centroids via sub-100ns XOR+POPCNT Hamming distance; confidence gate via `margin_trit()` (±1 signal / 0 ambient / -1 void) — accepts high-confidence specialists immediately, no sidecar call.
+     - **Escalation Path (TRIAD)**: Low-confidence decisions automatically escalate to `gemma_client::triad()` for three-way consensus (DIRECT / MIRROR / CODEC outputs) with SHA-256 `consensus_hash`.
+   - **Trained Router Loading**: Loads `.forge/distill/router.bqr` (trained centroids from flywheel distill pipeline); graceful fallback to untrained router if file absent.
+   - **Status**: Live dispatch arm wired, 186/186 daemon tests pass ✓. Awaiting trained routing data from `foreman distill` flywheel pass.
+9. **Native Tauri v2 Demo Shell** (`crates/studio-tauri`):
    - Zero external runtime dependencies (no Node, no Python server required).
    - Real-time WebGL2 5D Star Sky, Three Bears Fleet VRAM telemetry, Astrolabe volatility dials, and ConPTY glass terminal with a lock-free 50,000-line triple buffer.
 
@@ -114,14 +140,14 @@ Measured on physical host hardware (x86_64 host, NVIDIA RTX 3070 machine, measur
 
 | Benchmark Layer | Measured Throughput / Latency | Physical Mechanism |
 | :--- | :--- | :--- |
-| **Mama Bear 9B Blind Oracle (500k Passes)** | **24.24 Million arbitrations/sec** | `41.25 ns` per eval: S13 balanced ternary dual-stream ($T+T^*=0$) @ 0-heap |
+| **S13 Balanced Ternary Parity Gate (500k Evals)** | **24.24 Million evals/sec** | `41.25 ns` per eval: S13 balanced ternary scalar involution ($T+T^*=0$) @ 0-heap |
 | **512-bit BQ MetaRouter routing** | **1.90–2.75 M decisions/s / core** | `526 ns` per decision: XOR+POPCNT Hamming against 7 centroids |
 | **5D Star Sky Projection** | **44.45 Million stars/sec** | $SO(5)$ double-plane rotation + Lorentz boost (119k HYG catalog) |
 | **400×400 conjugate grid inversion (Scalar)** | **2.68 Gtrits/s** | `59.71 µs` full grid pass (160 KB L2 resident) |
 | **400×400 conjugate grid inversion (AVX2)** | **37.06 Gtrits/s** | `4.32 µs` full grid pass (AVX2 `PSHUFB` / SIMD) |
 | **Double-buffered host staging** | **60.30 GB/s** (58.65M swaps/s) | `17.05 ns` swap latency (2 x 64 KB ping-pong DMA) |
 | **Tile geometry planning (Ampere 32×32)** | **364.56 Million plans/s** | `2.74 ns` per plan integer ceiling division |
-| **Three Bears Resident Fleet VRAM** | **2.71 GB total VRAM** | Baby Bear 2B (410 MB) + Blind Mama Bear 9B (1.72 GB) + Papa Bear 27B Head (580 MB) |
+| **Three Bears Memory Layout Spec** | **2.71 GB target VRAM** | Baby Bear 2B (410 MB) + Mama Bear 9B (1.72 GB) + Papa Bear 27B Head Slice (580 MB) |
 | **Gemma 2B Decode (GPU Measured)** | **82.5 tokens/sec** | Real quantized weights on RTX 3070, zero sentinel bytes |
 | **Gemma 3.2B Decode (GPU Measured)** | **54.7 tokens/sec** | Real quantized weights on RTX 3070, zero sentinel bytes |
 | **Gemma 9B GEMV Decode (GPU Measured, RTX 3070)** | **49.2 GEMV passes/sec** (20.34 ms/pass) | 409.3 Gweights/s on REAL 1664.7 MB weights (`gpu_decode_real.rs`), bit-identical parity |
@@ -190,8 +216,9 @@ python scripts/test_vertex_cache_strict.py
 │   ├── RECEIPT-RUN-2026-08-27.txt      # Authoritative measured benchmark receipts
 │   └── patex_fullstack.png             # PaTeX 5D drafting sheet diagram
 └── scripts/
+    ├── fetch_demo_weights.py           # Standalone S13 quantized weight fetcher & verifier
     ├── demo_cloud_agent.ps1            # 1-Click live cloud agent demo for judges
-    ├── vertex_flash_cache.py           # Vertex AI context caching engine (gemini-3.7-flash @ $0.0004)
+    ├── vertex_flash_cache.py           # Vertex AI context caching engine (gemini-2.5-flash @ $0.0004)
     ├── run_competition_tests_3min.py   # 3-Minute master competition test suite
     ├── test_sovereign_airgap_red_green.py # 3-Wave Cree airgap red/green test
     ├── test_vertex_cache_strict.py     # Token census (>=32k) & strict cache verification

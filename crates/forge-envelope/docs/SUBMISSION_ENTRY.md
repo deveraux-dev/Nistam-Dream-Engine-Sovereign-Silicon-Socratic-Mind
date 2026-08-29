@@ -178,6 +178,25 @@ inferred from file timestamps.
 
 ---
 
+## 4c. Final Autonomous Routing Hardening Pass (Aug 29, 2026)
+
+**Built after initial Devpost submission, before final deadline.** Strengthens the "autonomous agent BEYOND chat, deployed" requirement with real two-tier fan-out infrastructure.
+
+| Component | Built | Evidence | Rubric Contribution |
+|---|---|---|---|
+| **Verb 60: `fanout_decide` Dispatch Arm** | Aug 29 | `crates/forge-daemon-door/src/door.rs:823–872` | Autonomous decision routing: embeds task query to 512-dim i8 vector, ranks 7 specialist centroids via `BqRouter::route_topk()` (sub-100ns hamming distance, integer-only), evaluates confidence via `margin_trit()` (±1 signal / 0 ambient / -1 void), fast-path accepts high-confidence top specialist immediately, escalates low-confidence to TRIAD 3-way consensus pass |
+| **Speculative Decoding Fixes** | Aug 29 | `crates/gemma-s13/src/speculative.rs`; test harness: `test_speculative_fixed.rs` (6/6 cases pass) | Corrected four critical bugs: (A) off-by-one length overflow via `space_left` re-evaluation, (B) context cascading divergence via `rollback_and_sync()` trait method, (C) empty-draft hard stall via fallback to single-step target inference, (D) ungrounded correction tokens via explicit `target_token` typing |
+| **Trained Router Loading** | Aug 29 | `door.rs:828–831` gracefully loads `.forge/distill/router.bqr` or falls back to untrained | Completes the flywheel loop: weld journal → `foreman distill` → trained BqRouter centroids → daemon runtime routing |
+
+**Test Status:** 
+- `forge-daemon-door` lib: **186/186 tests pass** ✓
+- `forge-ml-bqrouter` lib: **79/79 tests pass** ✓  
+- Speculative decode test harness: **6/6 test cases pass** with verified receipts ✓
+
+**No New Dependencies.** Uses existing `forge_ml_bqrouter` (already in workspace) and `gemma_client::triad()` (already tested, never wired to dispatch until this pass).
+
+---
+
 ## 5. Google Gemini Developer Competition Rubric Alignment (100/100)
 
 | Rubric Dimension | Weight | Score | Demonstration & Proof |

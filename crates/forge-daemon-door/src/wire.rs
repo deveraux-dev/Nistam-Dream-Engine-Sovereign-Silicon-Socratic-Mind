@@ -34,8 +34,8 @@ pub const KIND_RESULT: u8 = 1;
 /// Frame kind: fault/error response from daemon.
 pub const KIND_FAULT: u8 = 4;
 
-/// Wire ABI: the 37 ops of the `:13013` dispatch table (1-indexed).
-/// APPEND ONLY — never renumber, never reuse. Next free id: 55.
+/// Wire ABI: the 60 ops of the `:13013` dispatch table (1-indexed).
+/// APPEND ONLY — never renumber, never reuse. Next free id: 61.
 pub const TOOL_TABLE: &[&str] = &[
     "log",                      // 1
     "query",                    // 2
@@ -110,6 +110,11 @@ pub const TOOL_TABLE: &[&str] = &[
     "mma_verify",                // 57
     "mma_dot",                   // 58
     "mma_status",                // 59
+    // Autonomous fan-out decision gate (2026-08-29): BqRouter specialist routing
+    // + optional TRIAD escalation for ambiguous decisions. Two-tier fan-out:
+    // fast integer routing (route_topk), confidence gate, slow model consensus
+    // (TRIAD 3-way) only when signal is ambiguous. Used by autonomous loop.rs.
+    "fanout_decide",             // 60
 ];
 
 /// Look up operation name by 1-based tool ID. Returns None for 0 or out-of-range.
@@ -173,7 +178,7 @@ mod tests {
 
     #[test]
     fn tool_table_frozen() {
-        assert_eq!(TOOL_TABLE.len(), 59);
+        assert_eq!(TOOL_TABLE.len(), 60);
         assert_eq!(tool_id_of("log"), Some(1));
         assert_eq!(tool_id_of("ping"), Some(6));
         assert_eq!(tool_id_of("shutdown"), Some(15));
@@ -200,6 +205,7 @@ mod tests {
         assert_eq!(tool_id_of("mma_verify"), Some(57));
         assert_eq!(tool_id_of("mma_dot"), Some(58));
         assert_eq!(tool_id_of("mma_status"), Some(59));
+        assert_eq!(tool_id_of("fanout_decide"), Some(60));
         assert_eq!(tool_id_of("lsp_diagnostics"), Some(52));
         assert_eq!(tool_id_of("lsp_hover"), Some(53));
         assert_eq!(tool_id_of("asp_solve"), Some(54));
@@ -209,7 +215,8 @@ mod tests {
         assert_eq!(op_name(57), Some("mma_verify"));
         assert_eq!(op_name(58), Some("mma_dot"));
         assert_eq!(op_name(59), Some("mma_status"));
-        assert_eq!(op_name(60), None);
+        assert_eq!(op_name(60), Some("fanout_decide"));
+        assert_eq!(op_name(61), None);
         assert_eq!(op_name(1), Some("log"));
         assert_eq!(op_name(34), Some("daps_listen"));
         assert_eq!(op_name(35), Some("nostr_status"));

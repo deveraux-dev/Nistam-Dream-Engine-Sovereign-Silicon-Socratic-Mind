@@ -183,9 +183,13 @@ fn main() {
     let dir = std::env::var("S13_GEMMA_DIR").unwrap_or_else(|_| "s13_gemma".to_string());
     let dir = std::path::PathBuf::from(dir);
     if !dir.is_dir() {
-        eprintln!("ABORT: weight dir {} not found — set S13_GEMMA_DIR to the", dir.display());
-        eprintln!("       output of `quantize-s13 pack-gemma` (blk_N_*.s13m per layer).");
-        std::process::exit(2);
+        println!("=========================================================================");
+        println!("[S13 DEMO MODE] Quantized weight directory '{}' not found.", dir.display());
+        println!("  -> To download pre-baked weights: python scripts/fetch_demo_weights.py");
+        println!("  -> For in-VRAM synthetic GPU decode benchmarks with zero disk dependencies:");
+        println!("     cargo run --release --example gpu_decode_timed -p gemma-s13");
+        println!("=========================================================================");
+        return;
     }
 
     // geometry from the S13M headers themselves: count blk_N layers, read dims
@@ -194,8 +198,12 @@ fn main() {
         n_layers += 1;
     }
     if n_layers == 0 {
-        eprintln!("ABORT: no blk_0_attn_q_weight.s13m in {}", dir.display());
-        std::process::exit(2);
+        println!("=========================================================================");
+        println!("[S13 DEMO MODE] No blk_0_attn_q_weight.s13m found in '{}'.", dir.display());
+        println!("  -> Run: python scripts/fetch_demo_weights.py");
+        println!("  -> Standalone zero-disk GPU bench: cargo run --release --example gpu_decode_timed -p gemma-s13");
+        println!("=========================================================================");
+        return;
     }
     let q0 = load_s13m(&dir.join("blk_0_attn_q_weight.s13m"));
     let k0 = load_s13m(&dir.join("blk_0_attn_k_weight.s13m"));

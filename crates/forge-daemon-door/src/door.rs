@@ -613,6 +613,12 @@ impl Whitelist {
         "mma_verify",
         "mma_dot",
         "mma_status",
+        // Autonomous fan-out decision gate (2026-08-29): queries the BqRouter
+        // specialist router (integer XOR + POPCNT, no I/O) and optionally escalates
+        // to TRIAD consensus. Router is read-only until trained (no persistent
+        // state mutation); escalation path is same class as infer (optional sidecar
+        // call, no fs write).
+        "fanout_decide",
         // shutdown (2026-08-23, the sanctioned bounce): loopback-only door,
         // graceful tape flush, reply-then-exit(0) — door_hook::spawn_daemon
         // resurrects from the freshly deployed .forge/bin exe on the next
@@ -811,6 +817,56 @@ fn handle_whitelisted_msg(msg: DaemonMsg, conn: &TcpStream) -> DaemonReply {
                 }
                 Err(gemma_client::GemmaClientError::Refused(reason)) => {
                     DaemonReply::err(format!("gemma sidecar refused: {reason}"))
+                }
+            }
+        }
+        DaemonMsg::FanoutDecide { task, k, budget_ms } => {
+            use forge_ml_bqrouter::{embed_prompt, BqRouter, margin_trit};
+            use std::path::PathBuf;
+
+            let query = embed_prompt(&task);
+            let router = match BqRouter::load(&PathBuf::from(".forge/distill/router.bqr"), 512) {
+                Ok(r) => r,
+                Err(_) => BqRouter::new(512),
+            };
+            let ranked = router.route_topk(&query, k);
+            let top_verdict = margin_trit(ranked.first().map(|r| (r.id, r.margin_to_next)));
+
+            if top_verdict == 1 || ranked.is_empty() {
+                let mut reply_str = String::new();
+                reply_str.push_str(&format!("verdict:{}\n", top_verdict));
+                reply_str.push_str(&format!("ranked:{}\n", ranked.len()));
+                for r in &ranked {
+                    reply_str.push_str(&format!("  id:{} dist:{} margin:{} records:{}\n",
+                        r.id, r.dist, r.margin_to_next, r.record_count));
+                }
+                if !ranked.is_empty() {
+                    reply_str.push_str(&format!("accepted_id:{}\n", ranked[0].id));
+                }
+                DaemonReply::with_data(reply_str)
+            } else {
+                match gemma_client::triad(&task, 256, budget_ms) {
+                    Ok(triad_receipt) => {
+                        let mut reply_str = String::new();
+                        reply_str.push_str(&format!("verdict:{}\n", top_verdict));
+                        reply_str.push_str("escalated_to_triad:yes\n");
+                        reply_str.push_str(&format!("consensus_hash:{}\n", triad_receipt.consensus_hash));
+                        reply_str.push_str(&format!("latency_ms:{}\n", triad_receipt.latency_ms));
+                        reply_str.push_str("[DIRECT]\n");
+                        reply_str.push_str(&triad_receipt.direct_output);
+                        reply_str.push_str("\n[MIRROR]\n");
+                        reply_str.push_str(&triad_receipt.mirror_output);
+                        reply_str.push_str("\n[CODEC]\n");
+                        reply_str.push_str(&triad_receipt.codec_output);
+                        reply_str.push_str("\n");
+                        DaemonReply::with_data(reply_str)
+                    }
+                    Err(gemma_client::GemmaClientError::Unreachable(reason)) => {
+                        DaemonReply::err(format!("triad escalation unreachable: {reason}"))
+                    }
+                    Err(gemma_client::GemmaClientError::Refused(reason)) => {
+                        DaemonReply::err(format!("triad escalation refused: {reason}"))
+                    }
                 }
             }
         }

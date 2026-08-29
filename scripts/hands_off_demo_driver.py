@@ -125,20 +125,20 @@ def main():
         sys.exit(1)
 
     # -------------------------------------------------------------------------
-    # ACT III: THE 3-MODEL RESIDENT GEMMA FLEET IN TERMINAL [1:10 - 1:45]
+    # ACT III: THREE BEARS MEMORY ARCHITECTURE & PARITY GATE [1:10 - 1:45]
     # -------------------------------------------------------------------------
-    print_act_header("III", "3-Model Resident Gemma Fleet (2.71 GB VRAM)", "1:10 - 1:45", start_time)
-    print(f"{C_BOLD}  [1] Baby Bear (Gemma 2B - 410 MB VRAM):{C_RESET} M5 Geodesic Manifold & VIXI Shaders")
-    print(f"{C_BOLD}  [2] Blind Mama Bear (Gemma 9B - 1.72 GB VRAM):{C_RESET} S13 Balanced Ternary Dual-Stream Arbiter & Airgap Sentry")
-    print(f"{C_BOLD}  [3] Papa Bear Head (Gemma 27B - 580 MB VRAM):{C_RESET} 7-Domain BQ MetaRouter Centroid Routing")
-    print(f"{C_CYAN}  --> Total Fleet Footprint: 2,710 MB resident VRAM (Fits cleanly in 8 GB RTX 3070){C_RESET}\n")
+    print_act_header("III", "Three Bears Memory Architecture Spec (2.71 GB Target Layout)", "1:10 - 1:45", start_time)
+    print(f"{C_BOLD}  [1] Baby Bear (Gemma 2B - 410 MB Target):{C_RESET} M5 Geodesic Manifold & VIXI Shaders")
+    print(f"{C_BOLD}  [2] Mama Bear (Gemma 9B - 1.72 GB Target):{C_RESET} S13 Balanced Ternary Parity Gate & Real GEMV Kernel")
+    print(f"{C_BOLD}  [3] Papa Bear Head (Gemma 27B - 580 MB Slice):{C_RESET} 7-Domain BQ MetaRouter Centroid Routing")
+    print(f"{C_CYAN}  --> Total Target Footprint: 2,710 MB packed VRAM (Designed for 8 GB RTX 3070){C_RESET}\n")
 
-    # Run the 500,000 passes Blind Oracle Stress Test
-    print(f"{C_YELLOW}--> Executing 500,000 real-time Blind Dual-Stream Arbitration passes in Mama Bear 9B...{C_RESET}")
+    # Run the 500,000 passes Parity Gate Benchmark
+    print(f"{C_YELLOW}--> Executing 500,000 S13 Balanced Ternary Parity Gate passes (T+T*=0 involution check)...{C_RESET}")
     if not run_logged_cmd(
         ["cargo", "test", "--manifest-path", "crates/gemma-s13/Cargo.toml", "--test", "stress_blind_oracle", "--", "--nocapture"],
         REPO_ROOT,
-        "Mama Bear 9B Blind Dual-Stream 500k Stress Test"
+        "S13 Balanced Ternary Parity Gate 500k Test"
     ):
         sys.exit(1)
 
@@ -185,7 +185,7 @@ def main():
     # -------------------------------------------------------------------------
     # ACT V: LIVE GPU PANIC TEST & HARDWARE RECEIPTS [2:20 - 3:00]
     # -------------------------------------------------------------------------
-    print_act_header("V", "Live GPU Singularity Panic Test & 5,213 Rust Receipts", "2:20 - 3:00", start_time)
+    print_act_header("V", "Live GPU Singularity Panic Test & 5,243 Rust Receipts", "2:20 - 3:00", start_time)
     print(f"{C_CYAN}  Real WebGPU adapter, real dispatches. The probe names the adapter it found{C_RESET}")
     print(f"{C_CYAN}  and reports where the floor actually is — dispatch boundary, hazard drain, or work.{C_RESET}\n")
     if not run_logged_cmd(
@@ -195,7 +195,7 @@ def main():
     ):
         sys.exit(1)
 
-    print(f"{C_BOLD}{C_CYAN}─── EXECUTING FULL SOVEREIGN TEST MATRIX (5,213 COMPILED TESTS) ───{C_RESET}")
+    print(f"{C_BOLD}{C_CYAN}─── EXECUTING FULL SOVEREIGN TEST MATRIX (5,243 COMPILED TESTS, 104 SUITES) ───{C_RESET}")
     
     tests = [
         ("gemma-s13 (S13 Ternary & WebGPU Kernel)", ["cargo", "test", "--manifest-path", "crates/gemma-s13/Cargo.toml"]),

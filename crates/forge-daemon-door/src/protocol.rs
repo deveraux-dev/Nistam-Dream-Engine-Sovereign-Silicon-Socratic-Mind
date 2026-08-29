@@ -84,6 +84,15 @@ pub enum DaemonMsg {
         /// Budget in milliseconds.
         budget_ms: u32,
     },
+    /// Autonomous fan-out decision: BqRouter specialist ranking + optional TRIAD escalation.
+    FanoutDecide {
+        /// Task description for embedding and routing.
+        task: String,
+        /// Top-k specialists to rank (clamped to NUM_SPECIALISTS=7).
+        k: usize,
+        /// Budget in milliseconds for escalation path only.
+        budget_ms: u32,
+    },
     /// Log a work entry (repo, tag, message).
     Log {
         /// Repository name.
@@ -346,6 +355,10 @@ impl DaemonMsg {
                     s.push_str(&format!("domain_hint:{hint}"));
                 }
                 s
+            }
+
+            DaemonMsg::FanoutDecide { task, k, budget_ms } => {
+                format!("task:{task}\nk:{k}\nbudget_ms:{budget_ms}")
             }
 
             DaemonMsg::Log { repo, tag, msg } => {
@@ -616,6 +629,23 @@ impl DaemonMsg {
                     }
                 }
                 DaemonMsg::Infer { query, domain_hint, budget_ms }
+            }
+
+            "fanout_decide" => {
+                let mut task = String::new();
+                let mut k = 7usize;
+                let mut budget_ms = 100u32;
+                for line in text.lines() {
+                    if let Some((kk, v)) = line.split_once(':') {
+                        match kk {
+                            "task" => task = v.to_string(),
+                            "k" => k = v.parse().unwrap_or(7),
+                            "budget_ms" => budget_ms = v.parse().unwrap_or(100),
+                            _ => {}
+                        }
+                    }
+                }
+                DaemonMsg::FanoutDecide { task, k, budget_ms }
             }
 
             "log" => {

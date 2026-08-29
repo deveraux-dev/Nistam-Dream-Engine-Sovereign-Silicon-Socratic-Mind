@@ -1,6 +1,6 @@
 # Nistam Dream Engine & the Forge Engine — Competition Entry
 
-**Project:** 1.58-bit balanced-ternary Gemma inference — a 9B backbone in 1.72 GB, 2.0 Gweights/s per CPU core, and a GPU kernel measured at 22.9 tok/s on an RTX 3070 (bit-identical to the CPU reference; 268 tok/s bandwidth roofline named) — with a 3-model resident quantized fleet (2.71 GB total VRAM), a 7-centroid BQ MetaRouter MoE, a Google Cloud Vertex AI gemini-2.5-flash cloud governor, and a playable **Tauri v2 demo shell**: a full-window 5D star sky (119,625-star HYG catalog, WebGL2 bloom + godrays), a birth-rite / CYOA narrative arc that completes at the Toll Gate and persists to disk, an M5 worldbuilder canvas, and a ConPTY glass terminal.
+**Project:** 1.58-bit balanced-ternary Gemma inference — a 9B backbone in 1.72 GB, 2.0 Gweights/s per CPU core, and a GPU GEMV decode kernel measured at 49.2 passes/s (409.3 Gweights/s) on an RTX 3070 (bit-identical to the CPU reference) — with a 3-tier quantized memory architecture (2.71 GB target layout), a 7-centroid BQ MetaRouter MoE, a Google Cloud Vertex AI gemini-2.5-flash cloud governor, and a playable **Tauri v2 demo shell**: a full-window 5D star sky (119,625-star HYG catalog, WebGL2 bloom + godrays), a birth-rite / CYOA narrative arc that completes at the Toll Gate and persists to disk, an M5 worldbuilder canvas, and a ConPTY glass terminal.
 
 **Author:** Sean Morin, Edmonton, Alberta.
 **License:** MIT OR Apache-2.0. **Research DOI:** [10.5281/zenodo.22020676](https://doi.org/10.5281/zenodo.22020676) — *Pararity: the fixed-point residue of an involution, and why we need it* (Zenodo, 2026).
@@ -13,11 +13,11 @@
 
 2. **Integrity (The Merkle-Morin Architecture / MMA)**:
    - 1.58-bit packed ternary weights (5 trits/byte) unpacked in registers via AVX2 `PSHUFB` (2.57 Gtrits/s scalar, 37.06 Gtrits/s AVX2).
-   - **Three Bears fleet** (`gemma-s13`): 3 models concurrently resident in GPU VRAM (Baby Bear 2B, Blind Mama Bear 9B, Papa Bear 27B head = **2.71 GB total** VRAM, fits an 8 GB consumer GPU) with 59.62 GB/s staging memory rotation and 7-centroid BQ MetaRouter MoE dispatch.
+   - **Three Bears Architecture** (`gemma-s13`): 2.71 GB target layout (Baby Bear 2B shader core, Mama Bear 9B S13 backbone, Papa Bear 27B centroid router head) with 59.62 GB/s staging memory rotation and 7-centroid BQ MetaRouter MoE dispatch.
 
 3. **Transport & Autonomous Agent**:
    - `crates/forge-envelope/scripts/agent_loop.py` — an autonomous watcher, not a chat interface: polls a Cloud Storage inbox, runs deterministic ByteSieve triage, requests a schema-locked audit from gemini-2.5-flash on Vertex AI at temperature 0.0, cross-checks against a degradation model, writes the evidence-chain head to Firestore, and wipes local staging only after acknowledgement. No human in the loop.
-   - Cloud Governor: serverless Vertex AI context cache (`gemini-2.5-flash`, temperature 0.0, `$0.0004/call` governor ceiling).
+   - Cloud Governor: serverless Vertex AI context cache (`gemini-2.5-flash`, temperature 0.0, `$0.0004/call` observability ceiling).
    - Demo shell (`crates/studio-tauri`): 5D star sky, CYOA arc, M5 canvas, and ConPTY glass terminal. Builds with plain `cargo build --release` (no Node).
 
 ## Measured receipts
@@ -30,8 +30,10 @@ Every number below is a command you can run yourself; method and raw stdout are 
 | 400×400 conjugate grid inversion | 2.57–2.68 Gtrits/s scalar / 37.06 Gtrits/s AVX2 |
 | Double-buffered host staging | 59.62–60.30 GB/s |
 | Tile geometry planning (Ampere 32×32) | 358.17–364.56 M plans/s |
-| Three Bears resident fleet VRAM | 2.71 GB total (Baby Bear 2B + Blind Mama Bear 9B + Papa Bear 27B head) |
-| Gemma 2B / 3.2B / 9B decode (GPU, RTX 3070) | 82.5 / 54.7 / 22.9 tok/s |
+| Three Bears target layout VRAM | 2.71 GB total (Baby Bear 2B + Mama Bear 9B + Papa Bear 27B head) |
+| Gemma 2B / 3.2B Decode (GPU, RTX 3070) | 82.5 / 54.7 tok/s |
+| Gemma 9B GEMV Decode (GPU, RTX 3070) | 49.2 GEMV passes/s (409.3 Gweights/s) |
+| Gemma 9B End-to-End Decode (CPU AVX2+Rayon) | 0.48 tok/s (2.08 s/tok, 42 full layers) |
 | 5D star sky projection (119,625 HYG stars) | 44.45 M stars/sec, zero heap |
 | Airgap red/green | 5/5 red vectors blocked (`crates/forge-envelope/scripts/test_sovereign_airgap_red_green.py`) |
 
