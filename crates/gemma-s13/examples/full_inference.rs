@@ -22,17 +22,20 @@ fn main() {
     let seat_path = Path::new(&seat_dir);
 
     if !seat_path.exists() {
-        println!("=========================================================================");
-        println!("[S13 DEMO MODE] Quantized seat directory '{}' not found.", seat_dir);
-        println!("  -> To download pre-baked weights: python scripts/fetch_demo_weights.py");
-        println!("  -> Executing in-memory synthetic S13 forward graph verification...");
-        println!("=========================================================================");
-
-        let config = gemma_s13::model_9b::Gemma9bConfig::default();
-        let _graph = Gemma9bForwardGraph::new(config, DispatchEngine::ScalarReference);
-        println!("[synthetic_pass] Forward graph layout verified for 42 layers (d_model={})", config.d_model);
-        println!("[synthetic_pass] SUCCESS: Pipeline compiled and verified (synthetic fallback mode).");
-        return;
+        eprintln!("╭─────────────────────────────────────────────────────────────────────╮");
+        eprintln!("│ [full_inference] Gemma 9B weights not found: {}                 │", seat_dir);
+        eprintln!("├─────────────────────────────────────────────────────────────────────┤");
+        eprintln!("│ SETUP: Download quantized S13 weights from Hugging Face Hub:        │");
+        eprintln!("│                                                                     │");
+        eprintln!("│   python scripts/fetch_demo_weights.py                              │");
+        eprintln!("│                                                                     │");
+        eprintln!("│ Then retry this command:                                            │");
+        eprintln!("│   cargo run --release --example full_inference -p gemma-s13         │");
+        eprintln!("│                                                                     │");
+        eprintln!("│ Or set S13_GEMMA_DIR to an existing quantize-s13 pack-gemma output: │");
+        eprintln!("│   S13_GEMMA_DIR=/path/to/weights cargo run --example full_inference │");
+        eprintln!("╰─────────────────────────────────────────────────────────────────────╯");
+        std::process::exit(1);
     }
 
     println!("[full_inference] Loading Gemma 9B from {}", seat_dir);

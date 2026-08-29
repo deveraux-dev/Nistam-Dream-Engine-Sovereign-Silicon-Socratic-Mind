@@ -3,7 +3,7 @@
 
 //! First Flat Room Post-Birth-Rite Multi-Model Execution Engine.
 //!
-//! Demonstrates the 6-tier sovereign fleet pipeline at Spawn Node Origin ([0,0,0,0,0]):
+//! Demonstrates the 6-tier sovereign fleet pipeline at Spawn Node Origin (`[0,0,0,0,0]`):
 //! 1. `[1] s13_gemma_2b` Action Parser & Draft (Choice Archetypes & natal pitch).
 //! 2. `[2] s13_gemma_2b (Mirror)` Parity & Invariant Filter (Logit subtraction via anti-expert mask).
 //! 3. `[3] s13_gemma_2b_m3` Voxel & Hermetic Codec (5D Morton key, `senses_now()`, `#star-hud` telemetry).
