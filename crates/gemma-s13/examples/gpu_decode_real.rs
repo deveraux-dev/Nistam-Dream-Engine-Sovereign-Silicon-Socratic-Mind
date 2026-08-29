@@ -101,8 +101,10 @@ fn read_back_i32(gpu: &Gpu, src: &wgpu::Buffer, count: usize) -> Vec<i32> {
     out
 }
 
-/// One `.s13m` matrix: `S13M` magic, out/in features, per-tensor f32 scale,
-/// then `(out*in+4)/5` continuously packed base-243 trit bytes.
+use gemma_s13::s13::S13TensorView;
+
+/// One `.s13m` / `.s133` matrix: out/in features, per-tensor f32 scale,
+/// and continuously packed base-243 trit bytes.
 struct S13m {
     out_f: usize,
     in_f: usize,
@@ -112,13 +114,13 @@ struct S13m {
 
 fn load_s13m(path: &std::path::Path) -> S13m {
     let bytes = std::fs::read(path).unwrap_or_else(|e| panic!("cannot read {}: {e}", path.display()));
-    assert!(bytes.len() >= 16 && &bytes[0..4] == b"S13M", "{}: bad S13M header", path.display());
-    let out_f = u32::from_le_bytes([bytes[4], bytes[5], bytes[6], bytes[7]]) as usize;
-    let in_f = u32::from_le_bytes([bytes[8], bytes[9], bytes[10], bytes[11]]) as usize;
-    let scale = f32::from_le_bytes([bytes[12], bytes[13], bytes[14], bytes[15]]);
-    let expected = (out_f * in_f + 4) / 5;
-    assert_eq!(bytes.len() - 16, expected, "{}: payload length mismatch", path.display());
-    S13m { out_f, in_f, scale, packed: bytes[16..].to_vec() }
+    let view = S13TensorView::parse(&bytes).unwrap_or_else(|e| panic!("{}: {e}", path.display()));
+    S13m {
+        out_f: view.out_features,
+        in_f: view.in_features,
+        scale: view.scale,
+        packed: view.packed_trits.to_vec(),
+    }
 }
 
 const POW3: [u32; 5] = [1, 3, 9, 27, 81];
