@@ -2,7 +2,7 @@
 //! Run: `cargo run --example star_chart_d1_release --manifest-path crates/forge-vix-v3/Cargo.toml`
 
 use forge_core_v3::astrolabe::CATALOG_16;
-use forge_vix_v3::emit_html::{page_interactive, IPC_BRIDGE_SCRIPT, ASTROLABE_ORGAN_HOOK_SCRIPT, esc};
+use forge_vix_v3::emit_html::{page_interactive, esc};
 
 fn main() {
     let title = "13Forge Astrolabe — Live Star Chart";
