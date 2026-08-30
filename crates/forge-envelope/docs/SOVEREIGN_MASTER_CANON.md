@@ -4,8 +4,8 @@
 **Author:** Cree Systems Engineer Sean Morin, Edmonton River Valley  
 **Status:** UNIFIED, CANONICAL, & COMPREHENSIVE (LOSSLESS SYNTHESIS)  
 **Target Crate:** `forge-envelope`  
-**Zenodo DOI:** [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22020676.svg)](https://doi.org/10.5281/zenodo.22020676)  
-**Citation:** Sean Morin. *Pararity: the fixed-point residue of an involution, and why we need it.* Zenodo (2026). DOI: [10.5281/zenodo.22020676](https://doi.org/10.5281/zenodo.22020676).
+**Zenodo DOI:** [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22176968.svg)](https://doi.org/10.5281/zenodo.22176968)  
+**Citation:** Sean Morin. *Pararity: the fixed-point residue of an involution, and why we need it.* Zenodo (2026). DOI: [10.5281/zenodo.22176968](https://doi.org/10.5281/zenodo.22176968).
 
 ---
 

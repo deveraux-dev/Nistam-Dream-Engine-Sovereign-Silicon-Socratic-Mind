@@ -3,7 +3,7 @@
 **Project Title:** 13Forge: Reactive DSL, SplitShader GPU Warden & Gemini Active Governor  
 **Live Platform & Interactive Showcase:** [https://13forge.com](https://13forge.com)  
 **Author & Crates.io Registry Profile:** [Sean Morin (`deveraux-dev`)](https://crates.io/users/deveraux-dev)  
-**Mathematical Priority DOI:** [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22020676.svg)](https://doi.org/10.5281/zenodo.22020676) · *Pararity: the fixed-point residue of an involution, and why we need it* (Zenodo, 2026).
+**Mathematical Priority DOI:** [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22176968.svg)](https://doi.org/10.5281/zenodo.22176968) · *Pararity: the fixed-point residue of an involution, and why we need it* (Zenodo, 2026).
 
 ---
 
@@ -114,7 +114,7 @@ during this window. Every source file in `sidecar/src` carries a last-modified d
 **Built in-window, no earlier ancestor:** `forge-envelope` (from 2026-08-17) and `forge-ml-bqrouter`
 (from 2026-08-15) have no counterpart in the prior v2 tree — they are new work. The formal write-up
 of the mathematics was also published in-window: *"Pararity: the fixed-point residue of an
-involution, and why we need it."*, [DOI 10.5281/zenodo.22020676](https://doi.org/10.5281/zenodo.22020676),
+involution, and why we need it."*, [DOI 10.5281/zenodo.22176968](https://doi.org/10.5281/zenodo.22176968),
 thesis, CC BY 4.0, **published 2026-08-20**.
 
 **Disclosed as pre-existing, and incorporated into the Project:**
@@ -145,7 +145,7 @@ not that it originated then.
 | **2026-08-03** | ← **Submission Period opens** | |
 | 2026-08-09 → 08-20 | **the Gemma sidecar is built** | all 26 files in `sidecar/src` |
 | 2026-08-13 | `cdk.rs` ported to v3 | `forge-core-v3/src/cdk.rs` |
-| 2026-08-20 | pararity thesis published | DOI 10.5281/zenodo.22020676 |
+| 2026-08-20 | pararity thesis published | DOI 10.5281/zenodo.22176968 |
 
 ### What is new in this Project
 
@@ -185,5 +185,5 @@ inferred from file timestamps.
 | **1. Technical Execution & Rigor** | 30% | — | `#![deny(unsafe_code)]` pure `#![no_std]` Rust; WebGPU WGSL 64/32 dual `u32` register emulation; CPU benchmark suite that guards its inputs and reproduces within ~3% across warmed runs, with two prior overstated figures found and withdrawn by our own re-measurement (§4); **55/55 unit, integration, and doc tests passing** (`cargo test -p forge-envelope`, verified 2026-08-24); 0-byte dynamic heap allocation on hotpath. |
 | **2. Multimodal Gemini Implementation** | 25% | **25/25** | Gemini 3.7 & 2.5 Flash deployed as an **Active Thermodynamic Governor**; 450,000-token `CachedContent` context caching (75% savings); Pydantic schema-locked structured outputs; deterministic Zero-Point Temperature `0.0`. |
 | **3. Real-World Impact & Viability** | 30% | **30/30** | Solves high-consequence physical dispute loops in industrial infrastructure; Sovereign data privacy for First Nations on Treaty land & independent contractors; **ADR-0026 Zero Retention** (0 bytes raw photo liability). |
-| **4. Creativity & Innovation** | 15% | **15/15** | Koestler bisociation (23-year somatic coating inspector $\times$ systems Rust compiler craftsman); Neurodiversity focus engine (*The Foreman's Wave* pentatonic metronome); Pararity balanced ternary mathematics ([Zenodo DOI: `10.5281/zenodo.22020676`](https://doi.org/10.5281/zenodo.22020676)). |
+| **4. Creativity & Innovation** | 15% | **15/15** | Koestler bisociation (23-year somatic coating inspector $\times$ systems Rust compiler craftsman); Neurodiversity focus engine (*The Foreman's Wave* pentatonic metronome); Pararity balanced ternary mathematics ([Zenodo DOI: `10.5281/zenodo.22176968`](https://doi.org/10.5281/zenodo.22176968)). |
 | **5. Live Interactive Polish** | - | **Sealed** | Full live interactive studio running at [13forge.com](https://13forge.com); solo craftsman voiceover over 25 photo assets, delivered cut published to 13forge.com. |

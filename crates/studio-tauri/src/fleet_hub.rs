@@ -221,7 +221,7 @@ pub fn get_bear_detail(bear_id: String) -> BearDetailPayload {
                 format: "S13Norm27b RMSNorm + 5D Projection Latent".to_string(),
                 on_disk_files: 16,
                 on_disk_mb: 580.0,
-                mathematical_invariant: "Anti-Expert Parity Cancellation: T + T* = 0 (DOI 10.5281/zenodo.22020676)".to_string(),
+                mathematical_invariant: "Anti-Expert Parity Cancellation: T + T* = 0 (DOI 10.5281/zenodo.22176968)".to_string(),
                 description: "Evaluates conjugate involution parity, traps 13 out-of-band sentinel tokens (243..=255), and triggers ADR-0026 SIMD zero-retention memory scrubbing on any cultural airgap violation.".to_string(),
             }
         }

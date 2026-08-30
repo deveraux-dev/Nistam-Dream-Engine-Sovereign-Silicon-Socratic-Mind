@@ -118,7 +118,7 @@
   Source: SOVEREIGN_MASTER_CANON.md, SUBMISSION_ENTRY.md
 
   1. Gate 1: Lossless Synthesis & Mathematical Priority Landing
-      • Consolidated 54 exploratory milestone handoffs into SOVEREIGN_MASTER_CANON.md and secured Zenodo DOI 10.5281/zenodo.22020676 https://doi.org/10.5281/zenodo.22020676 (Pararity).
+      • Consolidated 54 exploratory milestone handoffs into SOVEREIGN_MASTER_CANON.md and secured Zenodo DOI 10.5281/zenodo.22176968 https://doi.org/10.5281/zenodo.22176968 (Pararity).
   2. Gate 2: Crate Zero Core Primitives & Safety Mandate
       • Implemented forge-envelope under #![deny(unsafe_code)], enforcing zero-heap ephemeral buffer sealing and balanced-ternary Disposition trits (53/53 tests green).
   3. Gate 3: Benchmark Reconciliation & Calibration

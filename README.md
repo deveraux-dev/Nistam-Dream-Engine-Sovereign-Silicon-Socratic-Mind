@@ -1,6 +1,6 @@
 # Nistam Dream Engine — Sovereign Silicon & Socratic Mind
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22020676.svg)](https://doi.org/10.5281/zenodo.22020676)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22176968.svg)](https://doi.org/10.5281/zenodo.22176968)
 [![License: MIT OR Apache-2.0](https://img.shields.io/badge/License-MIT%20OR%20Apache--2.0-blue.svg)](LICENSE)
 [![Google Gemini Competition](https://img.shields.io/badge/Google%20Gemini-Developer%20Competition-orange.svg)](docs/SUBMISSION_ENTRY.md)
 

@@ -29,7 +29,7 @@
 * **Dual-Track Visual Routing:** Positions our edge-metal sidecar as a low-latency telemetry pre-processor and fast-path visual compression trigger ($1,562,500\times$ space collapse), escalating raw 25MB photographs to Gemini Pro/Flash on Vertex AI whenever a sentinel is breached.
 ### [✓] Pararity Citation & Sovereign Triad Alignment
 * **Status:** Landed and canonical across all specs.
-* **Zenodo DOI:** [10.5281/zenodo.22020676](https://doi.org/10.5281/zenodo.22020676) (*Pararity: the fixed-point residue of an involution, and why we need it*).
+* **Zenodo DOI:** [10.5281/zenodo.22176968](https://doi.org/10.5281/zenodo.22176968) (*Pararity: the fixed-point residue of an involution, and why we need it*).
 * **6-Stream Inverted Differential Signaling:** $T + T^* = 0$ fail-closed symmetry invariant for multi-sensor governance (strain, acoustic emissions, freeze-thaw, tactile).
 * **Sovereign Triad Invariants:**
   * `ADR-0026`: Self-Attestation & Map-Edge 0-byte machine storage vs Human-Authored Vault.

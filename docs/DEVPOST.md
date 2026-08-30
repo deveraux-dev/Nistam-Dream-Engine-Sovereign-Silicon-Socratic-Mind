@@ -68,7 +68,7 @@ stale on the next run and becomes a claim instead of a measurement.
   stable + Windows WebView2 only, no Node. Full instructions:
   [`docs/JUDGE-BUILD.md`](JUDGE-BUILD.md).
 - **Reproduce the benchmarks:** [`docs/BENCHMARKS.md`](BENCHMARKS.md).
-- **Research:** [DOI 10.5281/zenodo.22020676](https://doi.org/10.5281/zenodo.22020676).
+- **Research:** [DOI 10.5281/zenodo.22176968](https://doi.org/10.5281/zenodo.22176968).
 
 ## Built with
 

@@ -2,7 +2,7 @@
 
 > **HACKATHON TARGET:** Devpost "All Things Agentic" ([allthingsagentichackathon.devpost.com](https://allthingsagentichackathon.devpost.com))  
 > **PROJECT ID:** `nde1-493505` (Google Cloud Vertex AI / Cloud Run / Firestore)  
-> **RESEARCH DOI:** [10.5281/zenodo.22020676](https://doi.org/10.5281/zenodo.22020676) (*Pararity: the fixed-point residue of an involution, and why we need it*)  
+> **RESEARCH DOI:** [10.5281/zenodo.22176968](https://doi.org/10.5281/zenodo.22176968) (*Pararity: the fixed-point residue of an involution, and why we need it*)  
 > **AUTHOR:** Sean Morin, Edmonton River Valley, Alberta, Canada  
 > **LICENSE:** MIT OR Apache-2.0  
 
@@ -10,7 +10,7 @@
 
 ```ron
 // NISTAM-SOVEREIGN-COMPILER-SPEC (v3.0.0-s13)
-// Target: Devpost "All Things Agentic" | Project: nde1-493505 | DOI: 10.5281/zenodo.22020676
+// Target: Devpost "All Things Agentic" | Project: nde1-493505 | DOI: 10.5281/zenodo.22176968
 (
     compiler: (
         name: "Nistam Sovereign Dream Engine",
@@ -221,7 +221,7 @@ cargo run --manifest-path crates/studio-tauri/Cargo.toml
 - **Built Specifically for this Hackathon Submission:**
   1. Complete **Three Bears S13 Gemma Fleet** (2B, 9B, 27B) quantized memory layout and inference pipeline.
   2. The 119,625-star **5D Relativistic Astrolabe Projection Engine** ($SO(5)$ + Lorentz boosts).
-  3. Formal mathematical monograph: *"Pararity: the fixed-point residue of an involution, and why we need it"*, [DOI 10.5281/zenodo.22020676](https://doi.org/10.5281/zenodo.22020676).
+  3. Formal mathematical monograph: *"Pararity: the fixed-point residue of an involution, and why we need it"*, [DOI 10.5281/zenodo.22176968](https://doi.org/10.5281/zenodo.22176968).
   4. Autonomous Cloud Run flywheel (`agent_loop.py`) with 3-wave cultural airgap and ADR-0026 zero-retention memory scrubbing.
   5. Native **Tauri v2 Desktop Showcase** with WebGL2 5D Star Sky and ConPTY glass terminal.
 - **Third-Party Open Source (Rule G10):** `candle` / `candle-transformers` (Apache-2.0 / MIT), `tokenizers`, `safetensors`, `bytemuck`, and `windows-sys`.
