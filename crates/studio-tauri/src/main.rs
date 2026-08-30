@@ -19,7 +19,6 @@ use forge_zones_v3::{
 mod door;
 mod door_spawn;
 mod term;
-mod fleet_hub;
 
 /// The one live ConPTY session (None until the dock first opens).
 type TermState = Arc<std::sync::Mutex<Option<term::TermSession>>>;
