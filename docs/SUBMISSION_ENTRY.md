@@ -39,7 +39,7 @@ Every number below is a command you can run yourself; method and raw stdout are 
 
 ## Demo
 
-- **Video:** [https://youtu.be/ttMofC_9-G0](https://youtu.be/ttMofC_9-G0) (≤4:00, English subtitles).
+- **Video:** [https://youtu.be/ttMofC_9-G0](https://youtu.be/ttMofC_9-G0) (≤3:00, English subtitles).
 - **Run it yourself:** prerequisites are Rust stable and Windows WebView2 only (no Node). Full judge instructions: [`docs/JUDGE-BUILD.md`](JUDGE-BUILD.md).
 
 ```bash
