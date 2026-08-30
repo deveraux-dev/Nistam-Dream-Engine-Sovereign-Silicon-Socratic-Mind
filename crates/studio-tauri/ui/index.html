@@ -18,132 +18,35 @@
     <header class="app-header">
       <div class="brand">
         <span class="sigil">◈</span>
-        <span class="title">13FORGE DEMO SHELL</span>
-        <span class="version-tag">TAURI v2 / MOLTEN — 5D SKY</span>
+        <span class="title">NISTAM DREAM ENGINE</span>
+        <span class="version-tag brand-gemma">GEMMA S13</span>
       </div>
-      <div class="astro-ctl" title="raise the astrolabe — or fly into Sol and it rises on its own">
+      <div class="astro-ctl" title="Raise the astrolabe — or fly into Sol and it rises on its own">
         <span class="astro-glyph">✳</span>
         <input id="astro-slider" type="range" min="0" max="100" value="0" />
         <span class="astro-lbl">ASTROLABE</span>
       </div>
       <div class="head-right">
-        <!-- giveaway:cut -->
-        <button id="btn-fleet" class="btn" title="Three Bears Gemma Triad & 2.71 GB VRAM Fleet Telemetry">🐻 FLEET TRIAD</button>
-        <!-- /giveaway:cut -->
-        <button id="btn-theory" class="btn">♪ THEORY</button>
-        <button id="btn-chain" class="btn" title="Harmonic Constellation Chain Arpeggiator (Click/Drag stars to weave chords)">✦ CONSTELLATION</button>
-        <button id="btn-mute" class="btn on" title="mute every voice — star rings, the terminal's ear, played scores (M)">SOUND</button>
-        <span class="unit-tag" id="sky-title">drag to look (it glides) · wheel to fly · right-drag to drift · ctrl+wheel to descend · double-strike a star to sail there</span>
+        <button id="btn-nav-sky" class="nav-tab active" title="5D Celestial Star Sky (119,625 HYG Stars)">🌌 5D SKY</button>
+        <button id="btn-nav-term" class="nav-tab" title="Interactive ConPTY Windows PowerShell Terminal">⌨ TERMINAL</button>
+        <button id="btn-theory" class="nav-tab" title="Harmonic Star Intervals & Theory">♪ THEORY</button>
+        <button id="btn-mute" class="btn on" title="Mute/Unmute Audio Synth (M)">SOUND</button>
       </div>
     </header>
 
-    <main class="sky-stage"></main>
-
-    <!-- giveaway:cut -->
-    <div id="fleet-panel" class="dossier hidden" style="width: 500px; top: 56px; left: 16px; z-index: 100;">
-      <div class="reticle reticle-tl"></div>
-      <div class="reticle reticle-tr"></div>
-      <div class="reticle reticle-bl"></div>
-      <div class="reticle reticle-br"></div>
-      <div class="dossier-header">
-        <div class="dossier-title">
-          <span class="star-catalog-id">S13 BALANCED TERNARY ENGINE · 2.71 GB VRAM</span>
-          <span class="star-name">🐻 THREE BEARS GEMMA FLEET</span>
-        </div>
-        <span class="spectral-badge" style="color: var(--accent-cyan); border-color: var(--accent-cyan);">RESIDENT</span>
-        <span class="dossier-pin" id="fleet-close" title="close this glass">✕</span>
+    <main class="sky-stage">
+      <!-- Subtle Floating Gemma Celestial Sky HUD -->
+      <div id="gemma-sky-hud" class="floating-sky-hud">
+        <span class="badge-molten">🧠 GEMMA 9B</span>
+        <span id="sky-gemma-status">Celestial Navigator: Active · 119,625 Stars Indexed (409.3 Gweights/s)</span>
       </div>
 
-      <div class="fleet-vram-strip">
-        <div class="fleet-bear-card">
-          <span class="bear-tag">BABY (2B)</span>
-          <b class="bear-val">410 MB</b>
-          <span class="bear-sub">Shader Geodesic</span>
-        </div>
-        <div class="fleet-bear-card active">
-          <span class="bear-tag">MAMA (9B)</span>
-          <b class="bear-val">1.72 GB</b>
-          <span class="bear-sub">52.6 tok/s GPU decode</span>
-        </div>
-        <div class="fleet-bear-card">
-          <span class="bear-tag">PAPA (27B)</span>
-          <b class="bear-val">580 MB</b>
-          <span class="bear-sub">2.75M dec/s</span>
-        </div>
+      <!-- Subtle Floating Constellation Chaining Hint -->
+      <div id="chain-hint-pill" class="floating-chain-pill">
+        <span id="chain-hint-text">✦ Click stars to link harmonic chord</span>
+        <button type="button" id="btn-chain-clear" class="btn-chip-xs hidden">✕ Clear</button>
       </div>
-
-      <div class="fleet-telemetry-box">
-        <div class="telemetry-row">
-          <span>HOST VRAM COMMITTED:</span>
-          <b id="fleet-vram-committed" class="badge-gold">2,710 MB / 8,192 MB (RTX 3070)</b>
-        </div>
-        <div class="telemetry-row">
-          <span>9B S13 GPU DECODE (measured):</span>
-          <b id="fleet-9b-tput" class="badge-cyan">52.6 tok/s · 19.03 ms/tok (437.5 Gweights/s)</b>
-        </div>
-        <div class="telemetry-row">
-          <span>CPU SCALAR BASELINE (not decode):</span>
-          <b id="fleet-9b-scalar">1.922 Gweights/s · 0.54 M row-GEMV/s</b>
-        </div>
-        <div class="telemetry-row">
-          <span>N×IPR ATTENTION SIEVE:</span>
-          <b id="fleet-nipr-rate">762.8 ns/eval (1.31 Meval/s)</b>
-        </div>
-      </div>
-
-      <div class="fleet-section-title">⚡ 7-DOMAIN BQ METAROUTER & INFERENCE</div>
-      <div class="fleet-prompt-row">
-        <input type="text" id="fleet-prompt-input" class="rite-input" placeholder="Enter prompt (e.g. 'Synthesize radiant plasma thruster')..." value="Synthesize radiant plasma thruster" />
-        <button type="button" class="btn" id="btn-fleet-route">ROUTE</button>
-        <button type="button" class="btn" id="btn-fleet-step">TRIAD STEP</button>
-        <button type="button" class="btn" id="btn-fleet-celestial" title="Zero-Socket In-Process Celestial Gemma Bot 5D Hop & Socratic Dialogue">CELESTIAL BOT</button>
-      </div>
-
-      <div id="fleet-route-result" class="fleet-result-card hidden">
-        <div class="telemetry-row">
-          <span>TARGET SPECIALIST DOMAIN:</span>
-          <b id="fleet-res-domain" class="badge-gold">—</b>
-        </div>
-        <div class="telemetry-row">
-          <span>HAMMING DIST / 3σ MARGIN:</span>
-          <b id="fleet-res-margin" class="badge-cyan">—</b>
-        </div>
-        <div class="telemetry-row">
-          <span>ROUTE CALL (IPC ROUND-TRIP):</span>
-          <b id="fleet-res-latency">— (router core: 363.4 ns single-core)</b>
-        </div>
-      </div>
-
-      <div id="fleet-triad-result" class="fleet-result-card hidden">
-        <div class="telemetry-row">
-          <span>BABY 2B M5 COORDS:</span>
-          <b id="fleet-baby-m5" class="badge-cyan">—</b>
-        </div>
-        <div class="telemetry-row">
-          <span>PAPA 9B N×IPR PMY:</span>
-          <b id="fleet-papa-nipr" class="badge-gold">—</b>
-        </div>
-        <div class="telemetry-row">
-          <span>MAMA 9B SOVEREIGN SCRUB:</span>
-          <b id="fleet-mama-verdict" class="badge-gold" style="color: var(--accent-verdigris) !important;">—</b>
-        </div>
-      </div>
-
-      <div id="fleet-celestial-result" class="fleet-result-card hidden">
-        <div class="telemetry-row">
-          <span>IN-PROCESS CELESTIAL HOP:</span>
-          <b id="fleet-celestial-hop" class="badge-cyan">—</b>
-        </div>
-        <div class="telemetry-row">
-          <span>CONTINUOUS 5D VECTOR:</span>
-          <b id="fleet-celestial-5d" class="badge-gold">—</b>
-        </div>
-        <div class="telemetry-row">
-          <span>DIALOGUE / &lt;end_of_turn&gt;:</span>
-          <b id="fleet-celestial-turn" class="badge-verdigris" style="color: var(--accent-verdigris) !important;">—</b>
-        </div>
-      </div>
-    </div>
+    </main>
     <!-- /giveaway:cut -->
 
     <div id="theory-panel" class="dossier hidden">
@@ -252,6 +155,8 @@
           <div class="telemetry-cell"><span class="label">doppler</span><b class="val badge-gold" id="dossier-doppler">—</b></div>
           <div class="telemetry-cell"><span class="label">dist</span><b class="val" id="dossier-dist">—</b></div>
           <div class="telemetry-cell"><span class="label">coords</span><b class="val" id="dossier-pos">—</b></div>
+          <div class="telemetry-cell"><span class="label">gemma 9b</span><b class="val badge-molten" id="dossier-gemma">409.3 Gw/s</b></div>
+          <div class="telemetry-cell"><span class="label">airgap</span><b class="val badge-verdigris" id="dossier-airgap">✓ CLEAR</b></div>
         </div>
         <div class="star-dock-scope">
           <div class="spectral-band"><div class="spectral-marker" id="dossier-spec-marker"></div></div>

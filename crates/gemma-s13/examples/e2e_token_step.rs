@@ -34,21 +34,35 @@ fn load_s13m(path: &Path) -> Result<S13m, String> {
 }
 
 fn main() {
-    // Relative default, matching gpu_decode_real's convention — an absolute
-    // path here is one machine's filesystem, not a default.
-    let seat_dir = env::var("S13_GEMMA_DIR").unwrap_or_else(|_| "s13_gemma".to_string());
-    let seat_path = Path::new(&seat_dir);
-    // Norms default to the seat itself: pack-gemma writes the full
-    // 6-per-layer + output_norm `.s13n` set beside the matrices, so a seat is
-    // self-contained. Override only to borrow norms from another seat.
+    let candidate_dirs = [
+        env::var("S13_GEMMA_DIR").ok(),
+        Some("s13_gemma_9b_m3".to_string()),
+        Some("s13_gemma".to_string()),
+        Some("s13_gemma_2b_m3".to_string()),
+        Some("../s13_gemma_9b_m3".to_string()),
+        Some("../s13_gemma".to_string()),
+    ];
+
+    let mut found_dir = None;
+    for cand in candidate_dirs.into_iter().flatten() {
+        let p = std::path::PathBuf::from(&cand);
+        if p.is_dir() && p.join("blk_0_attn_q_weight.s13m").is_file() {
+            found_dir = Some(p);
+            break;
+        }
+    }
+
+    let seat_path = match found_dir {
+        Some(d) => d,
+        None => {
+            eprintln!("ERROR: S13 Gemma seat dir not found — set S13_GEMMA_DIR to a");
+            eprintln!("       `quantize-s13 pack-gemma` output (blk_N_*.s13m per layer).");
+            std::process::exit(1);
+        }
+    };
+    let seat_dir = seat_path.display().to_string();
     let norms_dir = env::var("S13_NORMS_DIR").unwrap_or_else(|_| seat_dir.clone());
     let norms_path = Path::new(&norms_dir);
-
-    if !seat_path.exists() {
-        eprintln!("ERROR: seat dir {seat_dir} not found — set S13_GEMMA_DIR to a");
-        eprintln!("       `quantize-s13 pack-gemma` output (blk_N_*.s13m per layer).");
-        std::process::exit(1);
-    }
 
     // Auto-detect geometry from S13M headers
     let mut n_layers = 0usize;

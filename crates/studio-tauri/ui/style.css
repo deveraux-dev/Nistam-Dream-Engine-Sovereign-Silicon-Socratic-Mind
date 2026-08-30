@@ -31,6 +31,8 @@ body {
   overflow: hidden;
 }
 
+.hidden { display: none !important; }
+
 #gl-sky { position: fixed; inset: 0; z-index: 0; width: 100vw; height: 100vh; }
 #space-canvas { position: fixed; inset: 0; z-index: 1; width: 100vw; height: 100vh; }
 .app-layout { display: flex; flex-direction: column; height: 100vh; position: relative; z-index: 1; }
@@ -43,11 +45,12 @@ body {
   padding: 6px 12px;
 }
 .brand { display: flex; align-items: center; gap: 8px; }
-.sigil { color: var(--accent-cyan); }
-.title { font-weight: bold; letter-spacing: 1px; }
-.version-tag { color: var(--fg-muted); font-size: 11px; border: 1px solid var(--border-glass); padding: 1px 6px; border-radius: 3px; }
+.sigil { color: var(--accent-cyan); font-size: 14px; text-shadow: 0 0 6px var(--accent-cyan); }
+.title { font-weight: bold; letter-spacing: 1.2px; font-size: 13px; }
+.version-tag { color: var(--fg-muted); font-size: 10px; border: 1px solid var(--border-glass); padding: 1px 6px; border-radius: 3px; }
+.brand-gemma { color: var(--accent-cyan); border-color: rgba(255, 106, 26, 0.45); font-weight: 700; background: rgba(255, 106, 26, 0.1); letter-spacing: 0.5px; }
 
-.sky-stage { flex: 1; min-height: 0; }
+.sky-stage { flex: 1; min-height: 0; position: relative; }
 .muted { color: var(--fg-muted); }
 .unit-tag { color: var(--fg-muted); font-size: 11px; }
 
@@ -55,8 +58,87 @@ body {
   background: transparent; color: var(--fg-text);
   border: 1px solid var(--border-glass); border-radius: 4px;
   padding: 5px 10px; cursor: pointer; font: inherit;
+  transition: all 0.15s ease;
 }
 .btn:hover { border-color: var(--accent-cyan); color: var(--accent-cyan); }
+
+.nav-tab {
+  background: transparent; color: var(--fg-muted);
+  border: 1px solid var(--border-glass); border-radius: 4px;
+  padding: 4px 10px; font-size: 11px; font-weight: 600; cursor: pointer;
+  transition: all 0.15s ease;
+}
+.nav-tab:hover { color: #FFF; border-color: var(--accent-gold); }
+.nav-tab.active {
+  background: rgba(255, 106, 26, 0.16); color: var(--accent-cyan);
+  border-color: var(--accent-cyan); box-shadow: 0 0 8px rgba(255, 106, 26, 0.35);
+}
+
+.btn-primary-action {
+  background: #FF6A1A !important; color: #000 !important; font-weight: 700 !important;
+  border: 1px solid #FF8533 !important; border-radius: 4px;
+  padding: 6px 14px; cursor: pointer; transition: all 0.15s ease;
+  box-shadow: 0 0 10px rgba(255, 106, 26, 0.35);
+  text-transform: uppercase; font-size: 11px; letter-spacing: 0.8px;
+}
+.btn-primary-action:hover {
+  background: #FF8533 !important; box-shadow: 0 0 14px rgba(255, 106, 26, 0.65);
+}
+.btn-primary-action:disabled {
+  opacity: 0.55; cursor: not-allowed;
+}
+
+.btn-preset-chip {
+  background: rgba(176, 138, 99, 0.12); color: var(--fg-text);
+  border: 1px solid var(--border-glass); border-radius: 12px;
+  padding: 3px 9px; font-size: 10px; cursor: pointer; transition: all 0.15s ease;
+}
+.btn-preset-chip:hover {
+  border-color: var(--accent-gold); color: #FFF; background: rgba(200, 121, 30, 0.22);
+}
+.btn-preset-chip.chip-red {
+  background: rgba(239, 68, 68, 0.12); border-color: rgba(239, 68, 68, 0.35); color: #fca5a5;
+}
+.btn-preset-chip.chip-red:hover {
+  background: rgba(239, 68, 68, 0.25); border-color: #ef4444; color: #FFF;
+}
+
+.btn-chip-xs {
+  background: rgba(239, 68, 68, 0.2); color: #fca5a5;
+  border: 1px solid rgba(239, 68, 68, 0.4); border-radius: 8px;
+  padding: 1px 6px; font-size: 9px; cursor: pointer; margin-left: 6px;
+}
+.btn-chip-xs:hover { background: #ef4444; color: #FFF; }
+.btn-chip-xs.hidden { display: none; }
+
+/* ── FLOATING SKY HUD & CHAIN HINT ── */
+.floating-sky-hud {
+  position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%); z-index: 2;
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(16, 19, 26, 0.88); border: 1px solid rgba(255, 106, 26, 0.4);
+  border-radius: 16px; padding: 4px 14px; backdrop-filter: blur(10px);
+  font-size: 11px; color: var(--fg-text); box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+}
+.floating-chain-pill {
+  position: fixed; bottom: 64px; left: 50%; transform: translateX(-50%); z-index: 2;
+  display: flex; align-items: center; gap: 6px;
+  background: rgba(26, 15, 9, 0.90); border: 1px solid var(--accent-gold);
+  border-radius: 14px; padding: 3px 12px; backdrop-filter: blur(8px);
+  font-size: 10.5px; color: var(--accent-gold); box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+  transition: opacity 0.3s ease;
+}
+.badge-molten {
+  background: rgba(255, 106, 26, 0.2); color: #FF6A1A;
+  border: 1px solid #FF6A1A; border-radius: 3px;
+  padding: 1px 5px; font-size: 9.5px; font-weight: bold; letter-spacing: 0.5px;
+}
+.unified-narration-box {
+  background: rgba(0, 0, 0, 0.45); border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 4px; padding: 8px 10px; font-size: 11px; line-height: 1.45;
+  color: var(--fg-text); font-style: italic; border-left: 2px solid var(--accent-cyan);
+  margin-top: 4px; word-break: break-word;
+}
 
 /* ── GLASS SLIP OVER THE SKY (fleet pane wears this) ──────── */
 .rite-pane {
@@ -539,14 +621,23 @@ body {
   background: rgba(10, 7, 5, 0.7);
   border: 1px solid var(--border-glass);
   border-radius: 4px;
-  padding: 6px 8px;
+  padding: 8px 6px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+.fleet-bear-card:hover {
+  border-color: rgba(200, 121, 30, 0.6);
+  background: rgba(200, 121, 30, 0.08);
+  transform: translateY(-1px);
 }
 .fleet-bear-card.active {
   border-color: var(--accent-gold);
-  background: rgba(200, 121, 30, 0.12);
+  background: rgba(200, 121, 30, 0.16);
+  box-shadow: 0 0 10px rgba(200, 121, 30, 0.2);
 }
 .bear-tag {
   font-size: 9px;
@@ -557,22 +648,76 @@ body {
 .bear-val {
   font-size: 13px;
   color: #FFF;
-  margin: 2px 0;
+  margin: 3px 0;
 }
 .bear-sub {
   font-size: 8px;
   color: var(--fg-muted);
+  text-align: center;
 }
-.fleet-telemetry-box {
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+
+/* 🐻 Inspector Deep Dive Card */
+.fleet-inspector-card {
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(200, 121, 30, 0.3);
   border-radius: 4px;
-  padding: 6px 10px;
+  padding: 8px 10px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
   margin-bottom: 10px;
 }
+.inspector-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 4px;
+}
+.inspector-title {
+  font-size: 11px;
+  font-weight: bold;
+  color: #FFF;
+  letter-spacing: 0.8px;
+}
+.telemetry-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 12px;
+}
+.telemetry-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.cell-label {
+  font-size: 8px;
+  color: var(--fg-muted);
+  letter-spacing: 0.5px;
+}
+.cell-val {
+  font-size: 10px;
+  color: #EEE;
+}
+.inspector-math, .inspector-role {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.math-label {
+  font-size: 8.5px;
+  font-weight: bold;
+  color: var(--accent-gold);
+  letter-spacing: 0.5px;
+}
+.math-desc, .role-desc {
+  font-size: 9.5px;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0;
+  line-height: 1.35;
+}
+
+/* Benchmarks & Telemetry */
 .telemetry-row {
   display: flex;
   justify-content: space-between;
@@ -581,31 +726,66 @@ body {
   color: var(--fg-muted);
 }
 .telemetry-row b {
-  font-size: 11px;
+  font-size: 10.5px;
 }
 .fleet-section-title {
   font-size: 9px;
   font-weight: bold;
   color: var(--accent-gold);
-  letter-spacing: 1.5px;
-  margin-bottom: 4px;
+  letter-spacing: 1.2px;
+  margin: 8px 0 4px 0;
   border-bottom: 1px dashed rgba(200, 121, 30, 0.3);
   padding-bottom: 2px;
 }
+
+/* Presets & Prompts */
+.fleet-presets-row {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+.btn-preset {
+  background: rgba(200, 121, 30, 0.1);
+  border: 1px solid rgba(200, 121, 30, 0.3);
+  border-radius: 3px;
+  color: #DDD;
+  font-size: 9px;
+  padding: 3px 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.btn-preset:hover {
+  background: rgba(200, 121, 30, 0.25);
+  border-color: var(--accent-gold);
+  color: #FFF;
+}
+.btn-preset.data-red {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #fca5a5;
+}
+.btn-preset.data-red:hover {
+  background: rgba(239, 68, 68, 0.25);
+  border-color: #ef4444;
+  color: #FFF;
+}
 .fleet-prompt-row {
   display: flex;
-  gap: 6px;
+  gap: 4px;
   margin-bottom: 8px;
 }
 .fleet-prompt-row input {
   flex: 1;
-  font-size: 11px;
+  font-size: 10.5px;
 }
+
+/* Result Cards & Triad Grid */
 .fleet-result-card {
-  background: rgba(26, 15, 9, 0.9);
+  background: rgba(26, 15, 9, 0.95);
   border: 1px solid var(--border-glass);
   border-radius: 4px;
-  padding: 6px 10px;
+  padding: 8px 10px;
   margin-bottom: 8px;
   display: flex;
   flex-direction: column;
@@ -614,6 +794,82 @@ body {
 .fleet-result-card.hidden {
   display: none;
 }
+.result-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding-bottom: 4px;
+  margin-bottom: 4px;
+}
+.triad-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+}
+.triad-col {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+  padding: 6px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.col-title {
+  font-size: 8.5px;
+  font-weight: bold;
+  color: var(--accent-gold);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding-bottom: 2px;
+  margin-bottom: 2px;
+}
+.col-item {
+  display: flex;
+  flex-direction: column;
+  font-size: 8px;
+  color: var(--fg-muted);
+}
+.col-item b {
+  font-size: 9px;
+  word-break: break-word;
+}
+
+/* 🧭 7 Specialist Domain Bars */
+.domains-bars-container {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-top: 4px;
+}
+.domain-bar-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 8.5px;
+  gap: 6px;
+}
+.domain-bar-row.active {
+  color: var(--accent-gold);
+  font-weight: bold;
+}
+.domain-bar-bg {
+  flex: 1;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.domain-bar-fill {
+  height: 100%;
+  background: var(--accent-cyan);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+.domain-bar-row.active .domain-bar-fill {
+  background: var(--accent-gold);
+}
+
 
 
 

@@ -2378,6 +2378,8 @@ fn main() {
             theory_tuning,
             theory_audition,
             fleet_hub::bears_triad_step,
+            fleet_hub::get_bear_detail,
+            fleet_hub::run_live_gemv_benchmark,
             fleet_hub::bq_route_prompt,
             fleet_hub::mom_dsp_step,
             fleet_hub::resolvent_field_eval,

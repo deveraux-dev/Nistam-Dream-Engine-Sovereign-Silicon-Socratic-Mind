@@ -381,19 +381,34 @@ void main(){
   vec3 ground = mix(deep, mix(moss, violet, smoothstep(0.30, 1.0, 1.0 - v_uv.y)), max(vig, 0.25));
   ground += u_haze.rgb * 0.012 / (dot(v_uv - u_light, v_uv - u_light) * 6.0 + 0.35);
   // NASA Deep Star Maps 2020 Milky Way (public domain), equirect-sampled by
-  // per-pixel view ray, LST-unrotated, graded DS9 steel-silver over the umber.
+  // per-pixel view ray, LST-unrotated, ENB celestial godray & bloom grading.
   if (u_dust_on > 0.5) {
     vec2 ndc = v_uv * 2.0 - 1.0;
     vec4 pf = u_ivp * vec4(ndc, 1.0, 1.0);
-    vec4 pn = u_ivp * vec4(ndc, 0.0, 1.0);
+    vec4 pn = u_ivp * vec4(ndc, -1.0, 1.0);
     vec3 dir = normalize(pf.xyz / pf.w - pn.xyz / pn.w);
     float cl = cos(u_lstr), sl = sin(u_lstr);
     vec3 dd = vec3(dir.x*cl - dir.z*sl, dir.y, dir.x*sl + dir.z*cl);
     float ra = atan(dd.z, dd.x);
     float dec = asin(clamp(dd.y, -1.0, 1.0));
-    vec3 dustc = texture(u_dust, vec2(ra / 6.2831853 + 0.5, 0.5 - dec / 3.14159265)).rgb;
+    vec2 uv_mw = vec2(ra / 6.28318530718 + 0.5, 0.5 - dec / 3.14159265359);
+    vec3 dustc = texture(u_dust, uv_mw).rgb;
+    
+    // ENB Tone Curve & Chromatic Radiance: restore vivid galactic spine, golden core & H-alpha nebulosity
     float dlum = dot(dustc, vec3(0.299, 0.587, 0.114));
-    ground += vec3(0.42, 0.52, 0.68) * dlum * 0.50 + dustc * 0.08;
+    vec3 core_tint = vec3(1.20, 0.95, 0.65);   // Golden galactic core starlight
+    vec3 dust_tint = vec3(0.45, 0.60, 0.85);   // Interstellar scatter & blue reflection
+    vec3 h_alpha   = vec3(1.00, 0.40, 0.65);   // Interstellar hydrogen emission
+    
+    float core_w = smoothstep(0.15, 0.85, dlum);
+    float mid_w  = smoothstep(0.03, 0.45, dlum);
+    
+    vec3 enb_mw = dustc * 1.40 + 
+                  core_tint * (core_w * 0.85) + 
+                  dust_tint * (mid_w * 0.40) + 
+                  h_alpha * (pow(dustc.r, 2.0) * 0.30);
+                  
+    ground += enb_mw * 0.95;
   }
   vec3 comp = ground + color.rgb + texture(u_bloom, v_uv).rgb * 1.15 + fin.rgb * (0.6 + 0.4*mask);
   o = vec4(comp, 1.0);
@@ -691,18 +706,29 @@ void main(){
       glSky.dustCount = 6000;
       // NASA Milky Way equirect (ui/milkyway.jpg, public domain).
       const dimg = new Image();
+      dimg.crossOrigin = 'anonymous';
       dimg.onload = () => {
-        const tx = gl.createTexture();
-        gl.bindTexture(gl.TEXTURE_2D, tx);
-        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, gl.RGBA, gl.UNSIGNED_BYTE, dimg);
-        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-        glSky.dustTex = tx;
-        glSky.dustOn = 1;
+        try {
+          const tx = gl.createTexture();
+          gl.bindTexture(gl.TEXTURE_2D, tx);
+          gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
+          gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, dimg);
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+          glSky.dustTex = tx;
+          glSky.dustOn = 1;
+          console.log('[shell] NASA Milky Way ENB panorama loaded successfully');
+        } catch (texErr) {
+          console.error('[shell] Error uploading milkyway texture to WebGL:', texErr);
+        }
+      };
+      dimg.onerror = (err) => {
+        console.warn('[shell] Failed loading milkyway.jpg directly, trying ./milkyway.jpg:', err);
+        if (!dimg.src.endsWith('./milkyway.jpg')) {
+          dimg.src = './milkyway.jpg';
+        }
       };
       dimg.src = 'milkyway.jpg';
       const u = (p, n) => gl.getUniformLocation(p, n);
@@ -1003,11 +1029,12 @@ void main(){
 
   function updateChainHud() {
     const hud = $('chain-hud');
-    if (!hud) return;
-    if (constellationChain.length > 0 || chainModeActive) {
-      hud.classList.remove('hidden');
-    } else {
-      hud.classList.add('hidden');
+    if (hud) {
+      if (constellationChain.length > 0) {
+        hud.classList.remove('hidden');
+      } else {
+        hud.classList.add('hidden');
+      }
     }
     const cCount = $('chain-node-count');
     if (cCount) cCount.textContent = `${constellationChain.length} nodes`;
@@ -1015,6 +1042,22 @@ void main(){
     if (cMode) {
       cMode.textContent = chainIsLoop ? 'STANDING WAVE RESONANCE' : (constellationChain.length >= 2 ? 'ARPEGGIATOR CHAIN' : 'SOLO NODE');
       cMode.style.color = chainIsLoop ? '#FFD54A' : '#7FB86A';
+    }
+
+    // Update Floating Chaining Pill
+    const hintText = $('chain-hint-text');
+    const btnClear = $('btn-chain-clear');
+    if (constellationChain.length === 0) {
+      if (hintText) hintText.textContent = '✦ Click stars to link harmonic chord';
+      if (btnClear) btnClear.classList.add('hidden');
+    } else if (constellationChain.length === 1) {
+      const s = constellationChain[0];
+      if (hintText) hintText.textContent = `✦ Linked: ${s.name} · Click next star to weave chord`;
+      if (btnClear) btnClear.classList.remove('hidden');
+    } else {
+      const names = constellationChain.map((s) => s.name).join(' → ');
+      if (hintText) hintText.textContent = `✦ ${constellationChain.length}-Star Chain: ${names}`;
+      if (btnClear) btnClear.classList.remove('hidden');
     }
   }
 
@@ -1548,6 +1591,15 @@ void main(){
     $('hud-hz').textContent = `${(s.milli_hz / 1000).toFixed(2)} Hz`;
     $('hud-mag').textContent = s.mag_pmy;
     $('star-hud').classList.remove('hidden');
+
+    // Update Floating Gemma Sky HUD
+    const skyGemmaStatus = $('sky-gemma-status');
+    if (skyGemmaStatus) {
+      skyGemmaStatus.textContent = `Celestial Navigator: Steering toward ${s.name} · SO(5) Active (409.3 Gweights/s)`;
+    }
+
+    // Naturally link to constellation chain
+    toggleConstellationNode(s);
   }
 
   // Crawl + strike: the void (not chrome/terminal) is live sky.
@@ -1623,13 +1675,8 @@ void main(){
       if (d < bestD) { bestD = d; bestStar = s; }
     }
     if (bestStar) {
-      if (ev.shiftKey || chainModeActive) {
-        toggleConstellationNode(bestStar);
-        ringStarIdx(bestStar.idx);
-        return;
-      }
       selectStar(bestStar.idx);
-      ringStar();
+      ringStarIdx(bestStar.idx);
       return;
     }
     // No lore star under the strike — every deep star answers too.
@@ -1638,17 +1685,10 @@ void main(){
     else if (!dossierPinned) $('star-dossier').classList.add('hidden');
   });
 
-  const btnChain = $('btn-chain');
-  if (btnChain) {
-    btnChain.addEventListener('click', () => {
-      chainModeActive = !chainModeActive;
-      btnChain.classList.toggle('active', chainModeActive);
-      updateChainHud();
-    });
-  }
   const btnChainClear = $('btn-chain-clear');
   if (btnChainClear) {
-    btnChainClear.addEventListener('click', () => {
+    btnChainClear.addEventListener('click', (e) => {
+      e.stopPropagation();
       clearConstellationChain();
     });
   }
@@ -2907,87 +2947,33 @@ void main(){
     });
   }
 
-  // ── 🐻 THREE BEARS GEMMA FLEET & TELEMETRY CONTROLS ──
-  const btnFleet = $('btn-fleet');
-  const fleetPanel = $('fleet-panel');
-  const fleetClose = $('fleet-close');
-  if (fleetPanel) makeDraggable(fleetPanel);
+  // ── HEADER NAVIGATION CONTROLS ──
+  const btnNavSky = $('btn-nav-sky');
+  const btnNavTerm = $('btn-nav-term');
+  const btnTheory = $('btn-theory');
 
-  if (btnFleet && fleetPanel) {
-    btnFleet.addEventListener('click', async () => {
-      const isHidden = fleetPanel.classList.toggle('hidden');
-      btnFleet.classList.toggle('active', !isHidden);
-      if (!isHidden) {
-        const vram = await invokeCommand('get_fleet_vram_oracle');
-        if (vram) {
-          $('fleet-vram-committed').textContent =
-            `${vram.committed_mb} MB / ${vram.card_total_mb} MB (RTX 3070 resident)`;
-        }
-      }
+  function setActiveNavTab(activeBtn) {
+    [btnNavSky, btnNavTerm, btnTheory].forEach((b) => {
+      if (b) b.classList.toggle('active', b === activeBtn);
     });
   }
 
-  if (fleetClose && fleetPanel) {
-    fleetClose.addEventListener('click', () => {
-      fleetPanel.classList.add('hidden');
-      if (btnFleet) btnFleet.classList.remove('active');
+  if (btnNavSky) {
+    btnNavSky.addEventListener('click', () => {
+      setActiveNavTab(btnNavSky);
+      if ($('theory-panel')) $('theory-panel').classList.add('hidden');
+      termSetOpen(false);
     });
   }
 
-  const btnFleetRoute = $('btn-fleet-route');
-  if (btnFleetRoute) {
-    btnFleetRoute.addEventListener('click', async () => {
-      const prompt = $('fleet-prompt-input').value.trim();
-      if (!prompt) return;
-      const t0 = performance.now();
-      const res = await invokeCommand('bq_route_prompt', { prompt });
-      const dt = performance.now() - t0;
-      if (res) {
-        $('fleet-res-domain').textContent = res.top_specialist;
-        $('fleet-res-margin').textContent = `d=${res.top_distance} | margin=${res.margin} (${res.margin_trit > 0 ? '+1 Signal' : '0 Deadband'})`;
-        $('fleet-res-latency').textContent = `${(dt * 1000).toFixed(1)} µs IPC round-trip (router core: 363.4 ns)`;
-        $('fleet-route-result').classList.remove('hidden');
-      }
-    });
-  }
-
-  const btnFleetStep = $('btn-fleet-step');
-  if (btnFleetStep) {
-    btnFleetStep.addEventListener('click', async () => {
-      const prompt = $('fleet-prompt-input').value.trim();
-      if (!prompt) return;
-      const res = await invokeCommand('bears_triad_step', { prompt });
-      if (res) {
-        $('fleet-baby-m5').textContent = `[${res.baby_m5_coords.join(', ')}] · State ${res.baby_m5_state}`;
-        $('fleet-papa-nipr').textContent = `${res.papa_nipr_pmy} pmy · Attractor: ${res.papa_is_attractor ? 'YES' : 'NO'}`;
-        $('fleet-mama-verdict').textContent = `${res.mama_verdict} (${res.mama_adr0026_scrubbed ? 'SCRUBBED' : 'CLEAN'})`;
-        $('fleet-triad-result').classList.remove('hidden');
-      }
-    });
-  }
-
-  const btnFleetCelestial = $('btn-fleet-celestial');
-  if (btnFleetCelestial) {
-    btnFleetCelestial.addEventListener('click', async () => {
-      const userMessage = $('fleet-prompt-input').value.trim();
-      if (!userMessage) return;
-      const res = await invokeCommand('generate_celestial_dialogue', {
-        userMessage,
-        currentKey: '8A',
-        consonancePmy: 9000
-      });
-      if (res && res.star_hop) {
-        $('fleet-celestial-hop').textContent =
-          `${res.star_hop.star_name} (${res.star_hop.camelot_key} · idx ${res.star_hop.star_idx})`;
-        $('fleet-celestial-5d').textContent =
-          `[${res.star_hop.input_5d.map(v => v.toFixed(3)).join(', ')}] (Zero-Heap L2 NN)`;
-        $('fleet-celestial-turn').textContent =
-          `${res.star_hop.narration} (Domain: ${res.specialist_domain}, 3σ Margin: ${res.domain_margin})`;
-        $('fleet-celestial-result').classList.remove('hidden');
-
-        if (typeof res.star_hop.star_idx === 'number') {
-          showDossier(res.star_hop.star_idx);
-        }
+  if (btnNavTerm) {
+    btnNavTerm.addEventListener('click', () => {
+      const isClosed = $('term-dock').classList.contains('collapsed');
+      termSetOpen(isClosed);
+      if (isClosed) {
+        setActiveNavTab(btnNavTerm);
+      } else {
+        setActiveNavTab(btnNavSky);
       }
     });
   }

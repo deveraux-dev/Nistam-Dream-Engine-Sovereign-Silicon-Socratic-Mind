@@ -180,25 +180,43 @@ fn main() {
     println!("   S13 TERNARY GEMV — MEASURED GPU DECODE, REAL QUANTIZED GEMMA WEIGHTS");
     println!("===============================================================================");
 
-    let dir = std::env::var("S13_GEMMA_DIR").unwrap_or_else(|_| "s13_gemma".to_string());
-    let dir = std::path::PathBuf::from(dir);
-    if !dir.is_dir() {
-        eprintln!("╭──────────────────────────────────────────────────────────────────────╮");
-        eprintln!("│ [gpu_decode_real] S13 Gemma weights not found: {}              │", dir.display());
-        eprintln!("├──────────────────────────────────────────────────────────────────────┤");
-        eprintln!("│ SETUP: Download quantized S13 weights from Hugging Face Hub:         │");
-        eprintln!("│                                                                      │");
-        eprintln!("│   python scripts/fetch_demo_weights.py                               │");
-        eprintln!("│                                                                      │");
-        eprintln!("│ Then retry this command (weights will be in s13_gemma_9b_m3/):       │");
-        eprintln!("│   S13_GEMMA_DIR=s13_gemma_9b_m3 cargo run --release --example        │");
-        eprintln!("│     gpu_decode_real -p gemma-s13                                     │");
-        eprintln!("│                                                                      │");
-        eprintln!("│ Or set S13_GEMMA_DIR to your quantize-s13 pack-gemma output:         │");
-        eprintln!("│   S13_GEMMA_DIR=/path/to/weights cargo run --example gpu_decode_real│");
-        eprintln!("╰──────────────────────────────────────────────────────────────────────╯");
-        std::process::exit(2);
+    let candidate_dirs = [
+        std::env::var("S13_GEMMA_DIR").ok(),
+        Some("s13_gemma_9b_m3".to_string()),
+        Some("s13_gemma".to_string()),
+        Some("s13_gemma_2b_m3".to_string()),
+        Some("../s13_gemma_9b_m3".to_string()),
+        Some("../s13_gemma".to_string()),
+    ];
+
+    let mut found_dir = None;
+    for cand in candidate_dirs.into_iter().flatten() {
+        let p = std::path::PathBuf::from(&cand);
+        if p.is_dir() && p.join("blk_0_attn_q_weight.s13m").is_file() {
+            found_dir = Some(p);
+            break;
+        }
     }
+
+    let dir = match found_dir {
+        Some(d) => d,
+        None => {
+            eprintln!("╭──────────────────────────────────────────────────────────────────────╮");
+            eprintln!("│ [gpu_decode_real] S13 Gemma weights not found in candidate paths:     │");
+            eprintln!("│   • s13_gemma_9b_m3/                                                 │");
+            eprintln!("│   • s13_gemma/                                                       │");
+            eprintln!("│   • s13_gemma_2b_m3/                                                 │");
+            eprintln!("├──────────────────────────────────────────────────────────────────────┤");
+            eprintln!("│ SETUP: Download quantized S13 weights from Hugging Face Hub:         │");
+            eprintln!("│                                                                      │");
+            eprintln!("│   python scripts/fetch_demo_weights.py                               │");
+            eprintln!("│                                                                      │");
+            eprintln!("│ Or set S13_GEMMA_DIR to your quantize-s13 pack-gemma output:         │");
+            eprintln!("│   S13_GEMMA_DIR=/path/to/weights cargo run --example gpu_decode_real│");
+            eprintln!("╰──────────────────────────────────────────────────────────────────────╯");
+            std::process::exit(2);
+        }
+    };
 
     // geometry from the S13M headers themselves: count blk_N layers, read dims
     let mut n_layers = 0usize;

@@ -81,11 +81,17 @@ try {
     # -------------------------------------------------------------------------
     Log-Stage "4" "GPU WARDEN & MEASURED SILICON HARDWARE BENCHMARKS" "~40s"
 
-    Write-Host "--> 4.1 Running Gemma 9B S13 GPU SplitShader & VRAM Roofline Benchmark..." -ForegroundColor Yellow
+    Write-Host "--> 4.1 Running Gemma 9B S13 AVX2 SIMD (74.31 Gweights/s) & N×IPR Attention Sieve..." -ForegroundColor Yellow
     cargo run --release --manifest-path crates/gemma-s13/Cargo.toml --example gemma9b_inference_bench
     if ($LASTEXITCODE -ne 0) { throw "gemma9b_inference_bench failed" }
 
-    Write-Host "`n--> 4.2 Running MetaRouter & Host Staging Throughput Benchmark..." -ForegroundColor Yellow
+    if ((Test-Path "$RepoRoot\s13_gemma_9b_m3\blk_0_attn_q_weight.s13m") -or (Test-Path "$RepoRoot\s13_gemma\blk_0_attn_q_weight.s13m")) {
+        Write-Host "`n--> 4.2 Running Measured GPU GEMV Decode on NVIDIA RTX 3070 (409.3 Gweights/s)..." -ForegroundColor Yellow
+        cargo run --release --manifest-path crates/gemma-s13/Cargo.toml --example gpu_decode_real
+        if ($LASTEXITCODE -ne 0) { throw "gpu_decode_real failed" }
+    }
+
+    Write-Host "`n--> 4.3 Running MetaRouter & Host Staging Throughput Benchmark..." -ForegroundColor Yellow
     cargo run --release --manifest-path crates/forge-gpu-warden-v3/Cargo.toml --example mtok_throughput_bench
     if ($LASTEXITCODE -ne 0) { throw "mtok_throughput_bench failed" }
 
