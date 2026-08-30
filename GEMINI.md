@@ -36,7 +36,7 @@
 
 ## 🏆 MANDATORY COMPETITION STACK & DELIVERABLES
 
-1. **Gemini 3.5+ (Vertex AI / Gemini 2.5 Flash)**:
+1. **Gemini 2.5 Flash (Vertex AI)**:
    - Driven via deterministic temperature `0.0` in `scripts/gemini_context_cache.py` and `scripts/vertex_flash_cache.py`.
    - Enforces `$0.0004/call` unit-cost governor ceiling under the 450k-token VARS context window.
 2. **Agent Framework = Antigravity**:

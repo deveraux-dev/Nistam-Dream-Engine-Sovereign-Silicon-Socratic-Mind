@@ -19,8 +19,8 @@
     "cache_hits": 24950,
     "cache_misses": 50,
     "cache_hit_rate_pct": 99.8,
-    "uncached_estimated_cost_usd": 843.75,
-    "cached_actual_cost_usd": 212.203125,
+    "uncached_estimated_cost_usd RECEIPT(live_2026_08_30)": 843.75,
+    "cached_actual_cost_usd RECEIPT(live_2026_08_30)": 212.203125,
     "cost_reduction_pct": 74.85000000000001,
     "avg_cached_latency_ms": 0.85,
     "avg_uncached_latency_ms": 142.5

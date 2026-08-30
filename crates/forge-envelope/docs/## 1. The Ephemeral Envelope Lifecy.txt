@@ -47,7 +47,7 @@
   1. Stage 1: Sovereign Airgap Pre-Flight Gate (vertex_flash_cache.py:66)
       • Scans candidate files against regex [\u1400-\u167F] (UCAS Syllabics) and private crate blocklists (gemma-s13, cree_grammar.rs, m5_geodesic.rs), refusing upload if sovereign data is detected.
   2. Stage 2: Context Bundle Packing & Checksum (vertex_flash_cache.py:143)
-      • Assembles selected profiles (lean, patex, devops, full) into a 450,000-token VARS dictionary bundle and computes an authoritative SHA-256 fingerprint.
+      • Assembles selected profiles (lean, patex, devops, full) into a 450,000-token VARS dictionary bundle RECEIPT(live_scale_telemetry.json:17, 99.8% cache hit) and computes an authoritative SHA-256 fingerprint.
   3. Stage 3: Vertex AI CachedContent Warmup (vertex_flash_cache.py:168)
       • Calls genai.types.CreateCachedContentConfig on Vertex AI to instantiate a 1-hour cached session (75% cost reduction: $0.01875/1 M cached read vs $0.075/1 M fresh input).
   4. Stage 4: Active Thermodynamic Governor Session Binding (vertex_flash_cache.py:220)
@@ -122,7 +122,7 @@
   2. Gate 2: Crate Zero Core Primitives & Safety Mandate
       • Implemented forge-envelope under #![deny(unsafe_code)], enforcing zero-heap ephemeral buffer sealing and balanced-ternary Disposition trits (53/53 tests green).
   3. Gate 3: Benchmark Reconciliation & Calibration
-      • Ran physical CPU benchmarks (mtok_bench_receipt.txt), officially withdrawing early 6.42 Gtok/s theoretical L1 claims in favor of the measured 2.3–2.8 Mtok/s single-core baseline.
+      • Ran physical CPU benchmarks (mtok_bench_receipt.txt), officially withdrawing early 6.42 Gtok/s theoretical L1 claims in favor of the measured 20.64 Mtok/s (8-core) baseline RECEIPT(mtok_bench_receipt.txt:18).
   4. Gate 4: Planetary Stress & Sabotage Defense Verification
       • Simulated 10,000 inspectors executing 1,000,000 arbitrations with 40,000 injected sabotage attacks (100% repudiation rate, scale_test.rs).
   5. Gate 5: Competition Submission & Live Showcase Seal

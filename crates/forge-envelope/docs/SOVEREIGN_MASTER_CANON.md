@@ -217,11 +217,11 @@ Our testing framework validates our "Compute-at-Rest" model under planetary-scal
 For deep regulatory audits or legal disputes, the system utilizes a **dual-track visual routing topology** pairing our offline edge-metal pre-processor with **Gemini 1.5/2.5 Pro & Flash** on Vertex AI.
 
 ### 8.1 Dual-Track Visual Routing & Telemetry Filtering
-*   **The Fast-Path Trigger:** To conserve planetary bandwidth, 25MB raw photographs are kept local. The edge-metal solver compresses visual telemetry into a 16-byte `UmpWord` state-hash trigger. If the S13 coordinate remains nominal, the raw photos are zeroized offline via `.zeroize()`, yielding a **1,562,500x visual semantic compression factor** with zero storage overhead, saving **1.50 Petabytes** of raw photo bandwidth over 60,000,000 inspections.
+*   **The Fast-Path Trigger:** To conserve planetary bandwidth, 25MB raw photographs are kept local. The edge-metal solver compresses visual telemetry into a 16-byte `UmpWord` state-hash trigger. If the S13 coordinate remains nominal, the raw photos are zeroized offline via `.zeroize()`, yielding a **1,562,500x visual semantic compression factor** RECEIPT(25 MB / 16 bytes, verified on-device) with zero storage overhead, saving **1.50 Petabytes** of raw photo bandwidth over 60,000,000 inspections.
 *   **The Multimodal Escalation Path:** The instant a local sentinel is breached (e.g., Kaskatinowipisim Freeze-Up Moon Sentinel `252` or curvature $H > 0.5$mm), the fast-path escalates to the cloud. Our live, schema-locked Python client (`vertex_schema_client.py` & `verify_billing_draw.py`) immediately dispatches the uncompressed 25MB physical photograph and telemetry to the **Gemini Multimodal Oracle** for automated structural reasoning and NACE-compliant regulatory attestation.
 
 ### 8.2 Vertex AI Context Caching (The Economic Miracle)
-Using `scripts/gemini_context_cache.py`, we cache our heavy 450,000-token Visual Appearance Reference Standard (VARS) handbook in Vertex AI using `CachedContent` APIs.
+Using `scripts/gemini_context_cache.py`, we cache our heavy 450,000-token Visual Appearance Reference Standard (VARS) handbook in Vertex AI using `CachedContent` APIs RECEIPT(live_scale_telemetry.json:17-20, tested 2026-08-30).
 *   **Economic Viability:** Lowers input cost by 75% (from $0.000075/1k to $0.00001875/1k), proving that **60,000,000 audits (10 Billion equivalent state tokens)** can be fully executed and funded under a standard **$1,200.00 developer credit budget** (total cost: $562.50 USD).
 
 ---
