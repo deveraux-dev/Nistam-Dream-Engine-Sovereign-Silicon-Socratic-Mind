@@ -2979,7 +2979,6 @@ void main(){
   }
 
   // ── ♪ HARMONIC THEORY PANEL CONTROLS ──
-  const btnTheory = $('btn-theory');
   const theoryPanel = $('theory-panel');
   const theoryClose = $('theory-close');
   if (theoryPanel) makeDraggable(theoryPanel);
