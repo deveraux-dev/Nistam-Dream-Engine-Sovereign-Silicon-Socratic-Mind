@@ -1602,8 +1602,8 @@ void main(){
     toggleConstellationNode(s);
   }
 
-  // Crawl + strike: the void (not chrome/terminal) is live sky.
-  const onVoid = (ev) => !ev.target.closest('.term-dock, .app-header, .status-pane, .star-hud, .rite-pane, .dossier, button, input, label');
+  // Crawl + strike: the void (not chrome/terminal/docks/HUD) is live sky.
+  const onVoid = (ev) => !ev.target.closest('.term-dock, .app-header, .status-pane, .star-hud, .rite-pane, .dossier, .hud-5d-bar, .star-dock-row, .floating-chain-pill, .floating-sky-hud, .chain-hud, button, input, label, select');
   let voidDrag = false, voidPan = false, voidMoved = 0, voidX = 0, voidY = 0;
   window.addEventListener('mousedown', (ev) => {
     if (!onVoid(ev)) return;
@@ -1688,6 +1688,13 @@ void main(){
   const btnChainClear = $('btn-chain-clear');
   if (btnChainClear) {
     btnChainClear.addEventListener('click', (e) => {
+      e.stopPropagation();
+      clearConstellationChain();
+    });
+  }
+  const btnChainHudClear = $('btn-chain-hud-clear');
+  if (btnChainHudClear) {
+    btnChainHudClear.addEventListener('click', (e) => {
       e.stopPropagation();
       clearConstellationChain();
     });
@@ -2198,7 +2205,7 @@ void main(){
     });
     window.addEventListener('mouseup', () => { drag = false; });
   }
-  makeDraggable($('star-dossier'));
+  // star-dossier is docked at the bottom above footer (do not make draggable)
   makeDraggable($('star-hud'));
 
   // ── Terminal dock (ConPTY → VT500 grid frames from the backend) ──
