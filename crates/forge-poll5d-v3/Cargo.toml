@@ -1,0 +1,21 @@
+# T4 of the forge-vision drain (plan-2-welds.md tranche table, 2026-08-11):
+# the 05 poll5d quarry re-founded onto two exact words: Octal64 (64 bytes,
+# 20 3-bit tier slots = 60 bits + 4 spare, aligned to the trit byte
+# grammar) and Morton8 (8 bytes, 5-axis Z-order code at 10 bits per axis).
+# Self-contained; the k-NN/adaptive-poll algorithms arrive in later
+# tranches as functions over these types, never as a second home.
+[package]
+name = "forge-poll5d-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+
+# Morton8's file rides xtask's textual mount for the spine face (sky.rs
+# precedent); `sky-mount` compiles it data-only there — tests keep ONE home.
+[features]
+sky-mount = []
+
+[lints]
+workspace = true

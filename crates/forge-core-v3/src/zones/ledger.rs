@@ -2,24 +2,43 @@
 //! Append-only, tick-bounded mutation ledger for cell edits.
 //!
 //! Records the before/after state of every Pexil mutation with a deterministic seal,
-//! enabling tamper-evident playback and audit trails.
+//! enabling tamper-evident playback and audit trails. Hybrid gate: always appends a
+//! 2-bit triage class (LANDMARK/NEUTRAL/DIFFUSE) computed via NIPR; appends the full
+//! mutation payload only when `is_landmark()` is true.
 
 use crate::atom::{CellOrdinal, Pexil};
+
+/// Mutation localization triage: balanced ternary {-1, 0, +1}.
+#[repr(u8)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum TriageClass {
+    /// Diffuse / noisy (NIPR < DIFFUSE_PMY=2500).
+    Diffuse = 0,
+    /// Neutral / equilibrium (2500 <= NIPR < LANDMARK_PMY=7500).
+    Neutral = 1,
+    /// Landmark / active (NIPR >= LANDMARK_PMY=7500).
+    Landmark = 2,
+}
+
+const LANDMARK_PMY: u16 = 7500;
+const DIFFUSE_PMY: u16 = 2500;
+const PERMYRIAD_SCALE: u128 = 10_000;
 
 /// One row in the mutation ledger.
 ///
 /// Each row records a single cell mutation: the ordinal being changed, the engine tick
 /// it occurred on, the before and after states, and a deterministic seal computed from
-/// these fields to detect tampering.
+/// these fields to detect tampering. Triage class (LANDMARK/NEUTRAL/DIFFUSE) is always
+/// recorded; full before/after payload is stored only for landmarks.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct LedgerRow {
     /// The cell being mutated.
     pub ordinal: CellOrdinal,
     /// The engine tick this mutation occurred on.
     pub tick: u64,
-    /// The cell state before the mutation.
+    /// The cell state before the mutation (stored only when triage is Landmark; may be zeroed otherwise).
     pub before: Pexil,
-    /// The cell state after the mutation.
+    /// The cell state after the mutation (stored only when triage is Landmark; may be zeroed otherwise).
     pub after: Pexil,
     /// World coordinate `(x, y, z, w)` this mutation happened at — NOT derivable
     /// from `ordinal` (every cell starts `CellOrdinal(0)` and nothing in this
@@ -29,6 +48,8 @@ pub struct LedgerRow {
     /// FNV-1a-derived seal of `(ordinal, tick, before, after, world)`. Deterministic
     /// and independent of insertion order; tampering with any field breaks this hash.
     pub seal: [u8; 32],
+    /// NIPR-based triage class: Landmark, Neutral, or Diffuse.
+    pub triage: TriageClass,
 }
 
 /// An append-only ledger of cell mutations.
@@ -51,11 +72,36 @@ impl MutationLedger {
     /// Append one mutation row to the ledger.
     ///
     /// Computes the row's seal deterministically from its fields (ordinal, tick, before,
-    /// after, world) using FNV-1a hashing, then pushes the completed row. No temporary
-    /// allocations beyond the Vec's own growth.
+    /// after, world) using FNV-1a hashing. Triages the mutation via NIPR over the payload
+    /// delta. Always pushes the triage class (~30 B/s at 120 Hz); stores full before/after
+    /// only when triage is Landmark. Non-landmark rows have before/after zeroed.
     pub fn append(&mut self, ordinal: CellOrdinal, tick: u64, before: Pexil, after: Pexil, world: (usize, usize, usize, i8)) {
         let seal = compute_seal(ordinal, tick, before, after, world);
-        let row = LedgerRow { ordinal, tick, before, after, world, seal };
+        let triage = compute_triage(&before, &after);
+
+        let (stored_before, stored_after) = if triage == TriageClass::Landmark {
+            (before, after)
+        } else {
+            // Neutral and Diffuse mutations: zero the before/after to save space.
+            // Triage class and seal are always preserved for sequence integrity.
+            let zero_pexil = Pexil {
+                lattice: before.lattice,
+                validity: before.validity,
+                ordinal: before.ordinal,
+                payload: [0u8; 4],
+            };
+            (zero_pexil, zero_pexil)
+        };
+
+        let row = LedgerRow {
+            ordinal,
+            tick,
+            before: stored_before,
+            after: stored_after,
+            world,
+            seal,
+            triage,
+        };
         self.rows.push(row);
     }
 
@@ -186,6 +232,49 @@ fn pack_pexil(pexil: &Pexil, out: &mut [u8; 8]) {
     out[1] = pexil.validity.0;
     out[2..4].copy_from_slice(&pexil.ordinal.0.to_le_bytes());
     out[4..8].copy_from_slice(&pexil.payload);
+}
+
+/// Compute the Normalized Inverse Participation Ratio (NIPR) over a payload delta.
+/// Returns the permyriad value (0..=10000), computed via the formula:
+/// N × IPR = (N·S2 − S1²) / ((N−1)·S1²) × 10000, where S1 = Σv and S2 = Σv².
+fn compute_nipr(before: &Pexil, after: &Pexil) -> u16 {
+    let n = 4u128; // Payload is 4 bytes
+
+    // Compute S1 (sum of absolute changes) and S2 (sum of squared changes).
+    let mut s1: u128 = 0;
+    let mut s2: u128 = 0;
+
+    for i in 0..4 {
+        let delta = (after.payload[i] as i16 - before.payload[i] as i16).abs() as u128;
+        s1 += delta;
+        s2 += delta * delta;
+    }
+
+    if s1 == 0 || n == 0 {
+        return 0;
+    }
+
+    if n == 1 {
+        return 10_000;
+    }
+
+    // NIPR formula: (N·S2 − S1²) / ((N−1)·S1²) × 10000
+    let s1_sq = s1 * s1;
+    let numerator = (n * s2 - s1_sq) * PERMYRIAD_SCALE;
+    let denominator = (n - 1) * s1_sq;
+
+    let pmy = ((numerator / denominator).min(10_000)) as u16;
+    pmy
+}
+
+/// Triage a mutation based on NIPR thresholds: Landmark (>= 7500), Neutral (2500..7500), Diffuse (< 2500).
+fn compute_triage(before: &Pexil, after: &Pexil) -> TriageClass {
+    let pmy = compute_nipr(before, after);
+    match pmy {
+        p if p >= LANDMARK_PMY => TriageClass::Landmark,
+        p if p >= DIFFUSE_PMY => TriageClass::Neutral,
+        _ => TriageClass::Diffuse,
+    }
 }
 
 #[cfg(test)]

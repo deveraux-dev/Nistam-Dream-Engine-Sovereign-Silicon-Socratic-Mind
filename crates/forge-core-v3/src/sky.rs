@@ -136,6 +136,21 @@ impl Spectral {
     }
 }
 
+/// Historical name record: era, culture, scripts, meaning.
+#[derive(Debug, Clone, Copy)]
+pub struct NameRecord {
+    /// Era year: negative = BCE, positive = CE.
+    pub era_year: i16,
+    /// Cultural origin or language family.
+    pub culture: &'static str,
+    /// Original script representation.
+    pub original_script: &'static str,
+    /// Romanized or transliterated form.
+    pub transliteration: &'static str,
+    /// Literal or figurative meaning.
+    pub meaning: &'static str,
+}
+
 /// One star: name, constellation, magnitude, spiritual weight, colour.
 #[derive(Debug, Clone, Copy)]
 pub struct Star {
@@ -150,6 +165,8 @@ pub struct Star {
     pub brightness: Brightness,
     /// Spectral class: colour and season.
     pub spectral: Spectral,
+    /// Historical lineage: earliest known name through modern IAU designation.
+    pub lineage: &'static [NameRecord],
 }
 
 impl Star {
@@ -177,6 +194,87 @@ fn fnv1a_hash(s: &str) -> u64 {
     hash
 }
 
+const SIRIUS_LINEAGE: &[NameRecord] = &[
+    NameRecord { era_year: -2000, culture: "Egyptian", original_script: "𓇲𓏏𓅆", transliteration: "Sopdet", meaning: "Star of the Nile Flood" },
+    NameRecord { era_year: -800, culture: "Arabic", original_script: "الشعرى", transliteration: "al-Shi'ra", meaning: "the Brilliance" },
+    NameRecord { era_year: 1600, culture: "European", original_script: "Sirius", transliteration: "Sirius", meaning: "From Greek seirion, scorching" },
+];
+
+const RIGEL_LINEAGE: &[NameRecord] = &[
+    NameRecord { era_year: -800, culture: "Arabic", original_script: "رجل الجوزاء", transliteration: "Rijl al-Jauzā'", meaning: "Leg of Orion" },
+    NameRecord { era_year: 1600, culture: "European", original_script: "Rigel", transliteration: "Rigel", meaning: "Arabization of foot/leg" },
+];
+
+const BETELGEUSE_LINEAGE: &[NameRecord] = &[
+    NameRecord { era_year: -800, culture: "Arabic", original_script: "بيت الجوزاء", transliteration: "Bayt al-Jauzā'", meaning: "Shoulder of Orion (arm of)" },
+    NameRecord { era_year: 1600, culture: "European", original_script: "Betelgeuse", transliteration: "Betelgeuse", meaning: "Corruption of Arabic bayt al-jauzā'" },
+];
+
+const CAPELLA_LINEAGE: &[NameRecord] = &[
+    NameRecord { era_year: -200, culture: "Greek", original_script: "Αἴξ", transliteration: "Aix", meaning: "the Goat" },
+    NameRecord { era_year: 500, culture: "Latin", original_script: "Capella", transliteration: "Capella", meaning: "little goat (feminine)" },
+];
+
+const PROCYON_LINEAGE: &[NameRecord] = &[
+    NameRecord { era_year: -200, culture: "Greek", original_script: "Προκύων", transliteration: "Pro Kyon", meaning: "before the Dog (Star)" },
+    NameRecord { era_year: 1600, culture: "European", original_script: "Procyon", transliteration: "Procyon", meaning: "From Greek pro kyon" },
+];
+
+const MORNING_STAR_LINEAGE: &[NameRecord] = &[
+    NameRecord { era_year: -1000, culture: "Akkadian", original_script: "𒌚𒋧𒊬", transliteration: "Ishtar", meaning: "Goddess of morning/evening" },
+    NameRecord { era_year: 500, culture: "Latin", original_script: "Stella Matutina", transliteration: "Morning Star", meaning: "Star of the morning" },
+];
+
+const POLARIS_LINEAGE: &[NameRecord] = &[
+    NameRecord { era_year: -1, culture: "Arabic", original_script: "النجية الشمالية", transliteration: "al-Nujayya al-Šamāliyya", meaning: "northern star" },
+    NameRecord { era_year: 1600, culture: "European", original_script: "Polaris", transliteration: "Polaris", meaning: "From Latin stella polaris" },
+];
+
+const DENEB_LINEAGE: &[NameRecord] = &[
+    NameRecord { era_year: -800, culture: "Arabic", original_script: "ذنب الدجاجة", transliteration: "Dhanab al-Dajaja", meaning: "Tail of the Hen" },
+    NameRecord { era_year: 1600, culture: "European", original_script: "Deneb", transliteration: "Deneb", meaning: "Arabic word for tail" },
+];
+
+const ALTAIR_LINEAGE: &[NameRecord] = &[
+    NameRecord { era_year: -800, culture: "Arabic", original_script: "الناصر الطائر", transliteration: "al-Nasr al-Ṭā'ir", meaning: "the Flying Eagle" },
+    NameRecord { era_year: 1600, culture: "European", original_script: "Altair", transliteration: "Altair", meaning: "From Arabic al-nasr al-tāir" },
+];
+
+const SPICA_LINEAGE: &[NameRecord] = &[
+    NameRecord { era_year: -800, culture: "Arabic", original_script: "السماك الأعزل", transliteration: "al-Simāk al-A'zal", meaning: "the Disarmed One" },
+    NameRecord { era_year: 500, culture: "Latin", original_script: "Spica Virginis", transliteration: "Spica", meaning: "Ear of grain in Virgo's hand" },
+];
+
+const VEGA_LINEAGE: &[NameRecord] = &[
+    NameRecord { era_year: -800, culture: "Arabic", original_script: "واقع", transliteration: "Wāqiʿ", meaning: "the Landing Eagle or Falling" },
+    NameRecord { era_year: 1600, culture: "European", original_script: "Vega", transliteration: "Vega", meaning: "From Arabic wāqiʿ" },
+];
+
+const ARCTURUS_LINEAGE: &[NameRecord] = &[
+    NameRecord { era_year: -200, culture: "Greek", original_script: "Αρκτοῦρος", transliteration: "Arktoûros", meaning: "Bear-watcher/Guardian of Bear" },
+    NameRecord { era_year: -800, culture: "Arabic", original_script: "السماك الرامح", transliteration: "Al-Simak al-Ramih", meaning: "the Spear-thrower" },
+];
+
+const PLEIADES_LINEAGE: &[NameRecord] = &[
+    NameRecord { era_year: -300, culture: "Greek", original_script: "Πλειάδες", transliteration: "Pleiades", meaning: "the Seven Sisters" },
+    NameRecord { era_year: 500, culture: "Latin", original_script: "Pleiades", transliteration: "Pleiades", meaning: "From Greek pleiades" },
+];
+
+const BIG_DIPPER_LINEAGE: &[NameRecord] = &[
+    NameRecord { era_year: -2000, culture: "Proto-Indo-European", original_script: "Ursa Major", transliteration: "Ursae Majoris", meaning: "Great Bear constellation" },
+    NameRecord { era_year: 1600, culture: "European", original_script: "Big Dipper", transliteration: "Big Dipper", meaning: "Ladle/plow shape" },
+];
+
+const ANDROMEDA_LINEAGE: &[NameRecord] = &[
+    NameRecord { era_year: -200, culture: "Greek", original_script: "Ανδρομέδα", transliteration: "Andromeda", meaning: "Chained maiden" },
+    NameRecord { era_year: 1600, culture: "European", original_script: "Andromeda Galaxy", transliteration: "Andromeda", meaning: "From Greek mythology" },
+];
+
+const MILKY_WAY_LINEAGE: &[NameRecord] = &[
+    NameRecord { era_year: -200, culture: "Greek", original_script: "κύκλος γαλακτικός", transliteration: "Galaxías kýklos", meaning: "milky circle" },
+    NameRecord { era_year: 500, culture: "Latin", original_script: "Via Lactea", transliteration: "Via Lactea", meaning: "Milky Way" },
+];
+
 /// The 13moons star-lore catalog: named stars and asterisms with their
 /// spiritual and spectral properties. Every magnitude verbatim from the v2 lore.
 pub const CATALOG: [Star; 16] = [
@@ -187,6 +285,7 @@ pub const CATALOG: [Star; 16] = [
         mag_permyriad: -14600,
         brightness: Brightness::SpiritFire,
         spectral: Spectral::Frost,
+        lineage: SIRIUS_LINEAGE,
     },
     Star {
         name: "Rigel",
@@ -195,6 +294,7 @@ pub const CATALOG: [Star; 16] = [
         // v2 BRIGHTNESS_LADDER (stars.rs:35): mag 1300 > 0 ⇒ GuideStar.
         brightness: Brightness::GuideStar,
         spectral: Spectral::BoneStar,
+        lineage: RIGEL_LINEAGE,
     },
     Star {
         name: "Betelgeuse",
@@ -202,6 +302,7 @@ pub const CATALOG: [Star; 16] = [
         mag_permyriad: 4200,
         brightness: Brightness::GuideStar,
         spectral: Spectral::Wisakedjak,
+        lineage: BETELGEUSE_LINEAGE,
     },
     Star {
         name: "Capella",
@@ -209,6 +310,7 @@ pub const CATALOG: [Star; 16] = [
         mag_permyriad: 800,
         brightness: Brightness::GuideStar,
         spectral: Spectral::AskiyGold,
+        lineage: CAPELLA_LINEAGE,
     },
     Star {
         name: "Procyon",
@@ -216,6 +318,7 @@ pub const CATALOG: [Star; 16] = [
         mag_permyriad: 3400,
         brightness: Brightness::GuideStar,
         spectral: Spectral::AskiyGold,
+        lineage: PROCYON_LINEAGE,
     },
     Star {
         name: "Morning Star",
@@ -223,6 +326,7 @@ pub const CATALOG: [Star; 16] = [
         mag_permyriad: -46000,
         brightness: Brightness::SpiritFire,
         spectral: Spectral::Wanderer,
+        lineage: MORNING_STAR_LINEAGE,
     },
     // GuideStar: wayfinding home. Navigation becomes unreliable under the Walker.
     Star {
@@ -231,6 +335,7 @@ pub const CATALOG: [Star; 16] = [
         mag_permyriad: 19800,
         brightness: Brightness::GuideStar,
         spectral: Spectral::AskiyGold,
+        lineage: POLARIS_LINEAGE,
     },
     Star {
         name: "Deneb",
@@ -238,6 +343,7 @@ pub const CATALOG: [Star; 16] = [
         mag_permyriad: 12500,
         brightness: Brightness::GuideStar,
         spectral: Spectral::Frost,
+        lineage: DENEB_LINEAGE,
     },
     Star {
         name: "Altair",
@@ -245,6 +351,7 @@ pub const CATALOG: [Star; 16] = [
         mag_permyriad: 7700,
         brightness: Brightness::GuideStar,
         spectral: Spectral::Frost,
+        lineage: ALTAIR_LINEAGE,
     },
     Star {
         name: "Spica",
@@ -255,6 +362,7 @@ pub const CATALOG: [Star; 16] = [
         // buckets to BONE_STAR (:223). Was Frost — a transcription slip caught
         // 2026-08-12 when the boon table made spectral load-bearing.
         spectral: Spectral::BoneStar,
+        lineage: SPICA_LINEAGE,
     },
     Star {
         name: "Vega",
@@ -262,6 +370,7 @@ pub const CATALOG: [Star; 16] = [
         mag_permyriad: 300,
         brightness: Brightness::GuideStar,
         spectral: Spectral::Frost,
+        lineage: VEGA_LINEAGE,
     },
     // AncestorLight: distant but present. Naked-eye stars most dwell here.
     Star {
@@ -270,6 +379,7 @@ pub const CATALOG: [Star; 16] = [
         mag_permyriad: -500,
         brightness: Brightness::SpiritFire,
         spectral: Spectral::TheForge,
+        lineage: ARCTURUS_LINEAGE,
     },
     Star {
         name: "Pleiades",
@@ -279,6 +389,7 @@ pub const CATALOG: [Star; 16] = [
         // B6III in the v2 microcanon (celestial_alignment.rs:202); same B-prefix
         // rule as Spica and Rigel. Was Frost — the same 2026-08-12 slip.
         spectral: Spectral::BoneStar,
+        lineage: PLEIADES_LINEAGE,
     },
     Star {
         name: "Big Dipper",
@@ -286,6 +397,7 @@ pub const CATALOG: [Star; 16] = [
         mag_permyriad: 18000,
         brightness: Brightness::GuideStar,
         spectral: Spectral::Frost,
+        lineage: BIG_DIPPER_LINEAGE,
     },
     // TheDistant & Meskanaw: impossible far or the spirit path itself.
     Star {
@@ -294,6 +406,7 @@ pub const CATALOG: [Star; 16] = [
         mag_permyriad: 34400,
         brightness: Brightness::AncestorLight,
         spectral: Spectral::TheDistant,
+        lineage: ANDROMEDA_LINEAGE,
     },
     Star {
         name: "Milky Way",
@@ -303,6 +416,7 @@ pub const CATALOG: [Star; 16] = [
         mag_permyriad: -65000,
         brightness: Brightness::SpiritFire,
         spectral: Spectral::Meskanaw,
+        lineage: MILKY_WAY_LINEAGE,
     },
 ];
 

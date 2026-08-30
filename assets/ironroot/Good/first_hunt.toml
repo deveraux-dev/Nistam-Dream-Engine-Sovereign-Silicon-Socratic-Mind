@@ -1,0 +1,15 @@
+[quest]
+id = "first_hunt"
+name = "The First Hunt"
+description = "The trader needs wolf pelts. Hunt a Prairie Wolf."
+zone = "prairie_start"
+
+[[objectives]]
+type = "kill"
+target = "Prairie Wolf"
+count = 1
+description = "Defeat a Prairie Wolf"
+
+[reward]
+xp = 100
+item = "wolf_pelt"

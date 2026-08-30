@@ -4,7 +4,7 @@
 //! 1. 10,000 independent physical inspectors across Alberta construction sites.
 //! 2. Millions of O(1) Weaver Arbiter DFA conflict resolution cycles per second (< 1 μs latency).
 //! 3. Active wire-level sabotage and tampering injection (100% repudiation verification).
-//! 4. Edge Metal Gemini 2.5 Flash Context Caching telemetry & cost tracking.
+//! 4. Edge Metal Gemini 3.7 Flash Context Caching telemetry & cost tracking.
 //! 5. Structured JSON export to `surfaceledger/live_scale_telemetry.json`.
 
 use forge_envelope::{
@@ -405,14 +405,14 @@ fn test_cloud_scale_load_and_sabotage_defense() {
     assert_eq!(sab_injected, sab_intercepted, "Every single attack MUST be intercepted");
 
     // -------------------------------------------------------------
-    // CONTEXT CACHING TELEMETRY (GEMINI 2.5 FLASH & PRO)
+    // CONTEXT CACHING TELEMETRY (GEMINI 3.7 FLASH & PRO)
     // -------------------------------------------------------------
     let total_audit_queries = 25_000;
     let cache_hits = 24_950;
     let cache_misses = 50;
     let vars_handbook_tokens = 450_000; // 23-year VARS dictionary
 
-    // Gemini 2.5 Flash Pricing:
+    // Gemini 3.7 Flash Pricing:
     // Prompt Tokens (uncached): $0.075 / 1M tokens
     // Cached Tokens Read: $0.01875 / 1M tokens (75% savings!)
     let uncached_cost = (total_audit_queries as f64 * vars_handbook_tokens as f64 / 1_000_000.0) * 0.075;
@@ -422,7 +422,7 @@ fn test_cloud_scale_load_and_sabotage_defense() {
     let cost_reduction_pct = ((uncached_cost - actual_cost) / uncached_cost) * 100.0;
 
     let context_caching_metrics = ContextCachingTelemetry {
-        model: "gemini-2.5-flash".into(),
+        model: "gemini-3.7-flash".into(),
         cached_resource_name: "cachedContents/vars_23yr_handbook_sha256_e83b4".into(),
         vars_handbook_tokens,
         total_audit_queries,

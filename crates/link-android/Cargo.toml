@@ -1,0 +1,44 @@
+[package]
+name = "link-android"
+description = "13link Android NDK edge: RestGate coherence governor + zero-copy ByteRouter over the Android<->desktop link"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lib]
+name = "link_android"
+# rlib alongside cdylib: cdylib is the shipped NDK .so face; rlib lets
+# `cargo test` build a normal host test harness without a full Android
+# target/toolchain installed.
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+zerocopy = { version = "0.8", features = ["derive"] }
+link-wire = { path = "../link-wire" }
+serde_json = "1"
+# default-features off: matches link-core's fix -- feature unification
+# across a multi-crate `cargo test` would otherwise reintroduce aws-lc-rs
+# alongside ring workspace-wide, ambiguating the process default provider.
+rustls = { version = "0.23", default-features = false, features = ["ring", "std", "tls12"] }
+
+# NDK-only: android-activity/ndk/ndk-sys fail to build on a plain host triple
+# (no Android sysroot), so they're target-gated here rather than listed
+# unconditionally -- keeps `cargo test -p link-android` runnable on any dev
+# box without the NDK installed.
+[target.'cfg(target_os = "android")'.dependencies]
+android-activity = { version = "0.6", features = ["native-activity"] }
+ndk = "0.9"
+ndk-sys = { version = "0.6", features = ["audio"] }
+
+[lints]
+workspace = true
+
+# min_sdk_version=26: AAudio (ndk-sys "audio" feature, libaaudio.so) has no
+# linker shim below API 26 in the NDK sysroot. INTERNET permission:
+# android_main's link-reader thread opens a TcpStream to LINK_HOST:LINK_PORT.
+[package.metadata.android.sdk]
+min_sdk_version = 26
+target_sdk_version = 35
+
+[[package.metadata.android.uses_permission]]
+name = "android.permission.INTERNET"

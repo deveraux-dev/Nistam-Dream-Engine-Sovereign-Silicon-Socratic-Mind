@@ -1,0 +1,27 @@
+{
+  "asset_id": "ironroot_ridge_fracture_001",
+  "target_kind": "topology",
+  "source_priors": {
+    "material_priors": { "primary": "granite", "secondary": "iron_vein", "water_content": 0.12 },
+    "music_priors": { "carrier": "stone_horn", "interval_pattern": ["fundamental", "perfect_fifth", "counterpulse", "fracture_note"], "tempo": "slow_4_pulse" },
+    "topology_priors": { "visible_fault": true, "stress_profile": "fractured_locked", "route_change": "pass_open" }
+  },
+  "authority": { "resonance_target_id": "mountain_pass_ironroot_001", "instrument_id": "stone_horn_001", "material_id": "granite_iron_vein" },
+  "validators": {
+    "material_validated": true,
+    "physics_validated": true,
+    "brand_validated": false,
+    "rhythm_validated": true,
+    "topology_validated": true,
+    "cultural_review_required": false
+  },
+  "runtime_effects": {
+    "ai_modifiers": [],
+    "animation_modifiers": ["terrain_tremor", "fracture_anticipation", "collapse_settle"],
+    "audio_motifs": ["deep_faultsong", "stone_split_subharmonic"],
+    "material_overlays": ["crack_glow_iron_dust"],
+    "topology_operations": ["split_cliff", "open_pass", "update_navmesh", "reroute_water"]
+  },
+  "friction_points": ["<friction_topology_progression>", "<friction_metrical_physics>"],
+  "quality_gates": ["resonance_signature_known", "instrument_requirement_met", "route_impact_validated", "major_physics_unquantized"]
+}

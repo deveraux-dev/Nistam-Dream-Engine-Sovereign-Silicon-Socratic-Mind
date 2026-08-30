@@ -7,7 +7,7 @@
 
 use gemma_s13::gpu_warden::EmulatedU64;
 use gemma_s13::model_9b::{DispatchEngine, Gemma9bConfig, Gemma9bForwardGraph, Gemma9bLayerWeights, Gemma9bModel};
-use gemma_s13::nipr::NormalizedIpr;
+use forge_hal_clockspine::nipr::NormalizedIpr;
 use gemma_s13::s13::{pack_5_trits, TRITS_PER_BYTE};
 use std::hint::black_box;
 use std::time::Instant;

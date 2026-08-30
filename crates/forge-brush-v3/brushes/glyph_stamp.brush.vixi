@@ -1,0 +1,25 @@
+#vixi:brush v1
+surface: glyph_stamp
+
+# The E tool — the Glyph Stamp.
+#
+# Base left-click is the Apprentice baseline (flat Z=0 composition); the deeper
+# tiers stamp a glyph footprint rather than a single voxel:
+#   Shift+Drag  -> Journeyperson (extrude the stamped glyph into a Z column)
+#   Right-Click -> Master        (bind the glyph to a semantic/dispatch payload)
+#
+# The Apprentice drop here is `iron` — a hard, ringing material distinct from the
+# Q stone pencil and W bone lathe in the MusicSieve acoustic columns.
+
+brush glyph_stamp
+  tool     = GlyphStamp         # the E hotkey
+  tier     = Apprentice         # base click: flat 2D composition
+  material = iron               # CE material group dropped per stroke
+  plane    = z0                 # Apprentice locks the Front (Z=0) plane
+  feeds    = mass ring attack   # the AcousticRegistry columns this stroke drives
+  receives = bus_in             # audio snapshot modulates acoustic contribution
+
+gate float_in_ir  = forbidden
+gate alloc_steady = forbidden
+gate vibe_rms > 500             # suppress stroke when audio energy < 5% of max
+end

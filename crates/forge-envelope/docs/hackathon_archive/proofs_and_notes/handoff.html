@@ -1,0 +1,629 @@
+<title>Polysynthetic Lexer Handoff</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<style>
+:root {
+  --ground:   #F2F3EF;
+  --surface:  #FFFFFF;
+  --sunken:   #E9EBE5;
+  --ink:      #1A1F1C;
+  --muted:    #5C6560;
+  --faint:    #838C86;
+  --rule:     #DADED6;
+  --signal:   #1F5F4B;
+  --signal-w: #E4EFE9;
+  --ok:       #2D6A4F;
+  --warn:     #8A5D00;
+  --warn-w:   #F6EEDC;
+  --stop:     #A02C2C;
+  --stop-w:   #F7E7E4;
+
+  --f-display: "Newsreader", Georgia, "Times New Roman", serif;
+  --f-body: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+
+  --w-rail: 15rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground:   #131614;
+    --surface:  #1B201D;
+    --sunken:   #222824;
+    --ink:      #E8EDE8;
+    --muted:    #97A29B;
+    --faint:    #6E7873;
+    --rule:     #2C332E;
+    --signal:   #5FBF9B;
+    --signal-w: #1B2E27;
+    --ok:       #5FBF9B;
+    --warn:     #D9A441;
+    --warn-w:   #2E2717;
+    --stop:     #E07A6B;
+    --stop-w:   #33201D;
+  }
+}
+
+:root[data-theme="dark"] {
+  --ground:   #131614;
+  --surface:  #1B201D;
+  --sunken:   #222824;
+  --ink:      #E8EDE8;
+  --muted:    #97A29B;
+  --faint:    #6E7873;
+  --rule:     #2C332E;
+  --signal:   #5FBF9B;
+  --signal-w: #1B2E27;
+  --ok:       #5FBF9B;
+  --warn:     #D9A441;
+  --warn-w:   #2E2717;
+  --stop:     #E07A6B;
+  --stop-w:   #33201D;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--f-body);
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap {
+  display: grid;
+  grid-template-columns: var(--w-rail) minmax(0, 1fr);
+  gap: 3rem;
+  max-width: 78rem;
+  margin: 0 auto;
+  padding: 2.5rem 2rem 6rem;
+  align-items: start;
+}
+
+/* ---------- rail ---------- */
+
+.rail { position: sticky; top: 2.5rem; display: flex; flex-direction: column; gap: 1.75rem; }
+
+.clock {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-top: 3px solid var(--stop);
+  padding: 1.1rem 1.2rem 1.2rem;
+}
+.clock .days {
+  font-family: var(--f-display);
+  font-size: 3.4rem;
+  line-height: 1;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  display: block;
+}
+.clock .unit {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+  font-weight: 600;
+  display: block;
+  margin-top: 0.35rem;
+}
+.clock .due {
+  margin-top: 0.85rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--rule);
+  font-family: var(--f-mono);
+  font-size: 0.72rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.gate {
+  font-family: var(--f-mono);
+  font-size: 0.72rem;
+  border: 1px solid var(--rule);
+  background: var(--stop-w);
+  color: var(--stop);
+  padding: 0.7rem 0.85rem;
+  line-height: 1.7;
+}
+
+nav ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+nav a {
+  display: block;
+  padding: 0.3rem 0;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.82rem;
+  border-bottom: 1px solid transparent;
+}
+nav a:hover, nav a:focus-visible { color: var(--signal); }
+nav .nav-head {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--faint);
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+/* ---------- masthead ---------- */
+
+.masthead { border-bottom: 2px solid var(--ink); padding-bottom: 1.25rem; margin-bottom: 2.5rem; }
+.eyebrow {
+  font-family: var(--f-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--signal);
+  margin: 0 0 0.6rem;
+}
+h1 {
+  font-family: var(--f-display);
+  font-weight: 500;
+  font-size: clamp(2.1rem, 4.5vw, 3.1rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.7rem;
+  text-wrap: balance;
+}
+.standfirst {
+  font-size: 1.05rem;
+  color: var(--muted);
+  max-width: 60ch;
+  margin: 0;
+}
+
+/* ---------- sections ---------- */
+
+section { margin-bottom: 3rem; scroll-margin-top: 2rem; }
+
+h2 {
+  font-family: var(--f-body);
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--signal);
+  margin: 0 0 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+h3 {
+  font-family: var(--f-display);
+  font-size: 1.3rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  margin: 1.75rem 0 0.6rem;
+  text-wrap: balance;
+}
+
+p { max-width: 68ch; margin: 0 0 0.9rem; }
+p.lede { font-size: 1.02rem; }
+
+a { color: var(--signal); }
+
+code {
+  font-family: var(--f-mono);
+  font-size: 0.85em;
+  background: var(--sunken);
+  padding: 0.1em 0.35em;
+  border-radius: 2px;
+}
+
+/* ---------- callout ---------- */
+
+.callout {
+  border: 1px solid var(--rule);
+  border-left: 4px solid var(--stop);
+  background: var(--stop-w);
+  padding: 1.1rem 1.3rem;
+  margin: 1.25rem 0;
+}
+.callout .label {
+  font-family: var(--f-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--stop);
+  font-weight: 500;
+  display: block;
+  margin-bottom: 0.4rem;
+}
+.callout p:last-child { margin-bottom: 0; }
+
+/* ---------- pipeline ---------- */
+
+.pipeline {
+  font-family: var(--f-mono);
+  font-size: 0.78rem;
+  line-height: 1.75;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  padding: 1.2rem 1.4rem;
+  overflow-x: auto;
+  margin: 1.25rem 0;
+  white-space: pre;
+  color: var(--ink);
+}
+.pipeline .stage { color: var(--signal); font-weight: 500; }
+.pipeline .note { color: var(--faint); }
+
+/* ---------- tables ---------- */
+
+.tw { overflow-x: auto; margin: 1rem 0 1.4rem; border: 1px solid var(--rule); background: var(--surface); }
+table { border-collapse: collapse; width: 100%; min-width: 34rem; }
+th {
+  text-align: left;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--faint);
+  font-weight: 700;
+  padding: 0.7rem 1rem;
+  border-bottom: 1px solid var(--rule);
+  background: var(--sunken);
+  white-space: nowrap;
+}
+td {
+  padding: 0.72rem 1rem;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: top;
+  font-size: 0.88rem;
+}
+tr:last-child td { border-bottom: none; }
+td.receipt { font-family: var(--f-mono); font-size: 0.74rem; color: var(--muted); }
+
+/* ---------- pills + stripes ---------- */
+
+.pill {
+  display: inline-block;
+  font-family: var(--f-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.16rem 0.5rem;
+  border: 1px solid currentColor;
+  white-space: nowrap;
+}
+.pill.ok { color: var(--ok); background: var(--signal-w); }
+.pill.warn { color: var(--warn); background: var(--warn-w); }
+.pill.stop { color: var(--stop); background: var(--stop-w); }
+
+.striped { border-left: 3px solid var(--warn); }
+.striped-stop { border-left: 3px solid var(--stop); }
+.striped-ok { border-left: 3px solid var(--ok); }
+
+/* ---------- blockers ---------- */
+
+.blockers { display: grid; gap: 0.75rem; }
+.blocker {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--stop);
+  padding: 0.85rem 1.1rem;
+}
+.blocker .q { font-weight: 600; display: block; margin-bottom: 0.15rem; }
+.blocker .why { font-size: 0.84rem; color: var(--muted); }
+
+/* ---------- ordered actions ---------- */
+
+ol.actions { list-style: none; counter-reset: step; margin: 0; padding: 0; display: grid; gap: 0.6rem; }
+ol.actions li {
+  counter-increment: step;
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr);
+  gap: 0.9rem;
+  align-items: baseline;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  padding: 0.8rem 1rem;
+}
+ol.actions li::before {
+  content: counter(step);
+  font-family: var(--f-mono);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--signal);
+  font-variant-numeric: tabular-nums;
+}
+ol.actions strong { font-weight: 600; }
+ol.actions .why { display: block; color: var(--muted); font-size: 0.85rem; margin-top: 0.15rem; }
+
+ul.plain { margin: 0 0 1rem; padding-left: 1.15rem; }
+ul.plain li { margin-bottom: 0.45rem; max-width: 68ch; }
+
+/* ---------- math ---------- */
+
+.math {
+  font-family: var(--f-mono);
+  font-size: 0.8rem;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  padding: 1rem 1.2rem;
+  overflow-x: auto;
+  white-space: pre;
+  margin: 1rem 0;
+  line-height: 1.7;
+}
+
+.anchors {
+  font-family: var(--f-mono);
+  font-size: 0.72rem;
+  line-height: 1.85;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  padding: 1rem 1.2rem;
+  overflow-x: auto;
+  white-space: pre;
+  color: var(--muted);
+  margin: 1rem 0;
+}
+
+footer {
+  margin-top: 3.5rem;
+  padding-top: 1.25rem;
+  border-top: 2px solid var(--ink);
+  font-family: var(--f-mono);
+  font-size: 0.74rem;
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+@media (max-width: 62rem) {
+  .wrap { grid-template-columns: minmax(0, 1fr); gap: 2rem; padding: 1.5rem 1.15rem 4rem; }
+  .rail { position: static; flex-direction: row; flex-wrap: wrap; gap: 1rem; }
+  .clock { flex: 1 1 12rem; }
+  .gate { flex: 1 1 14rem; }
+  nav { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+</style>
+
+<div class="wrap">
+
+  <aside class="rail">
+    <div class="clock">
+      <span class="days">10</span>
+      <span class="unit">days remaining</span>
+      <div class="due">SUBMIT BY<br>2026-08-31 · 17:00 PT</div>
+    </div>
+
+    <div class="gate">STATIC: none<br>RUNTIME: none<br>BLOCKERS: 3</div>
+
+    <nav>
+      <div class="nav-head">Contents</div>
+      <ul>
+        <li><a href="#artifact">The artifact</a></li>
+        <li><a href="#arch">Architecture</a></li>
+        <li><a href="#verified">Verified</a></li>
+        <li><a href="#unverified">Unverified</a></li>
+        <li><a href="#decisions">Decisions</a></li>
+        <li><a href="#pitch">Pitch boundaries</a></li>
+        <li><a href="#blockers">Blockers</a></li>
+        <li><a href="#actions">Next actions</a></li>
+        <li><a href="#score">Score math</a></li>
+        <li><a href="#anchors">File anchors</a></li>
+        <li><a href="#errors">Errors</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <main>
+    <div class="masthead">
+      <p class="eyebrow">Handoff · written 2026-08-21</p>
+      <h1>Polysynthetic Morphological Lexer</h1>
+      <p class="standfirst">A Plains Cree morphological lexer for the All Things Agentic Hackathon, wired into HeySunny as new in-window work. The architecture is settled and correct. Nothing is built. The remaining blockers are administrative, not technical.</p>
+    </div>
+
+    <section id="cold">
+      <h2>Cold start</h2>
+      <p class="lede">Sean — Cree, Alberta, 2748684 Alberta LTD, heysunny.ca — is entering a Google/Devpost agentic-AI contest closing 31 August. The submission is a polysynthetic morphological lexer for nêhiyawêwin, built on top of HeySunny (his existing eldercare voice companion, declared as pre-existing work). Rules compression lives beside this file in <code>Rules-Benchmarks.md</code>.</p>
+    </section>
+
+    <section id="artifact">
+      <h2>The artifact</h2>
+      <p>A lexer converts a character stream into meaning-bearing tokens. Whitespace tokenization assumes word ≈ semantic unit. In a polysynthetic language that is simply false — <code>niwâpamâw</code> is one whitespace token carrying actor, verb, goal, direction and order. Every pipeline downstream of a whitespace tokenizer is parsing garbage before it starts.</p>
+      <p>An FST morphological analyzer <em>is</em> a lexer in the strict compiler sense: finite-state, ahead of the parser, emitting typed tokens. One component, four functions:</p>
+
+      <div class="tw">
+        <table>
+          <thead><tr><th>Function</th><th>What the lexer provides</th></tr></thead>
+          <tbody>
+            <tr><td>Anti-hallucination</td><td>Defines the legal emission space</td></tr>
+            <tr><td>5D lattice</td><td>Each analysis <em>is</em> a coordinate</td></tr>
+            <tr><td>Clinical biomarker fix</td><td>TTR, pronoun/noun ratio, pause boundaries computed on morphemes, not whitespace</td></tr>
+            <tr><td>Multimodal</td><td>Shared alignment across SRO, syllabics, audio</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>The Twist — 40% of the score</h3>
+      <p>Vocal and linguistic biomarkers for cognitive decline are calibrated on English morphology. A Cree-speaking elder screened with that instrument is being measured with the wrong ruler. The lexer closes that gap.</p>
+    </section>
+
+    <section id="arch">
+      <h2>Architecture</h2>
+
+      <div class="callout">
+        <span class="label">Blocking correction</span>
+        <p><strong>Vertex/Gemini does not support GBNF or per-token logit masking.</strong> It supports controlled generation via <code>responseSchema</code> — structured JSON — only. Any plan built on "logit-masked Gemini emission" is not implementable on the required platform. This invalidated the original design.</p>
+      </div>
+
+      <p>Corrected pipeline, buildable on Vertex today:</p>
+
+      <div class="pipeline"><span class="stage">Gemini 3.5</span>  (Vertex, responseSchema)   <span class="note">emits a COORDINATE, never Cree characters</span>
+           {"class":"VTA","actor":"1SG","goal":"3AN","order":"independent"}
+              │
+<span class="stage">Clingo / ASP</span>                          <span class="note">integrity constraints reject illegal coordinates</span>
+              │                        <span class="note">(obviation; direction on the 2&gt;1&gt;3&gt;3′ hierarchy)</span>
+<span class="stage">FST</span> (generation mode)                <span class="note">the ONLY thing that emits Cree text</span>
+              │
+           niwâpamâw
+              │
+<span class="stage">.glb lattice</span>                          <span class="note">witness surface — legal cells lit, holes dark</span></div>
+
+      <p>Hallucinated Cree is impossible not because logits are masked, but because <strong>Gemini is never in the Cree character-generation path at all.</strong> Stronger than masking, and it ships.</p>
+
+      <p>The division of labour is compiler-theoretic: <strong>lexer (FST, regular) + constraint solver (ASP, beyond-regular)</strong>. Obviation and direction are long-distance dependencies <em>within</em> a single token — past what regular power handles. That is why Clingo earns its place rather than decorating the stack.</p>
+
+      <p><code>.glb</code> is transport, not constraint. Constraints are discharged by the solver before anything reaches the container.</p>
+    </section>
+
+    <section id="verified">
+      <h2>Verified <span class="pill ok">receipts exist</span></h2>
+      <div class="tw">
+        <table>
+          <thead><tr><th>Fact</th><th>Receipt</th></tr></thead>
+          <tbody>
+            <tr class="striped-ok"><td>Rules: 20 hard gates, 8 deadlines, 3 mandatory stack items, 13 deliverables, 16 prizes</td><td class="receipt">Rules.txt L29–504</td></tr>
+            <tr class="striped-ok"><td>heysunny.ca = 3,373 files / 1,170,663 lines, last commit <code>a72e024</code> 2026-04-06</td><td class="receipt">manifests\heysunny.ca.json</td></tr>
+            <tr class="striped-ok"><td>Plains Cree FST exists — ~16,500 stems, ⅔ verbs, ALTLab + Giellatekno</td><td class="receipt">github.com/giellalt/lang-crk</td></tr>
+            <tr class="striped-ok"><td><strong>Prebuilt</strong> <code>.bhfst</code>/<code>.zip</code> releases ship — no HFST/Foma/autotools build needed</td><td class="receipt">same, releases page</td></tr>
+            <tr class="striped-stop"><td><strong>lang-crk license UNRESOLVED</strong> — README reads "licenced under LICENSE licence" (unfilled template), no SPDX</td><td class="receipt">verified by fetch</td></tr>
+            <tr class="striped-ok"><td>morphodict = <strong>Apache-2.0</strong></td><td class="receipt">github.com/UAlbertaALTLab/morphodict</td></tr>
+            <tr class="striped-ok"><td>itwêwina partners: ALTLab + First Nations University + <strong>Maskwacîs Education Schools Commission</strong>; sources = Wolvengrey + Maskwacîs + Alberta Elders' dictionaries</td><td class="receipt">altlab.ualberta.ca/itwewina</td></tr>
+            <tr class="striped-ok"><td><code>letter_morphometrics()</code> — glyph stroke anatomy from alpha mask, zero ML, <strong>12 tests</strong></td><td class="receipt">morphometric_smooth.rs:187–314</td></tr>
+            <tr class="striped-ok"><td><code>GlyphRegion</code> enum declared, never used — function pushes strings</td><td class="receipt">same file :172</td></tr>
+            <tr class="striped-ok"><td><code>CREE.md</code> is NOT a morphological derivation — doctrine-symbol scheme, self-shelved HORIZON</td><td class="receipt">CREE.md:87</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="unverified">
+      <h2>Unverified <span class="pill warn">do not build on these</span></h2>
+      <div class="tw">
+        <table>
+          <thead><tr><th>Claim</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr class="striped"><td><code>cree_syllabics.rs</code> — cited in <code>CREE.md:5</code>, never located. L22b violation.</td><td class="receipt">find it or drop it</td></tr>
+            <tr class="striped"><td>All effect sizes — Cohen's d=0.96, SMD=1.56, 81.69%, $4.43/$1, 19%/12%</td><td class="receipt">via NotebookLM over 14 unread sources — cite primaries or don't cite</td></tr>
+            <tr class="striped"><td>Morpheme-level biomarker novelty — plausibly the strongest IP claim</td><td class="receipt">prior art never searched</td></tr>
+            <tr class="striped"><td>pexil / penteract</td><td class="receipt">no implementation seen; Ump128 + Morton key marked UNPROVEN</td></tr>
+            <tr class="striped"><td><code>morphometric_smooth.rs</code></td><td class="receipt">read from a July E: snapshot, never compiled live</td></tr>
+            <tr class="striped-stop"><td><strong>G2 residency</strong> — the gate that voids everything else</td><td class="receipt">unconfirmed</td></tr>
+            <tr class="striped-stop"><td>Whether the HeySunny corpus holds <code>sunny-sessions</code> transcripts</td><td class="receipt">blocks any Vertex upload — Alberta HIA makes vendors affiliates</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="decisions">
+      <h2>Decisions</h2>
+      <div class="tw">
+        <table>
+          <thead><tr><th>Decision</th><th>Rationale</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Category: C3 Fortified Enterprise Fleet</strong> (flipped from C2)</td><td>12-week Life Review = "weeks of async"; TELUS CHR = "official enterprise infrastructure"; HIA/PIPA/#DataBack = "data sovereignty". Weak link is cross-department cataloging — fall back to C2 if the demo collapses to one conversation.</td></tr>
+            <tr><td><strong>HeySunny = disclosed pre-existing dependency; Cree layer = the new work</strong></td><td>Line 118 permits frameworks and libraries; disclosure is not a penalty. HeySunny itself cannot be submitted.</td></tr>
+            <tr><td><strong>Gemini emits coordinates, FST emits Cree</strong></td><td>Vertex has no GBNF. See Architecture.</td></tr>
+            <tr><td><strong>Drop the Echo / Alexa / AWS front-end</strong></td><td>Reports 5 and 11 are an Amazon pitch. A16 bars third-party branding implying sponsorship. Use Pi 5 + ReSpeaker + Coral.</td></tr>
+            <tr><td><strong>Wellness positioning only</strong></td><td>Never diagnostic — Class II device risk. Beacon supplementary to 911, never a replacement.</td></tr>
+            <tr><td><strong>No elders on camera</strong></td><td>Their voices would enter Google's perpetual promotional license under §12. Use Sean's own voice; keep community audio out of the submission entirely.</td></tr>
+            <tr><td><strong>Fund: spiral = growth schedule, not recipient lottery</strong></td><td>Geographic selection under-serves clustered need. ZKP is privacy, not governance — the credential <em>issuer</em> is the real governor and must be named. Forever needs corpus, not 2% flow.</td></tr>
+            <tr><td><strong>Repo compression rejected</strong></td><td>Five of six submission components are net-new. <code>CREE.md:78–87</code> already ran this experiment: chars ≠ tokens, one-shot is a net loss.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="pitch">
+      <h2>Pitch boundaries</h2>
+      <p><strong>Cite as prior art:</strong> two-level finite-state morphology, Giellatekno/ALTLab FSTs, twenty years across dozens of languages. Claiming the FST as novel fails instantly against a domain-literate judge.</p>
+      <p><strong>Claim as novel:</strong> (1) FST-derived constraint over polysynthetic morphology in a low-resource setting — <em>narrow it</em>, since grammar-constrained decoding is itself published work; (2) morpheme-level acoustic and linguistic biomarker extraction — <strong>strongest claim, unverified</strong>; (3) the spatial-linguistic coordinate mapping — <em>weak, demote to a design note</em>.</p>
+
+      <h3>The isomorphism table is two-of-five</h3>
+      <ul class="plain">
+        <li><strong>Real — Lexer.</strong> Deterministic segmentation of a continuous signal into typed discrete units. <code>letter_morphometrics</code> does this on glyphs; the FST does it on morphemes. Same operation, different signal.</li>
+        <li><strong>Real — Constraint Solver.</strong> Literally the same Clingo on two domains, not an analogy.</li>
+        <li><strong>Forced — Raw Input.</strong> "Both pipelines have input" does no work.</li>
+        <li><strong>Forced — AST / Lattice.</strong> Equivocates a discrete categorical tuple with continuous vertex algebra. Different kinds of object.</li>
+        <li><strong>Forced — Decoder Mask.</strong> A render pipeline draws; it does not constrain. Position in a pipeline is not structural identity.</li>
+      </ul>
+      <p>Say <strong>shared front-end discipline</strong>, not "isomorphism." Two solid correspondences carry a pitch; a claimed bijection that is two-of-five invites someone to check the other three.</p>
+
+      <div class="callout">
+        <span class="label">Overclaim risk</span>
+        <p>Framing this as "fundamental AI infrastructure" makes judges evaluate it <em>as</em> infrastructure — benchmarks, evals, generalization. A ten-day demo cannot answer that. Say the lexer solves a real structural problem here and the approach generalizes. Same trap as "proven 100%," in a better suit.</p>
+      </div>
+    </section>
+
+    <section id="blockers">
+      <h2>Blockers <span class="pill stop">asked 3× · unanswered</span></h2>
+      <div class="blockers">
+        <div class="blocker"><span class="q">Pi 5 + ReSpeaker in hand?</span><span class="why">No shipping room inside ten days.</span></div>
+        <div class="blocker"><span class="q">Is Alexa on the team?</span><span class="why">A12 requires all members added on Devpost with one Representative appointed. Also a G8 question if HeySunny is partly their work.</span></div>
+        <div class="blocker"><span class="q">G2 residency confirmed?</span><span class="why">Quebec is excluded. An Alberta entity is not proof of personal residence.</span></div>
+      </div>
+    </section>
+
+    <section id="actions">
+      <h2>Next actions</h2>
+      <ol class="actions">
+        <li><span><strong>Confirm G2.</strong><span class="why">Everything else is void if this fails.</span></span></li>
+        <li><span><strong>Send the ALTLab email</strong> → <code>altlab@ualberta.ca</code><span class="why">Dr. Antti Arppe is the principal; they prefer the general address. Draft exists and deliberately discloses the Google promotional license. Do <em>not</em> also email 21c.tools yet — partnership is a conversation, not a cold email.</span></span></li>
+        <li><span><strong>D1 credit form.</strong><span class="why">Aug 28 12:00 PM PT cutoff, 72 <em>business</em> hours review — effectively overdue.</span></span></li>
+        <li><span><strong>Stand up <code>sean@heysunny.ca</code>.</strong><span class="why">Sole remaining gate on Startup Excellence — $20k + $5k.</span></span></li>
+        <li><span><strong>Vertex hello-world returning one JSON coordinate.</strong><span class="why">An afternoon. Converts the whole design into a spine.</span></span></li>
+        <li><span><strong>S1 + S2 + S3 deployed.</strong><span class="why">Gemini 3.5 via Vertex + ADK + Cloud Run, live, before any feature work. Missing one fails Stage One regardless of quality.</span></span></li>
+        <li><span><strong>Then build.</strong><span class="why">One VTA verb paradigm — Clingo-enumerated, FST-realized, lattice baked to GLB, lighting on match, refusing on illegal.</span></span></li>
+      </ol>
+    </section>
+
+    <section id="score">
+      <h2>Score math</h2>
+      <div class="math">B = 0.40·Innovation + 0.30·Architecture + 0.30·Demo     B ∈ [1, 5]
+F = B + bonus                                          bonus ≤ 1.0,  F ≤ 6</div>
+      <ul class="plain">
+        <li><strong>Full bonus (+1.00) equals the exact delta from straight 4s to straight 5s.</strong> One is a blog post, a tweet and three model integrations. The other is beating 6,296 people on every axis.</li>
+        <li><strong>Base caps at 5.00; bonus stacks past it.</strong> Straight 5s with no bonus (5.00) loses to 4.2 with full bonus (5.20). Skipping the bonus removes you from the winning range arithmetically.</li>
+        <li><strong>Innovation is double-counted</strong> — 40% weight and the first tiebreak.</li>
+        <li><strong>Target: 4.5 / 4.5 / 4.5 + 1.00 = 5.35.</strong> Winnable in ten days. Straight 5s is not.</li>
+      </ul>
+    </section>
+
+    <section id="anchors">
+      <h2>File anchors</h2>
+      <div class="anchors">C:\Users\seanm\Desktop\Rules.txt                             source rules
+C:\Users\seanm\Desktop\Rules-Benchmarks.md                   compressed, 14 §§
+F:\NewRepo\_vault\output\research\context\manifests\heysunny.ca.json
+F:\NewRepo\_vault\output\research\research\heysunny-elder-research-dump.md
+F:\NewRepo\_vault\output\research\research\heysunny-reports-2-through-6.md
+F:\NewRepo\_vault\output\research\research\heysunny-reports-7-through-10.md
+E:\.airgap\NewRepo-source-2026-07-01\crates\forge-vision\src\scan\morphometric_smooth.rs
+E:\.quarantine\md-dedup-2026-07-14\E\13forge-super\_plans\archive\CREE.md
+E:\.quarantine\…\root-docs\OMRlogic.md                       GBNF Crucible @ L38
+E:\13forge-super\_merged\airgap\2026-06-07-memory-repair\shadowseer-is-ml-observer-…md
+E:\13forge-super\_scratch\py\morphometrics_scraper.py        12 Treaty-6 species
+github.com/giellalt/lang-crk                                 FST — license unresolved
+github.com/UAlbertaALTLab/morphodict                         Apache-2.0</div>
+    </section>
+
+    <section id="errors">
+      <h2>Errors this session <span class="pill warn">read before trusting the above</span></h2>
+      <ul class="plain">
+        <li>Cited <code>cree_syllabics.rs</code> as salvageable infrastructure without ever locating the file.</li>
+        <li>Framed "five prize lanes" as though eligibility were proximity to winning. Eligible for five with nothing built is worth zero.</li>
+        <li>Called Best Multimodal UX "the softest target." No rubric means <em>unpredictable</em>, not easy. Inverted.</li>
+        <li>Said <code>morphometric_smooth.rs</code> has 14 tests. It has 12.</li>
+        <li>Let architecture accumulate across five expansions — FST → GBNF → morphometrics → 5D lattice → lexer framing — with <strong>zero implementation</strong>. Generated design and called it progress.</li>
+        <li>Treated Cree provenance as an outsider-consent question before learning Sean is Cree. The community-protocol framing was wrong as applied; ordinary third-party software licensing still stands.</li>
+      </ul>
+    </section>
+
+    <footer>
+      Every turn this session closed STATIC: none / RUNTIME: none, except the FST verification.<br>
+      A successor should refuse to add architecture until action 5 has a receipt.
+    </footer>
+  </main>
+</div>

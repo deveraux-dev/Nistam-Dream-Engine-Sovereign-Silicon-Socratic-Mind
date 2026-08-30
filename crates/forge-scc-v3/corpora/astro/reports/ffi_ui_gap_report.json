@@ -1,0 +1,25 @@
+{
+  "gaps": [
+    {
+      "id": "scene.world_tree",
+      "next_action": "Spike a 2D integer transform tree + chunk hot-swap against the hardest scene before committing.",
+      "reason": "13forge exposes NO scene-graph/world-tree primitive. This is the WorldTree need AND the anchor for oracle-hot-swap chunk streaming. The tree shell (integer node ids) is routable; the Mat4 transforms ride the render oracle.",
+      "source": "astro.SkeletalHierarchy"
+    }
+  ],
+  "report": "ffi_ui_gap_report",
+  "summary": {
+    "engine_overlay": 0,
+    "native_existing": 1,
+    "native_existing_with_bounds": 1,
+    "native_existing_with_conversion": 10,
+    "native_missing_token": 0,
+    "native_missing_widget": 0,
+    "reject": 3,
+    "render_harvest": 13,
+    "reserve": 0,
+    "spike_only": 1,
+    "study_only": 7
+  },
+  "version": "0.1.0"
+}

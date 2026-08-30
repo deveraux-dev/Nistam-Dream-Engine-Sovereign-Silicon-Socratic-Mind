@@ -1,0 +1,60 @@
+{
+  "id": "prairie_start",
+  "name": "The Grasslands",
+  "biome": "Prairie",
+  "width_m": 200,
+  "height_m": 50,
+  "spawn_point": [10.0, 0.0, 0.0],
+  "ground_segments": [
+    {"x": 0, "y": 0}, {"x": 40, "y": 0}, {"x": 60, "y": 2},
+    {"x": 80, "y": 3}, {"x": 100, "y": 1}, {"x": 140, "y": 0},
+    {"x": 180, "y": -1}, {"x": 200, "y": 0}
+  ],
+  "npcs": [
+    {
+      "id": 1, "name": "Prairie Wolf",
+      "behavior": "Hostile",
+      "position": [50.0, 0.0, 0.0],
+      "material": "Bone",
+      "health": 6000,
+      "detection_radius_m": 8.0
+    },
+    {
+      "id": 2, "name": "Elder Bison",
+      "behavior": "Territorial",
+      "position": [120.0, 0.0, 0.0],
+      "material": "Stone",
+      "health": 15000,
+      "detection_radius_m": 12.0
+    },
+    {
+      "id": 3, "name": "Wandering Trader",
+      "behavior": "Passive",
+      "position": [80.0, 0.0, 0.0],
+      "material": "Bone",
+      "health": 10000,
+      "detection_radius_m": 5.0,
+      "quest_id": "first_hunt"
+    }
+  ],
+  "portals": [
+    {
+      "id": 1,
+      "position": [195.0, 0.0, 0.0],
+      "size": [5.0, 10.0, 5.0],
+      "target_zone": "forest_depths",
+      "spawn_pos": [5.0, 0.0, 0.0],
+      "label": "→ Forest Depths"
+    }
+  ],
+  "fires": [],
+  "ambient": "Prairie",
+  "quest_triggers": [
+    {
+      "quest_id": "first_hunt",
+      "position": [30.0, 0.0, 0.0],
+      "radius_m": 5.0,
+      "trigger_type": "enter"
+    }
+  ]
+}

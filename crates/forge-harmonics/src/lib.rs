@@ -10,12 +10,17 @@ pub mod cents_floor;
 pub mod delay_line;
 pub mod dnb;
 pub mod euclid;
+pub mod gammatone;
+pub mod mask;
 pub mod mersenne_lattice;
 pub mod scale_voice;
 pub mod scale_mask;
+pub mod scc_bridge;
+pub mod shaderbind_bridge;
 pub mod starmonics;
 pub mod synthxml;
 pub mod theory;
+pub mod tonnetz;
 
 #[cfg(feature = "musicxml")]
 pub mod musicxml_extract;

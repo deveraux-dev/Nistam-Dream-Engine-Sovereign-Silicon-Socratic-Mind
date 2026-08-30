@@ -1,0 +1,48 @@
+#vixi:shaderbind v1
+surface: canvas
+profile: anvil
+
+# forge_brand.shaderbind.vixi — the design's integer permyriad signals (0..10000) wired
+# to shader uniform channels. ONE channel map, byte-identical on Vulkan(SPIR-V) /
+# WebGPU(WGSL) / CPU. Owner: vixi-compiler-final (TS oracle), templates/shaderbinds/.
+# These are the SAME u32 slots the CPU reference reads -> golden-2eye holds across backends.
+#
+# Re-authored to v1 2026-07-28. The old file stacked FOUR `surface X profile Y` blocks;
+# v1 is one surface per file, so the `hero`/`bake` block moved to
+# forge_brand_hero.shaderbind.vixi. The three canvas profiles (anvil / dnbracer /
+# deveraux) shared ONE channel map, so they fold here with slots 0-8 intact:
+# deveraux declared only `audio.rms channel 4`, which is byte-identical to dnbracer's —
+# the same binding, not a second one.
+
+# ── look_dsl knobs (cosmetic LookKnobs, FREE-tier) -> vibematrix conditioning ──
+signal hue source=vibematrix.hue range=0..10000
+signal intensity source=vibematrix.intensity range=0..10000
+signal bloom source=vibematrix.bloom range=0..10000
+signal warp source=vibematrix.warp range=0..10000
+
+# ── audio-reactive (the vibe binds) -> shared channels, every profile ──
+signal rms source=audio.rms range=0..10000
+signal beat source=audio.beat_phase range=0..10000
+signal centroid source=audio.spectral_centroid range=0..10000
+signal speed source=world.velocity range=0..10000
+signal threat source=vibematrix.threat_color range=0..10000
+
+# 2 bloom float crosses ONLY at the bloom leaf (phash-bounded, never replay)
+# 4 rms   deveraux's play-head reuses this slot; no new channel
+# 5 beat  the WHITEHEAT breath
+# 7 speed colour streaks on speed
+canvas.channel[0] <- hue
+canvas.channel[1] <- intensity
+canvas.channel[2] <- bloom
+canvas.channel[3] <- warp
+canvas.channel[4] <- rms
+canvas.channel[5] <- beat
+canvas.channel[6] <- centroid
+canvas.channel[7] <- speed
+canvas.channel[8] <- threat
+
+# `visual_only_mutates_authority` is NOT declared: this surface binds no
+# `world.authority_q` lane, and the gate is a claim that an authority lane EXISTS to
+# protect (shaderbind_dsl.rs verify_gates). Declaring it over a purely cosmetic
+# surface would be an empty stamp.
+gate shader_compile_hotpath = forbidden

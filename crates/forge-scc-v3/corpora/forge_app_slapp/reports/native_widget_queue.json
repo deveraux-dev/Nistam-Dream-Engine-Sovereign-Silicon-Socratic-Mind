@@ -1,0 +1,24 @@
+{
+  "items": [
+    {
+      "classification": "native_missing_token",
+      "id": "type.ramp[acoustic_risk]",
+      "recommendation": "",
+      "source": "forge_app_slapp.CuiRisk"
+    },
+    {
+      "classification": "native_missing_widget",
+      "id": "surface.pipe_network_map",
+      "recommendation": "",
+      "source": "forge_app_slapp.MapPanel"
+    },
+    {
+      "classification": "native_missing_token",
+      "id": "creature_engine::acoustic_inspection",
+      "recommendation": "",
+      "source": "forge_app_slapp.CuiAssessment"
+    }
+  ],
+  "queue": "native_widget_queue",
+  "version": "0.1.0"
+}

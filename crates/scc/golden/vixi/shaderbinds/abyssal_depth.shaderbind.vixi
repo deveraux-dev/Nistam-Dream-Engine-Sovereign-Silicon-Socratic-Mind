@@ -1,0 +1,46 @@
+#vixi:shaderbind v1
+surface: abyssal_depth
+profile: forge_canvas
+
+# THE WATER SINGS — the normalized zone's own depth field folds into the vibe matrix.
+# Audio-inert law (root#audio-inert): audio_* uniforms are DEAD in WGSL; pixels move ONLY
+# through vibe_glow / vibe_shake / vibe_chromatic / vibe_pulse. Water is no exception —
+# no water_* uniform is invented here, the medium rides the four channels that already
+# reach pixels.
+#
+# Every source is integer permyriad from a PROVEN producer:
+#   density / depth -> forge_zones::normalized_zone::Zone::submersion (10 green)
+#   resonance       -> forge_core::material_registry Water row (fluids carry a flow-frequency
+#                      floor so water is distinct instead of a shared dead zero)
+#   surge           -> forge_audio beat phase, the same lane the singing terminal rides
+# WIRE LANDED 2026-07-28. forge_studio::world::WorldState::publish_submersion hands
+# Zone::submersion to technothesia::unified::set_submersion, and the level press calls it
+# (forge-studio edicts.rs, Generate("level")) — zone granularity, never per-frame.
+#   depth  <- Submersion::density_pmy      LIVE on pixels
+#   shafts <- Submersion::light_level_pmy  PRODUCED; owed a terminal door (set_submersion
+#             is the only one today), so channel 3 is fed but not yet on glass
+#   surge / spectral stay audio-side and are [UNPROVEN] by root#rank until fed.
+
+# `world.water_depth` was ALREADY in the closed source set (shaderbind_dsl.rs:70) —
+# harvested from bard_aura long before this zone existed. Fed here by
+# `Submersion.density_pmy`, which IS depth normalized to 0..10000, so no new vocab and
+# no second water lane.
+signal depth source=world.water_depth range=0..10000
+signal surge source=audio.beat_phase range=0..10000
+# shafts = daylight THROUGH the medium, floored at ABYSSAL_FLOOR_PMY so the deep is dark
+# and never blank — forge_zones::normalized_zone::Submersion::light_level_pmy.
+signal shafts source=world.light_level range=0..10000
+signal spectral source=audio.spectrum_high range=0..10000
+
+# Channel index IS the vibe target (unified.rs:1326): 0=glow, 1=pulse, 3=cascade,
+# 4=chromatic. Channel 2 is the reserved spectral lane and is NOT consumed until the FFT
+# lands — binding it would render nothing and read as a live effect.
+vibematrix.channel[0] <- depth
+vibematrix.channel[1] <- surge
+vibematrix.channel[3] <- shafts
+vibematrix.channel[4] <- spectral
+
+gate audio_not_identity = required
+gate mix_clarity = required
+gate shader_compile_hotpath = forbidden
+gate visual_only_mutates_authority = required

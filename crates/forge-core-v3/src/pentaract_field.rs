@@ -433,6 +433,31 @@ impl AddAssign for PentaractField {
     }
 }
 
+/// Infer trit (-1, 0, +1) from a permyriad value with default threshold ±3000.
+/// Threshold-based: q > +3k → +1 (aligned), q < -3k → -1 (corrupted), else 0 (neutral).
+/// Per-channel meanings: see CHANNEL_SEMANTICS.md. Channels may override thresholds per their semantics.
+pub const fn trit_from_permyriad(q: i32) -> i8 {
+    const THRESHOLD: i32 = 3_000;
+    if q > THRESHOLD {
+        1
+    } else if q < -THRESHOLD {
+        -1
+    } else {
+        0
+    }
+}
+
+/// Custom threshold trit inference. Useful for channels with different sensitivity.
+pub const fn trit_from_permyriad_threshold(q: i32, threshold: i32) -> i8 {
+    if q > threshold {
+        1
+    } else if q < -threshold {
+        -1
+    } else {
+        0
+    }
+}
+
 /// Per-channel gains a body applies to what it hears, in permyriad. Integer by
 /// law: float gain would make the woven room depend on FMA order and target ISA.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]

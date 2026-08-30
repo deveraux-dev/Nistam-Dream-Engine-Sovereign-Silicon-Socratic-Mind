@@ -314,7 +314,7 @@ pub const UCAS_MAIN: &[SyllabicEntry] = &[
     (0x151F, 'ᔟ', "CANADIAN SYLLABICS CARRIER LYEE"),
     (0x1520, 'ᔠ', "CANADIAN SYLLABICS CARRIER WKHEE"),
     // Y-series restored + 0x1549/0x157B-157F relabeled 2026-07-28: triple-oracle
-    // (disk grep · gemini-2.5-flash-lite · unicode.org list-unicodeset). The old
+    // (disk grep · gemini-3.1-flash-lite · unicode.org list-unicodeset). The old
     // rows duplicated 0x1449's glyph onto 0x1549 and stamped Y-names on the
     // Nunavik H / HK / Q block; the true Y block 0x1526-152E was absent.
     (0x1526, 'ᔦ', "CANADIAN SYLLABICS YE"),
@@ -449,7 +449,7 @@ mod tests {
 
     // [BOARD:CREE-TABLE-TRIPLE-ORACLE] 2026-07-28 defect fix pinned: the table
     // duplicated 0x1449 onto 0x1549, stamped Y-names on the H/HK/Q block, and
-    // omitted the true Y-series. Sources: disk grep + gemini-2.5-flash-lite +
+    // omitted the true Y-series. Sources: disk grep + gemini-3.1-flash-lite +
     // unicode.org list-unicodeset (three oracles, unanimous).
     #[test]
     fn no_codepoint_appears_twice() {

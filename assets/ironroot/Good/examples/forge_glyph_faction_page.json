@@ -1,0 +1,18 @@
+{
+  "script_id": "amber_choir_faction_page_001",
+  "visible_layer": "amber sun-ring glyph cluster with bell and formation marks",
+  "phonetic_layer": "RA-OM-KEL low rising choral phrase",
+  "mnemonic_layer": "Unity under bell; regroup when isolated; advance only in chorus.",
+  "glyphs": [
+    { "glyph_id": "G_SELF_CHORUS", "shape": "ring", "orientation": "upright", "color": "amber", "sound": "RA", "operator": "identify_faction", "target": "amber_choir" },
+    { "glyph_id": "G_FORMATION", "shape": "three_stacked_bars", "orientation": "forward", "color": "gold", "sound": "OM", "operator": "formation_priority", "target": "unit_group" },
+    { "glyph_id": "G_BELL_CARRIER", "shape": "bell_arc", "orientation": "downbeat", "color": "white", "sound": "KEL", "operator": "carrier_activate", "target": "brand_network" }
+  ],
+  "parse_result": {
+    "faction_id": "amber_choir",
+    "ai_priorities": ["regroup_if_isolated", "maintain_formation", "advance_under_bell"],
+    "audio_motif": "low_amber_bell_chorus",
+    "brand_affinity": "sun_ring_obedience",
+    "validators_required": ["brand_carrier_present", "formation_space_available", "morale_state_valid"]
+  }
+}

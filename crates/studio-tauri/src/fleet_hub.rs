@@ -719,4 +719,119 @@ pub fn get_5d_projection_hud(
     }
 }
 
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct CelestialStarHopPayload {
+    pub star_name: String,
+    pub star_idx: u32,
+    pub ra_u32: u32,
+    pub dec_i32: i32,
+    pub mag_permyriad: i16,
+    pub camelot_key: String,
+    pub input_5d: [f32; 5],
+    pub narration: String,
+    pub dialogue_turn: String,
+    pub zero_socket_direct: bool,
+    pub is_end_of_turn: bool,
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct CelestialDialoguePayload {
+    pub user_prompt: String,
+    pub star_hop: CelestialStarHopPayload,
+    pub full_dialogue: String,
+    pub specialist_domain: String,
+    pub domain_margin: u32,
+}
+
+#[tauri::command]
+pub fn observe_celestial_star_hop(
+    camelot_key: String,
+    consonance_pmy: Option<u16>,
+    from_star: Option<String>,
+) -> CelestialStarHopPayload {
+    use gemma_s13::celestial_bot::CelestialGemmaBot;
+    use forge_harmonics::camelot::CamelotKey;
+
+    static HYG_BYTES: &[u8] = include_bytes!("../../../shell/assets/hyg_baked.bin");
+    let mut bot = CelestialGemmaBot::new(HYG_BYTES);
+
+    let parsed_key = CamelotKey::parse(&camelot_key).unwrap_or(CamelotKey::DEFAULT_8A);
+    let consonance = consonance_pmy.unwrap_or(9000);
+    let from_str = from_star.unwrap_or_else(|| "Sol".to_string());
+
+    let (hop, dialogue_turn) = bot.observe_star_hop_dialogue(&from_str, parsed_key, consonance);
+    let input_5d = bot.key_to_5d(parsed_key, consonance);
+    let star_idx = parsed_key.star_idx().unwrap_or(0) as u32;
+
+    CelestialStarHopPayload {
+        star_name: hop.star_name,
+        star_idx,
+        ra_u32: hop.ra_u32,
+        dec_i32: hop.dec_i32,
+        mag_permyriad: hop.mag_permyriad,
+        camelot_key: format!("{}{}", parsed_key.number, if parsed_key.is_minor { "A" } else { "B" }),
+        input_5d,
+        narration: hop.narration,
+        dialogue_turn,
+        zero_socket_direct: true,
+        is_end_of_turn: true,
+    }
+}
+
+#[tauri::command]
+pub fn generate_celestial_dialogue(
+    user_message: String,
+    current_key: Option<String>,
+    consonance_pmy: Option<u16>,
+) -> CelestialDialoguePayload {
+    use gemma_s13::celestial_bot::CelestialGemmaBot;
+
+    let key_str = current_key.unwrap_or_else(|| "8A".to_string());
+    let hop_payload = observe_celestial_star_hop(key_str, consonance_pmy, None);
+    let router_res = bq_route_prompt(user_message.clone());
+
+    let turn_prompt = CelestialGemmaBot::format_turn_prompt(&user_message);
+    let full_dialogue = format!("{}{}", turn_prompt, hop_payload.dialogue_turn);
+
+    CelestialDialoguePayload {
+        user_prompt: user_message,
+        star_hop: hop_payload,
+        full_dialogue,
+        specialist_domain: router_res.top_specialist,
+        domain_margin: router_res.margin,
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_observe_celestial_star_hop_sirius() {
+        let payload = observe_celestial_star_hop("8A".to_string(), Some(9000), None);
+        assert_eq!(payload.star_name, "Sirius");
+        assert_eq!(payload.star_idx, 0);
+        assert_eq!(payload.camelot_key, "8A");
+        assert!(payload.zero_socket_direct);
+        assert!(payload.is_end_of_turn);
+        assert!(payload.dialogue_turn.contains("<start_of_turn>model"));
+        assert!(payload.dialogue_turn.contains("<end_of_turn>"));
+    }
+
+    #[test]
+    fn test_generate_celestial_dialogue_roundtrip() {
+        let dialogue = generate_celestial_dialogue(
+            "Navigate toward the radiant pulsar core".to_string(),
+            Some("11B".to_string()),
+            Some(8500),
+        );
+        assert_eq!(dialogue.star_hop.star_name, "Aldebaran");
+        assert!(dialogue.full_dialogue.contains("<start_of_turn>user"));
+        assert!(dialogue.full_dialogue.contains("<end_of_turn>"));
+        assert!(dialogue.full_dialogue.contains("<start_of_turn>model"));
+        assert!(!dialogue.specialist_domain.is_empty());
+    }
+}
+
+
 

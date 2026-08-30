@@ -10,7 +10,7 @@
 
 use gemma_s13::logit_mask::{WitnessedNode, LOGIT_MASKED_ZERO_PROB};
 use gemma_s13::m5_geodesic::M5Coordinate;
-use gemma_s13::nipr::{NormalizedIpr, LANDMARK_PMY};
+use forge_hal_clockspine::nipr::{NormalizedIpr, LANDMARK_PMY};
 use gemma_s13::sentinel::{SentinelBand, SENTINEL_MIN_BYTE};
 use gemma_s13::vault::ZeroRetentionVault;
 

@@ -1,0 +1,24 @@
+#vixi:brush v1
+surface: harmonic_lathe
+
+# The W tool — the Harmonic Extruder / Lathe.
+#
+# Base left-click is the Apprentice baseline (flat Z=0 composition, same footprint
+# as the Q pencil); the deeper tiers turn the same stroke into a lathe:
+#   Shift+Drag  -> Journeyperson (revolve / extrude the 2D profile along Z)
+#   Right-Click -> Master        (raw DSP routing — the extruded column's overtone law)
+#
+# The Apprentice drop here is `bone` so the W tool reads distinct from the Q stone
+# pencil in the MusicSieve acoustic columns it drives.
+
+brush harmonic_lathe
+  tool     = HarmonicLathe      # the W hotkey
+  tier     = Apprentice         # base click: flat 2D composition
+  material = bone               # CE material group dropped per stroke
+  plane    = z0                 # Apprentice locks the Front (Z=0) plane
+  feeds    = mass ring attack   # the AcousticRegistry columns this stroke drives
+  receives = bus_in             # audio snapshot modulates acoustic contribution
+
+gate float_in_ir  = forbidden
+gate alloc_steady = forbidden
+gate vibe_rms > 500             # suppress stroke when audio energy < 5% of max

@@ -1,0 +1,16 @@
+#vixi:kit v1
+surface: vfx_post
+profile: forge_primeflow
+classification: vfx_vfz_visual_effects
+
+slot vfx.root kind=region layout=stack_v
+slot vfx.particle_controls kind=region role=particles
+slot vfx.glow_controls kind=region role=emissive_glow
+slot vfx.trails kind=region role=motion_trails
+slot vfx.post kind=region role=post_process
+slot vfx.temporal kind=region role=temporal_stability
+
+gate visual_only_float = allowed
+state_mutation authoritative = forbidden
+gate silhouette_preserve = required
+gate temporal_popping = reject

@@ -1,0 +1,52 @@
+# Ported verbatim from F:\NewRepo\crates\forge-kv-math (2026-08-16).
+# Delta from donor: renamed -v3; dev-dep forge-shader-build + examples/seal_kernels.rs
+# DROPPED (no v3 forge-shader-build home yet — the sealed SPIR-V blobs are carried
+# and sha2-verified by src/seal.rs; regenerate seals from the v2 tree until then).
+[package]
+name = "forge-kv-math-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "OpaqueEnvelope KV seal + Semantic-Codepoint-Kernel bridge (Inventions #117, #156). Revived to canon from airgap 2026-07-11 (lib + registry; gpu-proof harness deferred)."
+
+[lib]
+name = "forge_kv_math_v3"
+path = "src/lib.rs"
+
+[lints]
+workspace = true
+
+[dependencies]
+hmac = "0.12"
+sha2 = "0.10"
+
+[dependencies.wgpu]
+version = "24"
+optional = true
+default-features = false
+# wgsl+spirv pull the Vulkan path (real-GPU proof); dx12 adds the WARP software
+# adapter so the parity proof can run on a GPU-less box. dx12 was dropped
+# 2026-08-16 (wgpu-hal windows/windows-core version mix broke its D3D12 path)
+# and restored 2026-08-17 by aligning wgpu-hal's own windows deps in the
+# lockfile — audio's windows 0.54/0.56 copies are untouched and coexist fine.
+features = ["wgsl", "spirv", "dx12"]
+
+[dependencies.pollster]
+version = "0.4"
+optional = true
+
+[dependencies.bytemuck]
+version = "1.25"
+optional = true
+features = ["derive"]
+
+[features]
+default = []
+# gpu-proof harness: examples/determinism_proof.rs, CPU==GPU parity bin.
+# Ported 2026-07-20 from the 2026-06-15 airgap (tractor-beam S4-promote).
+gpu-proof = ["dep:wgpu", "dep:pollster", "dep:bytemuck"]
+
+[[example]]
+name = "determinism_proof"
+required-features = ["gpu-proof"]

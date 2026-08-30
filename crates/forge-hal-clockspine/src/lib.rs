@@ -29,21 +29,24 @@
 #![forbid(unsafe_code)]
 
 pub mod attention;
+pub mod collision_bridge;
 pub mod epoch_arena;
 pub mod expert_pool;
 pub mod fixed;
 pub mod metronome;
 pub mod mom_router;
+pub mod nipr;
 pub mod spine;
 pub mod staleness;
 pub mod tick_warden;
 pub mod triple_buffer;
 
 pub use attention::{AttentionEvent, AttentionQueue, ATTENTION_BUDGET_US, ATTENTION_CAP};
+pub use collision_bridge::{CollisionBridge, ResonanceImpulse};
 pub use epoch_arena::EpochArena;
 pub use expert_pool::{hamming, MoeCell, MoeRouter, MoeRouterSoA};
 pub use fixed::{Permyriad, SimTick};
-pub use metronome::MetronomeClock;
+pub use metronome::{MetronomeClock, TickAccumulator};
 pub use spine::{
     audio_brush_stroke, derive_thesias, fires_on, Modality, Primitive, Sequencer, Stack,
     MAX_STACK, SEQ_CAP,

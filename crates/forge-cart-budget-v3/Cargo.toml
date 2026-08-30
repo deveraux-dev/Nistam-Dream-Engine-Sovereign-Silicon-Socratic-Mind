@@ -1,0 +1,13 @@
+[package]
+name = "forge-cart-budget-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "The RunDevRun funnel's COVERAGE LEDGER — a slim pure port of forge-meaning-budget's core (per-category content gaps + authoring hour budget). Read-only; zero deps; edge-portable. Ported verbatim from v2 forge-cart-budget (2026-08-15)."
+
+[dependencies]
+# Pure integer budget math — no deps (the funnel audit pass stays edge-portable).
+
+[lints]
+workspace = true

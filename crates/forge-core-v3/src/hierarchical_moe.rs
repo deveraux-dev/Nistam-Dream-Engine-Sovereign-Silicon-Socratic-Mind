@@ -23,6 +23,7 @@
 //! abs-sum). One LUT, one packer, shared with Tier 1 — not a parallel scheme.
 
 use crate::atom::TritCell5D;
+use crate::fixed_point::Permyriad;
 use crate::metarouter::{pack_trits, trit_bytes_needed, TRIT_DIST_LUT};
 
 /// Fixed-point scale for Tier-2 routing math: Q16, `1 << 16`. Distinct from
@@ -118,6 +119,60 @@ impl SubRouter {
             }
         }
         scores
+    }
+
+    /// Evaluate as soft weights (continuous blend) across all 7 sub-experts.
+    /// Returns a 7-element array of `Permyriad` weights (0..=10_000 each).
+    /// Weights are normalized via rank-preserving inverse-distance, same as
+    /// `evaluate()` but producing Permyriad output instead of fixed-point.
+    pub fn evaluate_soft(&self, query: &[f32]) -> [Permyriad; SUB_EXPERTS_PER_DOMAIN] {
+        let bpc = trit_bytes_needed(query.len() as u16) as usize;
+        let q_tq = pack_trits(query, bpc);
+        let origin = TritCell5D::ORIGIN.0 as usize;
+
+        let mut scores = [0i32; SUB_EXPERTS_PER_DOMAIN];
+        for (i, score) in scores.iter_mut().enumerate() {
+            *score = self.bias[i];
+        }
+
+        let band_size = bpc / SUB_EXPERTS_PER_DOMAIN;
+        if band_size > 0 {
+            for (i, score) in scores.iter_mut().enumerate() {
+                let start = i * band_size;
+                let end = if i == SUB_EXPERTS_PER_DOMAIN - 1 { bpc } else { start + band_size };
+                let energy: i32 = q_tq[start..end]
+                    .iter()
+                    .map(|&b| TRIT_DIST_LUT[(origin << 8) | b as usize] as i32)
+                    .sum();
+                *score = (*score as i64 * energy as i64 / 5) as i32;
+            }
+        }
+
+        let max_score = *scores.iter().max().unwrap_or(&0);
+        let mut sum: i64 = 0;
+        let mut shifted = [0i32; SUB_EXPERTS_PER_DOMAIN];
+
+        for i in 0..SUB_EXPERTS_PER_DOMAIN {
+            let shift = scores[i] - max_score;
+            shifted[i] = if shift >= 0 {
+                (1i64 << shift.min(30)) as i32
+            } else {
+                0
+            };
+            sum += shifted[i] as i64;
+        }
+
+        if sum == 0 {
+            sum = 1;
+        }
+
+        let mut out = [Permyriad::ZERO; SUB_EXPERTS_PER_DOMAIN];
+        for i in 0..SUB_EXPERTS_PER_DOMAIN {
+            let numerator = (shifted[i] as i64) * 10_000;
+            out[i] = Permyriad((numerator / sum) as i32);
+        }
+
+        out
     }
 }
 
@@ -400,5 +455,31 @@ mod tests {
                 assert_eq!(slices[i].layer_end, *exp_e, "num_layers={num_layers}, slice {i}: end mismatch");
             }
         }
+    }
+
+    #[test]
+    fn evaluate_soft_returns_normalized_weights() {
+        let bias = [SCALE_DENOM / 7; SUB_EXPERTS_PER_DOMAIN];
+        let router = SubRouter { bias, trained: false };
+
+        let query = vec![0.5f32; 64];
+        let weights = router.evaluate_soft(&query);
+
+        let sum: i32 = weights.iter().map(|w| w.0).sum();
+        assert!(sum > 0, "sum of weights must be positive");
+        assert!(weights.iter().all(|w| w.0 >= 0), "all weights must be non-negative");
+    }
+
+    #[test]
+    fn evaluate_soft_normalizes_to_sum() {
+        let bias = [SCALE_DENOM / 7; SUB_EXPERTS_PER_DOMAIN];
+        let router = SubRouter { bias, trained: false };
+
+        let query = vec![1.0f32; 64];
+        let weights = router.evaluate_soft(&query);
+
+        let sum: i32 = weights.iter().map(|w| w.0).sum();
+        assert!(sum > 0, "sum of weights must be positive");
+        assert!(weights.iter().all(|w| w.0 >= 0), "all weights must be non-negative");
     }
 }

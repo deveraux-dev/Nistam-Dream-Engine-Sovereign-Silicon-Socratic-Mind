@@ -1,0 +1,17 @@
+#vixi:kit v1
+surface: animation_timeline
+profile: forge_primeflow
+classification: animation_authoring
+
+tick_hz: 120
+slot anim.root kind=region layout=timeline_tracks
+slot anim.ruler kind=widget role=tick_ruler unit=ticks
+slot anim.tracks kind=slot_list of=region max=64 role=track_stack
+slot anim.keyframes kind=widget role=keyframe_lane
+slot anim.curves kind=widget role=curve_editor
+slot anim.preview kind=region role=pose_preview
+
+gate curve_continuity = required
+gate anticipation_marker_for_major_action = required
+gate movement_not_mass_alone = required
+gate speed_per_sec_rounding_warning = required

@@ -1,0 +1,22 @@
+[package]
+name = "prime-sieve-worldgen-v3"
+version = "0.1.0"
+edition = "2021"
+description = "Deterministic voxel world generator using Ulam spiral and prime sieve"
+
+[features]
+default = []
+wright_stats = []
+
+[dependencies]
+forge-core-v3 = { path = "../forge-core-v3" }
+forge-zones-v3 = { path = "../forge-zones-v3" }
+serde = { version = "1.0", features = ["derive"] }
+hmac = "0.12"
+sha2 = "0.10"
+
+[dev-dependencies]
+proptest = "1.0"
+
+[lints]
+workspace = true

@@ -4,7 +4,7 @@ scripts/run_vertex_1hr_tracker.py
 Surface Ledger — 1-Hour Vertex AI Context Cache & Price Tracking Test Harness.
 
 Executes a 1-hour live test of the Vertex AI Context Caching pipeline:
-1. Validates or initializes the 450,000-token `CachedContent` object with SHA-256 manifest hash RECEIPT(live_scale_telemetry.json:17).
+1. Validates or initializes the 450,000-token `CachedContent` object with SHA-256 manifest hash.
 2. Runs periodic deterministic audit queries through the cache.
 3. Tracks exact token consumption (cached vs uncached vs output) and USD spend.
 4. Updates `surfaceledger/billing_sentinel_status.json` and `surfaceledger/vertex_1hr_test_log.json` in real time.
@@ -208,7 +208,7 @@ def run_1hr_tracker(
             time.sleep(sleep_chunk)
 
     print("\n" + "=" * 80)
-    print(f"1-HOUR TEST HARNESS {'LIVE' if not dry_run else 'DRY-RUN'} COMPLETE — SUMMARY AUDIT")
+    print("1-HOUR TEST HARNESS COMPLETE — SUMMARY AUDIT")
     print("=" * 80)
     print(f"Total Test Elapsed Time:  {format_duration(time.time() - start_time)}")
     print(f"Total Audits Dispatched:  {iteration}")

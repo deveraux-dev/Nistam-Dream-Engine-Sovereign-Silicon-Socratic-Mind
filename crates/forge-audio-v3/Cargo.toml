@@ -68,7 +68,7 @@ urlencoding = "2"
 hex = "0.4"
 ogg = "0.9.2"
 rubato = "3.0.0"
-forge-harmonics = { path = "../forge-harmonics" }
+forge-harmonics = { path = "../forge-harmonics", features = ["musicxml"] }
 forge_hal = { package = "forge-hal-clockspine", path = "../forge-hal-clockspine" }
 # ShadowBackend (broski/dream_backend.rs) reuses the daemon's real wire/protocol
 # codec instead of hand-rolling a duplicate JSON-newline format (L05 one-home,

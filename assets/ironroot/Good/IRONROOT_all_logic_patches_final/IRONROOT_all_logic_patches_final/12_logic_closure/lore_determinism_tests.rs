@@ -1,0 +1,6 @@
+//! Copy-ready tests once modules are in the real crate.
+#![cfg(test)]
+use crate::lore_core::*; use crate::lore_registry::*; use crate::harmonic_substrate::*; use crate::packed_state::*;
+#[test] fn packed_state_round_trip(){let v=[1,2,3,1023,511,256];let p=Packed10::from_values(v);assert_eq!(p.values(),v)}
+#[test] fn phase_cancellation_is_stable(){let a=default_body(Element::Earth,AlchemicalTier::Nigredo);let b=default_body(Element::Fire,AlchemicalTier::Rubedo);assert!(phase_cancels(a,b))}
+#[test] fn first_solver_then_echo(){let def=FirstLockDef{id:FirstLockId(0),slug:"test",account:HiddenAccount::RedDebt,zone:ZoneHash(1),required_eras:&[],demand_a:MechanicalDemand::Aggression,demand_b:MechanicalDemand::Patience,final_action:FirstLockFinalAction::DoNotRingBell,world_first_relic:RelicId(1),echo_relic:RelicId(2),puzzle_scar:PuzzleScarId(3),public_ledger_line:"test"};let mut s=FirstLockState::default();let c=WorldFirstClaim{first_lock_id:FirstLockId(0),actor:PlayerHash(7),party_hash:9,proof:ProofHash(123),server_tick:1};assert_eq!(resolve_world_first(&mut s,def,c),WorldFirstVerdict::FirstRelic(RelicId(1)));assert_eq!(resolve_world_first(&mut s,def,c),WorldFirstVerdict::EchoRelic(RelicId(2)))}

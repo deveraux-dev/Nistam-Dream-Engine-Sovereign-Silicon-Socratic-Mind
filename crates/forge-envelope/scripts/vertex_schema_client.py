@@ -5,7 +5,7 @@ Surface Ledger & Forge-Envelope — Vertex AI Structured Output & Schema Dispatc
 This script implements a production-grade Vertex AI real-time client using the
 official google-genai SDK. It establishes a strict physical inspection schema
 via Pydantic, connects to Vertex AI (via ADC) or Google AI Studio (via API Key),
-and dispatches structured output queries to the Gemini 2.5 Flash and 1.5 Flash models.
+and dispatches structured output queries to the Gemini 3.5/2.5/1.5 Flash models.
 
 Ensures absolute determinism, no hallucinations, and pure validated JSON responses
 directly from Vertex AI.
@@ -31,7 +31,7 @@ except ImportError:
 
 
 # Target Model for Ultra-Low Latency Structured Output (Flash series)
-DEFAULT_MODEL = "gemini-2.5-flash"  # Flexible target, supports gemini-2.5-flash / gemini-1.5-flash
+DEFAULT_MODEL = "gemini-3.7-flash"  # Flexible target, supports gemini-3.5-flash / gemini-1.5-flash
 
 
 class PhysicalInspectionAudit(BaseModel):
@@ -107,7 +107,7 @@ def dispatch_structured_audit(
     recovered_curvature_mm: float
 ) -> PhysicalInspectionAudit:
     """
-    Sends raw on-device metadata to Vertex AI / Gemini 2.5 Flash and
+    Sends raw on-device metadata to Vertex AI / Gemini 3.5/2.5 Flash and
     enforces a validated schema returning a structured Pydantic object.
     """
     prompt = f"""
@@ -208,7 +208,7 @@ def main():
         )
 
         print("-" * 80)
-        print(f"                 VALIDATED {type(audit_result).__name__}                    ")
+        print("                 VALIDATED VERTEX AI SCHEMA OUTPUT                    ")
         print("-" * 80)
         print(json.dumps(audit_result.model_dump(), indent=2))
         print("-" * 80)

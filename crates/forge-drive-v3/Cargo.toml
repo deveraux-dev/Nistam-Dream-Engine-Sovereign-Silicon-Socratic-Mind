@@ -1,0 +1,21 @@
+# T6 of the forge-vision drain (plan-2-welds.md tranche table + D2
+# inputframe64 ruling, 2026-08-11): the input-drive word re-founded at 64
+# bytes — the biggest node — deliberately breaking the quarry's 32-byte
+# AgentInputFrame wire (spooler.rs:199) per ARCH000, never silently.
+# Self-contained; window driving and CDP arrive in later tranches as
+# functions over this type, never as a second home.
+[package]
+name = "forge-drive-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+
+# InputFrame64's file rides xtask's textual mount for the spine face (sky.rs
+# precedent); `sky-mount` compiles it data-only there — tests keep ONE home.
+[features]
+sky-mount = []
+
+[lints]
+workspace = true

@@ -1,0 +1,38 @@
+# T2 of the forge-vision drain (plan-2-welds.md tranche table, 2026-08-11):
+# the 08 photometrics quarry re-founded onto an integer-only octahedral
+# normal word. NormalAlbedo8 is the 8-byte photometric texel; the
+# octahedral codec is fixed-point, no f32/f64 anywhere on the encode/decode
+# path (L08). No dependency on Crate Zero or forge-colour-v3 — the
+# octahedral math and the permyriad refusal rows are self-contained; a
+# shading bridge (true unit-sphere normalization, PBR lighting) is a later
+# tranche's function over this type, never a second home for it.
+[package]
+name = "forge-photometric-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+
+# The HUD normal tile (xtask, zero-dependency by its own law) mounts
+# src/normal.rs textually via #[path], the sky.rs/trit.rs precedent: one
+# definition on disk, two compile targets, no cargo edge. The same
+# `sky-mount` feature name tells the file it is riding inside xtask and must
+# compile data-only.
+[features]
+sky-mount = []
+
+[dependencies]
+glam = "0.27"
+rustfft = "6.2"
+
+# EXAMPLES ONLY (2026-08-24): reverse_poisson is the decomposition twin of this
+# crate's forward solve — height -> gradients, where solve_relief is coverage ->
+# height. Running both back to back scores reconstruction fidelity, so the two
+# halves check each other. A dev-dependency keeps that oracle out of the real
+# dependency graph; nothing in src/ reaches for it.
+[dev-dependencies]
+forge-geo-v3 = { path = "../forge-geo-v3" }
+
+[lints]
+workspace = true

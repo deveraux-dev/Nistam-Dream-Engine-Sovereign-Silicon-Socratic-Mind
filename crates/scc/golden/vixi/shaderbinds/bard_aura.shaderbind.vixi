@@ -1,0 +1,26 @@
+#vixi:shaderbind v1
+# bard_aura.shaderbind.vixi — bard performance signals -> shader channels (Permyriad 0..10000).
+# Sovereign forge-gpu grammar (shaderbind_dsl), rewritten off the divergent TS dialect 2026-06-20
+# (Wave 1c): `surface:` / `signal <name> source=.. range=..` / `bard.channel[N] <- <name>`, channels
+# contiguous 0..N. Same signals as before, now loadable via forge_gpu::shaderbind_dsl::parse_shaderbind.
+# Brush gate: act ON the beat — rms gates (paint/strike only when loud enough), beat_phase drives
+# AuraOverlay.drive_from_vibe (the aura breathes on the beat). (brush_instrument_arsenal §3)
+surface: bard
+profile: perform
+
+# rms = gate + scale; beat_phase = aura drive; threat = vibematrix threat colour.
+signal rms        source=audio.rms               range=0..10000
+signal beat_phase source=audio.beat_phase         range=0..10000
+signal threat     source=vibematrix.threat_color  range=0..10000
+# flute = HarmonicEvent velocity -> fire intensity + aura magnitude; mood = MusicMood
+# Quiet/Wandering/Tense/Triumph (0..3) -> palette + drive; water = WaterField.depth -> steam.
+signal flute      source=world.flute_velocity     range=0..10000
+signal mood       source=world.mood               range=0..3
+signal water      source=world.water_depth        range=0..10000
+
+bard.channel[0] <- rms
+bard.channel[1] <- beat_phase
+bard.channel[2] <- threat
+bard.channel[3] <- flute
+bard.channel[4] <- mood
+bard.channel[5] <- water

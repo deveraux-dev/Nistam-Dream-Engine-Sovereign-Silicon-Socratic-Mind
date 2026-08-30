@@ -45,12 +45,9 @@ fn main() {
     let norms_path = Path::new(&norms_dir);
 
     if !seat_path.exists() {
-        println!("=========================================================================");
-        println!("[S13 DEMO MODE] Seat directory '{}' not found.", seat_dir);
-        println!("  -> To download pre-baked weights: python scripts/fetch_demo_weights.py");
-        println!("  -> Standalone GPU GEMV decode bench: cargo run --release --example gpu_decode_timed -p gemma-s13");
-        println!("=========================================================================");
-        return;
+        eprintln!("ERROR: seat dir {seat_dir} not found — set S13_GEMMA_DIR to a");
+        eprintln!("       `quantize-s13 pack-gemma` output (blk_N_*.s13m per layer).");
+        std::process::exit(1);
     }
 
     // Auto-detect geometry from S13M headers
@@ -59,12 +56,8 @@ fn main() {
         n_layers += 1;
     }
     if n_layers == 0 {
-        println!("=========================================================================");
-        println!("[S13 DEMO MODE] No blk_0_attn_q_weight.s13m found in '{}'.", seat_dir);
-        println!("  -> Run: python scripts/fetch_demo_weights.py");
-        println!("  -> Standalone GPU GEMV decode bench: cargo run --release --example gpu_decode_timed -p gemma-s13");
-        println!("=========================================================================");
-        return;
+        eprintln!("ERROR: no blk_0_attn_q_weight.s13m in {}", seat_dir);
+        std::process::exit(1);
     }
 
     // Load layer 0 to detect geometry
@@ -153,8 +146,8 @@ fn main() {
     println!("[e2e_token_step] Norms f32→i16: * 10000 (permyriad fixed-point for rms_norm precision)");
     println!("[e2e_token_step]   Loaded attn_norm: {} f32 values", attn_norm.len());
 
-    // Created for its side-effect (scratch-array bounds asserted in ::new); rms_norm below is called as an associated fn.
-    let _graph = Gemma9bForwardGraph::new(config, DispatchEngine::ScalarReference);
+    // Create forward graph
+    let graph = Gemma9bForwardGraph::new(config, DispatchEngine::ScalarReference);
 
     // Synthetic embeddings: deterministic, tied to output head for self-consistency.
     // Heap, not stack — at 262144 entries this is 512 KB, and the Windows main

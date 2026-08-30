@@ -1,0 +1,108 @@
+{
+  "rules": [
+    {
+      "id": "animation.intent.before.impact",
+      "category": "animation/combat_readability",
+      "claim": "combat animation must communicate intent before consequence",
+      "engine_translation": "hostile actions require readable anticipation before active frames unless explicitly tagged ambush or unfair-by-design",
+      "animation_prior": "anticipation, active, recovery, and hitbox timing must be explicit",
+      "audio_prior": "audio may reinforce tell but cannot be the only critical warning",
+      "flow_prior": "player must parse threat without needing prior failure",
+      "training_token": "animation_intent_before_impact",
+      "confidence": "high",
+      "failure_mode": "attack feels cheap because motion does not warn before damage",
+      "quality_gate": "hostile animation declares anticipation_ticks, active_ticks, recovery_ticks, and readable silhouette"
+    },
+    {
+      "id": "animation.vowless.refusal.motion",
+      "category": "animation/refusal",
+      "claim": "refusal must have visible motion language, not just absence of input",
+      "engine_translation": "compile refusal as deliberate holds, sheathing, lowered stance, turned blade, released breath, or stillness under pressure",
+      "animation_prior": "stillness requires pressure setup and release frame",
+      "audio_prior": "silence or breath may reinforce refusal but visual state must still read",
+      "flow_prior": "refusal must be selectable and legible, not confused with stun or idle",
+      "training_token": "animation_vowless_refusal_motion",
+      "confidence": "high",
+      "failure_mode": "actor appears idle when scene means refusal",
+      "quality_gate": "refusal animation includes active pressure context and deliberate non-action pose"
+    },
+    {
+      "id": "animation.shadow.repeats.habit",
+      "category": "animation/shadow",
+      "claim": "shadow animation should mirror repeated player habits",
+      "engine_translation": "compile shadow movement from repeated dodges, parries, mercy, executions, routes, deaths, and refusals",
+      "animation_prior": "use repetition, delayed mimicry, wrong-side mirroring, or over-perfect execution",
+      "audio_prior": "echo may reinforce but not replace motion evidence",
+      "flow_prior": "player should recognize that is me, but wrong",
+      "training_token": "animation_shadow_repeats_habit",
+      "confidence": "high",
+      "failure_mode": "shadow moves like generic enemy",
+      "quality_gate": "shadow animation cites route_hash, repeated_input_hash, death_position, refusal_count, or execution_count"
+    },
+    {
+      "id": "animation.faction.signal.motion",
+      "category": "animation/faction_readability",
+      "claim": "factions should communicate through motion as well as dialogue and sound",
+      "engine_translation": "each faction gets posture, gesture cadence, ritual blocking, crowd behavior, and transition style",
+      "animation_prior": "motion grammar must be faction-specific",
+      "audio_prior": "sound signal supports faction read but cannot be the only identifier",
+      "flow_prior": "player learns faction pressure from repeated readable behavior",
+      "training_token": "animation_faction_signal_motion",
+      "confidence": "high",
+      "failure_mode": "all factions gesture and stage scenes identically",
+      "quality_gate": "faction animation declares motion_family, signal_family, and world_function_hint"
+    },
+    {
+      "id": "animation.bardic.motion.is.input",
+      "category": "animation/bardic_action",
+      "claim": "bardic performance animation is input communication, not flourish",
+      "engine_translation": "bard animations expose tuning, listening, answering, refusing, striking rhythm, or singing a name",
+      "animation_prior": "performance distinguishes listening, testing, committing, failing, and cancelling",
+      "audio_prior": "sound and animation must agree on action phase",
+      "flow_prior": "player knows when bard is vulnerable, committed, interruptible, or safe",
+      "training_token": "animation_bardic_motion_is_input",
+      "confidence": "high",
+      "failure_mode": "bard plays pretty animation but action phase is unclear",
+      "quality_gate": "bardic animation declares action_phase, vulnerability_state, cancel_window, and worldstate_effect"
+    },
+    {
+      "id": "animation.dialogue.gesture.boundary",
+      "category": "animation/dialogue_gesture",
+      "claim": "dialogue gesture must obey speaker knowledge and identity state",
+      "engine_translation": "gestures reveal or hide witness, debt, memory, fear, obligation, or damaged identity without impossible knowledge",
+      "animation_prior": "gesture ties to speech act and speaker state",
+      "audio_prior": "voice crack, silence, or pause can reinforce gesture",
+      "flow_prior": "player reads social pressure without full exposition",
+      "training_token": "animation_dialogue_gesture_boundary",
+      "confidence": "high",
+      "failure_mode": "npc gestures reveal information they should not know",
+      "quality_gate": "dialogue gesture includes speaker_knowledge_bound and identity_state"
+    },
+    {
+      "id": "animation.quincunx.doublebind.blocking",
+      "category": "animation/systemic_pressure",
+      "claim": "quincunx scenes should animate incompatible demands through blocking and timing",
+      "engine_translation": "stage actors, camera, objectives, and timing so one valid motion conflicts with another valid demand",
+      "animation_prior": "use timing conflict, opposed facing, forced stillness during danger, or motion during proof",
+      "audio_prior": "dissonance may reinforce but cannot be only signal",
+      "flow_prior": "player feels pressured, not tricked",
+      "training_token": "animation_quincunx_doublebind_blocking",
+      "confidence": "high",
+      "failure_mode": "scene presents fake choice or unclear punishment",
+      "quality_gate": "quincunx animation defines demand_a, demand_b, readable conflict, and distinct costs"
+    },
+    {
+      "id": "animation.scripted.scene.must.write.state",
+      "category": "animation/scripted_scene",
+      "claim": "scripted scenes must remain compatible with deterministic state",
+      "engine_translation": "cinematic animation emits state events, not only visual playback",
+      "animation_prior": "scene beats declare state writes at anchor ticks",
+      "audio_prior": "audio stingers cannot replace state events",
+      "flow_prior": "player should not lose trust between cutscene and gameplay",
+      "training_token": "animation_scripted_scene_must_write_state",
+      "confidence": "high",
+      "failure_mode": "cutscene shows event that gameplay state does not record",
+      "quality_gate": "scripted animation declares ledger_event, state_write_tick, and post_scene_state"
+    }
+  ]
+}

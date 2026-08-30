@@ -1,0 +1,24 @@
+{
+  "mode_id": "fictional_root_dusk_mode_001",
+  "public_name": "Root Dusk Mode",
+  "source_inspiration": "raga-inspired modal/rasa/time-cycle logic, fictionalized",
+  "scale_family": "asymmetric_pentatonic_hexatonic",
+  "ascending_allowed": ["root", "minor_second", "fourth", "fifth", "minor_sixth", "octave"],
+  "descending_allowed": ["octave", "minor_sixth", "fifth", "fourth", "minor_second", "root"],
+  "primary_tone": "root",
+  "secondary_tone": "fifth",
+  "signature_phrases": [["root", "minor_second", "fourth", "minor_second", "root"]],
+  "ornaments": ["slow_slide_down", "held_drone"],
+  "time_gate": "dusk",
+  "season_gate": "rain_or_wet_stone",
+  "rasa_profile": { "awe": 0.4, "dread": 0.6, "grief": 0.5, "courage": 0.2, "obedience": 0.0, "liberation": 0.3 },
+  "valid_targets": ["creature", "brand", "zone", "topology", "memory"],
+  "invalid_targets": ["direct_mass_assignment"],
+  "runtime_effects": ["reveal_root_faults", "weaken_name_erasure", "extend_parry_window_if_phrase_completed"],
+  "cultural_review": {
+    "uses_real_raga_name": false,
+    "uses_sacred_material": false,
+    "review_required": false,
+    "notes": "Fictional mode inspired by structural concepts only."
+  }
+}

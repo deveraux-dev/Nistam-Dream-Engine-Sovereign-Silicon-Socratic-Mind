@@ -1,0 +1,5 @@
+interface:
+  display_name: Ironroot Animation Communication
+  short_description: Compile combat and scripted animation into readable communication contracts.
+  icon: 🎭
+  brand_color: "#3b2f2f"

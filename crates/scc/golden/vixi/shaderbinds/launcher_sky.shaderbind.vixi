@@ -1,0 +1,38 @@
+#vixi:shaderbind v1
+surface: launcher_sky
+profile: molten
+
+# THE DOOR'S SKY (Sean 2026-08-03, "shaderbind wire is the missing segment wire it").
+#
+# `launcher.kit.vixi:57` declares the field with `audio_reactive=true`, and the swell
+# it produces was a Rust call — `audio_lifted_intensity_q(10_000, 30_000)` reached in
+# by the host. That is a hardcoded routing decision wearing an authored slot's clothing:
+# the kit says the field reacts, but nothing authored says to WHAT, or how far.
+#
+# This file is that missing segment. The signal set and the channel order are the
+# routing, so changing what the sky answers to is an edit here, not a recompile of
+# `dual_loop.rs`.
+#
+# Channel order is the contract the host reads (`sky_bind()` in constellation_kit):
+#   [0] the star swell      [1] the seasonal wheel      [2] the ground brightness
+
+signal star_lift source=audio.rms range=0..10000
+signal moon_wheel source=world.moon_phase range=0..10000
+signal ground_light source=world.light_level range=0..10000
+
+vibematrix.channel[0] <- star_lift
+vibematrix.channel[1] <- moon_wheel
+vibematrix.channel[2] <- ground_light
+
+# AUDIO IS NOT IDENTITY (root#audio-inert): the music may swell a star's radius, it may
+# never decide WHICH stars are in the sky. That is the catalogue and the moon's job —
+# `celestial_alignment::visible_in_moon`, which is why `moon_wheel` is its own channel
+# and not something mixed out of the audio one.
+gate audio_not_identity = required
+# Three channels, three distinct sources, no two driving the same visual property.
+gate mix_clarity = required
+# The sky is decoration over the front door. It reads `world.*` and must never write
+# back to the authority lane.
+gate visual_only_mutates_authority = forbidden
+# Parsed once at load-time into a static table; never re-parsed on the 120Hz composite.
+gate shader_compile_hotpath = forbidden

@@ -1,0 +1,80 @@
+#vixi:vibe v1
+name: forge_smithy
+profile: forge
+classification: workshop_register
+seed: 1492
+tick_hz: 120
+
+# Palette — 8 slots, canon (token_taxonomy.md 2026-05-19)
+# Register: working smithy at dusk. Coal-fired forge, hammered bronze, leather strapping, ash on the floor.
+# Warm-dominant. Ember is the focal point, not a highlight.
+palette.bg_far          = rgb(14,12,11)     # soot black — deepest workbench shadow
+palette.bg_near         = rgb(28,22,19)     # ash-warm shadow — panel resting surface
+palette.fg_text         = rgb(230,212,180)  # bone — primary text
+palette.fg_muted        = rgb(140,118,98)   # old leather — secondary / disabled
+palette.accent_primary  = rgb(228,108,52)   # ember / hot bronze — focal interactive
+palette.accent_secondary= rgb(168,112,68)   # hammered bronze — supporting interactive
+palette.success         = rgb(148,178,108)  # forge-cooled patina — positive feedback
+palette.warning_danger  = rgb(212,64,44)    # quench red — warnings + errors (context disambiguates)
+
+# Density — workshop register breathes. Comfy default; spacious for low-density inspection surfaces.
+density = comfy
+
+# Chrome — heavier than forge_primeflow. Materials feel weighted. Gentle softening, not rounding.
+# permyriad(1600) = 16% radius — softens corners without reading as "soft UI".
+# mu(14) thickness — substantial border, reads as bronze edge not pixel line.
+# permyriad(3200) elevation — heavy shadow, materials feel placed not floating.
+chrome.curvature = permyriad(1600)
+chrome.thickness = mu(14)
+chrome.elevation = permyriad(3200)
+
+# Motion — settles with mass. Stiffness 200 / damping 11 = perceptibly slower than the engine-default
+# 220/12 of forge_primeflow. Reads as "weight settling", not "snap-to-grid".
+# duration_cap 280ms (above default 240) — settle has room to complete its arc.
+motion.snap.stiffness       = 200
+motion.snap.damping         = 11
+motion.snap.duration_cap_ms = 280
+
+# Type ramp — consistent with engine baseline. Workshop register doesn't justify type system divergence.
+type.ramp[0] = mu(11)   # caption — bench-tag / hover label
+type.ramp[1] = mu(14)   # body
+type.ramp[2] = mu(18)   # subhead
+type.ramp[3] = mu(24)   # head
+type.ramp[4] = mu(32)   # display — Window title only
+
+# Accent bias — focal point lives lower-right of center. Heat source orientation.
+# Golden-ratio horizontal + golden-ratio vertical. Procedural ember glow / pulse effects bias here.
+accent.bias.x_perm = 6180
+accent.bias.y_perm = 6180
+
+# Brush — Studio default carries no audio reactivity. DJ window opts in via per-Window kit.
+# Anvil/Animate/Create/Ship surfaces never modulate chrome by audio (cognitive load).
+brush.id     = "none"
+brush.bus_in = none
+
+# ── Gates ───────────────────────────────────────────────────────────────────────
+# Universal (vixiscript.md §5)
+gate contrast_min    = 4.5
+gate hit_target_min  = mu(44)
+gate runtime_parse   = forbidden
+gate alloc_steady    = forbidden
+gate float_in_ir     = forbidden
+
+# Guardrail (vixiscript.md §5 — 13Forge floor rules)
+gate guardrail_colour_material = required   # colour alone must not determine material
+gate guardrail_music_identity  = required   # music alone must not determine identity
+gate guardrail_motion_mass     = required   # movement alone must not determine mass
+gate guardrail_flow_style      = required   # flow optimization must not erase style
+gate guardrail_math_anything   = required   # math alone must not determine anything
+
+# Smithy-specific (workshop discipline) — texture amplitude tiered by surface context (refactored 2026-05-26)
+gate texture_amplitude_chrome_over_canvas  = permyriad(200)    # 2% — protects pixel work (load-bearing)
+gate texture_amplitude_chrome_floating     = permyriad(500)    # 5% — modals, popovers, title bars over own bg
+gate texture_amplitude_audio_reactive_peak = permyriad(1200)   # 12% — Audio Workshop / sequencer pulse peaks
+gate texture_amplitude_event_burst         = permyriad(800)    # 8% — dock-complete bloom, anvil-strike (<=2 frames)
+gate texture_amplitude_showcase            = permyriad(8000)   # 80% — splash / Hieros Gamos / promo (non-editor)
+gate texture_amplitude_default             = permyriad(200)    # 2% fallback for unscoped surfaces — Editor Surface Clarity (CLAUDE.md 2026-05-24)
+gate canvas_atmosphere_bleed               = forbidden         # NEVER over canvas content (unchanged — load-bearing)
+gate audio_chrome_modulation       = bounded_by_amplitude_tier   # chrome may modulate on ANY window, capped by texture_amplitude_* per context (refactored 2026-05-27 — atmosphere IS the workshop)
+gate audio_chrome_at_rest_contrast = required                     # when audio_rms=0, baseline chrome must read as chrome (control affordance preserved — protects canvas truth without forbidding glow)
+gate active_state_fill_invert      = forbidden                    # NEVER: active tab fill = accent + text = bg (Unity pattern)

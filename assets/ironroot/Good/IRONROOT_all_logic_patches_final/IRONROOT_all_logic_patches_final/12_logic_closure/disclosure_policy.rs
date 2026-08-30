@@ -1,0 +1,5 @@
+//! Canonical progressive disclosure.
+#![allow(dead_code)]
+#[derive(Debug,Clone,Copy,PartialEq,Eq,PartialOrd,Ord)] pub enum RevealStage{Hidden=0,Sensory=1,Pattern=2,Folklore=3,Ledger=4,RaidKey=5,VoidLeak=6}
+#[derive(Debug,Clone,Copy,PartialEq,Eq)] pub enum DisclosureSurface{HiddenAccountName,AccountHint,FirstLockMenu,EchoFarm,PublicLedger,DeathScarInspect,PuzzleScarInspect,ArtifactProvenance,InternalDebugNames,VowlessBlank}
+pub fn can_show(stage:RevealStage,surface:DisclosureSurface,debug:bool)->bool{match surface{DisclosureSurface::HiddenAccountName=>stage>=RevealStage::RaidKey,DisclosureSurface::AccountHint=>stage>=RevealStage::Pattern,DisclosureSurface::FirstLockMenu=>stage>=RevealStage::Folklore,DisclosureSurface::EchoFarm=>stage>=RevealStage::Ledger,DisclosureSurface::PublicLedger=>stage>=RevealStage::Sensory,DisclosureSurface::DeathScarInspect=>stage>=RevealStage::Pattern,DisclosureSurface::PuzzleScarInspect=>stage>=RevealStage::Folklore,DisclosureSurface::ArtifactProvenance=>stage>=RevealStage::Ledger,DisclosureSurface::InternalDebugNames=>debug,DisclosureSurface::VowlessBlank=>stage>=RevealStage::VoidLeak}}

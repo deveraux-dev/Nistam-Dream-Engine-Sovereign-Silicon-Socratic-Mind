@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Executable Brand",
+  "type": "object",
+  "properties": {
+    "brand_id": { "type": "string" },
+    "faction_id": { "type": "string" },
+    "brand_type": { "type": "string" },
+    "carrier_type": { "type": "array", "items": { "type": "string" } },
+    "target_filter": { "type": "object" },
+    "allegiance_delta": { "type": "object" },
+    "behavior_modifiers": { "type": "array", "items": { "type": "string" } },
+    "sensory_overrides": { "type": "object" },
+    "animation_overrides": { "type": "array", "items": { "type": "string" } },
+    "audio_motif": { "type": "string" },
+    "material_overlay": { "type": "string" },
+    "spread_rules": { "type": "object" },
+    "decay_rules": { "type": "object" },
+    "counter_rules": { "type": "array", "items": { "type": "string" } }
+  },
+  "required": ["brand_id", "faction_id", "brand_type", "carrier_type", "target_filter", "counter_rules"]
+}

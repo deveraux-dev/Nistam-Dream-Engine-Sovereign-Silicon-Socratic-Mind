@@ -1,0 +1,47 @@
+#vixi:kit v2
+surface: neurohud
+# neurohud — slapp NEURO-HUD folded in-studio (2026-07-16): goal/aperture/true-now/
+# boards/voice/manuscripts/vitals/search gauges. Host binds live text into the card
+# rects (forge-studio main.rs Playground arm); reached via the HUB neurohud portal.
+slot root                  kind=region  layout=stack_v  padding=mu(24) gap=mu(12)
+slot root.strip            kind=region  layout=stack_h  justify=space_between size=mu(44)
+slot root.strip.back       kind=widget  name=button     on_click=edict:nh_back size=mu(120) material=bronze
+slot root.strip.refresh    kind=widget  name=button     on_click=edict:nh_refresh size=mu(120) material=bronze
+slot root.strip.harvest    kind=widget  name=button     on_click=edict:hub_nightly_harvest size=mu(160) material=bronze
+# deck — THREE NAMED BANDS (2026-08-05 a000 re-chunk, Sean-approved). The 07-23 note
+# here claimed a flat cols=3 grid held the deck inside 4+-1; that was true at NINE cards
+# and stale the moment cognitive (07-19) and roadmap (07-23) landed — ten boxes hung off
+# ONE parent and the last row rendered a single orphan. Visual chunking is not structural
+# chunking, and the same note mis-stated the bind as last-segment: the host matches the
+# WHOLE dotted path (neurohud.rs cards() -> stable_key), so these paths and that table
+# move together or the deck goes blank. Bands read in the operator's order — where we are
+# pointed, what is on the bench, how the person at the bench is doing.
+slot root.deck             kind=region  layout=stack_v  gap=mu(16)
+# aim — where the work is pointed.
+slot root.deck.aim               kind=region  layout=grid  cols=4 gap=mu(12)
+slot root.deck.aim.goal          kind=region  layout=stack_v  size=mu(280)
+slot root.deck.aim.aperture      kind=region  layout=stack_v  size=mu(280)
+slot root.deck.aim.truenow       kind=region  layout=stack_v  size=mu(280)
+# roadmap — 07-23: read-only ROADMAP.json current-phase card (load-only, no mutation).
+slot root.deck.aim.roadmap       kind=region  layout=stack_v  size=mu(280)
+# work — what is on the bench and what it left behind.
+slot root.deck.work              kind=region  layout=grid  cols=3 gap=mu(12)
+slot root.deck.work.boards       kind=region  layout=stack_v  size=mu(280)
+slot root.deck.work.manuscripts  kind=region  layout=stack_v  size=mu(280)
+slot root.deck.work.search       kind=region  layout=stack_v  size=mu(280)
+# state — how the person at the bench is doing. Never a demand, only a readout.
+slot root.deck.state             kind=region  layout=grid  cols=3 gap=mu(12)
+slot root.deck.state.voice       kind=region  layout=stack_v  size=mu(280)
+slot root.deck.state.vitals      kind=region  layout=stack_v  size=mu(280)
+slot root.deck.state.vitals.gap   kind=region  size=mu(96)
+slot root.deck.state.vitals.pulse kind=widget  name=button     on_click=edict:nh_spine_pulse size=mu(44) material=bronze
+# cognitive — board C4 (2026-07-19): the 9th card the Snapshot already gathers
+# (neurohud.rs cards()[8]) finally has a slot to render into. Was an orphan: the
+# host draw loop (main.rs) skipped it for want of this box. lens state / adaptation /
+# guidance (never forced), read-only like its siblings.
+slot root.deck.state.cognitive   kind=region  layout=stack_v  size=mu(280)
+gate contrast_min = 4.5
+gate hit_target_min = mu(44)
+gate runtime_parse = forbidden
+gate alloc_steady = forbidden
+gate float_in_ir = forbidden

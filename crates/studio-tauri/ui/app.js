@@ -2945,7 +2945,7 @@ void main(){
       if (res) {
         $('fleet-res-domain').textContent = res.top_specialist;
         $('fleet-res-margin').textContent = `d=${res.top_distance} | margin=${res.margin} (${res.margin_trit > 0 ? '+1 Signal' : '0 Deadband'})`;
-        $('fleet-res-latency').textContent = `${(dt * 1000).toFixed(1)} µs IPC round-trip (router core: 363–568 ns)`;
+        $('fleet-res-latency').textContent = `${(dt * 1000).toFixed(1)} µs IPC round-trip (router core: 363.4 ns)`;
         $('fleet-route-result').classList.remove('hidden');
       }
     });
@@ -2962,6 +2962,32 @@ void main(){
         $('fleet-papa-nipr').textContent = `${res.papa_nipr_pmy} pmy · Attractor: ${res.papa_is_attractor ? 'YES' : 'NO'}`;
         $('fleet-mama-verdict').textContent = `${res.mama_verdict} (${res.mama_adr0026_scrubbed ? 'SCRUBBED' : 'CLEAN'})`;
         $('fleet-triad-result').classList.remove('hidden');
+      }
+    });
+  }
+
+  const btnFleetCelestial = $('btn-fleet-celestial');
+  if (btnFleetCelestial) {
+    btnFleetCelestial.addEventListener('click', async () => {
+      const userMessage = $('fleet-prompt-input').value.trim();
+      if (!userMessage) return;
+      const res = await invokeCommand('generate_celestial_dialogue', {
+        userMessage,
+        currentKey: '8A',
+        consonancePmy: 9000
+      });
+      if (res && res.star_hop) {
+        $('fleet-celestial-hop').textContent =
+          `${res.star_hop.star_name} (${res.star_hop.camelot_key} · idx ${res.star_hop.star_idx})`;
+        $('fleet-celestial-5d').textContent =
+          `[${res.star_hop.input_5d.map(v => v.toFixed(3)).join(', ')}] (Zero-Heap L2 NN)`;
+        $('fleet-celestial-turn').textContent =
+          `${res.star_hop.narration} (Domain: ${res.specialist_domain}, 3σ Margin: ${res.domain_margin})`;
+        $('fleet-celestial-result').classList.remove('hidden');
+
+        if (typeof res.star_hop.star_idx === 'number') {
+          showDossier(res.star_hop.star_idx);
+        }
       }
     });
   }

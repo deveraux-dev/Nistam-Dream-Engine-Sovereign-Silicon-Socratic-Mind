@@ -352,8 +352,8 @@ pub fn mag_glow_rgb(mag_permyriad: i32, shimmer_pmy: i32) -> [u8; 3] {
 }
 
 /// The spectral class this effective temperature burns at — Morgan-Keenan
-/// boundaries. F and G share [`Spectral::AskiyGold`], as the authored table
-/// does.
+/// boundaries, the same ones `sky_chart` reads. F and G share [`Spectral::
+/// AskiyGold`], as the authored table does.
 pub fn spectral_of_kelvin(kelvin: i32) -> Spectral {
     match kelvin {
         k if k >= 30_000 => Spectral::DeepWinter,
@@ -377,7 +377,9 @@ const CLASS_ANCHORS: [(i32, Spectral); 6] = [
     (33_000, Spectral::DeepWinter),
 ];
 
-/// Natural-log of Kelvin in Q16 — temperature is a LOG axis perceptually.
+/// Natural-log of Kelvin in Q16 — temperature is a LOG axis perceptually
+/// (3000K->4400K is a bigger colour step than 16000K->33000K), and integer
+/// Q16 keeps the walk deterministic.
 fn ln_k_q16(kelvin: i32) -> i64 {
     let k = kelvin.max(1) as f64;
     (k.ln() * 65_536.0) as i64
@@ -395,6 +397,11 @@ fn lerp_hue(a: u16, b: u16, t_q16: i64) -> u16 {
 /// by log-temperature, so the class palette IS the law and the ramp between
 /// classes is continuous. Lightness comes from apparent magnitude, so a
 /// blaze and a smudge of the same class differ in weight, not in hue.
+/// Chroma is then held under the gamut ceiling by [`soft_knee`] — never
+/// clipped per channel, which is what fused the whole catalog into two faces.
+///
+/// `chroma_gain_pmy` is the one aesthetic knob (10_000 = the anchors' own
+/// saturation); everything else is physics or authored table.
 pub fn star_ink_by_type(kelvin: i32, mag_permyriad: i32, chroma_gain_pmy: i32) -> [u8; 3] {
     let lk = ln_k_q16(kelvin);
     let (mut lo, mut hi) = (CLASS_ANCHORS[0], CLASS_ANCHORS[CLASS_ANCHORS.len() - 1]);
@@ -538,6 +545,180 @@ mod tests {
             oklch_to_rgb8(OklchColor { l: 30_000, c: 0, h: 40_000, a: u16::MAX }),
             oklch_to_rgb8(OklchColor { l: 30_000, c: 0, h: 0, a: u16::MAX })
         );
+    }
+
+    /// The ceiling is a true edge: at it the colour is in gamut, one step
+    /// past it is not.
+    #[test]
+    fn max_chroma_is_the_gamut_edge() {
+        for h in [0u16, 5_000, 12_000, 30_000, 47_000, 60_000] {
+            for l in [15_000u16, 32_000, 48_000, 58_000] {
+                let c = max_chroma_in_gamut(l, h);
+                assert!(in_srgb_gamut(OklchColor { l, c, h, a: u16::MAX }), "l{l} h{h} c{c}");
+                assert!(
+                    !in_srgb_gamut(OklchColor { l, c: c + 1, h, a: u16::MAX }),
+                    "l{l} h{h} c{c} was not the edge"
+                );
+            }
+        }
+    }
+
+    /// The four Teff LUT faces of `shell/assets/hyg_baked.bin` (0/20/60/255,
+    /// read 2026-08-27): per-channel gain clamps them onto ~two clipped
+    /// colours; the OKLCH ink keeps four separated hues, none clipped.
+    #[test]
+    fn teff_lut_faces_stay_distinct_as_star_ink() {
+        const LUT: [[u8; 3]; 4] = [[255, 136, 13], [255, 227, 205], [196, 214, 255], [151, 185, 255]];
+        let hues: Vec<u16> = LUT
+            .iter()
+            .map(|c| {
+                let ink = star_ink_rgb(c[0], c[1], c[2], 7_400, 35_000);
+                rgb8_to_oklch(ink[0], ink[1], ink[2]).h
+            })
+            .collect();
+        for (i, a) in hues.iter().enumerate() {
+            for b in &hues[i + 1..] {
+                let d = (*a as i32 - *b as i32).abs().min(65_536 - (*a as i32 - *b as i32).abs());
+                assert!(d > 200, "hues collapsed: {hues:?}");
+            }
+        }
+        for c in LUT {
+            let ink = star_ink_rgb(c[0], c[1], c[2], 7_400, 35_000);
+            assert!(ink.iter().filter(|&&v| v == 255 || v == 0).count() <= 1, "{c:?} -> clipped {ink:?}");
+        }
+    }
+
+    /// The knee never reaches the wall and never reorders. Strictly rising
+    /// through 3x the ceiling (where every real Teff face lands); beyond that
+    /// integer division flattens the asymptote, which stays non-decreasing.
+    #[test]
+    fn soft_knee_rises_and_never_hits_the_wall() {
+        let ceiling = 20_000i64;
+        let mut prev = -1i64;
+        for want in (0..200_000).step_by(97) {
+            let c = soft_knee(want, ceiling);
+            assert!(c < ceiling, "want {want} hit the wall");
+            if want <= 3 * ceiling {
+                assert!(c > prev, "flat at want {want}: {c} <= {prev}");
+            } else {
+                assert!(c >= prev, "fell at want {want}: {c} < {prev}");
+            }
+            prev = c;
+        }
+    }
+
+    /// The two hottest Teff faces of the real LUT (idx 0 and 8, read from
+    /// `shell/assets/hyg_baked.bin` 2026-08-27) must not fuse — 21k stars
+    /// live in indices 0-15.
+    #[test]
+    fn the_hot_teff_faces_do_not_fuse() {
+        let a = star_ink_rgb(255, 136, 13, 7_400, 35_000);
+        let b = star_ink_rgb(255, 183, 122, 7_400, 35_000);
+        let d: i32 = a.iter().zip(b).map(|(x, y)| (*x as i32 - y as i32).abs()).sum();
+        assert!(d > 20, "hot faces fused: {a:?} vs {b:?}");
+    }
+
+    /// The middle survives: a near-white A-class face stays far paler than a
+    /// K-class ember at the same gain — the failure mode of a flat
+    /// "everything to the gamut edge" rule.
+    #[test]
+    fn star_ink_keeps_the_pale_faces_pale() {
+        let chroma = |c: [u8; 3]| {
+            let ink = star_ink_rgb(c[0], c[1], c[2], 7_400, 35_000);
+            rgb8_to_oklch(ink[0], ink[1], ink[2]).c as i32
+        };
+        let pale = chroma([255, 253, 249]); // LUT idx 30, A-class white
+        let ember = chroma([255, 136, 13]); // LUT idx 0, the hot orange face
+        assert!(ember > pale * 3, "pale {pale} vs ember {ember}");
+    }
+
+    /// Ink honours its requested lightness (within the u16 grid) instead of
+    /// riding whatever the source tint's luma happened to be.
+    #[test]
+    fn star_ink_lands_on_the_requested_lightness() {
+        for l_pmy in [4_000, 6_200, 7_400, 8_800] {
+            let ink = star_ink_rgb(196, 214, 255, l_pmy, 35_000);
+            let got = rgb8_to_oklch(ink[0], ink[1], ink[2]).l as i32;
+            let want = l_pmy * 65_535 / 10_000;
+            assert!((got - want).abs() <= 400, "l{l_pmy}: want {want}, got {got}");
+        }
+    }
+
+    #[test]
+    fn achromatic_source_yields_achromatic_ink() {
+        let ink = star_ink_rgb(200, 200, 200, 7_400, 35_000);
+        assert_eq!(ink[0], ink[1]);
+        assert_eq!(ink[1], ink[2]);
+    }
+
+    /// Morgan-Keenan boundaries, both sides of each edge.
+    #[test]
+    fn spectral_classes_land_on_the_mk_boundaries() {
+        assert_eq!(spectral_of_kelvin(35_000), Spectral::DeepWinter);
+        assert_eq!(spectral_of_kelvin(30_000), Spectral::DeepWinter);
+        assert_eq!(spectral_of_kelvin(29_999), Spectral::BoneStar);
+        assert_eq!(spectral_of_kelvin(10_000), Spectral::BoneStar);
+        assert_eq!(spectral_of_kelvin(9_999), Spectral::Frost);
+        assert_eq!(spectral_of_kelvin(7_500), Spectral::Frost);
+        assert_eq!(spectral_of_kelvin(5_778), Spectral::AskiyGold); // Sol
+        assert_eq!(spectral_of_kelvin(4_000), Spectral::TheForge);
+        assert_eq!(spectral_of_kelvin(3_100), Spectral::Wisakedjak);
+    }
+
+    /// The ramp is CONTINUOUS in temperature: no 1K step may jump the ink,
+    /// which is what a class-snapped palette does at every boundary.
+    #[test]
+    fn the_type_ramp_never_snaps_across_a_class_edge() {
+        for edge in [3_700, 5_200, 7_500, 10_000, 30_000] {
+            let below = star_ink_by_type(edge - 1, 20_000, 10_000);
+            let above = star_ink_by_type(edge + 1, 20_000, 10_000);
+            for (x, y) in below.into_iter().zip(above) {
+                assert!(
+                    (x as i32 - y as i32).abs() <= 3,
+                    "snap at {edge}K: {below:?} -> {above:?}"
+                );
+            }
+        }
+    }
+
+    /// Hotter reads bluer, cooler reads warmer — the whole point of typing.
+    #[test]
+    fn hot_types_read_blue_and_cool_types_read_warm() {
+        let m = star_ink_by_type(3_000, 20_000, 10_000);
+        let g = star_ink_by_type(5_778, 20_000, 10_000);
+        let o = star_ink_by_type(33_000, 20_000, 10_000);
+        assert!(m[0] > m[2], "M-class is warm: {m:?}");
+        assert!(o[2] > o[0], "O-class is blue: {o:?}");
+        assert!(g[0] >= g[2], "G-class sits warm-of-neutral: {g:?}");
+        let warmth = |c: [u8; 3]| c[0] as i32 - c[2] as i32;
+        assert!(warmth(m) > warmth(g), "M warmer than G");
+        assert!(warmth(g) > warmth(o), "G warmer than O");
+    }
+
+    /// Same class, different magnitude: one hue, two weights.
+    #[test]
+    fn magnitude_moves_weight_not_hue() {
+        let blaze = star_ink_by_type(5_778, -14_600, 10_000);
+        let smudge = star_ink_by_type(5_778, 60_000, 10_000);
+        let hue = |c: [u8; 3]| rgb8_to_oklch(c[0], c[1], c[2]).h as i32;
+        let d = (hue(blaze) - hue(smudge)).abs().min(65_536 - (hue(blaze) - hue(smudge)).abs());
+        assert!(d < 900, "hue drifted with magnitude: {blaze:?} vs {smudge:?}");
+        let luma = |c: [u8; 3]| c[0] as u32 + c[1] as u32 + c[2] as u32;
+        assert!(luma(blaze) > luma(smudge), "{blaze:?} vs {smudge:?}");
+    }
+
+    /// Nothing the type lane emits may clip a channel.
+    #[test]
+    fn typed_ink_never_clips() {
+        for k in (2_000..40_000).step_by(311) {
+            for mag in [-14_600, 0, 20_000, 45_000, 90_000] {
+                let ink = star_ink_by_type(k, mag, 35_000);
+                assert!(
+                    ink.iter().filter(|&&v| v == 255 || v == 0).count() <= 1,
+                    "{k}K mag{mag} clipped: {ink:?}"
+                );
+            }
+        }
     }
 
     #[test]

@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Dirge Raga-Inspired Fictional Mode",
+  "type": "object",
+  "properties": {
+    "mode_id": { "type": "string" },
+    "public_name": { "type": "string" },
+    "source_inspiration": { "type": "string" },
+    "scale_family": { "type": "string" },
+    "ascending_allowed": { "type": "array", "items": { "type": "string" } },
+    "descending_allowed": { "type": "array", "items": { "type": "string" } },
+    "primary_tone": { "type": "string" },
+    "secondary_tone": { "type": "string" },
+    "signature_phrases": { "type": "array", "items": { "type": "array", "items": { "type": "string" } } },
+    "ornaments": { "type": "array", "items": { "type": "string" } },
+    "time_gate": { "type": "string" },
+    "season_gate": { "type": "string" },
+    "rasa_profile": { "type": "object" },
+    "valid_targets": { "type": "array", "items": { "type": "string" } },
+    "invalid_targets": { "type": "array", "items": { "type": "string" } },
+    "runtime_effects": { "type": "array", "items": { "type": "string" } },
+    "cultural_review": { "type": "object" }
+  },
+  "required": ["mode_id", "public_name", "source_inspiration", "ascending_allowed", "descending_allowed", "primary_tone", "signature_phrases", "cultural_review"]
+}

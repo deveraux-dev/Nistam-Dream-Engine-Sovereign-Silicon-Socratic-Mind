@@ -1,0 +1,26 @@
+#vixi:shaderbind v1
+surface: deveraux_radio
+profile: seehear
+
+# deveraux.fm as ambient signal — the pirate radio's audio drives the brush/signal
+# fields across the site (home brand pulse, radio viz). Authored mapping, not hardcoded.
+#
+# FIVE channels, one per collapse axis. `forge_audio::dimensional_collapse` reduces a
+# 5D point (X pan+ITD · Y depth · Z semantic root-note · W chrono lineage · theta
+# harmonic codeword) to a flat signal; this is that same reduction read backwards, so
+# the site's fields move on the axes the audio engine already thinks in. Three signals
+# left two axes dark: nothing carried POSITION and nothing carried TIMBRE.
+signal pan      source=audio.crossfader         range=0..10000
+signal depth    source=audio.rms                range=0..10000
+signal root     source=audio.spectral_centroid  range=0..10000
+signal lineage  source=audio.beat_phase         range=0..10000
+signal timbre   source=audio.spectrum_high      range=0..10000
+
+deveraux_radio.channel[0] <- pan
+deveraux_radio.channel[1] <- depth
+deveraux_radio.channel[2] <- root
+deveraux_radio.channel[3] <- lineage
+deveraux_radio.channel[4] <- timbre
+
+gate shader_compile_hotpath = forbidden
+gate visual_only_mutates_authority = forbidden

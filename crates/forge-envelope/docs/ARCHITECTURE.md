@@ -211,7 +211,7 @@ For deep regulatory auditing or legal disputes, the S13 token and extracted curv
 ### 11.1. Content Caching Mechanism
 To bypass the latency and token cost of uploading massive reference manuals on every query, I compile a stable SHA-256 signature of the VARS handbook:
 $$\text{Signature} = \text{SHA-256}(\text{VARS\_Handbook.pdf})$$
-I create a Vertex AI or Gemini API `CachedContent` object with a stable TTL. Subsequent inspection queries reference this cache directly on the Edge Metal **Gemini 2.5 Flash** engine, while on-device **Gemma 4** (via `candle-core`) provides local triage. This achieves a massive cost reduction, making the queries extremely light, fast, and economical.
+I create a Vertex AI or Gemini API `CachedContent` object with a stable TTL. Subsequent inspection queries reference this cache directly on the Edge Metal **Gemini 3.7 Flash** engine, while on-device **Gemma 4** (via `candle-core`) provides local triage. This achieves a massive cost reduction, making the queries extremely light, fast, and economical.
 
 ### 11.2. The Zero-Point Tuning State (Temperature 0.0)
 In the context of generative inference, setting model parameters like temperature is often treated merely as a dial for randomness. However, under the Pararity framework:

@@ -1,0 +1,242 @@
+<title>100 Gifts for Brit</title>
+<style>
+/* 100 Gifts for Brit — responsive, neurodivergent-friendly interface */
+body { font-family: system-ui, sans-serif; margin: 0; padding: 1rem; }
+.wrap { max-width: 90ch; margin: 0 auto; }
+.eyebrow { font-size: 0.875rem; color: #666; margin: 0; text-transform: uppercase; letter-spacing: 0.05em; }
+h1 { margin: 0.5rem 0; font-size: 2rem; font-weight: 700; }
+.lede { font-size: 1.125rem; margin: 1rem 0 2rem; color: #333; }
+details { border-left: 4px solid #ddd; padding-left: 1rem; margin: 1rem 0; }
+details[open] { border-left-color: #0066cc; }
+summary { cursor: pointer; font-weight: 600; margin: 0.5rem 0; user-select: none; }
+summary:hover { text-decoration: underline; }
+.room { margin: 2rem 0; }
+.room-head { display: flex; gap: 1rem; align-items: baseline; font-size: 1.25rem; }
+.room-no { font-weight: 700; color: #0066cc; min-width: 5rem; }
+.room-name { flex: 1; }
+.room-mark { color: #999; }
+details[open] > summary .room-mark::before { content: "−"; }
+details:not([open]) > summary .room-mark::before { content: "+"; }
+.room-body { margin: 1rem 0; }
+.room-gap { font-style: italic; margin: 0.5rem 0 1rem; color: #555; }
+.shelf { margin: 1rem 0 0 1rem; }
+.gifts { list-style: none; padding: 0; margin: 0.5rem 0 0 1rem; }
+.gifts li { margin: 0.25rem 0; font-size: 0.95rem; line-height: 1.4; }
+.gifts b { color: #0066cc; font-weight: 600; }
+.sources { margin: 1rem 0 0 2rem; }
+.sources ul { list-style: none; padding: 0; margin: 0.5rem 0 0 0; }
+.sources a { color: #0066cc; text-decoration: none; }
+.sources a:hover { text-decoration: underline; }
+@media (prefers-color-scheme: dark) {
+  body { background: #1a1a1a; color: #eee; }
+  .eyebrow { color: #999; }
+  h1 { color: #fff; }
+  .lede { color: #ccc; }
+  details { border-left-color: #444; }
+  details[open] { border-left-color: #4da6ff; }
+  summary { color: #eee; }
+  summary:hover { color: #fff; }
+  .room-no { color: #4da6ff; }
+  .room-gap { color: #aaa; }
+  .gifts b { color: #4da6ff; }
+  .sources a { color: #4da6ff; }
+}
+</style>
+
+<div class="wrap">
+  <p class="eyebrow">a chapter of the living atlas</p>
+  <h1>100 Gifts for Brit</h1>
+  <p class="lede">Five rooms. Open one, then a shelf.</p>
+
+  <details class="room">
+    <summary class="room-head"><span class="room-no">ROOM 1</span><span class="room-name">The Healing Room</span><span class="room-mark">+</span></summary>
+    <div class="room-body">
+      <p class="room-gap">The province funds waitlists. This room funds making.</p>
+      <details class="shelf"><summary>Paint without fear</summary><ul class="gifts">
+        <li><b>Paint studio</b> A full painting room: brushes, fill, line, layers, undo — one window.</li>
+        <li><b>Six real brushes</b> Pencil, lathe, stamp, spring pen, hatch fill, mirror — a real rack.</li>
+        <li><b>One shared palette</b> Sixty-four colours that mean the same thing in every room of the shop.</li>
+        <li><b>Colour harmony helper</b> Picks colours that agree with each other, automatically.</li>
+        <li><b>Photo to relief</b> Turns a photograph into a touchable 3D carving, ready to print.</li>
+      </ul></details>
+      <details class="shelf"><summary>Sound that settles</summary><ul class="gifts">
+        <li><b>Music desk</b> A four-deck DJ and recording studio in one window.</li>
+        <li><b>Broadcast booth</b> Mic strip, record button, level meters — podcast-ready.</li>
+        <li><b>Key wheel</b> Shows which songs mix without clashing, before you try.</li>
+        <li><b>Sound shapes</b> Draw a sound's rise and fall by hand; the machine plays it back.</li>
+        <li><b>Steady time</b> Metronome and note grid — a drum circle keeps together.</li>
+      </ul></details>
+      <details class="shelf"><summary>Stories that carry</summary><ul class="gifts">
+        <li><b>Story drops</b> Prose becomes a thousand-picture film, paced like breathing.</li>
+        <li><b>Book builder</b> Write, drop pictures in, press one button — out comes a website.</li>
+        <li><b>Zine press</b> The same book prints to a paper-ready file for the copier.</li>
+        <li><b>Branching stories</b> Choose-your-own-path story trees, walked by choice.</li>
+        <li><b>Pressure pen</b> Pen pressure becomes emphasis on the page — the hand stays in the text.</li>
+      </ul></details>
+      <details class="shelf"><summary>Proof it helps</summary><ul class="gifts">
+        <li><b>Nine in ten</b> About 9 in 10 arts-program participants self-report better mental health.</li>
+        <li><b>Youth PTSD evidence</b> A 2025 meta-analysis: creative arts reduce PTSD symptoms in young people.</li>
+        <li><b>Calm by construction</b> Built to never overwhelm — that is a compiled law, not a promise.</li>
+        <li><b>Nothing leaves the room</b> One machine, wire shut. No cloud, no account, no watching.</li>
+        <li><b>Receipts for funders</b> Every claim carries a file line or a source you can check.</li>
+      </ul></details>
+    </div>
+  </details>
+
+  <details class="room">
+    <summary class="room-head"><span class="room-no">ROOM 2</span><span class="room-name">The Language Room</span><span class="room-mark">+</span></summary>
+    <div class="room-body">
+      <p class="room-gap">The language money exists. The delivery tools are what's missing.</p>
+      <details class="shelf"><summary>The Star Alphabet</summary><ul class="gifts">
+        <li><b>Cree syllabics engine</b> The Star Alphabet: glyphs whose rotation IS the vowel — encoded and taught.</li>
+        <li><b>Calligraphy strokes</b> Stroke geometry for the glyphs, each carrying a provenance seal.</li>
+        <li><b>Glyph meets sound</b> Each written character carries its own voice — hearing and reading, one fact.</li>
+        <li><b>Syllabics as paint</b> Write the language directly into artwork — glyph stamps as brushes.</li>
+        <li><b>The star map</b> A sky index anchored on the Cree standing-still star; it files the alphabet.</li>
+      </ul></details>
+      <details class="shelf"><summary>Culture kept right</summary><ul class="gifts">
+        <li><b>Elder-reviewed names</b> nehiyaw-reviewed archetypes only; the faux pas were found and removed.</li>
+        <li><b>Eight guardians</b> Cree-named zone spirits, each with a real, documented sound signature.</li>
+        <li><b>13 Moons storywork</b> A voice-linted story chapter living inside the one book.</li>
+        <li><b>The honest floor</b> What is ours and what is borrowed is said plainly, in writing.</li>
+        <li><b>Provenance seals</b> Who made it and when — tamper-evident, breaks loudly if touched.</li>
+      </ul></details>
+      <details class="shelf"><summary>Teaching tools</summary><ul class="gifts">
+        <li><b>Learning tracks</b> Lessons with prerequisites; the next lesson unlocks when you are ready.</li>
+        <li><b>A book that grows</b> Reveals more as the reader advances — never a wall at once.</li>
+        <li><b>Mastery by doing</b> Practice raises skill on a real dial; trying something new counts double.</li>
+        <li><b>Font sandbox</b> Build and test typefaces for syllabics, live on screen.</li>
+        <li><b>Reading-level gauge</b> Keeps lesson text at the level the learner is actually at.</li>
+      </ul></details>
+      <details class="shelf"><summary>The moment is now</summary><ul class="gifts">
+        <li><b>SILR 2026, Edmonton</b> 460+ gathered in April; workshops on syllabics and digital fluency tools.</li>
+        <li><b>NRC ships language tech</b> The federal lab open-sources tools for 25+ languages, Cree and Michif in.</li>
+        <li><b>Federal language money</b> The Indigenous Languages Component funds community-led revitalization.</li>
+        <li><b>The Métis language office</b> Otipemisiwak is actively revitalizing nêhiyawêwin and three Michifs.</li>
+        <li><b>Brit's program</b> Her Métis Nation talks plus this engine equals the pilot. It is ready.</li>
+      </ul></details>
+    </div>
+  </details>
+
+  <details class="room">
+    <summary class="room-head"><span class="room-no">ROOM 3</span><span class="room-name">The Maker Floor</span><span class="room-mark">+</span></summary>
+    <div class="room-body">
+      <p class="room-gap">A full creative studio with no subscription. Access is the point.</p>
+      <details class="shelf"><summary>One machine, every art</summary><ul class="gifts">
+        <li><b>One program, every tool</b> Paint, music, worlds, words — thirty-six organs, one single program.</li>
+        <li><b>No subscription, ever</b> One computer, no internet needed, nothing rented, nothing expiring.</li>
+        <li><b>Five rooms, one door</b> Paint, Create, Audio, Terminal, Hub — tabs across the top, that's it.</li>
+        <li><b>A flight recorder</b> Every change is recorded; any afternoon can be rewound.</li>
+        <li><b>Machine eyes</b> The shop screenshots and checks its own screens — visual proof, not vibes.</li>
+      </ul></details>
+      <details class="shelf"><summary>Game worlds</summary><ul class="gifts">
+        <li><b>World map maker</b> Zones, eras, factions, connections — a living map of an invented place.</li>
+        <li><b>Hex and tile boards</b> Board-game grids with real distances — print and play at the hall.</li>
+        <li><b>Creature book</b> Archetypes with temperaments and stances — a bestiary for any table.</li>
+        <li><b>The whole game night</b> Quests, crafting, loot, trade, experience — the full kit, deterministic.</li>
+        <li><b>Seasons drive story</b> An in-world calendar and weather that turn with the year — gardens too.</li>
+      </ul></details>
+      <details class="shelf"><summary>Picture pipeline</summary><ul class="gifts">
+        <li><b>Photo to game piece</b> A photograph becomes a placeable asset: cut out, meshed, ready.</li>
+        <li><b>Sprite splitter</b> One drawn sheet becomes many game pieces, automatically.</li>
+        <li><b>The item mint</b> A sword forged from a seed number, with its own fingerprint and preview.</li>
+        <li><b>220 real materials</b> Stone, sand, metal, cloth — real surface looks bound to the 64 slots.</li>
+        <li><b>Living pixels</b> Sand falls, fire spreads, water flows — playable physics for art class.</li>
+      </ul></details>
+      <details class="shelf"><summary>The video lane</summary><ul class="gifts">
+        <li><b>Devlog pipeline</b> Screen plus voice becomes a finished YouTube cut — no camera, no crew.</li>
+        <li><b>Thousand-picture reels</b> Stories become videos: dwell, blink, and page-turn timing built in.</li>
+        <li><b>Cinematic slides</b> Beat-mapped scene decks generated from prose drafts.</li>
+        <li><b>Ghost voice lane</b> Spoken-word and chant layers for the reels — the eerie done kindly.</li>
+        <li><b>One source, many faces</b> One authored file emits the site, the deck, and the video assets.</li>
+      </ul></details>
+    </div>
+  </details>
+
+  <details class="room">
+    <summary class="room-head"><span class="room-no">ROOM 4</span><span class="room-name">The Quiet Design</span><span class="room-mark">+</span></summary>
+    <div class="room-body">
+      <p class="room-gap">Software that respects how brains actually work — by law, not promise.</p>
+      <details class="shelf"><summary>Never overwhelms</summary><ul class="gifts">
+        <li><b>The four-things rule</b> No screen group ever exceeds four-ish items. It is a compiled law here.</li>
+        <li><b>One thing glows</b> One attention cue at a time — never five things blinking at once.</li>
+        <li><b>Depth on request</b> Detail appears only when asked for; the surface stays calm.</li>
+        <li><b>One honest icon each</b> Every tool gets one picture that means it — no mystery buttons.</li>
+        <li><b>The forward ratchet</b> Screens are allowed to get simpler over time — never to re-clutter.</li>
+      </ul></details>
+      <details class="shelf"><summary>Predictable is safe</summary><ul class="gifts">
+        <li><b>Same input, same result</b> The engine is integer-deterministic: no surprises, ever, by construction.</li>
+        <li><b>Two clocks</b> A steady 120Hz heartbeat runs the world; the art lane runs free beside it.</li>
+        <li><b>No popups, no nags</b> Click-only, provably no dead ends, and nothing phones out.</li>
+        <li><b>Never lose the work</b> Save, history, and diff are built into the book itself.</li>
+        <li><b>One pick, one meaning</b> Pick a colour once — material, sound and feel follow it.</li>
+      </ul></details>
+      <details class="shelf"><summary>The watchful desk</summary><ul class="gifts">
+        <li><b>Honest gauges</b> Progress is a measured bar on the desk, not a guess in a meeting.</li>
+        <li><b>Board that cannot flatter</b> It says 3 green, 323 unwired — out loud, to funders too.</li>
+        <li><b>Flags that cannot stale</b> Every warning is re-checked from disk each time — no rotting dashboards.</li>
+        <li><b>Loud when missing</b> Absent things say ABSENT. Nothing fails silently, by rule.</li>
+        <li><b>One word, one meaning</b> A glossary where each term has an owner and a single sense.</li>
+      </ul></details>
+      <details class="shelf"><summary>The research base</summary><ul class="gifts">
+        <li><b>Attention-paced media</b> Dwell and blink timing are parameters, not accidents — tuned for ADHD reads.</li>
+        <li><b>Safety is chapter one</b> The build track opens with Mercy &amp; Iron — ethics before pixels.</li>
+        <li><b>Sound science, pointed kind</b> The psychoacoustics are documented per voice — the same dials can soothe.</li>
+        <li><b>The laws bind us too</b> Cognitive-load law governs every export — even this page.</li>
+        <li><b>Three hundred named methods</b> Hundreds of named mechanisms, each with a file line to point at.</li>
+      </ul></details>
+    </div>
+  </details>
+
+  <details class="room">
+    <summary class="room-head"><span class="room-no">ROOM 5</span><span class="room-name">The Honest Ledger</span><span class="room-mark">+</span></summary>
+    <div class="room-body">
+      <p class="room-gap">Every claim receipted. Funders see the same board we do.</p>
+      <details class="shelf"><summary>The paperwork spine</summary><ul class="gifts">
+        <li><b>Three papers, in order</b> Incorporate, open the bank account, set up payroll. Boring, vital, cheap.</li>
+        <li><b>December opens the door</b> Year-end lands in December; the SR&amp;ED and lending window opens after it.</li>
+        <li><b>R&amp;D diary, already kept</b> Every experiment is dated and receipted daily — SR&amp;ED evidence by default.</li>
+        <li><b>Five priced inventions</b> A licensing table already exists: $1.105M conservative first-year model.</li>
+        <li><b>Cost-of-business gauge</b> Twenty dials weigh spend against output every session.</li>
+      </ul></details>
+      <details class="shelf"><summary>Transparent by construction</summary><ul class="gifts">
+        <li><b>Tamper-proof receipts</b> The ledger is hash-chained: touch one entry and the whole chain breaks loudly.</li>
+        <li><b>Unfakeable signatures</b> Who-did-what is read from the operating system, not from a typed name.</li>
+        <li><b>The 3-for-1 debt law</b> Every shortcut stacked owes three real repairs, with proof. Compiled.</li>
+        <li><b>Badged bragging</b> The brag page marks each claim PROVEN, WIRED, or PLANNED. It cannot inflate.</li>
+        <li><b>One seal, whole shop</b> The entire project state compresses to one checksum a funder can hold.</li>
+      </ul></details>
+      <details class="shelf"><summary>Programs we run</summary><ul class="gifts">
+        <li><b>Trauma-art studio nights</b> The Healing Room, open evenings, staffed — where the province funds waitlists.</li>
+        <li><b>Cree calligraphy workshops</b> The Language Room, delivered with the Métis Nation — Brit's program.</li>
+        <li><b>The garden's paperwork</b> Plot maps, planting calendar, harvest ledger — beautiful, printed, shared.</li>
+        <li><b>Youth game-night league</b> Worlds, quests, and dice from the Maker Floor — printable, screens optional.</li>
+        <li><b>Community zine press</b> Neighbourhood stories in, printed zines and a website out, same afternoon.</li>
+      </ul></details>
+      <details class="shelf"><summary>The pitch itself</summary><ul class="gifts">
+        <li><b>The 13-second script</b> Every line fits one breath — a test fails if it doesn't.</li>
+        <li><b>A demo that fits a phone</b> One self-contained page that opens anywhere, offline.</li>
+        <li><b>Built in the dark</b> Nine months, two people, 127 crates, every claim receipted.</li>
+        <li><b>We can do better, provably</b> They fund studies of the problem; this shop runs the answer.</li>
+        <li><b>Brit holds the pen</b> The next hundred are hers. Her red pen is revision two.</li>
+      </ul></details>
+      <details class="shelf"><summary>How to check any of this</summary>
+        <ul class="gifts">
+        <li><b>proven</b> receipted on disk (70)</li>
+        <li><b>wired</b> built, proof pending (13)</li>
+        <li><b>world</b> outside evidence (6)</li>
+        <li><b>program</b> a program we run (10)</li>
+        <li><b>planned</b> named, not built (1)</li>
+        </ul>
+        <details class="sources"><summary>Outside sources</summary><ul>
+          <li><a href="https://www.psychologytoday.com/ca/blog/the-art-effect/202607/arts-engagement-in-trauma-recovery-can-benefit-mental-health">Arts in trauma recovery</a></li>
+          <li><a href="https://www.nature.com/articles/s44220-025-00543-y">Youth PTSD meta-analysis</a></li>
+          <li><a href="https://www.ualberta.ca/en/supporting-indigenous-language-revitalization/events/silr-gathering-2026.html">SILR Gathering 2026</a></li>
+          <li><a href="https://nrc.canada.ca/en/research-development/research-collaboration/programs/canadian-indigenous-languages-technology-project">NRC language tech</a></li>
+          <li><a href="https://www.canada.ca/en/canadian-heritage/services/funding/aboriginal-peoples.html">Indigenous Languages Component</a></li>
+          <li><a href="https://albertametis.com/culture/language/">Otipemisiwak Métis Government</a></li>
+        </ul></details>
+      </details>
+    </div>
+  </details>
+</div>

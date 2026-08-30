@@ -1,0 +1,6 @@
+//! Name-Shear accessibility config.
+#![allow(dead_code)]
+#[derive(Debug,Clone,Copy)] pub struct NameShearAccessibility{pub reduce_audio_intensity:bool,pub replace_psychoacoustic_tone:bool,pub visual_only_mode:bool,pub haptic_only_mode:bool,pub subtitle_direction_cues:bool,pub max_volume_q:i32,pub max_haptic_q:i32}
+impl Default for NameShearAccessibility{fn default()->Self{Self{reduce_audio_intensity:false,replace_psychoacoustic_tone:false,visual_only_mode:false,haptic_only_mode:false,subtitle_direction_cues:true,max_volume_q:8000,max_haptic_q:6000}}}
+#[derive(Debug,Clone,Copy)] pub struct NameShearCue{pub audio_volume_q:i32,pub haptic_q:i32,pub show_visual_wave:bool,pub show_subtitle_direction:bool,pub use_replacement_tone:bool}
+pub fn apply_accessibility(base_audio_q:i32,base_haptic_q:i32,cfg:NameShearAccessibility)->NameShearCue{let mut audio=base_audio_q.min(cfg.max_volume_q).max(0);let mut haptic=base_haptic_q.min(cfg.max_haptic_q).max(0);if cfg.reduce_audio_intensity{audio/=2} if cfg.visual_only_mode{audio=0;haptic=0} if cfg.haptic_only_mode{audio=0} NameShearCue{audio_volume_q:audio,haptic_q:haptic,show_visual_wave:cfg.visual_only_mode||!cfg.haptic_only_mode,show_subtitle_direction:cfg.subtitle_direction_cues,use_replacement_tone:cfg.replace_psychoacoustic_tone}}

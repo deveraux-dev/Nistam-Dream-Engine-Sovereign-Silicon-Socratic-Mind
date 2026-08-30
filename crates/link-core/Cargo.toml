@@ -1,0 +1,31 @@
+[package]
+name = "link-core"
+description = "13link desktop daemon: TLS-TOFU pairing + config. Ported from F:\\NewRepo\\crates\\link-core with the connection/transport layer rewritten on std::net+std::thread (the donor's tokio async transport was not ported verbatim -- this workspace has no other tokio dependency)."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+link-wire = { path = "../link-wire" }
+forge-core-v3 = { path = "../forge-core-v3" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+uuid = { version = "1", features = ["v4"] }
+anyhow = "1"
+tracing = "0.1"
+toml = "0.8"
+dirs-next = "2"
+gethostname = "0.5"
+# default-features off: rustls's default provider is aws-lc-rs, which
+# would compile in ALONGSIDE the "ring" feature below and make the
+# process-level default provider ambiguous (ServerConfig::builder()'s
+# shorthand panics rather than guessing between two). link-android hits the
+# same crate but never touches that shorthand -- it always builds its
+# ClientConfig with an explicit `ring::default_provider()`, so it never
+# surfaced this. One provider only, matching link-android's actual usage.
+rustls = { version = "0.23", default-features = false, features = ["ring", "std", "tls12"] }
+rustls-pemfile = "2"
+rcgen = "0.13"
+
+[lints]
+workspace = true

@@ -1,0 +1,14 @@
+[quest]
+id = "iron_descent"
+name = "The Iron Descent"
+description = "The Forest Spirit warns of corruption below. Find the Iron Caverns."
+zone = "forest_depths"
+
+[[objectives]]
+type = "reach_zone"
+target = "iron_caverns"
+description = "Enter the Iron Caverns"
+
+[reward]
+xp = 250
+item = "spirit_blessing"

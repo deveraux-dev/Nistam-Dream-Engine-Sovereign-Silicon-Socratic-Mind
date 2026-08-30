@@ -1,0 +1,36 @@
+#vixi:shaderbind v1
+surface: ironroot_console
+profile: ironroot_glass
+
+# Ironroot register state -> glass channels. Permyriad only (0..10000), never floats.
+# Game state rides the `world` namespace, the same lane terminal.glass.shaderbind.vixi
+# uses for world.authority_q.
+#
+# Engine firewall (root#audio-inert): the CanvasUniforms audio fields are INERT in
+# WGSL. A signal reaches pixels ONLY by folding into vibe_glow / vibe_shake /
+# vibe_chromatic, or into the glass opacity the sand_emerge kernel already consumes.
+# That is the whole legal surface, so these four are what is bound here.
+
+# Clarity is the 8th register and the crystallisation parameter: it drives the same
+# glass_opacity_q the VoxelFontAnimator writes, so the pane frosts as the player
+# clears. This is the sand->glass emergence (ADR-0032), driven by game state.
+signal ir_clarity source=world.clarity_q range=0..10000
+
+# Resonance (Sol / gold / Vibration) is the bloom — the surface glows as it rings.
+signal ir_resonance source=world.resonance_q range=0..10000
+
+# Tarnish (Venus / copper / Gender) degrades harmonic fidelity -> chromatic split.
+signal ir_tarnish source=world.tarnish_q range=0..10000
+
+# Shadow Weight (Saturn / lead / Correspondence) is mass — it shakes the pane.
+signal ir_shadow_weight source=world.shadow_weight_q range=0..10000
+
+ironroot_console.channel[0] <- ir_clarity
+ironroot_console.channel[1] <- ir_resonance
+ironroot_console.channel[2] <- ir_tarnish
+ironroot_console.channel[3] <- ir_shadow_weight
+
+# These channels are read-only over game state: the render lane never writes back into
+# authority. Compilation is AOT — no shader build on the hot path.
+gate shader_compile_hotpath = forbidden
+gate visual_only_mutates_authority = forbidden

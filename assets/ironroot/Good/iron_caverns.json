@@ -1,0 +1,66 @@
+{
+  "id": "iron_caverns",
+  "name": "The Iron Caverns",
+  "biome": "Rocky",
+  "width_m": 180,
+  "height_m": 40,
+  "spawn_point": [5.0, 0.0, 0.0],
+  "ground_segments": [
+    {"x": 0, "y": 0}, {"x": 20, "y": -3}, {"x": 50, "y": -8},
+    {"x": 80, "y": -12}, {"x": 110, "y": -10}, {"x": 140, "y": -6},
+    {"x": 160, "y": -3}, {"x": 180, "y": 0}
+  ],
+  "npcs": [
+    {
+      "id": 20, "name": "Iron Golem",
+      "behavior": "Hostile",
+      "position": [80.0, -12.0, 0.0],
+      "material": "Iron",
+      "health": 25000,
+      "detection_radius_m": 8.0
+    },
+    {
+      "id": 21, "name": "Void Crawler",
+      "behavior": "Hostile",
+      "position": [50.0, -8.0, 0.0],
+      "material": "Void",
+      "health": 4000,
+      "detection_radius_m": 20.0
+    },
+    {
+      "id": 22, "name": "Stone Sentinel",
+      "behavior": "Territorial",
+      "position": [140.0, -6.0, 0.0],
+      "material": "Stone",
+      "health": 30000,
+      "detection_radius_m": 6.0
+    }
+  ],
+  "portals": [
+    {
+      "id": 20,
+      "position": [0.0, 0.0, 0.0],
+      "size": [5.0, 10.0, 5.0],
+      "target_zone": "forest_depths",
+      "spawn_pos": [240.0, 0.0, 0.0],
+      "label": "← Deep Forest"
+    }
+  ],
+  "fires": [
+    {
+      "position": [110.0, -10.0, 0.0],
+      "fuel": 8000,
+      "temp_mk": 800000
+    }
+  ],
+  "ambient": "Cave",
+  "quest_triggers": [
+    {
+      "quest_id": "the_scarred_path",
+      "position": [80.0, -12.0, 0.0],
+      "radius_m": 3.0,
+      "trigger_type": "kill_target",
+      "target_npc_id": 20
+    }
+  ]
+}

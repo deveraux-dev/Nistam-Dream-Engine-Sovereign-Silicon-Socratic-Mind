@@ -1,0 +1,28 @@
+#vixi:brush v1
+surface: symmetry_mirror
+
+# The Symmetry brush — a coordinate mirror. Paint ONE stroke; the runtime mirrors
+# (and optionally scales) every painted voxel across a canvas axis. The mirror
+# math is mined from the legacy create_2d_panel.rs symmetry path (mx = (W-1)-x,
+# my = (H-1)-y), re-expressed integer-only on the .brush.vixi runtime and
+# generalized with a Permyriad `scale` of the mirror offset (10000 = exact mirror,
+# the legacy behaviour; <10000 pulls the reflection toward the centre axis).
+#
+# `axis`  = vertical (mirror X) | horizontal (mirror Y) | quad (4-fold).
+# `scale` = Permyriad (10000 = 1.0). Deterministic: same stroke -> same mirror.
+
+brush symmetry_mirror
+  tool     = SymmetryBrush     # coordinate-mirror tool (non-QWER footprint)
+  tier     = Apprentice        # base: flat Z=0 composition
+  material = stone             # CE material group dropped per voxel (orig + mirror)
+  plane    = z0                # locks the Front (Z=0) plane
+  shape    = symmetry          # coordinate mirror (vs Plain)
+  axis     = vertical          # mirror X about the canvas centre (legacy symmetry_x)
+  scale    = 10000             # Permyriad mirror-offset scale; 10000 = exact mirror
+  feeds    = mass ring attack  # AcousticRegistry columns the mirrored stroke drives
+  receives = bus_in            # audio snapshot modulates acoustic contribution
+
+gate float_in_ir  = forbidden
+gate alloc_steady = forbidden
+gate vibe_rms > 500            # suppress stroke when audio energy < 5% of max
+end

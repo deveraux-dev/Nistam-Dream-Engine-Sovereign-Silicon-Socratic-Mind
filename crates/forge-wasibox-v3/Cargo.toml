@@ -1,0 +1,17 @@
+# WASIBOX deterministic spine, mined 2026-08-17 from the plan doc
+# F:\NewRepo\_vault\_plans\_unmined\WASIBOX.txt (no code donor exists in any
+# root). Zero external deps by design; the Gemma/Claude seats are traits, the
+# WASI shared-memory lane is deferred behind an ARCH000 runtime decision.
+[package]
+name = "forge-wasibox-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "WASIBOX gatekeeper spine: CPU/GPU parity verdict, ForgeHandoff escalation packet, sealed upward tool boundary over forge-kv-math-v3."
+
+[lints]
+workspace = true
+
+[dependencies]
+forge-kv-math-v3 = { path = "../forge-kv-math-v3" }

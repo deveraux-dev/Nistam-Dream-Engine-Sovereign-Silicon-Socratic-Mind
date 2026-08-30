@@ -1,0 +1,33 @@
+#vixi:vibe v1
+name: forge_primeflow
+profile: forge
+seed: 1337
+tick_hz: 120
+
+palette.bg_far = rgb(18,18,21)
+palette.bg_near = rgb(26,26,31)
+palette.fg_text = rgb(224,212,186)
+palette.fg_muted = rgb(138,132,120)
+palette.accent_primary = rgb(212,168,67)
+palette.accent_secondary = rgb(126,145,178)
+palette.success = rgb(89,178,112)
+palette.warning = rgb(220,170,50)
+palette.danger = rgb(212,53,53)
+palette.emissive = rgb(142,246,255)
+
+density = comfy
+chrome.curvature = permyriad(1800)
+chrome.thickness = mu(12)
+chrome.elevation = permyriad(2400)
+motion.snap.stiffness = 220
+motion.snap.damping = 12
+motion.snap.duration_cap_ms = 240
+type.ramp[0] = mu(11)
+type.ramp[1] = mu(14)
+type.ramp[2] = mu(18)
+type.ramp[3] = mu(24)
+type.ramp[4] = mu(32)
+accent.bias.x_perm = 6180
+accent.bias.y_perm = 3820
+
+# guardrails: colour alone must not determine material; music alone must not determine identity; movement alone must not determine mass; flow optimization must not erase style.

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>vixi glass — the birth interview</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--panel:#1a1410cc;--panel-solid:#1a1410;--gold:#c8a040;--gold-dim:#8a7030;--blood:#e54b00;--spectral:#00a08e;--text:#e0d4ba;--dim:#706458}
+html,body{background:transparent}
+body{color:var(--text);font-family:'Consolas','Courier New',monospace;height:100vh;display:flex;flex-direction:column}
+header{padding:10px 16px;border-bottom:1px solid var(--gold-dim);display:flex;align-items:center;gap:10px;background:var(--panel);backdrop-filter:blur(2px)}
+header h1{font-size:14px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);font-weight:400}
+#dot{width:10px;height:10px;border-radius:50%;background:var(--spectral);box-shadow:0 0 6px var(--spectral)}
+#progress{font-size:11px;color:var(--dim);letter-spacing:1px;margin-left:auto}
+#log{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
+.msg{max-width:85%;padding:8px 12px;border-radius:3px;font-size:13px;white-space:pre-wrap;word-break:break-word;line-height:1.5}
+.you{align-self:flex-end;background:var(--panel);border:1px solid var(--gold-dim)}
+.door{align-self:flex-start;background:#10140fcc;border:1px solid rgba(0,160,142,.35);color:var(--text)}
+.sys{align-self:center;color:var(--dim);font-size:11px;font-style:italic}
+.tag{display:block;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:4px}
+footer{padding:12px 16px;border-top:1px solid var(--gold-dim);display:flex;flex-direction:column;gap:8px;background:var(--panel);backdrop-filter:blur(2px)}
+.row{display:flex;gap:10px}
+input[type=text],input[type=date],input[type=time]{flex:1;background:var(--panel-solid);border:1px solid var(--gold-dim);color:var(--text);font-family:inherit;font-size:13px;padding:8px;border-radius:3px}
+input:focus{outline:none;border-color:var(--gold)}
+button{background:var(--panel-solid);border:1px solid var(--gold-dim);color:var(--gold);font-family:inherit;font-size:12px;letter-spacing:1px;padding:8px 14px;cursor:pointer;border-radius:3px;text-align:left}
+button:hover,button:focus{border-color:var(--gold);outline:none}
+button .k{color:var(--dim);margin-right:8px}
+.choices{display:flex;flex-direction:column;gap:6px}
+</style>
+</head>
+<body>
+<header><div id="dot"></div><h1>the birth interview</h1><span id="progress"></span></header>
+<div id="log"></div>
+<footer id="foot"></footer>
+<script>
+// DUMB GLASS LAW: no business logic beyond the interview itself.
+// A different CART table is a different game.
+const CART = [
+  { moon: 0, key: 'birthDate', type: 'date', prompt: 'moon 0 — the door you were born through. what date did you first cross it?' },
+  { moon: 1, key: 'birthTime', type: 'time', prompt: 'moon 1 — the hour the sky was fixed above that door. what time did you cross?' },
+  { moon: 2, key: 'birthPlace', type: 'text', prompt: 'moon 2 — the ground under that hour. where were you standing?', placeholder: 'city, or lat/lon' },
+  { moon: 3, key: 'm3', type: 'choice', prompt: "moon 3 — a door won't open. you:", choices: ['find another door', 'wait it out', 'take it off the hinges'] },
+  { moon: 4, key: 'm4', type: 'choice', prompt: "moon 4 — the fire's low and it's your watch. you:", choices: ['feed it now', 'let it breathe', 'let it die and relight at dawn'] },
+  { moon: 5, key: 'm5', type: 'choice', prompt: 'moon 5 — someone hands you a map with a piece torn off. you:', choices: ['walk the torn edge anyway', 'draw the missing piece yourself', 'ask who tore it'] },
+  { moon: 6, key: 'm6', type: 'choice', prompt: "moon 6 — the work is done wrong and nobody's checking. you:", choices: ['fix it quiet', 'flag it loud', "leave it, not your table"] },
+  { moon: 7, key: 'm7', type: 'choice', prompt: "moon 7 — a stranger asks the way and you don't know it. you:", choices: ['say so plain', 'guess with confidence', 'walk with them until you find it'] },
+  { moon: 8, key: 'm8', type: 'choice', prompt: "moon 8 — the storm's early and the crew's not ready. you:", choices: ['call it now', 'push the last hour', 'split the difference'] },
+  { moon: 9, key: 'm9', type: 'choice', prompt: "moon 9 — you win, but you're not sure you earned it. you:", choices: ['take it and move on', 'say so out loud', 'give the credit away'] },
+  { moon: 10, key: 'm10', type: 'choice', prompt: 'moon 10 — the room goes quiet after you speak. you:', choices: ['keep going', 'soften it', 'let the silence sit'] },
+  { moon: 11, key: 'm11', type: 'choice', prompt: "moon 11 — an old debt comes due and you can't pay it in kind. you:", choices: ['pay what you can now', 'name the shortfall', 'let it carry another season'] },
+  { moon: 12, key: 'm12', type: 'choice', prompt: 'moon 12 — the last door before dawn. you:', choices: ['walk through', 'look back once', 'sit on the step till the light comes'] },
+];
+
+const log = document.getElementById('log');
+const foot = document.getElementById('foot');
+const progress = document.getElementById('progress');
+
+const answers = {};      // real birth data + rendered choice text, keyed by CART key
+const temperamentPriors = {}; // choice index per moon, invisible — never rendered
+
+let idx = -1; // -1 = boot door, 0..12 = CART index, 13 = done
+
+function say(cls, tag, text) {
+  const d = document.createElement('div');
+  d.className = 'msg ' + cls;
+  if (tag) { const t = document.createElement('span'); t.className = 'tag'; t.textContent = tag; d.appendChild(t); }
+  d.appendChild(document.createTextNode(text));
+  log.appendChild(d); log.scrollTop = log.scrollHeight;
+  return d;
+}
+
+function fnv1a(str) {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < str.length; i++) {
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h, 0x01000193);
+  }
+  return h >>> 0;
+}
+
+function toHex(n) { return '0x' + n.toString(16).padStart(8, '0'); }
+
+function clearFoot() { foot.innerHTML = ''; foot.onkeydown = null; }
+
+function renderChoices(choices, onPick) {
+  clearFoot();
+  const wrap = document.createElement('div');
+  wrap.className = 'choices';
+  choices.forEach((c, i) => {
+    const b = document.createElement('button');
+    const k = document.createElement('span');
+    k.className = 'k'; k.textContent = '(' + (i + 1) + ')';
+    b.appendChild(k);
+    b.appendChild(document.createTextNode(c));
+    b.onclick = () => onPick(i);
+    wrap.appendChild(b);
+  });
+  foot.appendChild(wrap);
+  foot.onkeydown = (e) => {
+    const n = parseInt(e.key, 10);
+    if (n >= 1 && n <= choices.length) onPick(n - 1);
+  };
+  const first = wrap.querySelector('button');
+  if (first) first.focus();
+}
+
+function renderTextEntry(type, placeholder, onSubmit) {
+  clearFoot();
+  const row = document.createElement('div');
+  row.className = 'row';
+  const inp = document.createElement('input');
+  inp.type = type;
+  if (placeholder) inp.placeholder = placeholder;
+  const btn = document.createElement('button');
+  btn.textContent = 'enter';
+  row.appendChild(inp); row.appendChild(btn);
+  foot.appendChild(row);
+  const submit = () => {
+    const v = inp.value;
+    if (!v) return;
+    onSubmit(v);
+  };
+  btn.onclick = submit;
+  inp.addEventListener('keydown', (e) => { if (e.key === 'Enter') submit(); });
+  inp.focus();
+}
+
+function bootMenu() {
+  say('door', 'door', 'the glass is listening.');
+  renderChoices(['begin the interview', 'what is this?', 'skip to hud'], (i) => {
+    if (i === 0) { idx = 0; askCurrent(); }
+    else if (i === 1) {
+      say('sys', '', 'thirteen questions, one per moon. the first three set your real sky. the rest just set the tone. press a number, or type and press enter.');
+      bootMenu();
+    } else {
+      say('sys', '', 'skipped. no seed struck.');
+      clearFoot();
+    }
+  });
+}
+
+function askCurrent() {
+  const q = CART[idx];
+  progress.textContent = 'moon ' + q.moon + ' / 12';
+  const d = say('door', 'door', q.prompt);
+  if (q.type === 'choice') {
+    renderChoices(q.choices, (choiceIdx) => {
+      say('you', 'you', q.choices[choiceIdx]);
+      answers[q.key] = q.choices[choiceIdx];
+      temperamentPriors[q.key] = choiceIdx;
+      advance();
+    });
+  } else {
+    renderTextEntry(q.type, q.placeholder, (val) => {
+      say('you', 'you', val);
+      answers[q.key] = val;
+      advance();
+    });
+  }
+}
+
+function advance() {
+  idx++;
+  if (idx >= CART.length) { finish(); return; }
+  askCurrent();
+}
+
+function finish() {
+  progress.textContent = 'moon 12 / 12';
+  clearFoot();
+  say('sys', '', 'interview complete.');
+  say('door', 'door', 'birth sky: ' + answers.birthDate + ' ' + answers.birthTime + ' — ' + answers.birthPlace);
+  const order = CART.map(q => answers[q.key]).join('|');
+  const seed = fnv1a(order);
+  say('door', 'birth seed', toHex(seed));
+  // DUMB GLASS LAW still holds: this posts the raw struck seed, nothing
+  // else — the host decides what a "birth-seed" message means (spawn a
+  // tab, reseed a live operator, or nothing at all if no host is
+  // listening). No business logic lives on this side of the wire.
+  if (window.ipc && window.ipc.postMessage) {
+    window.ipc.postMessage('birth-seed ' + toHex(seed));
+    say('sys', '', 'seed sent to the host.');
+  } else {
+    say('sys', '', 'no host listening — copy the seed above into `reseed <hex>` yourself.');
+  }
+}
+
+bootMenu();
+</script>
+</body>
+</html>

@@ -434,25 +434,48 @@ fn is_inside_cfg_test(content: &str, pos: usize) -> bool {
     test_depth != -1
 }
 
-/// Every `pub struct <Name>` / `pub enum <Name>` newly declared in `content`,
-/// outside `#[cfg(test)]`.
-fn new_type_decls(content: &str) -> Vec<&str> {
-    let mut names = Vec::new();
+/// Is `pos` inside a `//` line comment? A doc example or a commented-out line
+/// is prose, not a live home, and counting it is a false positive.
+fn is_inside_line_comment(content: &str, pos: usize) -> bool {
+    let bytes = content.as_bytes();
+    let line_start = bytes[..pos.min(bytes.len())].iter().rposition(|&b| b == b'\n').map_or(0, |i| i + 1);
+    let mut i = line_start;
+    while i + 1 < pos && i + 1 < bytes.len() {
+        if bytes[i] == b'/' && bytes[i + 1] == b'/' {
+            return true;
+        }
+        i += 1;
+    }
+    false
+}
+
+/// Every `pub struct`/`pub enum` name in `content` with its marker offset,
+/// unfiltered — callers decide which sites are live code.
+fn decl_sites(content: &str) -> Vec<(&str, usize)> {
+    let mut out = Vec::new();
     for marker in ["pub struct ", "pub enum "] {
         let mut start = 0;
         while let Some(rel) = content[start..].find(marker) {
             let marker_pos = start + rel;
             let ident_start = marker_pos + marker.len();
-            if !is_inside_cfg_test(content, marker_pos) {
-                let ident = read_ident(&content[ident_start..]);
-                if !ident.is_empty() {
-                    names.push(ident);
-                }
+            let ident = read_ident(&content[ident_start..]);
+            if !ident.is_empty() {
+                out.push((ident, marker_pos));
             }
             start = ident_start;
         }
     }
-    names
+    out
+}
+
+/// Every `pub struct <Name>` / `pub enum <Name>` declared as LIVE code in
+/// `content` — `#[cfg(test)]` fixtures and commented lines are not homes.
+fn new_type_decls(content: &str) -> Vec<&str> {
+    decl_sites(content)
+        .into_iter()
+        .filter(|&(_, pos)| !is_inside_cfg_test(content, pos) && !is_inside_line_comment(content, pos))
+        .map(|(name, _)| name)
+        .collect()
 }
 
 /// Does `name` already exist as a `pub struct`/`pub enum` in a file other
@@ -470,19 +493,21 @@ fn find_existing_decl(root: &Path, editing_file: &Path, name: &str) -> Option<St
             continue; // the file being edited right now, not a collision with itself
         }
         let Ok(text) = std::fs::read_to_string(&entry.path) else { continue };
-        for marker in ["pub struct ", "pub enum "] {
-            let mut start = 0;
-            while let Some(rel) = text[start..].find(marker) {
-                let ident_start = start + rel + marker.len();
-                let found = read_ident(&text[ident_start..]);
-                if found == name && !is_inside_cfg_test(&text, start + rel) {
-                    return Some(entry.path.display().to_string());
-                }
-                start = ident_start;
-            }
+        if new_type_decls(&text).iter().any(|&found| found == name) {
+            return Some(entry.path.display().to_string());
         }
     }
     None
+}
+
+/// Is `file` inside `root`? Compared case-insensitively with separators
+/// normalised: hook JSON carries whatever casing and slash style the caller
+/// used, and a mismatch here would silently disable the gate it guards.
+fn is_under_root(root: &Path, file: &Path) -> bool {
+    let norm = |p: &Path| p.to_string_lossy().to_lowercase().replace('/', "\\");
+    let r = norm(root);
+    let prefix = format!("{}\\", r.trim_end_matches('\\'));
+    norm(file).starts_with(&prefix)
 }
 
 /// L05 one-home: does `content` introduce a `pub struct`/`pub enum` name that
@@ -491,8 +516,29 @@ fn one_home_gate(root: &Path, file: &Path, content: &str) -> Option<String> {
     if content.is_empty() {
         return None;
     }
-    for name in new_type_decls(content) {
-        if let Some(hit) = find_existing_decl(root, file, name) {
+    // One home is a WITHIN-repo law. A file edited outside this root belongs to
+    // a separate tree — the cleanroom mirror ships these same types on purpose —
+    // so scanning THIS root's crates/ for it reports a collision that isn't one.
+    if !is_under_root(root, file) {
+        return None;
+    }
+    // The hook is handed the edit FRAGMENT, where a `#[cfg(test)]` or doc-comment
+    // context sitting above the edit is out of view and a fixture line reads as a
+    // real declaration. Judge context against the file on disk — post-edit runs
+    // after the write — and gate only on names this edit actually introduced.
+    let whole = std::fs::read_to_string(file).unwrap_or_default();
+    let names: Vec<String> = if whole.is_empty() {
+        new_type_decls(content).into_iter().map(str::to_string).collect()
+    } else {
+        let touched: Vec<&str> = decl_sites(content).into_iter().map(|(n, _)| n).collect();
+        new_type_decls(&whole)
+            .into_iter()
+            .filter(|n| touched.contains(n))
+            .map(str::to_string)
+            .collect()
+    };
+    for name in names {
+        if let Some(hit) = find_existing_decl(root, file, &name) {
             return Some(format!(
                 "[foreman hook post-edit] L05 one-home: '{name}' was just declared in {} but already \
                  exists as a pub struct/enum in {hit} — a second live home for the same name is a \
@@ -1692,6 +1738,74 @@ mod tests {
         let raw = "line1\nline2 \"quoted\" back\\slash";
         let wrapped = format!("{{\"k\":\"{}\"}}", json_escape(raw));
         assert_eq!(json_str(&wrapped, "k").as_deref(), Some(raw));
+    }
+
+    /// L05 is a within-repo law. The cleanroom mirror ships the same public
+    /// types on purpose, so an edit landing outside this root must not be
+    /// reported as a second home for a name this root already owns.
+    #[test]
+    fn one_home_gate_ignores_files_outside_the_root() {
+        let root = Path::new("F:\\v3");
+        let content = "pub struct MudReplyDto { pub text: String }".to_string();
+
+        // A deliberately generic OUTSIDE-THE-ROOT path. It named a real sibling
+        // tree until 2026-08-29 and was misspelled, which made a test fixture
+        // read as a live cross-tree reference in every grep. The gate cares only
+        // that the path is not under `root`.
+        let foreign = PathBuf::from("F:\\some-other-tree\\crates\\studio-tauri\\src\\main.rs");
+        assert_eq!(
+            one_home_gate(root, &foreign, &content),
+            None,
+            "a mirror tree's copy of a type is not a second home in THIS root"
+        );
+
+        // Case and slash style vary in the hook JSON; neither may re-enable it.
+        let odd = PathBuf::from("f:/NISTAM-Dream/crates/studio-tauri/src/main.rs");
+        assert_eq!(one_home_gate(root, &odd, &content), None);
+
+        // Control: the same name edited INSIDE this root must still be caught,
+        // or the guard would have disabled the law instead of scoping it. Uses a
+        // path with no file on disk, which is also the fragment-only fallback.
+        let native = PathBuf::from("F:\\v3\\crates\\forge-core-v3\\src\\__no_such_file.rs");
+        assert!(
+            one_home_gate(root, &native, &content).is_some(),
+            "L05 must still fire for a real second home inside this root"
+        );
+    }
+
+    /// post-edit sees only the edit fragment, so context that lives above it is
+    /// invisible. These two filters are what stop a fixture or a doc example
+    /// from being read as a live home once the whole file IS in view.
+    #[test]
+    fn decls_in_comments_and_cfg_test_are_not_homes() {
+        let decl = format!("pub {} Widget;", "struct");
+
+        let doc = format!("/// {decl}\npub fn f() {{}}");
+        assert!(new_type_decls(&doc).is_empty(), "a doc example is prose, not a home");
+
+        let commented = format!("// {decl}");
+        assert!(new_type_decls(&commented).is_empty(), "a commented-out line is not a home");
+
+        let fixture = format!("#[cfg(test)]\nmod t {{\n    fn a() {{ let s = \"{decl}\"; }}\n}}");
+        assert!(new_type_decls(&fixture).is_empty(), "a test fixture is not a home");
+
+        let live = format!("{decl}\n");
+        assert_eq!(new_type_decls(&live), vec!["Widget"], "real code still counts");
+
+        // Trailing `//` on the same line must not mask a decl that precedes it.
+        let trailing = format!("{decl} // note\n");
+        assert_eq!(new_type_decls(&trailing), vec!["Widget"]);
+    }
+
+    /// The guard keys on a path boundary, not a bare prefix: a sibling root
+    /// whose name merely starts with this one is still outside.
+    #[test]
+    fn is_under_root_requires_a_separator_boundary() {
+        let root = Path::new("F:\\v3");
+        assert!(is_under_root(root, Path::new("F:\\v3\\crates\\a\\src\\lib.rs")));
+        assert!(is_under_root(root, Path::new("f:/V3/crates/a/src/lib.rs")));
+        assert!(!is_under_root(root, Path::new("F:\\v33\\crates\\a\\src\\lib.rs")));
+        assert!(!is_under_root(root, Path::new("F:\\NewRepo\\crates\\a\\src\\lib.rs")));
     }
 
     #[test]

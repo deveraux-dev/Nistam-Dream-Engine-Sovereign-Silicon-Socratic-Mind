@@ -1,0 +1,15 @@
+[package]
+name = "forge-vision-v3"
+version = "0.3.0"
+edition = "2021"
+description = "forge-vision's contour extraction pipeline (Sobel edge detection -> boundary trace -> Douglas-Peucker simplify), ported verbatim from F:\\NewRepo\\crates\\forge-vision\\src\\scan\\{edges,contour}.rs. File-loading paths (image crate) excluded — this port is pure pixel math only."
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+rustfft = { version = "6", optional = true }
+
+[features]
+scan = ["dep:rustfft"]
+
+[dev-dependencies]
+serde_json = "1.0"

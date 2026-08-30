@@ -7,6 +7,80 @@
 //! Nehiyaw Natural Law sentinel governor, WebGPU warden, DSP audio bus,
 //! Zero-Generative Cree grammar verification, RAG-DAG logit masking,
 //! Active Thermodynamic Governor, and ADR-0026 zero-retention data vault for Gemma.
+//!
+//! ## Deterministic Substrate Stack
+//!
+//! The core inference loop chains four deterministic modules for real-time closed-form control:
+//!
+//! **`UmpFluxStream`** → **`FredholmResolventEngine`** → **`CognitiveWatchdog`** → **`SpeculativeDecoder`**
+//!
+//! Each module operates with zero heap allocation, O(1) or O(n) bounded latency per tick, and deterministic
+//! output given the same input state.
+//!
+//! ### Module Roles
+//!
+//! - **`UmpFluxStream`**: MIDI Universal Message Protocol packet ingress. Decodes real-time control messages
+//!   (CC, pitch bend, note-on) into machine-friendly `UmpPacket` atoms. Use when handling external
+//!   hardware or DAW automation feeds.
+//! - **`FredholmResolventEngine`**: Closed-form spectral state solver. Accepts decoder state and
+//!   resolves latent projections onto a 5D geodesic manifold via Morton-order tiling (64-point kernel).
+//!   Use for spatial reasoning over model state; guarantees O(64) operations per tick.
+//! - **`CognitiveWatchdog`**: Divergence detector. Monitors Fredholm output against running
+//!   Tikhonov-regularized estimates to flag instability (NaN, inf, out-of-range). O(n) cost where
+//!   n = state vector width (≤128 typical). Use to abort decoding or trigger fallback paths.
+//! - **`SpeculativeDecoder`** (std feature): Lookahead acceptance sampler. Feeds Watchdog decisions
+//!   back to kernel to adjust per-token acceptance threshold. O(1) ring-buffer operations.
+//!
+//! ### Integration Pattern
+//!
+//! ```text
+//! fn inference_loop_120hz() {
+//!     let mut engine = FredholmResolventEngine::new();
+//!     let mut watchdog = CognitiveWatchdog::new(/* tikhonov_lambda */ 0.001);
+//!     let mut ump_rx = UmpFluxStream::open_rx();
+//!     let mut decoder = SpeculativeDecoder::new(/* threshold */ 0.5);
+//!
+//!     loop {
+//!         // 1. Ingest external control (8.3ms window @ 120 Hz)
+//!         if let Some(packet) = ump_rx.next() {
+//!             engine.apply_ump_packet(&packet);
+//!         }
+//!
+//!         // 2. Solve spectral state (O(64) Fredholm kernel)
+//!         let resolvent = engine.step();
+//!
+//!         // 3. Monitor for instability (O(n) clamp checks)
+//!         let watchdog_decision = watchdog.evaluate(&resolvent.state);
+//!
+//!         // 4. Accept or reject speculative token
+//!         let token = match watchdog_decision {
+//!             WatchdogDecision::Accept => decoder.accept(resolvent.logits),
+//!             WatchdogDecision::Reject => decoder.fallback(),
+//!         };
+//!
+//!         // Emit token and cycle
+//!         output_tx.send(token);
+//!         thread::sleep(Duration::from_millis(8));  // 120 Hz cadence
+//!     }
+//! }
+//! ```
+//!
+//! ### Performance Characteristics
+//!
+//! | Module | Complexity | Heap | Notes |
+//! |--------|-----------|------|-------|
+//! | `FredholmResolventEngine` | O(64) | 0 | Morton8 tile dim = 8×8 kernel |
+//! | `CognitiveWatchdog` | O(n) | 0 | n ≤ 128 typical; O(1) Tikhonov update |
+//! | `UmpFluxStream` | O(1) | 0 | Ring buffer decode; stateless |
+//! | `SpeculativeDecoder` | O(1) | 0 | Threshold adaptation via ring buffer |
+//!
+//! ### Invariants
+//!
+//! - **Deterministic**: Identical input state + UMP stream yields identical output tokens across runs.
+//! - **Zero-heap**: All allocations are static or stack-local; no `Vec`, `HashMap`, or dynamic sizing.
+//! - **Bounded latency**: No tick exceeds 6 ms (reserve budget for 120 Hz @ 12 ms window).
+//! - **Seam**: Watchdog clamp values (min/max) must match decoder's speculative range to prevent aliasing.
+//!
 
 #![deny(unsafe_code)]
 #![deny(missing_docs)]
@@ -26,7 +100,6 @@ pub mod logit_mask;
 pub mod m5_geodesic;
 pub mod model_4b;
 pub mod model_9b;
-pub mod nipr;
 #[cfg(feature = "std")]
 pub mod prompt_cache;
 pub mod s13;
@@ -52,7 +125,10 @@ pub use three_bears::{
     ThreeBearsFleet, ThreeBearsFleetOutput, compute_anti_expert_conjugate,
     ternary_dot_product_5trit,
 };
-pub use s13::{MerkleMorinHeader, MerkleMorinMatrix, S13Error, S13_MERKLE_MAGIC, S13TensorView, S13M_MAGIC, S133_MAGIC};
+pub use s13::{
+    isqrt_u64, s13_rms_norm_i16, s13_rms_norm_i32, MerkleMorinHeader, MerkleMorinMatrix,
+    S13Error, S13TensorView, S133_MAGIC, S13M_MAGIC, S13_MERKLE_MAGIC,
+};
 #[cfg(feature = "std")]
 pub use prompt_cache::{load_s13n_norms, S13N_MAGIC};
 
@@ -63,6 +139,11 @@ pub mod fredholm_resolvent;
 pub mod somatic_profile;
 pub mod model_27b;
 pub mod accessibility_gate;
+pub mod two_drums;
+#[cfg(feature = "std")]
+pub mod constrain;
+#[cfg(feature = "std")]
+pub mod celestial_bot;
 
 pub use mersenne31::{reduce_m31, Mersenne31, Morton8_2D, MERSENNE_31_MODULUS};
 pub use cognitive_watchdog::{CognitiveWatchdog, TikhonovClamp, WatchdogDecision};
@@ -74,10 +155,19 @@ pub use somatic_profile::{
     TraumaRecoveryProfile,
 };
 pub use model_27b::{
-    Gemma27bConfig, Somatic27bProjectionWeights, D_FF_27B, D_HEAD_27B, D_MODEL_27B,
+    Gemma27bConfig, S13Norm27b, Somatic27bProjectionWeights, D_FF_27B, D_HEAD_27B, D_MODEL_27B,
     N_HEADS_27B, N_KV_HEADS_27B, N_LAYERS_27B,
 };
 pub use accessibility_gate::{
     AccessibilityGateEngine, AccessibilityOutput, TriStateChoice,
 };
+pub use two_drums::TwoDrums;
+#[cfg(feature = "std")]
+pub use constrain::{
+    PdaStateCache, PdaStateDescriptor, PdaStateId, WeldConstraint, TOKEN_BOS, TOKEN_END_OF_TURN,
+    TOKEN_EOS, TOKEN_PAD, TOKEN_START_OF_TURN, TOKEN_UNK,
+};
+#[cfg(feature = "std")]
+pub use celestial_bot::{CelestialGemmaBot, StarHopResult, LANDMARK_NAMES};
+
 

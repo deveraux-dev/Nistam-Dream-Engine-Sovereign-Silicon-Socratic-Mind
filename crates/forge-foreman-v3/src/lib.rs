@@ -27,9 +27,11 @@
 //! Mechanism values (endpoint, gate command, retry budget) come from
 //! `.forge/v3-directives.ron` and a missing key is an error, never a default.
 
+pub mod amortize_trigger;
 pub mod arbiter;
 pub mod beat_status;
 pub mod census;
+pub mod claim;
 pub mod client;
 pub mod directives;
 pub mod dauer;

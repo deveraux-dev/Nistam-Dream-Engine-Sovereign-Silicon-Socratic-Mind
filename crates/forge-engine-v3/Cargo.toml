@@ -1,0 +1,26 @@
+# Wave engine-spine (ENGINE-SPINE-BRIEF.md + ledger, 2026-08-11): the ONE
+# engine home (L05) — the spine every engine folds into or adapts onto.
+# EngineTick8 (8-byte tick word: 120Hz carrier frame + pulse phase mod 30,
+# LCM(1,2,3,5) sky doctrine + CRT residues + run-state trit) and SpineState64
+# (64-byte spine state: tick + Morton8 5-axis pos + input digest + mechanism).
+# Deps are the two alignment seams only: Morton8 (5D) and InputFrame64 (drive).
+[package]
+name = "forge-engine-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+
+[dependencies]
+forge-poll5d-v3 = { path = "../forge-poll5d-v3" }
+forge-drive-v3 = { path = "../forge-drive-v3" }
+
+# The spine face rides xtask's textual mount (sky.rs precedent); the same
+# `sky-mount` feature name compiles the mounted files data-only there, so no
+# test ever has two homes.
+[features]
+sky-mount = []
+
+[lints]
+workspace = true

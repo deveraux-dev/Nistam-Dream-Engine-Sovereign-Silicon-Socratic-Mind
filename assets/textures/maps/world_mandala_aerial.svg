@@ -1,0 +1,328 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1600" width="100%" height="100%">
+  <defs>
+    <!-- Gradients for Themes & Elements -->
+    <radialGradient id="bgParchment" cx="50%" cy="50%" r="75%">
+      <stop offset="0%" stop-color="#1c1f26"/>
+      <stop offset="60%" stop-color="#12141a"/>
+      <stop offset="100%" stop-color="#090a0d"/>
+    </radialGradient>
+    
+    <radialGradient id="hubGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#3d3420"/>
+      <stop offset="70%" stop-color="#221e14"/>
+      <stop offset="100%" stop-color="#13110b"/>
+    </radialGradient>
+
+    <!-- Elemental Node Glows -->
+    <radialGradient id="fireGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ff4422"/>
+      <stop offset="70%" stop-color="#881100"/>
+      <stop offset="100%" stop-color="#330500"/>
+    </radialGradient>
+    <radialGradient id="earthGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#44bb44"/>
+      <stop offset="70%" stop-color="#115511"/>
+      <stop offset="100%" stop-color="#052205"/>
+    </radialGradient>
+    <radialGradient id="airGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#eebb33"/>
+      <stop offset="70%" stop-color="#775511"/>
+      <stop offset="100%" stop-color="#332205"/>
+    </radialGradient>
+    <radialGradient id="waterGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#2299ee"/>
+      <stop offset="70%" stop-color="#0a4477"/>
+      <stop offset="100%" stop-color="#031a33"/>
+    </radialGradient>
+
+    <!-- Filters -->
+    <filter id="dropShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.8"/>
+    </filter>
+    <filter id="goldGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+
+  <style>
+    .title-main { font-family: 'Cinzel', 'Georgia', serif; font-size: 34px; font-weight: bold; fill: #e6c67a; letter-spacing: 4px; }
+    .title-sub { font-family: 'Cinzel', 'Georgia', serif; font-size: 15px; fill: #9e8a58; letter-spacing: 2px; }
+    .node-title { font-family: 'Cinzel', 'Georgia', serif; font-size: 16px; font-weight: bold; fill: #ffffff; text-anchor: middle; }
+    .node-subtitle { font-family: 'Trebuchet MS', sans-serif; font-size: 12px; fill: #d4cfb8; text-anchor: middle; }
+    .node-element { font-family: 'Trebuchet MS', sans-serif; font-size: 11px; font-weight: bold; text-anchor: middle; text-transform: uppercase; }
+    .distance-tag { font-family: 'Courier New', monospace; font-size: 11px; fill: #8c8268; text-anchor: middle; }
+    .spoke-line { stroke: #3a3528; stroke-width: 1.5; stroke-dasharray: 4,4; }
+    .spoke-solid { stroke: #5c5238; stroke-width: 2; }
+    .ring-line { stroke: #2a251a; stroke-width: 1.5; fill: none; }
+    .ring-major { stroke: #4e442c; stroke-width: 2; fill: none; stroke-dasharray: 8,4; }
+    .quincunx-line { stroke: #e6a122; stroke-width: 2.5; fill: none; stroke-dasharray: 6,4; opacity: 0.85; }
+    .legend-text { font-family: 'Trebuchet MS', sans-serif; font-size: 12px; fill: #c0b89d; }
+    .axis-label { font-family: 'Courier New', monospace; font-size: 13px; fill: #706850; }
+  </style>
+
+  <!-- Background Base -->
+  <rect width="1600" height="1600" fill="url(#bgParchment)"/>
+
+  <!-- Grid & Coordinate Lines -->
+  <line x1="800" y1="80" x2="800" y2="1520" stroke="#222018" stroke-width="1.5" stroke-dasharray="2,6"/>
+  <line x1="80" y1="800" x2="1520" y2="800" stroke="#222018" stroke-width="1.5" stroke-dasharray="2,6"/>
+  <text x="815" y="105" class="axis-label">+Y (North / 0°)</text>
+  <text x="1460" y="790" class="axis-label">+X (East / 90°)</text>
+  <text x="815" y="1510" class="axis-label">-Y (South / 180°)</text>
+  <text x="90" y="790" class="axis-label">-X (West / 270°)</text>
+
+  <!-- Concentric Distance Rings -->
+  <circle cx="800" cy="800" r="140" class="ring-line"/>
+  <circle cx="800" cy="800" r="280" class="ring-line"/>
+  <circle cx="800" cy="800" r="420" class="ring-line"/>
+  <circle cx="800" cy="800" r="540" class="ring-major"/>
+  <circle cx="800" cy="800" r="680" class="ring-line"/>
+  <text x="800" y="245" class="distance-tag">1.09 km Radial Spoke Radius (R = 540m)</text>
+  <text x="800" y="105" class="distance-tag">Outer Boundary: 2.25 km Radius (4.5 km Diameter)</text>
+
+  <!-- 12 Radial Spoke Rays -->
+  <!-- 12: 0 deg -->
+  <line x1="800" y1="800" x2="800" y2="260" class="spoke-solid"/>
+  <!-- 1: 30 deg -->
+  <line x1="800" y1="800" x2="1070" y2="332" class="spoke-solid"/>
+  <!-- 2: 60 deg -->
+  <line x1="800" y1="800" x2="1267" y2="530" class="spoke-solid"/>
+  <!-- 3: 90 deg -->
+  <line x1="800" y1="800" x2="1340" y2="800" class="spoke-solid"/>
+  <!-- 4: 120 deg -->
+  <line x1="800" y1="800" x2="1267" y2="1070" class="spoke-solid"/>
+  <!-- 5: 150 deg -->
+  <line x1="800" y1="800" x2="1070" y2="1268" class="spoke-solid"/>
+  <!-- 6: 180 deg -->
+  <line x1="800" y1="800" x2="800" y2="1340" class="spoke-solid"/>
+  <!-- 7: 210 deg -->
+  <line x1="800" y1="800" x2="530" y2="1268" class="spoke-solid"/>
+  <!-- 8: 240 deg -->
+  <line x1="800" y1="800" x2="333" y2="1070" class="spoke-solid"/>
+  <!-- 9: 270 deg -->
+  <line x1="800" y1="800" x2="260" y2="800" class="spoke-solid"/>
+  <!-- 10: 300 deg -->
+  <line x1="800" y1="800" x2="333" y2="530" class="spoke-solid"/>
+  <!-- 11: 330 deg -->
+  <line x1="800" y1="800" x2="530" y2="332" class="spoke-solid"/>
+
+  <!-- Quincunx Traversal Circulation (+5 mod 12 Path) -->
+  <!-- Sequence: Z0(800,800) -> P5(1070,1268) -> P10(333,530) -> P3(1340,800) -> P8(333,1070) -> P1(1070,332) -> P6(800,1340) -> P11(530,332) -> P4(1267,1070) -> P9(260,800) -> P2(1267,530) -> P7(530,1268) -> P12(800,260) -> Z0(800,800) -->
+  <path d="M 800,800 
+           L 1070,1268 
+           L 333,530 
+           L 1340,800 
+           L 333,1070 
+           L 1070,332 
+           L 800,1340 
+           L 530,332 
+           L 1267,1070 
+           L 260,800 
+           L 1267,530 
+           L 530,1268 
+           L 800,260 
+           Z" 
+        class="quincunx-line" filter="url(#goldGlow)"/>
+
+  <!-- ================= 12 PETAL ZONE NODES ================= -->
+
+  <!-- P12: Pisces (Water / Reef) - 12 o'clock -->
+  <g transform="translate(800, 260)" filter="url(#dropShadow)">
+    <circle cx="0" cy="0" r="54" fill="url(#waterGlow)" stroke="#66ccff" stroke-width="2.5"/>
+    <text y="-14" class="node-title">P12: PISCES</text>
+    <text y="4" class="node-subtitle">Coral Reef / Atoll</text>
+    <text y="20" class="node-element" fill="#66ccff">Water • 12 o'clock</text>
+    <circle cx="0" cy="36" r="10" fill="#132438" stroke="#66ccff" stroke-width="1.5"/>
+    <text y="40" font-size="10" fill="#66ccff" font-weight="bold" text-anchor="middle">12</text>
+  </g>
+
+  <!-- P1: Aries (Fire / Volcanic) - 1 o'clock -->
+  <g transform="translate(1070, 332)" filter="url(#dropShadow)">
+    <circle cx="0" cy="0" r="54" fill="url(#fireGlow)" stroke="#ff6644" stroke-width="2.5"/>
+    <text y="-14" class="node-title">P1: ARIES</text>
+    <text y="4" class="node-subtitle">Volcanic Crags</text>
+    <text y="20" class="node-element" fill="#ff6644">Fire • 1 o'clock</text>
+    <circle cx="0" cy="36" r="10" fill="#331005" stroke="#ff6644" stroke-width="1.5"/>
+    <text y="40" font-size="10" fill="#ff6644" font-weight="bold" text-anchor="middle">5</text>
+  </g>
+
+  <!-- P2: Taurus (Earth / Forest) - 2 o'clock -->
+  <g transform="translate(1267, 530)" filter="url(#dropShadow)">
+    <circle cx="0" cy="0" r="54" fill="url(#earthGlow)" stroke="#66dd66" stroke-width="2.5"/>
+    <text y="-14" class="node-title">P2: TAURUS</text>
+    <text y="4" class="node-subtitle">Ancient Forest</text>
+    <text y="20" class="node-element" fill="#66dd66">Earth • 2 o'clock</text>
+    <circle cx="0" cy="36" r="10" fill="#0c240c" stroke="#66dd66" stroke-width="1.5"/>
+    <text y="40" font-size="10" fill="#66dd66" font-weight="bold" text-anchor="middle">10</text>
+  </g>
+
+  <!-- P3: Gemini (Air / Highlands) - 3 o'clock -->
+  <g transform="translate(1340, 800)" filter="url(#dropShadow)">
+    <circle cx="0" cy="0" r="54" fill="url(#airGlow)" stroke="#ffdd55" stroke-width="2.5"/>
+    <text y="-14" class="node-title">P3: GEMINI</text>
+    <text y="4" class="node-subtitle">Highland Spires</text>
+    <text y="20" class="node-element" fill="#ffdd55">Air • 3 o'clock</text>
+    <circle cx="0" cy="36" r="10" fill="#2e2608" stroke="#ffdd55" stroke-width="1.5"/>
+    <text y="40" font-size="10" fill="#ffdd55" font-weight="bold" text-anchor="middle">3</text>
+  </g>
+
+  <!-- P4: Cancer (Water / Swamp) - 4 o'clock -->
+  <g transform="translate(1267, 1070)" filter="url(#dropShadow)">
+    <circle cx="0" cy="0" r="54" fill="url(#waterGlow)" stroke="#66ccff" stroke-width="2.5"/>
+    <text y="-14" class="node-title">P4: CANCER</text>
+    <text y="4" class="node-subtitle">Mangrove Swamp</text>
+    <text y="20" class="node-element" fill="#66ccff">Water • 4 o'clock</text>
+    <circle cx="0" cy="36" r="10" fill="#132438" stroke="#66ccff" stroke-width="1.5"/>
+    <text y="40" font-size="10" fill="#66ccff" font-weight="bold" text-anchor="middle">8</text>
+  </g>
+
+  <!-- P5: Leo (Fire / Savanna) - 5 o'clock -->
+  <g transform="translate(1070, 1268)" filter="url(#dropShadow)">
+    <circle cx="0" cy="0" r="54" fill="url(#fireGlow)" stroke="#ff6644" stroke-width="2.5"/>
+    <text y="-14" class="node-title">P5: LEO</text>
+    <text y="4" class="node-subtitle">Golden Savanna</text>
+    <text y="20" class="node-element" fill="#ff6644">Fire • 5 o'clock</text>
+    <circle cx="0" cy="36" r="10" fill="#331005" stroke="#ff6644" stroke-width="1.5"/>
+    <text y="40" font-size="10" fill="#ff6644" font-weight="bold" text-anchor="middle">1</text>
+  </g>
+
+  <!-- P6: Virgo (Earth / Quarry) - 6 o'clock -->
+  <g transform="translate(800, 1340)" filter="url(#dropShadow)">
+    <circle cx="0" cy="0" r="54" fill="url(#earthGlow)" stroke="#66dd66" stroke-width="2.5"/>
+    <text y="-14" class="node-title">P6: VIRGO</text>
+    <text y="4" class="node-subtitle">Granite Quarry</text>
+    <text y="20" class="node-element" fill="#66dd66">Earth • 6 o'clock</text>
+    <circle cx="0" cy="36" r="10" fill="#0c240c" stroke="#66dd66" stroke-width="1.5"/>
+    <text y="40" font-size="10" fill="#66dd66" font-weight="bold" text-anchor="middle">6</text>
+  </g>
+
+  <!-- P7: Libra (Air / Plateau) - 7 o'clock -->
+  <g transform="translate(530, 1268)" filter="url(#dropShadow)">
+    <circle cx="0" cy="0" r="54" fill="url(#airGlow)" stroke="#ffdd55" stroke-width="2.5"/>
+    <text y="-14" class="node-title">P7: LIBRA</text>
+    <text y="4" class="node-subtitle">Windswept Steppes</text>
+    <text y="20" class="node-element" fill="#ffdd55">Air • 7 o'clock</text>
+    <circle cx="0" cy="36" r="10" fill="#2e2608" stroke="#ffdd55" stroke-width="1.5"/>
+    <text y="40" font-size="10" fill="#ffdd55" font-weight="bold" text-anchor="middle">11</text>
+  </g>
+
+  <!-- P8: Scorpio (Water / Abyss) - 8 o'clock -->
+  <g transform="translate(333, 1070)" filter="url(#dropShadow)">
+    <circle cx="0" cy="0" r="54" fill="url(#waterGlow)" stroke="#66ccff" stroke-width="2.5"/>
+    <text y="-14" class="node-title">P8: SCORPIO</text>
+    <text y="4" class="node-subtitle">Abyssal Trench</text>
+    <text y="20" class="node-element" fill="#66ccff">Water • 8 o'clock</text>
+    <circle cx="0" cy="36" r="10" fill="#132438" stroke="#66ccff" stroke-width="1.5"/>
+    <text y="40" font-size="10" fill="#66ccff" font-weight="bold" text-anchor="middle">4</text>
+  </g>
+
+  <!-- P9: Sagittarius (Fire / Canyon) - 9 o'clock -->
+  <g transform="translate(260, 800)" filter="url(#dropShadow)">
+    <circle cx="0" cy="0" r="54" fill="url(#fireGlow)" stroke="#ff6644" stroke-width="2.5"/>
+    <text y="-14" class="node-title">P9: SAGITTARIUS</text>
+    <text y="4" class="node-subtitle">Red Rock Canyon</text>
+    <text y="20" class="node-element" fill="#ff6644">Fire • 9 o'clock</text>
+    <circle cx="0" cy="36" r="10" fill="#331005" stroke="#ff6644" stroke-width="1.5"/>
+    <text y="40" font-size="10" fill="#ff6644" font-weight="bold" text-anchor="middle">9</text>
+  </g>
+
+  <!-- P10: Capricorn (Earth / Tundra) - 10 o'clock -->
+  <g transform="translate(333, 530)" filter="url(#dropShadow)">
+    <circle cx="0" cy="0" r="54" fill="url(#earthGlow)" stroke="#66dd66" stroke-width="2.5"/>
+    <text y="-14" class="node-title">P10: CAPRICORN</text>
+    <text y="4" class="node-subtitle">Frozen Tundra</text>
+    <text y="20" class="node-element" fill="#66dd66">Earth • 10 o'clock</text>
+    <circle cx="0" cy="36" r="10" fill="#0c240c" stroke="#66dd66" stroke-width="1.5"/>
+    <text y="40" font-size="10" fill="#66dd66" font-weight="bold" text-anchor="middle">2</text>
+  </g>
+
+  <!-- P11: Aquarius (Air / Glacier) - 11 o'clock -->
+  <g transform="translate(530, 332)" filter="url(#dropShadow)">
+    <circle cx="0" cy="0" r="54" fill="url(#airGlow)" stroke="#ffdd55" stroke-width="2.5"/>
+    <text y="-14" class="node-title">P11: AQUARIUS</text>
+    <text y="4" class="node-subtitle">Crystalline Glacier</text>
+    <text y="20" class="node-element" fill="#ffdd55">Air • 11 o'clock</text>
+    <circle cx="0" cy="36" r="10" fill="#2e2608" stroke="#ffdd55" stroke-width="1.5"/>
+    <text y="40" font-size="10" fill="#ffdd55" font-weight="bold" text-anchor="middle">7</text>
+  </g>
+
+  <!-- ================= CENTER HUB: Z0 THORNHAVEN ================= -->
+  <g transform="translate(800, 800)" filter="url(#dropShadow)">
+    <!-- Fortified Island Moat & Wall -->
+    <rect x="-85" y="-85" width="170" height="170" rx="18" fill="url(#hubGrad)" stroke="#e6c67a" stroke-width="3.5"/>
+    <rect x="-70" y="-70" width="140" height="140" rx="10" fill="#231f16" stroke="#9e8a58" stroke-width="1.5" stroke-dasharray="4,2"/>
+    
+    <!-- Internal Quarters -->
+    <!-- Forge NW -->
+    <rect x="-60" y="-60" width="45" height="45" rx="4" fill="#3a1e12" stroke="#ff6644" stroke-width="1"/>
+    <text x="-37" y="-34" font-size="9" fill="#ffaa88" font-family="sans-serif" text-anchor="middle">FORGE</text>
+
+    <!-- Market Center -->
+    <rect x="-12" y="-12" width="24" height="24" rx="3" fill="#4d3d1a" stroke="#ffdd55" stroke-width="1"/>
+    <text x="0" y="3" font-size="7" fill="#ffe899" font-family="sans-serif" text-anchor="middle">MKT</text>
+
+    <!-- Parish Shrine SW -->
+    <rect x="-60" y="15" width="45" height="45" rx="4" fill="#182c38" stroke="#66ccff" stroke-width="1"/>
+    <text x="-37" y="41" font-size="9" fill="#88ddff" font-family="sans-serif" text-anchor="middle">SHRINE</text>
+
+    <!-- Toll Gate E -->
+    <rect x="25" y="-18" width="38" height="36" rx="4" fill="#1f331f" stroke="#66dd66" stroke-width="1"/>
+    <text x="44" y="4" font-size="8" fill="#aaddaa" font-family="sans-serif" text-anchor="middle">TOLL</text>
+
+    <!-- Descent Door S -->
+    <circle cx="0" cy="45" r="14" fill="#110e17" stroke="#bb77ff" stroke-width="2"/>
+    <circle cx="0" cy="45" r="7" fill="#050308" stroke="#e6c67a" stroke-width="1"/>
+    <text x="0" y="72" font-size="9" fill="#cca3ff" font-weight="bold" font-family="sans-serif" text-anchor="middle">DESCENT DOOR</text>
+
+    <!-- Center Label -->
+    <text y="-70" class="node-title" fill="#ffd700">Z0: THORNHAVEN CORE</text>
+    <text y="-95" class="node-subtitle" fill="#e6c67a">80m × 80m Fortified Urban Island</text>
+  </g>
+
+  <!-- ================= MAP HEADERS & LEGENDS ================= -->
+
+  <!-- Main Map Title Block -->
+  <g transform="translate(100, 110)">
+    <text class="title-main">13FORGE V3 — WORLD MANDALA</text>
+    <text y="30" class="title-sub">TOP-DOWN AERIAL BLUEPRINT &amp; 13-MOON QUINCUNX TRAVERSAL MAP</text>
+    <rect x="0" y="45" width="480" height="2" fill="#9e8a58"/>
+  </g>
+
+  <!-- Traversal Order Legend (Bottom Left) -->
+  <g transform="translate(80, 1380)" filter="url(#dropShadow)">
+    <rect width="360" height="150" rx="8" fill="#14171d" stroke="#3d3725" stroke-width="1.5"/>
+    <text x="18" y="26" font-family="Cinzel, Georgia, serif" font-size="14" font-weight="bold" fill="#e6c67a">13-MOON QUINCUNX (+5 mod 12)</text>
+    <text x="18" y="50" class="legend-text"><tspan fill="#ffd700">Traversal Cycle Order (Step 1-13):</tspan></text>
+    <text x="18" y="72" class="legend-text" fill="#ffdd55">Z0 → P5(Leo) → P10(Cap) → P3(Gem) → P8(Scorp)</text>
+    <text x="18" y="92" class="legend-text" fill="#ffdd55">→ P1(Aries) → P6(Virgo) → P11(Aquar) → P4(Canc)</text>
+    <text x="18" y="112" class="legend-text" fill="#ffdd55">→ P9(Sagit) → P2(Taur) → P7(Lib) → P12(Pisc) → Z0</text>
+    <text x="18" y="134" class="legend-text" fill="#9e8a58">Result: Era-Tick (T+1) &amp; Disclosure Stratum (S+1)</text>
+  </g>
+
+  <!-- Elements & Dimensions Legend (Bottom Right) -->
+  <g transform="translate(1160, 1380)" filter="url(#dropShadow)">
+    <rect width="360" height="150" rx="8" fill="#14171d" stroke="#3d3725" stroke-width="1.5"/>
+    <text x="18" y="26" font-family="Cinzel, Georgia, serif" font-size="14" font-weight="bold" fill="#e6c67a">DIMENSIONS &amp; LATTICE SCALES</text>
+    <text x="18" y="52" class="legend-text">• <tspan fill="#ffffff">Pexil Unit Cell:</tspan> 500mm × 500mm × 500mm</text>
+    <text x="18" y="74" class="legend-text">• <tspan fill="#ffffff">Z0 Thornhaven:</tspan> 160 × 160 cells (80m × 80m)</text>
+    <text x="18" y="96" class="legend-text">• <tspan fill="#ffffff">12 Petal Zones:</tspan> 1.09km × 1.09km each (1.2 km²)</text>
+    <text x="18" y="118" class="legend-text">• <tspan fill="#ffffff">Total Contiguous Landmass:</tspan> 14.3 km² (4.5km ⌀)</text>
+    <text x="18" y="138" class="legend-text">• <tspan fill="#ffffff">Cathedral Spire:</tspan> +224m  |  <tspan fill="#ffffff">Deep Door:</tspan> -256m</text>
+  </g>
+
+  <!-- Elemental Color Code (Top Right) -->
+  <g transform="translate(1240, 80)" filter="url(#dropShadow)">
+    <rect width="280" height="120" rx="8" fill="#14171d" stroke="#3d3725" stroke-width="1.5"/>
+    <text x="15" y="24" font-family="Cinzel, Georgia, serif" font-size="13" font-weight="bold" fill="#e6c67a">ELEMENTAL QUADRANTS</text>
+    <circle cx="25" cy="45" r="7" fill="#ff4422"/>
+    <text x="42" y="49" class="legend-text" fill="#ff8866">FIRE (Aries, Leo, Sagittarius)</text>
+    <circle cx="25" cy="67" r="7" fill="#44bb44"/>
+    <text x="42" y="71" class="legend-text" fill="#88ee88">EARTH (Taurus, Virgo, Capricorn)</text>
+    <circle cx="25" cy="89" r="7" fill="#eebb33"/>
+    <text x="42" y="93" class="legend-text" fill="#ffea88">AIR (Gemini, Libra, Aquarius)</text>
+    <circle cx="25" cy="111" r="7" fill="#2299ee"/>
+    <text x="42" y="115" class="legend-text" fill="#77ccff">WATER (Cancer, Scorpio, Pisces)</text>
+  </g>
+
+</svg>

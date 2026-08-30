@@ -1,0 +1,83 @@
+1
+00:00:00,000 --> 00:00:11,000
+I dropped out in grade 9 because the system
+wasn't built for a brain like mine.
+
+2
+00:00:11,000 --> 00:00:22,500
+Spent 23 years putting material on steel across Edmonton,
+Fort Mac, Suncor, and the Walterdale Bridge—NACE Level 2.
+
+3
+00:00:22,500 --> 00:00:33,000
+Four years waiting for a government letter
+to confirm what I already knew.
+
+4
+00:00:33,000 --> 00:00:45,000
+Cree dad, white mom, accepted by neither side. My brain
+can't do long division, so I built a fixed-point engine.
+
+5
+00:00:45,000 --> 00:00:56,000
+Walk downtown Edmonton past the Ice District casino.
+Half a block away, people are suffering.
+
+6
+00:00:56,000 --> 00:01:07,000
+Tech builds $3,000 tools for people with endless runway,
+ignoring those who have had everything taken away.
+
+7
+00:01:07,000 --> 00:01:19,000
+Can't recover under the current rules.
+Diagnosed with AuDHD at 39.
+
+8
+00:01:19,000 --> 00:01:30,000
+Computer processor can't do floating-point math without drifting.
+So I built a fixed-point engine.
+
+9
+00:01:30,000 --> 00:01:42,000
+I took a consequence demo to Alberta Innovates,
+and the Professional Engineer looked at me and said:
+
+10
+00:01:42,000 --> 00:01:52,000
+'There is nothing I can do to help you.
+There is no one I can refer you to.'
+
+11
+00:01:52,000 --> 00:02:03,000
+So I sat in the dark for 8 months with no runway,
+no CS degree, and no support.
+
+12
+00:02:03,000 --> 00:02:15,000
+And I forged 1 million lines
+of #![no_std] Rust.
+
+13
+00:02:15,000 --> 00:02:26,000
+14 scattered domains collapsed into one truth.
+Millions of tokens per second on a single core,
+
+14
+00:02:26,000 --> 00:02:37,000
+backed by Gemini on the cloud. This is software
+for the people left behind.
+
+15
+00:02:37,000 --> 00:02:48,000
+For those who didn't get to learn Cree.
+Human error, not computational rounding error.
+
+16
+00:02:48,000 --> 00:02:59,000
+Accountability is self-attestation,
+not surveillance.
+
+17
+00:02:59,000 --> 00:03:00,000
+No ending is silent.

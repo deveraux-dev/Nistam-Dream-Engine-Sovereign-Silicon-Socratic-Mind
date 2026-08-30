@@ -1,0 +1,17 @@
+[package]
+name = "forge-studio-v3"
+version = "0.1.0"
+edition = "2021"
+description = "13Forge Studio - dumb glass webview launcher for NISTAM DREAM ENGINE"
+
+[[bin]]
+name = "13forge-studio-v3"
+path = "src/main.rs"
+
+[dependencies]
+wry = "0.55"
+tao = "0.35"
+forge-daemon-door = { path = "../forge-daemon-door" }
+
+[build-dependencies]
+forge-vix-v3 = { path = "../forge-vix-v3" }

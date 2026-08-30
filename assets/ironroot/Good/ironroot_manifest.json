@@ -1,0 +1,330 @@
+{
+  "project": "Universal Sovereign MUD Core Integration",
+  "version": "1.0.0",
+  "target_engine": "13Forge Sovereign Stack MUD (sf-wasm)",
+  "compiled_at": "2026-07-30T12:00:00Z",
+  "summary": "Full analysis, classification, and comprehensive metadata index for the unified MUD systems (Pets, Zones, Crafting, Alchemy, Talents, Classes, and Character Sheets) mapped directly to the 13Forge MUD-Deveraux engine requirements.",
+  "inventory": [
+    {
+      "file_path": "ironroot_headless_flash_datapack.ron",
+      "category": "HeadlessDatapack",
+      "mime_type": "text/x-ron",
+      "metadata": {
+        "description": "Unified compile-ready Ron binary pack representing the complete holistic world, character classes, talent tree, pets registry, alchemical matrices, and crafting recipes."
+      }
+    },
+    {
+      "file_path": "ironroot_mud_bridge.rs",
+      "category": "CoreEngineBridge",
+      "mime_type": "text/x-rust",
+      "metadata": {
+        "description": "Zero-stub high-fidelity bridge management code integrating the 8-Stat sheets, taming constraints, alchemical recipes, and tick-cooldown loops."
+      }
+    },
+    {
+      "file_path": "ironroot_mud_integration_plan.md",
+      "category": "ArchitecturalPlan",
+      "mime_type": "text/markdown",
+      "metadata": {
+        "description": "Architectural integration plan documenting dual-clock synchronization, 8-stat blocks, taming validation equations, and steganographic glyph scripting."
+      }
+    },
+    {
+      "file_path": "dummy_zone.json",
+      "category": "ZoneData",
+      "mime_type": "application/json",
+      "semantic_dimension": {
+        "axis_0_lat": 0,
+        "axis_1_lon": 0,
+        "axis_2_depth": 0,
+        "axis_3_time": 0,
+        "axis_4_soul": 0
+      },
+      "metadata": {
+        "id": "dummy_zone",
+        "name": "Sovereign Test Room",
+        "spawn_point": [0.0, 5.0, 0.0],
+        "npcs_count": 0,
+        "terrain_seed": 43
+      }
+    },
+    {
+      "file_path": "prairie_start.json",
+      "category": "ZoneData",
+      "mime_type": "application/json",
+      "semantic_dimension": {
+        "axis_0_lat": 10,
+        "axis_1_lon": 0,
+        "axis_2_depth": 1,
+        "axis_3_time": 0,
+        "axis_4_soul": 100
+      },
+      "metadata": {
+        "id": "prairie_start",
+        "name": "The Grasslands",
+        "biome": "Prairie",
+        "width_m": 200,
+        "height_m": 50,
+        "spawn_point": [10.0, 0.0, 0.0],
+        "npcs": [
+          {"id": 1, "name": "Prairie Wolf", "behavior": "Hostile", "health": 6000},
+          {"id": 2, "name": "Elder Bison", "behavior": "Territorial", "health": 15000},
+          {"id": 3, "name": "Wandering Trader", "behavior": "Passive", "health": 10000, "quest_id": "first_hunt"}
+        ],
+        "portals": [
+          {"target_zone": "forest_depths", "label": "→ Forest Depths"}
+        ]
+      }
+    },
+    {
+      "file_path": "forest_depths.json",
+      "category": "ZoneData",
+      "mime_type": "application/json",
+      "semantic_dimension": {
+        "axis_0_lat": 15,
+        "axis_1_lon": 5,
+        "axis_2_depth": 2,
+        "axis_3_time": 0,
+        "axis_4_soul": 120
+      },
+      "metadata": {
+        "id": "forest_depths",
+        "name": "The Deep Forest",
+        "biome": "Forest",
+        "width_m": 250,
+        "height_m": 60,
+        "spawn_point": [5.0, 0.0, 0.0],
+        "npcs": [
+          {"id": 10, "name": "Shadow Stalker", "behavior": "Hostile", "health": 8000},
+          {"id": 11, "name": "Iron Bark Treant", "behavior": "Territorial", "health": 20000},
+          {"id": 12, "name": "Forest Spirit", "behavior": "Passive", "health": 5000, "quest_id": "iron_descent"}
+        ],
+        "portals": [
+          {"target_zone": "prairie_start", "label": "← The Grasslands"}
+        ]
+      }
+    },
+    {
+      "file_path": "iron_caverns.json",
+      "category": "ZoneData",
+      "mime_type": "application/json",
+      "semantic_dimension": {
+        "axis_0_lat": 25,
+        "axis_1_lon": -10,
+        "axis_2_depth": 5,
+        "axis_3_time": 0,
+        "axis_4_soul": 240
+      },
+      "metadata": {
+        "id": "iron_caverns",
+        "name": "The Iron Caverns",
+        "biome": "Underground",
+        "spawn_point": [10.0, -5.0, 0.0],
+        "npcs": [
+          {"id": 20, "name": "Deep Ore Golem", "behavior": "Hostile", "health": 35000}
+        ]
+      }
+    },
+    {
+      "file_path": "first_hunt.toml",
+      "category": "QuestData",
+      "mime_type": "text/x-toml",
+      "metadata": {
+        "id": "first_hunt",
+        "name": "The First Hunt",
+        "description": "The trader needs wolf pelts. Hunt a Prairie Wolf.",
+        "zone": "prairie_start",
+        "objectives": [
+          {"type": "kill", "target": "Prairie Wolf", "count": 1}
+        ],
+        "reward": {
+          "xp": 100,
+          "item": "wolf_pelt"
+        }
+      }
+    },
+    {
+      "file_path": "iron_descent.toml",
+      "category": "QuestData",
+      "mime_type": "text/x-toml",
+      "metadata": {
+        "id": "iron_descent",
+        "name": "Iron Descent",
+        "description": "Descend into the iron caverns to reclaim the root sigil.",
+        "zone": "forest_depths"
+      }
+    },
+    {
+      "file_path": "the_scarred_path.toml",
+      "category": "QuestData",
+      "mime_type": "text/x-toml",
+      "metadata": {
+        "id": "the_scarred_path",
+        "name": "The Scarred Path",
+        "zone": "iron_caverns"
+      }
+    },
+    {
+      "file_path": "examples/church_branded_wolf.json",
+      "category": "BrandRule",
+      "mime_type": "application/json",
+      "metadata": {
+        "brand_id": "church_branded_wolf",
+        "visual_signature": "gothic_seal_gold",
+        "alignment_offset": 432
+      }
+    },
+    {
+      "file_path": "examples/fictional_root_dusk_mode.json",
+      "category": "ModeConfig",
+      "mime_type": "application/json",
+      "metadata": {
+        "mode": "dusk_resonance",
+        "gating": "raga_melancholic"
+      }
+    },
+    {
+      "file_path": "examples/forge_glyph_faction_page.json",
+      "category": "GlyphScript",
+      "mime_type": "application/json",
+      "metadata": {
+        "faction": "thornhaven_guard",
+        "steganographic_glyphs": ["calcination", "fermentation"]
+      }
+    },
+    {
+      "file_path": "examples/mountain_fracture_event.json",
+      "category": "ResonanceEvent",
+      "mime_type": "application/json",
+      "metadata": {
+        "type": "structural_fracture",
+        "base_hz": 800
+      }
+    },
+    {
+      "file_path": "examples/rhythm_boss_chart.json",
+      "category": "RhythmChart",
+      "mime_type": "application/json",
+      "metadata": {
+        "ticks_per_beat": 4,
+        "measures": 32,
+        "difficulty": "Master"
+      }
+    },
+    {
+      "file_path": "rules/kg_rules.jsonl",
+      "category": "KnowledgeGraphRule",
+      "mime_type": "application/x-jsonlines",
+      "metadata": {
+        "format": "semantic-triplets",
+        "assertions": 128
+      }
+    },
+    {
+      "file_path": "schemas/brand.schema.json",
+      "category": "Schema",
+      "mime_type": "application/schema+json",
+      "metadata": {
+        "target": "brand_specification"
+      }
+    },
+    {
+      "file_path": "schemas/dirge_mode.schema.json",
+      "category": "Schema",
+      "mime_type": "application/schema+json",
+      "metadata": {
+        "target": "dirge_mode"
+      }
+    },
+    {
+      "file_path": "schemas/dirge_resonance_event.schema.json",
+      "category": "Schema",
+      "mime_type": "application/schema+json",
+      "metadata": {
+        "target": "dirge_resonance_event"
+      }
+    },
+    {
+      "file_path": "schemas/glyph_script.schema.json",
+      "category": "Schema",
+      "mime_type": "application/schema+json",
+      "metadata": {
+        "target": "glyph_script"
+      }
+    },
+    {
+      "file_path": "schemas/resonance_target.schema.json",
+      "category": "Schema",
+      "mime_type": "application/schema+json",
+      "metadata": {
+        "target": "resonance_target"
+      }
+    },
+    {
+      "file_path": "tables/authority_hierarchy.csv",
+      "category": "Table",
+      "mime_type": "text/csv",
+      "metadata": {
+        "primary_key": "rank_id",
+        "levels": [
+          "PlayerAction",
+          "CatalyticRelease",
+          "ActivePhysics",
+          "PassivePhysics",
+          "Environmental",
+          "Temporal"
+        ]
+      }
+    },
+    {
+      "file_path": "tables/compiler_table.csv",
+      "category": "Table",
+      "mime_type": "text/csv",
+      "metadata": {
+        "primary_key": "term_index"
+      }
+    },
+    {
+      "file_path": "sources/provenance_notes.json",
+      "category": "Provenance",
+      "mime_type": "application/json",
+      "metadata": {
+        "source": "13engine_quarry_arch"
+      }
+    },
+    {
+      "file_path": "sources/source_ledger.md",
+      "category": "Provenance",
+      "mime_type": "text/markdown",
+      "metadata": {
+        "compiled_by": "Sean"
+      }
+    },
+    {
+      "file_path": "Welcome to Ironroot's hidden wonders.png",
+      "category": "AssetTexture",
+      "mime_type": "image/png",
+      "metadata": {
+        "dimensions": "1024x1024",
+        "color_profile": "SRGB_Vibe_Glow"
+      }
+    },
+    {
+      "file_path": "Twilight scout of the Gloamwild.png",
+      "category": "AssetTexture",
+      "mime_type": "image/png",
+      "metadata": {
+        "dimensions": "512x1024"
+      }
+    },
+    {
+      "file_path": "CommitMono-400-Regular.ttf",
+      "category": "Font",
+      "mime_type": "font/ttf",
+      "metadata": {
+        "style": "monospace",
+        "intended_use": "MUD_Terminal_Presentation"
+      }
+    }
+  ]
+}

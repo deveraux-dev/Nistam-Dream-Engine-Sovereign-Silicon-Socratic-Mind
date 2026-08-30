@@ -1,0 +1,1282 @@
+
+      ▄▀▀▄        Antigravity CLI 1.1.16
+     ▀▀▀▀▀▀       dev@deveraux.dev (Agent Platform)
+    ▀▀▀▀▀▀▀▀      Gemini 3.7 Flash (High)
+   ▄▀▀    ▀▀▄     F:/v3
+  ▄▀▀      ▀▀▄
+
+────────────────────────────────────────────────────────────
+> #### Session 1: The S13 Gemma Loader & Single-Model Generation
+
+     Wire LinearOp::S13 into gemma3.rs.
+     Run pack-gemma to produce the .s13m weight files on disk.
+     Verify bit-exact forward pass and text generation running directly from S13 weights.
+     Milestone: First live token emitted from a 589 MB Gemma model on your GPU.
+
+    #### Session 2: The Triad Fleet, LoRA Splits & Video Proofs
+
+     Wire the 3 concurrent tiers (Direct + Mirror + Codec) with LoRA splits in engine.rs.
+     Run the throughput benchmark verifying the 6.42 Gtok/s / 1.14 ns receipts.
+     Capture live footage of the Triad + Surface Ledger to update LASTPROMO.mp4.
+     Milestone: Complete, video-proven, submitted.
+     carry on
+
+▸ Thought for 9s, 968 tokens
+  Reviewing Constraints
+
+● Search(Grep repo map for gemma) (ctrl+o to expand)
+
+▸ Thought for 3s, 107 tokens
+  Adapting Search Method
+
+● Read(F:/v3/.forge/repo-map.tsv) (ctrl+o to expand)
+
+▸ Thought for 6s, 353 tokens
+  Analyzing Repo Map
+
+● Read(F:/v3/TODO/handoffs/HANDOFF-2026-08-20-DURABLE-S13-GEMMA-TRINITY-AND-SPRINT-PLAN.md)
+● Read(F:/v3/TODO/handoffs/HANDOFF-2026-08-20-DURABLE-GEMMA-TIER-TRIAD-S13-SPEC.md)
+● Read(F:/v3/TODO/handoffs/HANDOFF-2026-08-20-DURABLE-S13-QUANTIZATION-AND-SPRINT-STATUS.md)
+● Read(F:/v3/TODO/handoffs/HANDOFF-2026-0...IDEO-PROMO-AND-CLEAR-CHECKPOINT.md) (ctrl+o to expand)
+
+▸ Thought for 5s, 361 tokens
+  Integrating Gemma Loader
+
+● Read(F:/v3/sidecar/src/gemma3.rs)
+● Read(F:/v3/sidecar/src/tier3_cuda.rs)
+● Read(F:/v3/sidecar/src/ml/quantize_s13.rs)
+● Read(F:/v3/sidecar/src/engine.rs)
+● Read(F:/v3/sidecar/src/engine.rs)
+● Find(Sidecar source list)
+● Read(F:/v3/sidecar/src/tier_dispatch.rs)
+● Read(F:/v3/sidecar/src/main.rs)
+● Find(Find safetensors)
+● Find(Find gguf files)
+● Read(F:/v3/.forge/v3-directives.ron) (ctrl+o to expand)
+
+▸ Thought for 3s, 134 tokens
+  Confirming File Access
+
+● Bash(Test-Path "F:\NewRepo\llm\models\gemma-3-4b-it-Q4_K_M.gguf")
+● Bash(Get-ChildItem "F:\NewRepo\llm\models" ; Get-ChildItem "F:\v3\nde-models")
+● Bash(cargo test --manifest-path F:\v3\sidecar\Cargo.toml) (ctrl+o to expand)
+
+▸ Thought for 3s, 159 tokens
+  Finding Compiler Issue
+
+● Find(Find build-gpu script)
+● Read(F:/v3/build-gpu.cmd) (ctrl+o to expand)
+
+▸ Thought for 3s, 106 tokens
+  Analyzing Build Script
+
+● Bash($env:PATH = "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTo...) (ctrl+o to
+expand)
+
+▸ Thought for 2s, 22 tokens
+  Awaiting Task-48 Completion
+
+● ManageTask(status 6e7a7814-33d7-41cc-bc1c-93a7948dfa1f/task-48) (ctrl+o to expand)
+
+▸ Thought for 11s, 1.3k tokens
+  Compiling and Planning
+
+● ManageTask(status 6e7a7814-33d7-41cc-bc1c-93a7948dfa1f/task-48) (ctrl+o to expand)
+
+▸ Thought for 14s, 2.0k tokens
+  Analyzing Gemma3 Implementation
+
+● ManageTask(status 6e7a7814-33d7-41cc-bc1c-93a7948dfa1f/task-48) (ctrl+o to expand)
+
+▸ Thought for 8s, 756 tokens
+  Compiling Kernels
+
+● ManageTask(status 6e7a7814-33d7-41cc-bc1c-93a7948dfa1f/task-48) (ctrl+o to expand)
+
+▸ Thought for 3s, 91 tokens
+  Waiting for the Notification
+
+● Schedule(30s: Check on task-48 completion) (ctrl+o to expand)
+
+  Task 6e7a7814-33d7-41cc-bc1c-93a7948dfa1f/task-48 finished with status: DONE.
+  Task output:
+  Set-PSReadLineOption: C:\Users\seanm\Documents\PowerShell\Microsoft.PowerShell_profile.ps1:15
+  Line |
+  15 |      Set-PSReadLineOption -PredictionSource History
+  |      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  | The predictive suggestion feature cannot be enabled because the console output doesn't
+  | support virtual terminal processing or it's redirected.
+  Set-PSReadLineOption: C:\Users\seanm\Documents\PowerShell\Microsoft.PowerShell_profile.ps1:61
+  Line |
+  61 |      Set-PSReadLineOption -PredictionSource History
+  |      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  | The predictive suggestion feature cannot be enabled because the console output doesn't
+  | support virtual terminal processing or it's redirected.
+  Compiling candle-kernels v0.10.2
+  Compiling cudarc v0.19.8
+  Compiling candle-transformers v0.10.2
+  Compiling sidecar v0.1.0 (F:\v3\sidecar)
+  Finished test profile [unoptimized + debuginfo] target(s) in 3m 48s
+  Running unittests src\main.rs (F:/NewRepo/target\debug\deps\gemma_sidecar-8df311d94f27ca04.exe)
+
+  running 131 tests
+  test directives::tests::directives_are_valid_and_non_empty ... ok
+  test directives::tests::unknown_keys_are_rejected ... ok
+  test engine::tests::decode_keeps_user_defined_and_drops_control ... ok
+  test engine::tests::nucleus_pick_is_argmax_at_rand_zero_and_stays_in_the_pool ... ok
+  test fence::tests::clean_manifest_passes ... ok
+  test fence::tests::corrupted_magic_is_trapped ... ok
+  test fence::tests::corrupted_sha256_is_trapped ... ok
+  test fence::tests::tampered_epoch_is_trapped ... ok
+  test flywheel_distill::tests::journal_round_trip_preserves_every_row ... ok
+  test flywheel_distill::tests::label_flips_attempt0_to_green_and_updates_bqr ... ok
+  test flywheel_distill::tests::multi_attempt_session_labels_all_matching_traces ... ok
+  test flywheel_distill::tests::bqr_reflects_only_labeled_pairs ... ok
+  test flywheel_distill::tests::relabel_preserves_non_matching_rows ... ok
+  test flywheel_distill::tests::zero_distill_pairs_produces_empty_bqr ... ok
+  test flywheel_log::tests::log_records_rejections ... ok
+  test flywheel_log::tests::log_records_resolutions ... ok
+  test flywheel_log::tests::log_records_triages ... ok
+  test flywheel_log::tests::summary_reflects_unresolved_debt ... ok
+  test flywheel_rules::tests::all_ten_rules_present ... ok
+  test flywheel_rules::tests::rule_1_requires_exact_bqr_match ... ok
+  test flywheel_rules::tests::rule_2_rejects_unapproved_crates ... ok
+  test flywheel_rules::tests::rule_3_enforces_budget_ceiling ... ok
+  test flywheel_rules::tests::rule_4_bans_git_in_distill ... ok
+  test flywheel_rules::tests::rule_5_requires_exact_label_schema ... ok
+  test flywheel_rules::tests::rule_6_enforces_monotonic_timestamps ... ok
+  test flywheel_rules::tests::rule_7_bans_duplicate_session_ids ... ok
+  test flywheel_rules::tests::rule_8_requires_typed_rejection_reasons ... ok
+  test flywheel_rules::tests::rule_9_bans_raw_model_strings ... ok
+  test flywheel_rules::tests::rule_10_enforces_clean_exit_0 ... ok
+  test frame::tests::round_trip_raw_exact ... ok
+  test frame::tests::round_trip_empty_exact ... ok
+  test frame::tests::round_trip_large_exact ... ok
+  test gemma3::tests::attn_mask_makes_cached_history_visible ... ok
+  test gemma3::tests::chunked_masks_agree_with_the_single_shot_mask ... ok
+  test gemma3::tests::window_tail_is_idempotent ... ok
+  test gemma3::tests::window_tail_keeps_exactly_the_mask_span ... ok
+  test lora::tests::apply_empty_delta_is_identity ... ok
+  test lora::tests::apply_preserves_input ... ok
+  test lora::tests::apply_scales_by_alpha_over_rank ... ok
+  test lora::tests::apply_shape_mismatch_panics ... ok
+  test lora::tests::deserialize_short_buffer_fails ... ok
+  test lora::tests::deserialize_tampered_header_fails ... ok
+  test lora::tests::new_initializes_b_to_zeros ... ok
+  test lora::tests::round_trip_preserves_all_fields ... ok
+  test lora_beat::tests::beat_advances_and_cycles_cleanly ... ok
+  test lora_beat::tests::lora_beat_attaches_and_shifts_output ... ok
+  test lora_beat::tests::lora_beat_none_matches_baseline_exactly ... ok
+  test lora_ledger::tests::append_and_read_round_trip ... ok
+  test lora_ledger::tests::corrupted_checksum_fails_loud ... ok
+  test lora_ledger::tests::history_preserves_order ... ok
+  test lora_train::tests::train_step_decreases_squared_error ... ok
+  test lora_train::tests::train_step_gradient_shape_matches ... ok
+  test lora_train::tests::train_step_learning_rate_scales_update ... ok
+  test ml::byte_classifier::tests::empty_dataset_fails_loud ... ok
+  test ml::byte_classifier::tests::overfits_small_synthetic_batch ... ok
+  test ml::byte_classifier::tests::predict_deterministic ... ok
+  test ml::byte_classifier::tests::predict_probs_sum_to_one ... ok
+  test ml::byte_corpus::tests::all_examples_non_empty ... ok
+  test ml::byte_corpus::tests::deterministic_split_distribution ... ok
+  test ml::byte_corpus::tests::deterministic_split_is_exact ... ok
+  test ml::byte_corpus::tests::label_distribution_is_balanced ... ok
+  test ml::byte_corpus::tests::max_len_enforced ... ok
+  test ml::byte_corpus::tests::synthetic_corpus_has_expected_categories ... ok
+  test ml::byte_corpus::tests::vocab_size_is_256 ... ok
+  test ml::quantize_s13::tests::mean_reduce_gate_averages_over_k ... ok
+  test ml::quantize_s13::tests::parse_pack_args_reads_flags_and_positional ... ok
+  test ml::quantize_s13::tests::parse_pack_args_requires_tensor_and_out ... ok
+  test ml::quantize_s13::tests::quantize_matrix_f32_packs_5trits_per_byte ... ok
+  test ml::sieve_to_s13::tests::cli_pack_runs_to_completion ... ok
+  test ml::sieve_to_s13::tests::cli_requires_two_positionals ... ok
+  test ml::sieve_to_s13::tests::round_trip_synthetic_pt_to_s13 ... ok
+  test ml::sieve_to_s13::tests::weights_from_raw_pt_extracts_tensors ... ok
+  test ml::sieve_to_s13::tests::weights_from_raw_pt_rejects_missing_keys ... ok
+  test ml::sieve_to_s13::tests::weights_from_raw_pt_rejects_shape_mismatch ... ok
+  test ml::train_s13::tests::loss_decreases_over_training ... ok
+  test ml::train_s13::tests::parse_args_flags_and_positional ... ok
+  test ml::train_s13::tests::parse_args_requires_positional ... ok
+  test ml::train_s13::tests::ste_quantize_gradient_flows ... ok
+  test ml::train_truthlane::tests::cli_requires_two_positionals ... ok
+  test ml::train_truthlane::tests::loss_decreases_on_synthetic_batch ... ok
+  test opaque::tests::round_trip_exact ... ok
+  test router_swap::tests::active_slot_points_to_valid_bqr ... ok
+  test router_swap::tests::hot_swap_preserves_classification_accuracy ... ok
+  test router_swap::tests::hot_swap_updates_active_slot ... ok
+  test router_swap::tests::invalid_bqr_fails_closed ... ok
+  test router_swap::tests::swap_is_idempotent ... ok
+  test tier3_cuda::tests::cuda_matches_cpu_bit_exact ... ok
+  test tier3_cuda::tests::gpu_fault_is_detected ... ok
+  test tier3_cuda::tests::lora_adapter_shape_mismatch_is_a_hard_error ... ok
+  test tier3_cuda::tests::matches_tritcell5d_trits_bit_exact ... ok
+  test tier3_cuda::tests::nonzero_lora_adapter_shifts_output_from_base ... ok
+  test tier3_cuda::tests::origin_byte_is_all_zero_trits ... ok
+  test tier3_cuda::tests::sentinel_byte_is_a_hard_error_not_a_silent_zero ... ok
+  test tier3_cuda::tests::test_s13_matmul_forward_matches_manual_projection ... ok
+  test tier3_cuda::tests::trit_expert_ffn_all_zero_weights_yield_zero_output ... ok
+  test tier3_cuda::tests::trit_expert_ffn_cuda_matches_cpu_within_tolerance ... ok
+  test tier3_cuda::tests::trit_expert_ffn_matches_scalar_reference ... ok
+  test tier3_cuda::tests::trit_expert_ffn_sentinel_byte_propagates_the_dequant_trap ... ok
+  test tier3_cuda::tests::trit_expert_ffn_short_weight_buffer_is_a_hard_error ... ok
+  test tier3_cuda::tests::zero_lora_adapters_match_lora_free_output_exactly ... ok
+  test tier_dispatch::tests::cpu_fallback_when_thermal_veto_forced ... ok
+  test tier_dispatch::tests::cpu_fallback_when_vram_veto_forced ... ok
+  test tier_dispatch::tests::gpu_admitted_when_healthy ... ok
+  test tier_dispatch::tests::no_cuda_device_always_runs_cpu ... ok
+  test tier_dispatch::tests::run_ffn_lora_with_no_adapters_matches_run_ffn ... ok
+  test tier_dispatch::tests::run_ffn_lora_with_trained_adapter_shifts_output ... ok
+  test tier_dispatch::tests::vram_mb_estimate_is_real_arithmetic ... ok
+  test constrain::tests::empty_output_starts_in_fresh_state ... ok
+  test constrain::tests::valid_weld_drains_stack_to_done ... ok
+  test constrain::tests::invalid_opening_byte_is_rejected ... ok
+  test constrain::tests::corrupted_transition_traps_fail_closed ... ok
+  test constrain::tests::arbitrary_garbage_never_completes ... ok
+  test constrain::tests::stack_underflow_is_trapped ... ok
+  test constrain::tests::unclosed_block_never_reports_done ... ok
+  test constrain::tests::extra_trailing_bytes_past_done_are_rejected ... ok
+  test constrain::tests::deterministic_replay_on_same_byte_stream ... ok
+  test constrain::tests::step_budget_exhaustion_is_detectable ... ok
+  test constrain::tests::accepts_prefix_of_valid_weld ... ok
+  test constrain::tests::rejects_byte_violating_current_token_rule ... ok
+  test constrain::tests::deeply_nested_brackets_reach_done ... ok
+  test constrain::tests::unterminated_string_literal_never_completes ... ok
+  test constrain::tests::escaped_quotes_inside_string_stay_inside_string ... ok
+  test constrain::tests::empty_input_is_not_done ... ok
+  test constrain::tests::whitespace_tolerance_matches_grammar ... ok
+  test constrain::tests::all_twenty_weld_sample_vectors_validate ... ok
+  test constrain::tests::regression_cliff_gate_is_prevented ... ok
+  test constrain::tests::round_trip_serialize_deserialize_pda_state ... ok
+  test constrain::tests::fuzz_random_byte_stream_never_panics ... ok
+  test constrain::tests::exact_byte_counter_matches_advance_calls ... ok
+  test constrain::tests::output_string_matches_advanced_bytes_lossless ... ok
+
+  test result: ok. 131 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in
+  18.06s
+  }
+
+● Read(F:/v3/sidecar/src/gemma3.rs) (ctrl+o to expand)
+
+▸ Thought for 3s, 161 tokens
+  Analyzing Test Results
+
+● Bash($env:PATH = "C:\Program Files (x86)\Microsoft Visual
+Studio\2022\BuildTools\VC\Tools\MSVC\1...)
+● Read(F:/v3/sidecar/Cargo.toml) (ctrl+o to expand)
+
+▸ Thought for 4s, 180 tokens
+  Investigating Linker Errors
+
+● Search(Search tokenizers in sidecar)
+● Bash(Get-ChildItem -Path "F:\v3\sidecar\src" -Recurse -Filter "*.rs" | Select...) (ctrl+o to
+expand)
+
+▸ Thought for 4s, 222 tokens
+  Discovering Code Usage
+
+● Edit(F:/v3/sidecar/Cargo.toml)
+● Bash($env:PATH = "C:\Program Files (x86)\Microsoft Visual
+Studio\2022\BuildTools\VC\Tools\MSVC\1...)
+● Edit(F:/v3/sidecar/Cargo.toml)
+● Bash($env:PATH = "C:\Program Files (x86)\Microsoft Visual
+Studio\2022\BuildTools\VC\Tools\MSVC\1...)
+● Bash(cargo tree -i onig_sys --manifest-path F:\v3\sidecar\Cargo.toml) (ctrl+o to expand)
+
+▸ Thought for 5s, 440 tokens
+  Investigating onig_sys Errors
+
+● Bash(cmd.exe /c "call ""C:\Program Files (x86)\Microsoft Visual Studio\2022\B...) (ctrl+o to
+expand)
+
+  Task 6e7a7814-33d7-41cc-bc1c-93a7948dfa1f/task-85 finished with status: DONE.
+  Task output:
+  ──────
+  ** Visual Studio 2022 Developer Command Prompt v17.14.7
+  ** Copyright (c) 2025 Microsoft Corporation
+  ──────
+  [vcvarsall.bat] Environment initialized for: 'x64'
+  Compiling sidecar v0.1.0 (F:\v3\sidecar)
+  Finished test profile [unoptimized + debuginfo] target(s) in 3.42s
+  Running unittests src\main.rs (F:/NewRepo/target\debug\deps\gemma_sidecar-8df311d94f27ca04.exe)
+
+  running 131 tests
+  test directives::tests::directives_are_valid_and_non_empty ... ok
+  test directives::tests::unknown_keys_are_rejected ... ok
+  test engine::tests::decode_keeps_user_defined_and_drops_control ... ok
+  test engine::tests::nucleus_pick_is_argmax_at_rand_zero_and_stays_in_the_pool ... ok
+  test fence::tests::clean_manifest_passes ... ok
+  test fence::tests::corrupted_magic_is_trapped ... ok
+  test fence::tests::corrupted_sha256_is_trapped ... ok
+  test fence::tests::tampered_epoch_is_trapped ... ok
+  test flywheel_distill::tests::journal_round_trip_preserves_every_row ... ok
+  test flywheel_distill::tests::label_flips_attempt0_to_green_and_updates_bqr ... ok
+  test flywheel_distill::tests::multi_attempt_session_labels_all_matching_traces ... ok
+  test flywheel_distill::tests::relabel_preserves_non_matching_rows ... ok
+  test flywheel_distill::tests::bqr_reflects_only_labeled_pairs ... ok
+  test flywheel_distill::tests::zero_distill_pairs_produces_empty_bqr ... ok
+  test flywheel_log::tests::log_records_rejections ... ok
+  test flywheel_log::tests::log_records_resolutions ... ok
+  test flywheel_log::tests::log_records_triages ... ok
+  test flywheel_log::tests::summary_reflects_unresolved_debt ... ok
+  test flywheel_rules::tests::all_ten_rules_present ... ok
+  test flywheel_rules::tests::rule_1_requires_exact_bqr_match ... ok
+  test flywheel_rules::tests::rule_2_rejects_unapproved_crates ... ok
+  test flywheel_rules::tests::rule_3_enforces_budget_ceiling ... ok
+  test flywheel_rules::tests::rule_4_bans_git_in_distill ... ok
+  test flywheel_rules::tests::rule_5_requires_exact_label_schema ... ok
+  test flywheel_rules::tests::rule_6_enforces_monotonic_timestamps ... ok
+  test flywheel_rules::tests::rule_7_bans_duplicate_session_ids ... ok
+  test flywheel_rules::tests::rule_8_requires_typed_rejection_reasons ... ok
+  test flywheel_rules::tests::rule_9_bans_raw_model_strings ... ok
+  test flywheel_rules::tests::rule_10_enforces_clean_exit_0 ... ok
+  test frame::tests::round_trip_raw_exact ... ok
+  test frame::tests::round_trip_empty_exact ... ok
+  test frame::tests::round_trip_large_exact ... ok
+  test gemma3::tests::attn_mask_makes_cached_history_visible ... ok
+  test gemma3::tests::chunked_masks_agree_with_the_single_shot_mask ... ok
+  test gemma3::tests::window_tail_is_idempotent ... ok
+  test gemma3::tests::window_tail_keeps_exactly_the_mask_span ... ok
+  test lora::tests::apply_empty_delta_is_identity ... ok
+  test lora::tests::apply_preserves_input ... ok
+  test lora::tests::apply_scales_by_alpha_over_rank ... ok
+  test lora::tests::apply_shape_mismatch_panics ... ok
+  test lora::tests::deserialize_short_buffer_fails ... ok
+  test lora::tests::deserialize_tampered_header_fails ... ok
+  test lora::tests::new_initializes_b_to_zeros ... ok
+  test lora::tests::round_trip_preserves_all_fields ... ok
+  test lora_beat::tests::beat_advances_and_cycles_cleanly ... ok
+  test lora_beat::tests::lora_beat_attaches_and_shifts_output ... ok
+  test lora_beat::tests::lora_beat_none_matches_baseline_exactly ... ok
+  test lora_ledger::tests::append_and_read_round_trip ... ok
+  test lora_ledger::tests::corrupted_checksum_fails_loud ... ok
+  test lora_ledger::tests::history_preserves_order ... ok
+  test lora_train::tests::train_step_decreases_squared_error ... ok
+  test lora_train::tests::train_step_gradient_shape_matches ... ok
+  test lora_train::tests::train_step_learning_rate_scales_update ... ok
+  test ml::byte_classifier::tests::empty_dataset_fails_loud ... ok
+  test ml::byte_classifier::tests::overfits_small_synthetic_batch ... ok
+  test ml::byte_classifier::tests::predict_deterministic ... ok
+  test ml::byte_classifier::tests::predict_probs_sum_to_one ... ok
+  test ml::byte_corpus::tests::all_examples_non_empty ... ok
+  test ml::byte_corpus::tests::deterministic_split_distribution ... ok
+  test ml::byte_corpus::tests::deterministic_split_is_exact ... ok
+  test ml::byte_corpus::tests::label_distribution_is_balanced ... ok
+  test ml::byte_corpus::tests::max_len_enforced ... ok
+  test ml::byte_corpus::tests::synthetic_corpus_has_expected_categories ... ok
+  test ml::byte_corpus::tests::vocab_size_is_256 ... ok
+  test ml::quantize_s13::tests::mean_reduce_gate_averages_over_k ... ok
+  test ml::quantize_s13::tests::parse_pack_args_reads_flags_and_positional ... ok
+  test ml::quantize_s13::tests::parse_pack_args_requires_tensor_and_out ... ok
+  test ml::quantize_s13::tests::quantize_matrix_f32_packs_5trits_per_byte ... ok
+  test ml::sieve_to_s13::tests::cli_pack_runs_to_completion ... ok
+  test ml::sieve_to_s13::tests::cli_requires_two_positionals ... ok
+  test ml::sieve_to_s13::tests::round_trip_synthetic_pt_to_s13 ... ok
+  test ml::sieve_to_s13::tests::weights_from_raw_pt_extracts_tensors ... ok
+  test ml::sieve_to_s13::tests::weights_from_raw_pt_rejects_missing_keys ... ok
+  test ml::sieve_to_s13::tests::weights_from_raw_pt_rejects_shape_mismatch ... ok
+  test ml::train_s13::tests::loss_decreases_over_training ... ok
+  test ml::train_s13::tests::parse_args_flags_and_positional ... ok
+  test ml::train_s13::tests::parse_args_requires_positional ... ok
+  test ml::train_s13::tests::ste_quantize_gradient_flows ... ok
+  test ml::train_truthlane::tests::cli_requires_two_positionals ... ok
+  test ml::train_truthlane::tests::loss_decreases_on_synthetic_batch ... ok
+  test opaque::tests::round_trip_exact ... ok
+  test router_swap::tests::active_slot_points_to_valid_bqr ... ok
+  test router_swap::tests::hot_swap_preserves_classification_accuracy ... ok
+  test router_swap::tests::hot_swap_updates_active_slot ... ok
+  test router_swap::tests::invalid_bqr_fails_closed ... ok
+  test router_swap::tests::swap_is_idempotent ... ok
+  test tier3_cuda::tests::cuda_matches_cpu_bit_exact ... ok
+  test tier3_cuda::tests::gpu_fault_is_detected ... ok
+  test tier3_cuda::tests::lora_adapter_shape_mismatch_is_a_hard_error ... ok
+  test tier3_cuda::tests::matches_tritcell5d_trits_bit_exact ... ok
+  test tier3_cuda::tests::nonzero_lora_adapter_shifts_output_from_base ... ok
+  test tier3_cuda::tests::origin_byte_is_all_zero_trits ... ok
+  test tier3_cuda::tests::sentinel_byte_is_a_hard_error_not_a_silent_zero ... ok
+  test tier3_cuda::tests::test_s13_matmul_forward_matches_manual_projection ... ok
+  test tier3_cuda::tests::trit_expert_ffn_all_zero_weights_yield_zero_output ... ok
+  test tier3_cuda::tests::trit_expert_ffn_cuda_matches_cpu_within_tolerance ... ok
+  test tier3_cuda::tests::trit_expert_ffn_matches_scalar_reference ... ok
+  test tier3_cuda::tests::trit_expert_ffn_sentinel_byte_propagates_the_dequant_trap ... ok
+  test tier3_cuda::tests::trit_expert_ffn_short_weight_buffer_is_a_hard_error ... ok
+  test tier3_cuda::tests::zero_lora_adapters_match_lora_free_output_exactly ... ok
+  test tier_dispatch::tests::cpu_fallback_when_thermal_veto_forced ... ok
+  test tier_dispatch::tests::cpu_fallback_when_vram_veto_forced ... ok
+  test tier_dispatch::tests::gpu_admitted_when_healthy ... ok
+  test tier_dispatch::tests::no_cuda_device_always_runs_cpu ... ok
+  test tier_dispatch::tests::run_ffn_lora_with_no_adapters_matches_run_ffn ... ok
+  test tier_dispatch::tests::run_ffn_lora_with_trained_adapter_shifts_output ... ok
+  test tier_dispatch::tests::vram_mb_estimate_is_real_arithmetic ... ok
+  test constrain::tests::empty_output_starts_in_fresh_state ... ok
+  test constrain::tests::valid_weld_drains_stack_to_done ... ok
+  test constrain::tests::invalid_opening_byte_is_rejected ... ok
+  test constrain::tests::corrupted_transition_traps_fail_closed ... ok
+  test constrain::tests::arbitrary_garbage_never_completes ... ok
+  test constrain::tests::stack_underflow_is_trapped ... ok
+  test constrain::tests::unclosed_block_never_reports_done ... ok
+  test constrain::tests::extra_trailing_bytes_past_done_are_rejected ... ok
+  test constrain::tests::deterministic_replay_on_same_byte_stream ... ok
+  test constrain::tests::step_budget_exhaustion_is_detectable ... ok
+  test constrain::tests::accepts_prefix_of_valid_weld ... ok
+  test constrain::tests::rejects_byte_violating_current_token_rule ... ok
+  test constrain::tests::deeply_nested_brackets_reach_done ... ok
+  test constrain::tests::unterminated_string_literal_never_completes ... ok
+  test constrain::tests::escaped_quotes_inside_string_stay_inside_string ... ok
+  test constrain::tests::empty_input_is_not_done ... ok
+  test constrain::tests::whitespace_tolerance_matches_grammar ... ok
+  test constrain::tests::all_twenty_weld_sample_vectors_validate ... ok
+  test constrain::tests::regression_cliff_gate_is_prevented ... ok
+  test constrain::tests::round_trip_serialize_deserialize_pda_state ... ok
+  test constrain::tests::fuzz_random_byte_stream_never_panics ... ok
+  test constrain::tests::exact_byte_counter_matches_advance_calls ... ok
+  test constrain::tests::output_string_matches_advanced_bytes_lossless ... ok
+
+  test result: ok. 131 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in
+  18.06s
+  }****
+
+───────────────────────────────────── Conversation compacted ──────────────────────────────────────
+
+● Read(F:/v3/sidecar/src/gemma3.rs)
+● Read(F:/v3/sidecar/src/gemma3.rs) (ctrl+o to expand)
+
+▸ Thought for 3s, 214 tokens
+  Analyzing Dependency Conflicts
+
+● Bash(cmd.exe /c "call ""C:\Program Files (x86)\Microsoft Visual Studio\2022\B...) (ctrl+o to
+expand)
+
+  Task 6e7a7814-33d7-41cc-bc1c-93a7948dfa1f/task-92 finished with status: DONE.
+  Task output:
+  ──────
+  ** Visual Studio 2022 Developer Command Prompt v17.14.7
+  ** Copyright (c) 2025 Microsoft Corporation
+  ──────
+  [vcvarsall.bat] Environment initialized for: 'x64'
+  Compiling sidecar v0.1.0 (F:\v3\sidecar)
+  Finished test profile [unoptimized + debuginfo] target(s) in 2.37s
+  Running unittests src\main.rs (F:/NewRepo/target\debug\deps\gemma_sidecar-ad28c114389dd7d9.exe)
+
+  running 131 tests
+  test directives::tests::directives_are_valid_and_non_empty ... ok
+  test directives::tests::unknown_keys_are_rejected ... ok
+  test engine::tests::decode_keeps_user_defined_and_drops_control ... ok
+  test engine::tests::nucleus_pick_is_argmax_at_rand_zero_and_stays_in_the_pool ... ok
+  test fence::tests::clean_manifest_passes ... ok
+  test fence::tests::corrupted_magic_is_trapped ... ok
+  test fence::tests::corrupted_sha256_is_trapped ... ok
+  test fence::tests::tampered_epoch_is_trapped ... ok
+  test flywheel_distill::tests::bqr_reflects_only_labeled_pairs ... ok
+  test flywheel_distill::tests::journal_round_trip_preserves_every_row ... ok
+  test flywheel_distill::tests::label_flips_attempt0_to_green_and_updates_bqr ... ok
+  test flywheel_distill::tests::multi_attempt_session_labels_all_matching_traces ... ok
+  test flywheel_distill::tests::relabel_preserves_non_matching_rows ... ok
+  test flywheel_distill::tests::zero_distill_pairs_produces_empty_bqr ... ok
+  test flywheel_log::tests::log_records_rejections ... ok
+  test flywheel_log::tests::log_records_resolutions ... ok
+  test flywheel_log::tests::log_records_triages ... ok
+  test flywheel_log::tests::summary_reflects_unresolved_debt ... ok
+  test flywheel_rules::tests::all_ten_rules_present ... ok
+  test flywheel_rules::tests::rule_1_requires_exact_bqr_match ... ok
+  test flywheel_rules::tests::rule_2_rejects_unapproved_crates ... ok
+  test flywheel_rules::tests::rule_3_enforces_budget_ceiling ... ok
+  test flywheel_rules::tests::rule_4_bans_git_in_distill ... ok
+  test flywheel_rules::tests::rule_5_requires_exact_label_schema ... ok
+  test flywheel_rules::tests::rule_6_enforces_monotonic_timestamps ... ok
+  test flywheel_rules::tests::rule_7_bans_duplicate_session_ids ... ok
+  test flywheel_rules::tests::rule_8_requires_typed_rejection_reasons ... ok
+  test flywheel_rules::tests::rule_9_bans_raw_model_strings ... ok
+  test flywheel_rules::tests::rule_10_enforces_clean_exit_0 ... ok
+  test frame::tests::round_trip_empty_exact ... ok
+  test frame::tests::round_trip_large_exact ... ok
+  test frame::tests::round_trip_raw_exact ... ok
+  test gemma3::tests::attn_mask_makes_cached_history_visible ... ok
+  test gemma3::tests::chunked_masks_agree_with_the_single_shot_mask ... ok
+  test gemma3::tests::window_tail_is_idempotent ... ok
+  test gemma3::tests::window_tail_keeps_exactly_the_mask_span ... ok
+  test lora::tests::apply_empty_delta_is_identity ... ok
+  test lora::tests::apply_preserves_input ... ok
+  test lora::tests::apply_scales_by_alpha_over_rank ... ok
+  test lora::tests::apply_shape_mismatch_panics ... ok
+  test lora::tests::deserialize_short_buffer_fails ... ok
+  test lora::tests::deserialize_tampered_header_fails ... ok
+  test lora::tests::new_initializes_b_to_zeros ... ok
+  test lora::tests::round_trip_preserves_all_fields ... ok
+  test lora_beat::tests::beat_advances_and_cycles_cleanly ... ok
+  test lora_beat::tests::lora_beat_attaches_and_shifts_output ... ok
+  test lora_beat::tests::lora_beat_none_matches_baseline_exactly ... ok
+  test lora_ledger::tests::append_and_read_round_trip ... ok
+  test lora_ledger::tests::corrupted_checksum_fails_loud ... ok
+  test lora_ledger::tests::history_preserves_order ... ok
+  test lora_train::tests::train_step_decreases_squared_error ... ok
+  test lora_train::tests::train_step_gradient_shape_matches ... ok
+  test lora_train::tests::train_step_learning_rate_scales_update ... ok
+  test ml::byte_classifier::tests::empty_dataset_fails_loud ... ok
+  test ml::byte_classifier::tests::overfits_small_synthetic_batch ... ok
+  test ml::byte_classifier::tests::predict_deterministic ... ok
+  test ml::byte_classifier::tests::predict_probs_sum_to_one ... ok
+  test ml::byte_corpus::tests::all_examples_non_empty ... ok
+  test ml::byte_corpus::tests::deterministic_split_distribution ... ok
+  test ml::byte_corpus::tests::deterministic_split_is_exact ... ok
+  test ml::byte_corpus::tests::label_distribution_is_balanced ... ok
+  test ml::byte_corpus::tests::max_len_enforced ... ok
+  test ml::byte_corpus::tests::synthetic_corpus_has_expected_categories ... ok
+  test ml::byte_corpus::tests::vocab_size_is_256 ... ok
+  test ml::quantize_s13::tests::mean_reduce_gate_averages_over_k ... ok
+  test ml::quantize_s13::tests::parse_pack_args_reads_flags_and_positional ... ok
+  test ml::quantize_s13::tests::parse_pack_args_requires_tensor_and_out ... ok
+  test ml::quantize_s13::tests::quantize_matrix_f32_packs_5trits_per_byte ... ok
+  test ml::sieve_to_s13::tests::cli_pack_runs_to_completion ... ok
+  test ml::sieve_to_s13::tests::cli_requires_two_positionals ... ok
+  test ml::sieve_to_s13::tests::round_trip_synthetic_pt_to_s13 ... ok
+  test ml::sieve_to_s13::tests::weights_from_raw_pt_extracts_tensors ... ok
+  test ml::sieve_to_s13::tests::weights_from_raw_pt_rejects_missing_keys ... ok
+  test ml::sieve_to_s13::tests::weights_from_raw_pt_rejects_shape_mismatch ... ok
+  test ml::train_s13::tests::loss_decreases_over_training ... ok
+  test ml::train_s13::tests::parse_args_flags_and_positional ... ok
+  test ml::train_s13::tests::parse_args_requires_positional ... ok
+  test ml::train_s13::tests::ste_quantize_gradient_flows ... ok
+  test ml::train_truthlane::tests::cli_requires_two_positionals ... ok
+  test ml::train_truthlane::tests::loss_decreases_on_synthetic_batch ... ok
+  test opaque::tests::round_trip_exact ... ok
+  test router_swap::tests::active_slot_points_to_valid_bqr ... ok
+  test router_swap::tests::hot_swap_preserves_classification_accuracy ... ok
+  test router_swap::tests::hot_swap_updates_active_slot ... ok
+  test router_swap::tests::invalid_bqr_fails_closed ... ok
+  test router_swap::tests::swap_is_idempotent ... ok
+  test tier3_cuda::tests::cuda_matches_cpu_bit_exact ... ok
+  test tier3_cuda::tests::gpu_fault_is_detected ... ok
+  test tier3_cuda::tests::lora_adapter_shape_mismatch_is_a_hard_error ... ok
+  test tier3_cuda::tests::matches_tritcell5d_trits_bit_exact ... ok
+  test tier3_cuda::tests::nonzero_lora_adapter_shifts_output_from_base ... ok
+  test tier3_cuda::tests::origin_byte_is_all_zero_trits ... ok
+  test tier3_cuda::tests::sentinel_byte_is_a_hard_error_not_a_silent_zero ... ok
+  test tier3_cuda::tests::test_s13_matmul_forward_matches_manual_projection ... ok
+  test tier3_cuda::tests::trit_expert_ffn_all_zero_weights_yield_zero_output ... ok
+  test tier3_cuda::tests::trit_expert_ffn_cuda_matches_cpu_within_tolerance ... ok
+  test tier3_cuda::tests::trit_expert_ffn_matches_scalar_reference ... ok
+  test tier3_cuda::tests::trit_expert_ffn_sentinel_byte_propagates_the_dequant_trap ... ok
+  test tier3_cuda::tests::trit_expert_ffn_short_weight_buffer_is_a_hard_error ... ok
+  test tier3_cuda::tests::zero_lora_adapters_match_lora_free_output_exactly ... ok
+  test tier_dispatch::tests::cpu_fallback_when_thermal_veto_forced ... ok
+  test tier_dispatch::tests::cpu_fallback_when_vram_veto_forced ... ok
+  test tier_dispatch::tests::gpu_admitted_when_healthy ... ok
+  test tier_dispatch::tests::no_cuda_device_always_runs_cpu ... ok
+  test tier_dispatch::tests::run_ffn_lora_with_no_adapters_matches_run_ffn ... ok
+  test tier_dispatch::tests::run_ffn_lora_with_trained_adapter_shifts_output ... ok
+  test tier_dispatch::tests::vram_mb_estimate_is_real_arithmetic ... ok
+  test constrain::tests::all_twenty_weld_sample_vectors_validate ... ok
+  test constrain::tests::arbitrary_garbage_never_completes ... ok
+  test constrain::tests::empty_output_starts_in_fresh_state ... ok
+  test constrain::tests::deeply_nested_brackets_reach_done ... ok
+  test constrain::tests::invalid_opening_byte_is_rejected ... ok
+  test constrain::tests::corrupted_transition_traps_fail_closed ... ok
+  test constrain::tests::exact_byte_counter_matches_advance_calls ... ok
+  test constrain::tests::regression_cliff_gate_is_prevented ... ok
+  test constrain::tests::output_string_matches_advanced_bytes_lossless ... ok
+  test constrain::tests::extra_trailing_bytes_past_done_are_rejected ... ok
+  test constrain::tests::step_budget_exhaustion_is_detectable ... ok
+  test constrain::tests::deterministic_replay_on_same_byte_stream ... ok
+  test constrain::tests::round_trip_serialize_deserialize_pda_state ... ok
+  test constrain::tests::rejects_byte_violating_current_token_rule ... ok
+  test constrain::tests::unterminated_string_literal_never_completes ... ok
+  test constrain::tests::stack_underflow_is_trapped ... ok
+  test constrain::tests::escaped_quotes_inside_string_stay_inside_string ... ok
+  test constrain::tests::accepts_prefix_of_valid_weld ... ok
+  test constrain::tests::whitespace_tolerance_matches_grammar ... ok
+  test constrain::tests::fuzz_random_byte_stream_never_panics ... ok
+  test constrain::tests::valid_weld_drains_stack_to_done ... ok
+  test constrain::tests::unclosed_block_never_reports_done ... ok
+  test constrain::tests::empty_input_is_not_done ... ok
+
+  test result: ok. 131 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.58s
+  }****
+
+▸ Thought for 3s, 168 tokens
+  Testing Executables Successfully
+
+● Bash(cmd.exe /c "call ""C:\Program Files (x86)\Microsoft Visual
+Studio\2022\BuildTools\VC\Auxili...)
+● Bash(cmd.exe /c "call F:\v3\build-gpu.cmd") (ctrl+o to expand)
+
+  Task 6e7a7814-33d7-41cc-bc1c-93a7948dfa1f/task-98 finished with status: DONE.
+  Task output:
+  Compiling sidecar v0.1.0 (F:\v3\sidecar)
+  Finished release profile [optimized] target(s) in 10.96s
+  }
+
+● Read(F:/v3/sidecar/src/gemma3.rs) (ctrl+o to expand)
+
+▸ Thought for 16s, 2.4k tokens
+  Exploring LinearOp Definition
+
+● Read(F:/v3/sidecar/src/ml/quantize_s13.rs) (ctrl+o to expand)
+
+▸ Thought for 9s, 907 tokens
+  Refining Pack Logic
+
+● Read(F:/v3/sidecar/src/engine.rs)
+● Read(F:/v3/sidecar/src/engine.rs) (ctrl+o to expand)
+
+▸ Thought for 3s, 223 tokens
+  Implementing S13 Loading
+
+● Read(F:/v3/sidecar/src/lora.rs) (ctrl+o to expand)
+
+▸ Thought for 3s, 99 tokens
+  Exploring Low-Rank Adaptation
+
+● Read(F:/v3/sidecar/src/tier3_cuda.rs) (ctrl+o to expand)
+
+▸ Thought for 38s, 5.7k tokens
+  Analyzing S13MatMul
+
+● Find(Find video script files)
+● Read(F:/v3/crates/forge-envelope/docs/VIDEO_3MIN_SCRIPT.md)
+● Find(Find forge-envelope files)
+● Read(F:/v3/crates/forge-envelope/scripts/generate_video_deck.py) (ctrl+o to expand)
+
+▸ Thought for 6s, 686 tokens
+  Finalizing Gemma Integration
+
+● Read(F:/v3/sidecar/src/gemma3.rs) (ctrl+o to expand)
+
+▸ Thought for 8s, 989 tokens
+  Investigating `onig_sys` Error
+
+● Bash(cmd.exe /c "call ""C:\Program Files (x86)\Microsoft Visual
+Studio\2022\BuildTools\VC\Auxili...)
+● Find(Find config.toml files)
+● Read(F:/NewRepo/.cargo/config.toml) (ctrl+o to expand)
+
+▸ Thought for 4s, 409 tokens
+  Exploring linker configurations
+
+● Read(F:/v3/.cargo/config.toml) (ctrl+o to expand)
+
+▸ Thought for 4s, 254 tokens
+  Configuring Target Libraries
+
+● Edit(F:/v3/.cargo/config.toml)
+● Bash(cmd.exe /c "call ""C:\Program Files (x86)\Microsoft Visual Studio\2022\B...) (ctrl+o to
+expand)
+
+▸ Thought for 5s, 301 tokens
+  Investigating Compile Linkage
+
+● Edit(F:/v3/.cargo/config.toml)
+● Bash(cmd.exe /c "call ""C:\Program Files (x86)\Microsoft Visual Studio\2022\B...) (ctrl+o to
+expand)
+
+▸ Thought for 4s, 455 tokens
+  Investigating `onig_sys`
+
+● Read(F:/v3/sidecar/Cargo.toml) (ctrl+o to expand)
+
+▸ Thought for 3s, 297 tokens
+  Updating Dependencies
+
+● Bash(cargo tree -i onig --manifest-path F:\v3\sidecar\Cargo.toml) (ctrl+o to expand)
+
+▸ Thought for 4s, 271 tokens
+  Analyzing Dependency Versions
+
+● Search(Search for tokenizers usage) (ctrl+o to expand)
+
+▸ Thought for 3s, 79 tokens
+  Testing Candle Integration
+
+● Edit(F:/v3/sidecar/Cargo.toml)
+● Bash(cargo tree -i onig --manifest-path F:\v3\sidecar\Cargo.toml) (ctrl+o to expand)
+
+▸ Thought for 3s, 157 tokens
+  Exploring Tokenizer Dependencies
+
+● Edit(F:/v3/sidecar/Cargo.toml)
+● Bash(cargo tree -i onig --manifest-path F:\v3\sidecar\Cargo.toml) (ctrl+o to expand)
+
+▸ Thought for 11s, 484 tokens
+  Analyzing Dependency Chains
+
+● Edit(F:/v3/.cargo/config.toml)
+● Bash(cmd.exe /c "call ""C:\Program Files (x86)\Microsoft Visual Studio\2022\B...) (ctrl+o to
+expand)
+
+  Task 6e7a7814-33d7-41cc-bc1c-93a7948dfa1f/task-156 finished with status: DONE.
+  Task output:
+  ──────
+  ** Visual Studio 2022 Developer Command Prompt v17.14.7
+  ** Copyright (c) 2025 Microsoft Corporation
+  ──────
+  [vcvarsall.bat] Environment initialized for: 'x64'
+  Compiling sidecar v0.1.0 (F:\v3\sidecar)
+  Finished test profile [unoptimized + debuginfo] target(s) in 2.29s
+  Running unittests src\main.rs (F:/v3/target\debug\deps\gemma_sidecar-25ea8d3bca2ef448.exe)
+
+  running 131 tests
+  test directives::tests::directives_are_valid_and_non_empty ... ok
+  test directives::tests::unknown_keys_are_rejected ... ok
+  test engine::tests::decode_keeps_user_defined_and_drops_control ... ok
+  test engine::tests::nucleus_pick_is_argmax_at_rand_zero_and_stays_in_the_pool ... ok
+  test fence::tests::clean_manifest_passes ... ok
+  test fence::tests::corrupted_magic_is_trapped ... ok
+  test fence::tests::corrupted_sha256_is_trapped ... ok
+  test fence::tests::tampered_epoch_is_trapped ... ok
+  test flywheel_distill::tests::bqr_reflects_only_labeled_pairs ... ok
+  test flywheel_distill::tests::journal_round_trip_preserves_every_row ... ok
+  test flywheel_distill::tests::label_flips_attempt0_to_green_and_updates_bqr ... ok
+  test flywheel_distill::tests::multi_attempt_session_labels_all_matching_traces ... ok
+  test flywheel_distill::tests::relabel_preserves_non_matching_rows ... ok
+  test flywheel_distill::tests::zero_distill_pairs_produces_empty_bqr ... ok
+  test flywheel_log::tests::log_records_rejections ... ok
+  test flywheel_log::tests::log_records_resolutions ... ok
+  test flywheel_log::tests::log_records_triages ... ok
+  test flywheel_log::tests::summary_reflects_unresolved_debt ... ok
+  test flywheel_rules::tests::all_ten_rules_present ... ok
+  test flywheel_rules::tests::rule_1_requires_exact_bqr_match ... ok
+  test flywheel_rules::tests::rule_2_rejects_unapproved_crates ... ok
+  test flywheel_rules::tests::rule_3_enforces_budget_ceiling ... ok
+  test flywheel_rules::tests::rule_4_bans_git_in_distill ... ok
+  test flywheel_rules::tests::rule_5_requires_exact_label_schema ... ok
+  test flywheel_rules::tests::rule_6_enforces_monotonic_timestamps ... ok
+  test flywheel_rules::tests::rule_7_bans_duplicate_session_ids ... ok
+  test flywheel_rules::tests::rule_8_requires_typed_rejection_reasons ... ok
+  test flywheel_rules::tests::rule_9_bans_raw_model_strings ... ok
+  test flywheel_rules::tests::rule_10_enforces_clean_exit_0 ... ok
+  test frame::tests::round_trip_empty_exact ... ok
+  test frame::tests::round_trip_large_exact ... ok
+  test frame::tests::round_trip_raw_exact ... ok
+  test gemma3::tests::attn_mask_makes_cached_history_visible ... ok
+  test gemma3::tests::chunked_masks_agree_with_the_single_shot_mask ... ok
+  test gemma3::tests::window_tail_is_idempotent ... ok
+  test gemma3::tests::window_tail_keeps_exactly_the_mask_span ... ok
+  test lora::tests::apply_empty_delta_is_identity ... ok
+  test lora::tests::apply_preserves_input ... ok
+  test lora::tests::apply_scales_by_alpha_over_rank ... ok
+  test lora::tests::apply_shape_mismatch_panics ... ok
+  test lora::tests::deserialize_short_buffer_fails ... ok
+  test lora::tests::deserialize_tampered_header_fails ... ok
+  test lora::tests::new_initializes_b_to_zeros ... ok
+  test lora::tests::round_trip_preserves_all_fields ... ok
+  test lora_beat::tests::beat_advances_and_cycles_cleanly ... ok
+  test lora_beat::tests::lora_beat_attaches_and_shifts_output ... ok
+  test lora_beat::tests::lora_beat_none_matches_baseline_exactly ... ok
+  test lora_ledger::tests::append_and_read_round_trip ... ok
+  test lora_ledger::tests::corrupted_checksum_fails_loud ... ok
+  test lora_ledger::tests::history_preserves_order ... ok
+  test lora_train::tests::train_step_decreases_squared_error ... ok
+  test lora_train::tests::train_step_gradient_shape_matches ... ok
+  test lora_train::tests::train_step_learning_rate_scales_update ... ok
+  test ml::byte_classifier::tests::empty_dataset_fails_loud ... ok
+  test ml::byte_classifier::tests::overfits_small_synthetic_batch ... ok
+  test ml::byte_classifier::tests::predict_deterministic ... ok
+  test ml::byte_classifier::tests::predict_probs_sum_to_one ... ok
+  test ml::byte_corpus::tests::all_examples_non_empty ... ok
+  test ml::byte_corpus::tests::deterministic_split_distribution ... ok
+  test ml::byte_corpus::tests::deterministic_split_is_exact ... ok
+  test ml::byte_corpus::tests::label_distribution_is_balanced ... ok
+  test ml::byte_corpus::tests::max_len_enforced ... ok
+  test ml::byte_corpus::tests::synthetic_corpus_has_expected_categories ... ok
+  test ml::byte_corpus::tests::vocab_size_is_256 ... ok
+  test ml::quantize_s13::tests::mean_reduce_gate_averages_over_k ... ok
+  test ml::quantize_s13::tests::parse_pack_args_reads_flags_and_positional ... ok
+  test ml::quantize_s13::tests::parse_pack_args_requires_tensor_and_out ... ok
+  test ml::quantize_s13::tests::quantize_matrix_f32_packs_5trits_per_byte ... ok
+  test ml::sieve_to_s13::tests::cli_pack_runs_to_completion ... ok
+  test ml::sieve_to_s13::tests::cli_requires_two_positionals ... ok
+  test ml::sieve_to_s13::tests::round_trip_synthetic_pt_to_s13 ... ok
+  test ml::sieve_to_s13::tests::weights_from_raw_pt_extracts_tensors ... ok
+  test ml::sieve_to_s13::tests::weights_from_raw_pt_rejects_missing_keys ... ok
+  test ml::sieve_to_s13::tests::weights_from_raw_pt_rejects_shape_mismatch ... ok
+  test ml::train_s13::tests::loss_decreases_over_training ... ok
+  test ml::train_s13::tests::parse_args_flags_and_positional ... ok
+  test ml::train_s13::tests::parse_args_requires_positional ... ok
+  test ml::train_s13::tests::ste_quantize_gradient_flows ... ok
+  test ml::train_truthlane::tests::cli_requires_two_positionals ... ok
+  test ml::train_truthlane::tests::loss_decreases_on_synthetic_batch ... ok
+  test opaque::tests::round_trip_exact ... ok
+  test router_swap::tests::active_slot_points_to_valid_bqr ... ok
+  test router_swap::tests::hot_swap_preserves_classification_accuracy ... ok
+  test router_swap::tests::hot_swap_updates_active_slot ... ok
+  test router_swap::tests::invalid_bqr_fails_closed ... ok
+  test router_swap::tests::swap_is_idempotent ... ok
+  test tier3_cuda::tests::cuda_matches_cpu_bit_exact ... ok
+  test tier3_cuda::tests::gpu_fault_is_detected ... ok
+  test tier3_cuda::tests::lora_adapter_shape_mismatch_is_a_hard_error ... ok
+  test tier3_cuda::tests::matches_tritcell5d_trits_bit_exact ... ok
+  test tier3_cuda::tests::nonzero_lora_adapter_shifts_output_from_base ... ok
+  test tier3_cuda::tests::origin_byte_is_all_zero_trits ... ok
+  test tier3_cuda::tests::sentinel_byte_is_a_hard_error_not_a_silent_zero ... ok
+  test tier3_cuda::tests::test_s13_matmul_forward_matches_manual_projection ... ok
+  test tier3_cuda::tests::trit_expert_ffn_all_zero_weights_yield_zero_output ... ok
+  test tier3_cuda::tests::trit_expert_ffn_cuda_matches_cpu_within_tolerance ... ok
+  test tier3_cuda::tests::trit_expert_ffn_matches_scalar_reference ... ok
+  test tier3_cuda::tests::trit_expert_ffn_sentinel_byte_propagates_the_dequant_trap ... ok
+  test tier3_cuda::tests::trit_expert_ffn_short_weight_buffer_is_a_hard_error ... ok
+  test tier3_cuda::tests::zero_lora_adapters_match_lora_free_output_exactly ... ok
+  test tier_dispatch::tests::cpu_fallback_when_thermal_veto_forced ... ok
+  test tier_dispatch::tests::cpu_fallback_when_vram_veto_forced ... ok
+  test tier_dispatch::tests::gpu_admitted_when_healthy ... ok
+  test tier_dispatch::tests::no_cuda_device_always_runs_cpu ... ok
+  test tier_dispatch::tests::run_ffn_lora_with_no_adapters_matches_run_ffn ... ok
+  test tier_dispatch::tests::run_ffn_lora_with_trained_adapter_shifts_output ... ok
+  test tier_dispatch::tests::vram_mb_estimate_is_real_arithmetic ... ok
+  test constrain::tests::all_twenty_weld_sample_vectors_validate ... ok
+  test constrain::tests::arbitrary_garbage_never_completes ... ok
+  test constrain::tests::empty_output_starts_in_fresh_state ... ok
+  test constrain::tests::deeply_nested_brackets_reach_done ... ok
+  test constrain::tests::output_string_matches_advanced_bytes_lossless ... ok
+  test constrain::tests::step_budget_exhaustion_is_detectable ... ok
+  test constrain::tests::deterministic_replay_on_same_byte_stream ... ok
+  test constrain::tests::round_trip_serialize_deserialize_pda_state ... ok
+  test constrain::tests::rejects_byte_violating_current_token_rule ... ok
+  test constrain::tests::whitespace_tolerance_matches_grammar ... ok
+  test constrain::tests::unterminated_string_literal_never_completes ... ok
+  test constrain::tests::regression_cliff_gate_is_prevented ... ok
+  test constrain::tests::stack_underflow_is_trapped ... ok
+  test constrain::tests::exact_byte_counter_matches_advance_calls ... ok
+  test constrain::tests::invalid_opening_byte_is_rejected ... ok
+  test constrain::tests::corrupted_transition_traps_fail_closed ... ok
+  test constrain::tests::escaped_quotes_inside_string_stay_inside_string ... ok
+  test constrain::tests::accepts_prefix_of_valid_weld ... ok
+  test constrain::tests::extra_trailing_bytes_past_done_are_rejected ... ok
+  test constrain::tests::fuzz_random_byte_stream_never_panics ... ok
+  test constrain::tests::valid_weld_drains_stack_to_done ... ok
+  test constrain::tests::unclosed_block_never_reports_done ... ok
+  test constrain::tests::empty_input_is_not_done ... ok
+
+  test result: ok. 131 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.58s
+  }****
+
+▸ Thought for 3s, 143 tokens
+  Investigating Configuration Conflicts
+
+● Read(F:/v3/build-gpu.cmd) (ctrl+o to expand)
+
+▸ Thought for 3s, 188 tokens
+  Compiling Release Build
+
+● Bash(cmd.exe /c "call F:\v3\build-gpu.cmd") (ctrl+o to expand)
+
+  Task 6e7a7814-33d7-41cc-bc1c-93a7948dfa1f/task-162 finished with status: DONE.
+  Task output:
+  Compiling sidecar v0.1.0 (F:\v3\sidecar)
+  Finished release profile [optimized] target(s) in 9.94s
+  }
+
+● Read(F:/v3/sidecar/src/gemma3.rs)
+● Read(F:/v3/sidecar/src/gemma3.rs) (ctrl+o to expand)
+
+▸ Thought for 26s, 1.9k tokens
+  Designing Gemma Operators
+
+● Edit(F:/v3/sidecar/src/gemma3.rs) (ctrl+o to expand)
+
+▸ Thought for 4s, 267 tokens
+  Analyzing Configuration Differences
+
+● Read(F:/NewRepo/.cargo/config.toml)
+● Edit(F:/NewRepo/.cargo/config.toml)
+○ Bash(cmd.exe /c "call F:\v3\build-gpu.cmd") (ctrl+o to expand)
+
+  Task 6e7a7814-33d7-41cc-bc1c-93a7948dfa1f/task-175 finished with status: DONE.
+  Task output:
+  Compiling sidecar v0.1.0 (F:\v3\sidecar)
+  error[E0308]: mismatched types
+  --> src\gemma3.rs:484:32
+  |
+  484 |                 attention_wq: QMatMul::from_qtensor(attention_wq)?,
+  |                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected LinearOp, found
+  QMatMul
+  |
+  help: try wrapping the expression in LinearOp::Quantized
+  |
+  484 |                 attention_wq: LinearOp::Quantized(QMatMul::from_qtensor(attention_wq)?),
+  |                               ++++++++++++++++++++                                    +
+
+  error[E0308]: mismatched types
+  --> src\gemma3.rs:485:32
+  |
+  485 |                 attention_wk: QMatMul::from_qtensor(attention_wk)?,
+  |                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected LinearOp, found
+  QMatMul
+  |
+  help: try wrapping the expression in LinearOp::Quantized
+  |
+  485 |                 attention_wk: LinearOp::Quantized(QMatMul::from_qtensor(attention_wk)?),
+  |                               ++++++++++++++++++++                                    +
+
+  error[E0308]: mismatched types
+  --> src\gemma3.rs:486:32
+  |
+  486 |                 attention_wv: QMatMul::from_qtensor(attention_wv)?,
+  |                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected LinearOp, found
+  QMatMul
+  |
+  help: try wrapping the expression in LinearOp::Quantized
+  |
+  486 |                 attention_wv: LinearOp::Quantized(QMatMul::from_qtensor(attention_wv)?),
+  |                               ++++++++++++++++++++                                    +
+
+  error[E0308]: mismatched types
+  --> src\gemma3.rs:487:32
+  |
+  487 |                 attention_wo: QMatMul::from_qtensor(attention_wo)?,
+  |                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected LinearOp, found
+  QMatMul
+  |
+  help: try wrapping the expression in LinearOp::Quantized
+  |
+  487 |                 attention_wo: LinearOp::Quantized(QMatMul::from_qtensor(attention_wo)?),
+  |                               ++++++++++++++++++++                                    +
+
+  error[E0308]: mismatched types
+  --> src\gemma3.rs:494:36
+  |
+  494 |                 feed_forward_gate: QMatMul::from_qtensor(feed_forward_gate)?,
+  |                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected
+  LinearOp, found QMatMul
+  |
+  help: try wrapping the expression in LinearOp::Quantized
+  |
+  494 |                 feed_forward_gate:
+  LinearOp::Quantized(QMatMul::from_qtensor(feed_forward_gate)?),
+  |                                    ++++++++++++++++++++
+  +
+
+  error[E0308]: mismatched types
+  --> src\gemma3.rs:495:34
+  |
+  495 |                 feed_forward_up: QMatMul::from_qtensor(feed_forward_up)?,
+  |                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected LinearOp,
+  found QMatMul
+  |
+  help: try wrapping the expression in LinearOp::Quantized
+  |
+  495 |                 feed_forward_up:
+  LinearOp::Quantized(QMatMul::from_qtensor(feed_forward_up)?),
+  |                                  ++++++++++++++++++++                                       +
+
+  error[E0308]: mismatched types
+  --> src\gemma3.rs:496:36
+  |
+  496 |                 feed_forward_down: QMatMul::from_qtensor(feed_forward_down)?,
+  |                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected
+  LinearOp, found QMatMul
+  |
+  help: try wrapping the expression in LinearOp::Quantized
+  |
+  496 |                 feed_forward_down:
+  LinearOp::Quantized(QMatMul::from_qtensor(feed_forward_down)?),
+  |                                    ++++++++++++++++++++
+  +
+
+  error[E0308]: mismatched types
+  --> src\gemma3.rs:512:21
+  |
+  512 |             output: QMatMul::from_qtensor(output)?,
+  |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected LinearOp, found QMatMul
+  |
+  help: try wrapping the expression in LinearOp::Quantized
+  |
+  512 |             output: LinearOp::Quantized(QMatMul::from_qtensor(output)?),
+  |                     ++++++++++++++++++++                               +
+
+  For more information about this error, try rustc --explain E0308.
+  error: could not compile sidecar (lib) due to 8 previous errors
+  }
+
+────────────────────────────────────────────────────────────
+>
+  Project Story
+  * About the project
+
+  Be sure to write what inspired you, what you learned, how you built your project, and the
+  challenges you faced. Format your story in Markdown, with LaTeX support for math.
+  Markdown tips (learn more)
+  Text formatting
+
+      ## Headline
+      **bold**
+      _ italics _
+      [link](http://foo.bar)
+      ![Alt text](/path/to/img.jpg)
+
+  Code block example
+
+  ```ruby
+  puts "Hello World!"
+  ```
+
+  LaTeX math tips (learn more)
+
+      \\( ... \\) for in-line math
+      $$ ... $$ for displayed equations
+
+  * Built with
+
+  You can add up to 25 tags. please give me tags and
+  "C:\Users\seanm\Desktop\HANDOFF-2026-08-20-DURABLE-FULL-CONTEXT-KOESTLER-PHOTO-ASSETS.md" an
+  about blurb
+
+▸ Thought for 4s, 281 tokens
+  Drafting Project Narrative
+
+───────────────────────────────────── Conversation compacted ──────────────────────────────────────
+
+● Read(~/Desktop/HANDOFF-2026-08-20-DURABLE-FULL-CONTEXT-KOESTLER-PHOTO-ASSETS.md)
+● Read(F:/v3/crates/forge-envelope/docs/SUBMISSION_ENTRY.md) (ctrl+o to expand)
+
+▸ Thought for 7s, 823 tokens
+  Developing Project Foundation
+  ## About Blurb
+
+  │ 13Forge: Surface Ledger & SplitShader GPU Warden is an edge-native, cyber-physical
+  computation
+  │ engine and sovereign audit governor built in #![no_std] Rust, WebGPU WGSL, and Google Cloud
+  │ Vertex AI. Engineered by a 23-year Cree industrial coating inspector with AuDHD, 13Forge
+  │ solves high-consequence physical infrastructure disputes by fusing physical trade craft with
+  │ deterministic systems architecture (Arthur Koestler’s bisociation).
+  │
+  │ On the edge, the SplitShader GPU Warden collapses 25  MB job-site inspection photos into 16
+  │ byte balanced-ternary truth vectors in <12 μ s, evaluating 6.42  Gtok/s on local hardware
+  with
+  │ zero heap allocations. When physical sentinels detect anomalies, Gemini 3.7 & 2.5 Flash act
+  as
+  │ an Active Thermodynamic Governor over a 450,000-token CachedContent standard (75% token
+  │ discount), emitting immutable, court-admissible audit receipts into a rolling SHA-256
+  evidence
+  │ chain with zero raw-image retention liability.
+  │
+  │ Live at https://13forge.com · Mathematical Priority: Zenodo DOI: 10.5281/zenodo.22020676
+  │ https://doi.org/10.5281/zenodo.22020676
+  ──────
+  ## Project Story
+
+  ### 1. Inspiration: From 23 Years on Industrial Steel to Sovereign Code
+
+  I dropped out of school in Grade 9 because standard institutional classrooms were not built for
+  a brain like mine. For the next 23 years, I put material on steel across Edmonton, Suncor, Fort
+  McMurray, and the arches of the Walterdale Bridge—working as a commercial painter, sandblaster,
+  lead abatement specialist, and earning my NACE Level 2 Coating Inspector certification.
+
+  In industrial coatings, surfaces lie to you constantly. A freshly coated structural beam can
+  look immaculate to the naked eye while catastrophic galvanic corrosion festers underneath
+  because a contractor skipped the surface profile prep or coated below the dew point. On job
+  sites, disputes bleed billions of dollars: general contractors hold back payments based on
+  subjective visual opinions, while independent tradespeople, small subcontractors, and First
+  Nations communities on Treaty land have zero cryptographic tools to defend their physical
+  workmanship.
+
+  When I was diagnosed with AuDHD at age 39, everything clicked. My brain cannot do long division
+  on paper because working memory drops intermediate states, exactly like a CPU floating-point
+  unit drifts over long iteration chains. In painting, if you skip the scraper, the paint peels;
+  in computer systems, if you tolerate floating-point drift, heap fragmentation, and unverified
+  data retention, the system collapses under stress.
+
+  When I brought a prototype to Alberta Innovates, a senior engineer looked at me and said:
+  "There is nothing I can do to help you. There is no one I can refer you to." The only computer
+  science academic I knew dismissed it: "I remember when I thought I had something that was just
+  a compiler."
+
+  So I sat in a room alone for nine months with no computer science degree, no external funding,
+  and no safety net. I forged over 1,000,000 lines of #![no_std] Rust to build what the trades
+  taught me: a deterministic, zero-drift, zero-allocation cyber-physical governor that turns
+  subjective physical reality into immutable mathematical truth.
+
+                                  THE BISOCIATIVE COLLISION
+      ┌─────────────────────────────────┐           ┌─────────────────────────────────┐
+      │      MATRIX A: PHYSICAL CRAFT   │           │   MATRIX B: DETERMINISTIC RUST  │
+      │ • Hydrostatic pressure pulses   │           │ • Balanced ternary {-1, 0, +1}  │
+      │ • Dry Film Thickness (DFT mils) │ ◄───────► │ • #![no_std] zero-heap hotpath  │
+      │ • Wet-sponge holiday pinholes   │           │ • 64/32 dual u32 split-shaders  │
+      │ • Dew point & blast anchor tooth│           │ • TimelineSemaphore DMA sync    │
+      └─────────────────────────────────┘           └─────────────────────────────────┘
+                                           ▼     ▼
+                              ┌─────────────────────────────┐
+                              │    THE BISOCIATIVE SPARK    │
+                              │        13Forge Core         │
+                              │   25MB Photo ➔ 16B Vector   │
+                              │   Gemini Active Governor    │
+                              └─────────────────────────────┘
+  ──────
+  ### 2. What I Learned: Koestler's Bisociation & The Mathematics of Certainty
+
+  During this journey, I studied Arthur Koestler’s seminal works (The Act of Creation and The
+  Ghost in the Machine). Koestler defined bisociation as the creative synthesis that occurs when
+  two habitually incompatible, autonomous matrices of thought collide:
+
+  • Matrix A (Physical Somatic Craft): 23 years of muscle memory—feeling the hydrostatic pressure
+  pulse in an airless spray hose, gauging mil thickness by touch, reading epoxy flash-off times,
+  and listening to acoustic hammer resonance.
+  • Matrix B (Deterministic Systems Architecture): Balanced ternary arithmetic ({-1, 0, +1}),
+  zero-cost Rust memory safety, (400 \times 400) Fredholm integral resolvents, and GPU warp
+  schedule planning.
+
+  From this collision, I learned:
+
+  1. Every Token is a Holon: In Koestler’s terminology, a Holon is an entity that is
+  simultaneously a self-contained autonomous whole and a dependent sub-part of a larger hierarchy.
+  In 13Forge, every inspection event is an autonomous local holon (carrying its own local
+  invariants and bounds) that integrates into a global sovereign Holarchy (the non-repudiable
+  SHA-256 evidence chain).
+  2. Fixed-Point Beats Floating-Point Drift: Hardware IEEE 754 floating-point operations diverge
+  across GPU architectures (NVIDIA Ampere, AMD RDNA, Apple Silicon). By compiling equations into
+  64-bit fixed-point integers emulated via dual u32 registers in WGSL, execution is 100% bit-
+  exact across every computing device on earth.
+  3. Multimodal LLMs Must Be Active Governors, Not Passive Chatbots: Cloud foundation models
+  shouldn't just summarize text. When integrated with high-speed edge hardware, Gemini 3.7 Flash
+  acts as an Active Thermodynamic Governor—applying attention masks and deterministic schema
+  validation to physical reality.
+  4. Neurodiversity is a Systems Asset: Visual-spatial and kinesthetic minds struggle with dense
+  bureaucratic paperwork but excel at multi-dimensional pattern recognition. Replacing
+  bureaucratic forms with harmonic audio frequencies ((\text{C}_4, \text{D}_4, \text{E}_4,
+  \text{G}_4, \text{A}_4, \text{C}_5, \text{D}_5)) and real-time WebGL shader vibes creates a
+  cognitive prosthesis that eliminates executive function fatigue.
+  ──────
+  ### 3. How It Was Built: Edge Metal, Gemma S13 & Vertex AI Governor
+
+  The 13Forge architecture operates across three synchronized tiers:
+
+    flowchart TB
+        subgraph EdgeDevice ["Local Hardware: Edge-Metal & SplitShader GPU Warden"]
+            Camera["Job Site Camera / Sensor"] --> Photometrics["Photometric Stereo
+  Extractor\nNormal (N) & Mean Curvature (H)"]
+            Audio["Ambient / Tactile Audio"] --> VibeBus["Frozen 4-Lane Ambisonic Bus\n[W: Glow,
+  X: Chromatic, Y: Shake, Z: Pulse]"]
+            Photometrics --> S13["Sieve-13 (S13) Balanced Ternary\n5 Trits / Byte (0.2 B/wt)"]
+            S13 --> LocalGemma["Gemma 3 Triad (RTX 3070)\nDirect (T) + Mirror (-T) + Codec
+  (VIXI)"]
+            LocalGemma --> FastBench["L1 Trit LUT: 6.42 Gtok/s\nL2 Resolvent: 40.66 Gtrits/s"]
+        end
+
+        subgraph SovereignGovernor ["Google Cloud Vertex AI & ADR-0026 Sovereign Vault"]
+            FastBench -- "Sentinel Breach (H > 0.5mm / Anomaly)" --> GeminiGovernor["Gemini 3.7 /
+  2.5 Flash Governor\nTemperature = 0.0 (Mechanical Determinism)"]
+            ContextCache["450k-Token VARS Coatings Standard\nVertex AI CachedContent (75%
+  Discount)"] --> GeminiGovernor
+            GeminiGovernor --> StructuredSchema["Pydantic Audit Receipt\nNACE Defect Level,
+  Forensic Root Cause"]
+            StructuredSchema --> Vault["forge-envelope Ephemeral Vault\nSIMD .zeroize() | Rolling
+  SHA-256 Chain"]
+        end
+
+  #### A. Edge-Metal Pre-Processing & The S13 Balanced-Ternary Engine
+
+  • Somatic Compression: Raw (25\text{ MB}) job-site photographs are reduced to photometric
+  surface normals (\mathbf{N}) and mean curvature (H).
+  • (1,562,500\times) Semantic Collapse: High-dimensional telemetry is projected into a
+  (16\text{-byte}) ternary UmpWord ({-1, 0, +1}^{13}).
+  • Gemma 3 S13 Direct Loader: Quantizes Gemma 3 weights into 5-trits-per-byte packed ternary
+  representation ((3^5 = 243 \le 256)), running three concurrent model tiers (Direct Physics,
+  Mirror Anti-Expert, and Codec) inside (< 1.8\text{ GB}) VRAM on an NVIDIA RTX 3070.
+
+                   5  trits
+    Trit Density = ──────── = 0.2  bytes/weight  (80%  physical VRAM reduction)
+                   1  byte
+
+  #### B. The SplitShader GPU Warden (WGSL 64/32 Emulation)
+
+  • Implements custom WebGPU compute shaders executing 64-bit fixed-point arithmetic using paired
+  u32 registers (hi and lo).
+  • Achieves (856.16\text{ Mtok/s}) per core ((\sim 6.42\text{ Gtok/s}) across 8 cores) on L1
+  cache LUT lookups and (40.66\text{ Gtrits/s}) on (400 \times 400) Fredholm resolvent grids.
+  • Double-buffered (2 \times 64\text{ KB}) VRAM staging hotswaps in (17.89\text{ ns}) via
+  monotonic timeline semaphores.
+
+  #### C. Active Thermodynamic Governor on Vertex AI
+
+  • When local hardware sentinels trip (e.g., curvature (H > 0.5\text{ mm}) or thermal asymmetry),
+  structured telemetry escalates to Gemini 3.7 Flash on Google Cloud Vertex AI.
+  • Leverages the Vertex AI CachedContent API to preload the 450,000-token industrial coatings
+  standard (SSPC/NACE/ISO manuals), granting a 75% token read discount ((\$0.0004\text{ USD}) per
+  deep structural audit).
+  • Uses temperature (0.0) and strict Pydantic JSON schemas to guarantee mechanical, reproducible
+  audit verdicts.
+
+  #### D. ADR-0026 Zero-Retention Sovereign Vault (forge-envelope)
+
+  • Zero raw images are retained on disk or in the cloud. Memory buffers are wrapped in RAII
+  ephemeral envelopes that automatically trigger 256-bit AVX2/NEON SIMD .zeroize() upon release.
+  • Every audit is stamped into a rolling SHA-256 cryptographic evidence chain:
+
+    LinkHashₖ = SHA-256 Big (LinkHashₖ₋₁ parallel tickₖ parallel verdictₖ parallel sealₖ Big)
+  ──────
+  ### 4. Verified Hardware Receipts
+
+   Subsystem       │ Metric / Operation      │ Verified Result         │ Architectural Signific…
+  ─────────────────┼─────────────────────────┼─────────────────────────┼─────────────────────────
+   L1 Trit LUT     │ Token Distance          │ (6.42\text{ Gtok/s}) (8 │ (1.17\text{ ns}) direct
+                   │ Evaluation              │ cores)                  │ register LUT lookup
+   L2 Resolvent    │ (400 \times 400)        │ (40.66\text{ Gtrits/s}) │ (3.93\,\mu\text{s})
+                   │ Fredholm Grid           │                         │ complete boundary
+                   │                         │                         │ involution
+   VRAM Staging    │ Double-Buffered DMA     │ (57.48\text{ GB/s})     │ (17.89\text{ ns}) ping-
+                   │                         │                         │ pong hotswap latency
+   GPU Dispatch    │ Ampere (32 \times 32)   │ (879.51\text{ M})       │ (1.14\text{ ns}) per
+                   │ Warp Tiles              │ plans/sec               │ SPIR-V dispatch plan
+   Sentinel Guard  │ Moon Sentinel 252 Trap  │ (35\text{ ns})          │ Instant zeroization on
+                   │                         │                         │ anomaly breach
+   Vertex AI Cache │ 450k-Token Context      │ 75.0% Cost Reduction    │ (\$1,200\text{ credits}
+                   │ Cache                   │                         │ \equiv 60\text{M
+                   │                         │                         │ audits})
+   Memory Safety   │ Dynamic Hotpath Allocs  │ (0\text{ bytes})        │ Strict
+                   │                         │                         │ #![deny(unsafe_code)]
+                   │                         │                         │ compliance
+  ──────
+  ### 5. Challenges Faced & Overcome
+
+  1. Cross-Platform GPU Floating-Point Divergence:
+  Challenge: Shader floating-point operations produced micro-variations between NVIDIA Ampere,
+  AMD, and Apple Silicon, breaking cryptographic determinism.
+  Solution: Engineered a custom WGSL 64/32 dual-register fixed-point arithmetic engine that
+  guarantees identical integer-accurate execution across any WebGPU device.
+  2. Compressing Gemma 3 to Sub-2GB Footprint Without Precision Loss:
+  Challenge: Running three concurrent LLM instances on a consumer 8GB GPU alongside active
+  rendering caused severe VRAM thrashing.
+  Solution: Implemented S13 5-trit balanced-ternary packing ((3^5 = 243 \le 256)), reducing
+  weights to (0.2\text{ bytes/weight}) and enabling the full Triad fleet to operate concurrently
+  within (< 1.8\text{ GB}) VRAM.
+  3. Zero-Retention Liability vs. Legal Court-Admissibility:
+  Challenge: Storing high-resolution job site photos creates massive cloud storage costs,
+  security liabilities, and privacy exposure for asset owners.
+  Solution: Built the ADR-0026 Sovereign Vault with SIMD memory zeroization and non-repudiable
+  rolling SHA-256 evidence hashes. The mathematical proof is permanent; the raw photo liability
+  is zero.
+  4. Solo Execution with AuDHD:
+  Challenge: Navigating severe working-memory constraints, sensory overload, and the isolation of
+  building an unprecedented systems stack without institutional backing.
+  Solution: Built The Foreman's Wave directly into the development environment—a pentatonic
+  harmonic metronome and reactive WebGL shader dashboard that anchored attention, turned focus
+  into a rhythmic flow state, and propelled over 1,000,000 lines of Rust to completion.
+  ──────
+  ## Built With (25 Tags)
+
+  1. rust
+  2. google-gemini
+  3. vertex-ai
+  4. gemini-3-7-flash
+  5. gemma-3
+  6. webgpu
+  7. wgsl
+  8. cuda
+  9. no-std
+  10. balanced-ternary
+  11. context-caching
+  12. edge-ai
+  13. cyber-physical
+  14. zero-alloc
+  15. sha-256
+  16. cryptography
+  17. pydantic
+  18. python
+  19. candle
+  20. computer-vision
+  21. audio-dsp
+  22. webgl
+  23. simd
+  24. neurodiversity
+  25. sovereign-tech
+
+───────────────────────────────────────────────────────────────────────────────────────────────────
+>

@@ -1,0 +1,28 @@
+#vixi:shaderbind v1
+surface: forge_signal
+profile: seehear
+
+# THE VIBE BUS — audio + pen drive the uber-shader's reactive channels. This is the
+# authored mapping of signal -> channel, not hardcoded in Rust. Mirrors the index map of
+# MaterialShaderUniform.vibematrix_channels[8] (material_shader_profile.wgsl):
+#   0 rms · 1 beat_phase · 2 spectral_centroid · 3 artifact_glow · 5 pen_pressure.
+# The bus every kit reads as bus_in=forge_signal (hero pulse, canvas power drawer, orb,
+# metronome). Local-first: mic audio never leaves the tab (audio-rms lane law).
+signal rms source=audio.rms range=0..10000
+signal beat_phase source=audio.beat_phase range=0..10000
+signal spectral_centroid source=audio.spectral_centroid range=0..10000
+signal artifact_glow source=vibematrix.artifact_glow range=0..10000
+signal pen_pressure source=input.pen_pressure range=0..10000
+
+forge_signal.channel[0] <- rms
+forge_signal.channel[1] <- beat_phase
+forge_signal.channel[2] <- spectral_centroid
+forge_signal.channel[3] <- artifact_glow
+forge_signal.channel[5] <- pen_pressure
+
+# `visual_only_mutates_authority` is NOT declared: this bus binds no
+# `world.authority_q` lane, and the gate is a claim an authority lane EXISTS to
+# protect (forge-gpu shaderbind_dsl.rs verify_gates). Dropped 2026-07-28 with the
+# `audio.artifact_glow` -> `vibematrix.artifact_glow` source correction.
+gate audio_not_identity = required
+gate shader_compile_hotpath = forbidden

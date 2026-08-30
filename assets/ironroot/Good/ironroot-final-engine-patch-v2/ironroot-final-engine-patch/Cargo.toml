@@ -1,0 +1,7 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/forge-core",
+    "crates/forge-ump",
+    "crates/ironroot-signal",
+]

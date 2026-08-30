@@ -1,0 +1,11 @@
+{
+  "bundle_id": "dirge_ironroot_resonance_compiler_v0_1",
+  "created_for": "Sean / Nistam Dream Engine",
+  "source_types": [
+    "user_provided_design_notes",
+    "theory_engine_compiler_skill_workflow",
+    "conversation_derived_synthesis"
+  ],
+  "legal_cultural_note": "This package contains fictionalized compiler doctrine. Raga and cultural grammar references are structural inspiration only unless separately researched, permissioned, and reviewed.",
+  "runtime_status": "doctrine_and_schema_bundle_not_final_runtime_code"
+}

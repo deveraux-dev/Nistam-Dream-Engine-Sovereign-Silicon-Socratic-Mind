@@ -28,6 +28,7 @@ pub mod timeline_futuresight;
 pub mod timeline_recorder;
 pub mod winproc;
 pub mod ghost_reaper;
+pub mod sidecar;
 
 // The textually mounted `beat_batch.rs` below says `use forge_ump::…` — its
 // one home compiles inside forge-audio-v3, which names the dep that way. An

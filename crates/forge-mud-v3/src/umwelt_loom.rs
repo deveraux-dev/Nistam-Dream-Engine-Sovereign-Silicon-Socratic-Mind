@@ -38,63 +38,22 @@ pub fn t_tolerance(tick_frequency_hz: u32) -> i64 {
     }
 }
 
-/// What the grid has to say about one cell. The fields here are the ones of
-/// [`SenseChannel`]'s thirty-two that a landed world system currently feeds;
-/// the rest read zero until one does. Kept as named fields because they are
-/// the authored contract of the landed forms — [`Self::field`] is the typed
-/// door.
-#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
-pub struct VoxelState {
-    /// Pressure difference across the cell, permyriad. The djinn's channel.
-    pub pressure_delta_q: i32,
-    /// Life entropy, permyriad. The lich's channel.
-    pub life_entropy_q: i32,
-    /// Load bearing on the stone, permyriad. Skeleton and treant.
-    pub stone_stress_q: i32,
-    /// How far back the last passage sits on the t axis, in lattice cells.
-    pub scent_age_t: i64,
-    /// Thermal departure from the cell's resting temperature, permyriad.
-    pub heat_gradient_q: i32,
-    /// Airborne dust and ash held in suspension, permyriad.
-    pub particulate_flux_q: i32,
-    /// Hostility aimed at whoever is standing here, permyriad.
-    pub hate_vector_q: i32,
-    /// Living bodies within earshot, permyriad.
-    pub vitality_lux_q: i32,
+/// Hash key for a cell address — unchanged from the old VoxelState::field builder.
+pub fn cell_key(at: Cell5) -> u64 {
+    at.iter().fold(0u64, |h, &v| (h ^ v as u64).wrapping_mul(0x9e37_79b9_7f4a_7c15))
+}
+
+/// Quiet cell field at a 5D address — ready for index-writing channels.
+pub fn quiet_cell_field(at: Cell5) -> PentaractField {
+    let key = cell_key(at);
+    let point = forge_core_v3::pentaract::Pentaract::new(key, 0, 0, 0, 0, 0, 0);
+    PentaractField::quiet_at(point)
 }
 
 /// The channels a body is built to hear, and the one it stands in.
 pub use forge_core_v3::pentaract_field::{
     mood_point, PentaractField, SenseChannel, SenseGain, SenseMask, SENSE_COUNT,
 };
-
-impl VoxelState {
-    /// When the trail stops being a trail — [`t_tolerance`] decides, never a
-    /// number tuned here.
-    #[inline]
-    pub fn trail_cold_at(bank_hz: u32) -> i64 {
-        t_tolerance(bank_hz)
-    }
-
-    /// Lift this cell into the 32-channel field. `scent_age_t` stays outside
-    /// it: it is a position on the t axis, not a permyriad magnitude.
-    ///
-    /// The point's identity is the cell address; its S⁴ angles are the shape
-    /// of what the cell is doing, so a body can be scored against it.
-    pub fn field(&self, at: Cell5) -> PentaractField {
-        let key = at.iter().fold(0u64, |h, &v| (h ^ v as u64).wrapping_mul(0x9e37_79b9_7f4a_7c15));
-        let point = forge_core_v3::pentaract::Pentaract::new(key, 0, 0, 0, 0, 0, 0);
-        let mut f = PentaractField::quiet_at(point);
-        f[SenseChannel::AtmospherePa] = self.pressure_delta_q;
-        f[SenseChannel::NecroticDecay] = self.life_entropy_q;
-        f[SenseChannel::MasonryStress] = self.stone_stress_q;
-        f[SenseChannel::HeatGradient] = self.heat_gradient_q;
-        f[SenseChannel::ParticulateFlux] = self.particulate_flux_q;
-        f[SenseChannel::HateVector] = self.hate_vector_q;
-        f[SenseChannel::VitalityLux] = self.vitality_lux_q;
-        f.oriented(key)
-    }
-}
 
 /// Which channels a worn body hears, and how loudly. Replaces the per-form
 /// match arm: a new body is a new mask, not a new branch.
@@ -159,21 +118,20 @@ const NOISE_EDGE_Q: i64 = 1_000;
 
 /// `trail_hz` is the tick rate of the bank that owns the passage channel —
 /// the weaver never decides how fast a fact goes stale, it asks the lattice.
-pub fn weave(form: Form, senses: &Senses, voxel: &VoxelState, at: Cell5, trail_hz: u32) -> String {
+pub fn weave(form: Form, senses: &Senses, field: &PentaractField, scent_age_t: i64, at: Cell5, trail_hz: u32) -> String {
     let h = |slot: u8| slot_hash(at, form, slot);
-    let field = voxel.field(at);
-    let filter = FormFilter::attuned(form, &field);
+    let filter = FormFilter::attuned(form, field);
     // The mask decides WHAT the body may read; the match decides what it says
     // about it. A deaf channel reads 0 here, not "skipped" — the empty branch
     // of each body's own prose is the honest report of nothing.
-    let hear = |c: SenseChannel| filter.read(&field, c).unwrap_or(0);
+    let hear = |c: SenseChannel| filter.read(field, c).unwrap_or(0);
     let channel = match form {
         Form::Djinn => djinn(hear(SenseChannel::AtmospherePa), h(1)),
         Form::Lich => lich(hear(SenseChannel::NecroticDecay), h(1)),
         Form::Skeleton => skeleton(hear(SenseChannel::MasonryStress), h(1)),
-        Form::Werewolf => werewolf(voxel, trail_hz, h(1)),
+        Form::Werewolf => werewolf(scent_age_t, trail_hz, h(1)),
         Form::Treant => treant(hear(SenseChannel::MasonryStress), h(1)),
-        Form::Wraith => wraith(voxel, senses, trail_hz, h(1)),
+        Form::Wraith => wraith(field, senses, scent_age_t, trail_hz, h(1)),
         Form::Mortal => mortal(senses, h(1)),
     };
     format!("{} {} {}", form.body_line(), channel, noise(senses, h(2)))
@@ -262,16 +220,16 @@ fn skeleton(load_q: i32, seed: usize) -> &'static str {
     }
 }
 
-fn werewolf(v: &VoxelState, trail_hz: u32, seed: usize) -> &'static str {
-    let cold = VoxelState::trail_cold_at(trail_hz);
-    if v.scent_age_t * 4 < cold {
+fn werewolf(scent_age_t: i64, trail_hz: u32, seed: usize) -> &'static str {
+    let cold = t_tolerance(trail_hz);
+    if scent_age_t * 4 < cold {
         const FRESH: [&str; 3] = [
             "It went through here just now and it was not being careful.",
             "The trail is still warm and it runs west, low, along the wall.",
             "Something crossed this floor and left the whole of itself in the air.",
         ];
         FRESH[seed % FRESH.len()]
-    } else if v.scent_age_t < cold {
+    } else if scent_age_t < cold {
         const AGING: [&str; 2] = [
             "The trail is hours old. You can still follow it if you go now.",
             "Something came through. It has had time to get somewhere since.",
@@ -295,12 +253,12 @@ fn treant(load_q: i32, seed: usize) -> &'static str {
     }
 }
 
-fn wraith(v: &VoxelState, senses: &Senses, trail_hz: u32, seed: usize) -> &'static str {
+fn wraith(field: &PentaractField, senses: &Senses, scent_age_t: i64, trail_hz: u32, seed: usize) -> &'static str {
     // Off the floor, sensitivity enormous, reliability gone: the wraith is the
     // one body whose channel is allowed to be wrong, and it never says which.
-    let anything = v.life_entropy_q >= FAINT_Q
-        || v.pressure_delta_q >= FAINT_Q
-        || v.scent_age_t < VoxelState::trail_cold_at(trail_hz);
+    let anything = field[SenseChannel::NecroticDecay] >= FAINT_Q
+        || field[SenseChannel::AtmospherePa] >= FAINT_Q
+        || scent_age_t < t_tolerance(trail_hz);
     if anything || senses.resolve() > 12_000 {
         const HEARD: [&str; 3] = [
             "Someone said something in here. It may not have been recently.",
@@ -345,42 +303,47 @@ mod tests {
         1
     }
 
-    fn hot() -> VoxelState {
-        VoxelState {
-            pressure_delta_q: 9_000,
-            life_entropy_q: 9_000,
-            stone_stress_q: 9_000,
-            scent_age_t: 1,
-            ..Default::default()
-        }
+    fn hot_field() -> (PentaractField, i64) {
+        let at = [0, 0, 0, 0, 0];
+        let mut f = quiet_cell_field(at);
+        f[SenseChannel::AtmospherePa] = 9_000;
+        f[SenseChannel::NecroticDecay] = 9_000;
+        f[SenseChannel::MasonryStress] = 9_000;
+        f[SenseChannel::HeatGradient] = 0;
+        f[SenseChannel::ParticulateFlux] = 0;
+        f[SenseChannel::HateVector] = 0;
+        f[SenseChannel::VitalityLux] = 0;
+        (f.oriented(cell_key(at)), 1)
     }
 
     #[test]
     fn the_same_cell_reads_the_same_way_on_every_machine() {
         let at = [12, 34, 2, 120, 3];
-        let a = weave(Form::Lich, &senses(0), &hot(), at, slow_bank_hz());
-        let b = weave(Form::Lich, &senses(0), &hot(), at, slow_bank_hz());
+        let (field, scent_age_t) = hot_field();
+        let a = weave(Form::Lich, &senses(0), &field, scent_age_t, at, slow_bank_hz());
+        let b = weave(Form::Lich, &senses(0), &field, scent_age_t, at, slow_bank_hz());
         assert_eq!(a, b);
     }
 
     #[test]
     fn the_lattice_is_what_makes_it_various() {
         let s = senses(0);
+        let (field, scent_age_t) = hot_field();
         let base = [12, 34, 2, 0, 0];
         let mut seen = std::collections::HashSet::new();
         for t in 0..64 {
-            seen.insert(weave(Form::Djinn, &s, &hot(), [12, 34, 2, t, 0], slow_bank_hz()));
+            seen.insert(weave(Form::Djinn, &s, &field, scent_age_t, [12, 34, 2, t, 0], slow_bank_hz()));
         }
         assert!(seen.len() > 1, "the tick axis must re-weave the room");
 
         let mut spatial = std::collections::HashSet::new();
         for x in 0..64 {
-            spatial.insert(weave(Form::Djinn, &s, &hot(), [x, 34, 2, 0, 0], slow_bank_hz()));
+            spatial.insert(weave(Form::Djinn, &s, &field, scent_age_t, [x, 34, 2, 0, 0], slow_bank_hz()));
         }
         assert!(spatial.len() > 1, "and so must the ground");
         assert_ne!(
-            weave(Form::Djinn, &s, &hot(), base, slow_bank_hz()),
-            weave(Form::Lich, &s, &hot(), base, slow_bank_hz()),
+            weave(Form::Djinn, &s, &field, scent_age_t, base, slow_bank_hz()),
+            weave(Form::Lich, &s, &field, scent_age_t, base, slow_bank_hz()),
             "two bodies in one cell do not file the same report"
         );
     }
@@ -389,19 +352,26 @@ mod tests {
     fn a_blind_body_has_no_words_for_light() {
         const FORBIDDEN: [&str; 6] = ["light", "dark", "shadow", "colour", "glow", " see "];
         let s = senses(0);
-        let quiet = VoxelState { scent_age_t: 10_000, ..Default::default() };
-        let faint = VoxelState {
-            pressure_delta_q: 2_000,
-            life_entropy_q: 2_000,
-            stone_stress_q: 2_000,
-            scent_age_t: 6,
-            ..Default::default()
+
+        let quiet_field = {
+            let at = [0, 0, 0, 0, 0];
+            quiet_cell_field(at).oriented(cell_key(at))
         };
+        let faint_field = {
+            let at = [0, 0, 0, 0, 0];
+            let mut f = quiet_cell_field(at);
+            f[SenseChannel::AtmospherePa] = 2_000;
+            f[SenseChannel::NecroticDecay] = 2_000;
+            f[SenseChannel::MasonryStress] = 2_000;
+            f.oriented(cell_key(at))
+        };
+        let (hot_f, _) = hot_field();
+
         for form in [Form::Lich, Form::Skeleton, Form::Treant] {
-            for voxel in [hot(), faint, quiet] {
+            for (field, scent) in [(hot_f, 1i64), (quiet_field, 10_000i64), (faint_field, 6i64)] {
                 for t in 0..32 {
                     let line =
-                        weave(form, &s, &voxel, [1, 2, 3, t, 0], slow_bank_hz()).to_lowercase();
+                        weave(form, &s, &field, scent, [1, 2, 3, t, 0], slow_bank_hz()).to_lowercase();
                     for word in FORBIDDEN {
                         assert!(
                             !line.contains(word),
@@ -417,13 +387,14 @@ mod tests {
 
     #[test]
     fn an_empty_cell_is_reported_empty() {
-        let quiet = VoxelState { scent_age_t: 10_000, ..Default::default() };
         let at = [0, 0, 0, 0, 0];
-        assert!(weave(Form::Lich, &senses(0), &quiet, at, slow_bank_hz()).contains("spending"));
-        assert!(weave(Form::Skeleton, &senses(0), &quiet, at, slow_bank_hz()).contains("holding nothing"));
-        assert!(weave(Form::Werewolf, &senses(0), &quiet, at, slow_bank_hz()).contains("cold"));
+        let quiet_f = quiet_cell_field(at).oriented(cell_key(at));
+        let quiet_s = 10_000i64;
+        assert!(weave(Form::Lich, &senses(0), &quiet_f, quiet_s, at, slow_bank_hz()).contains("spending"));
+        assert!(weave(Form::Skeleton, &senses(0), &quiet_f, quiet_s, at, slow_bank_hz()).contains("holding nothing"));
+        assert!(weave(Form::Werewolf, &senses(0), &quiet_f, quiet_s, at, slow_bank_hz()).contains("cold"));
         // Except the wraith, which does not get to be sure of an empty room.
-        assert!(weave(Form::Wraith, &senses(0), &quiet, at, slow_bank_hz()).contains("do not trust"));
+        assert!(weave(Form::Wraith, &senses(0), &quiet_f, quiet_s, at, slow_bank_hz()).contains("do not trust"));
     }
 
     /// Every body's filter names the channel its own prose describes, and no
@@ -455,14 +426,12 @@ mod tests {
     /// A body cannot read a channel it was not built for, whatever the cell holds.
     #[test]
     fn a_body_cannot_read_outside_its_own_sense() {
-        let loud = VoxelState {
-            pressure_delta_q: 9_000,
-            life_entropy_q: 9_000,
-            stone_stress_q: 9_000,
-            scent_age_t: 1,
-            ..Default::default()
-        };
-        let field = loud.field([1, 2, 3, 4, 5]);
+        let at = [1, 2, 3, 4, 5];
+        let mut field = quiet_cell_field(at);
+        field[SenseChannel::AtmospherePa] = 9_000;
+        field[SenseChannel::NecroticDecay] = 9_000;
+        field[SenseChannel::MasonryStress] = 9_000;
+        let field = field.oriented(cell_key(at));
         let skeleton = FormFilter::of(Form::Skeleton);
         assert_eq!(skeleton.read(&field, SenseChannel::MasonryStress), Some(9_000));
         assert_eq!(
@@ -473,19 +442,24 @@ mod tests {
         assert_eq!(skeleton.read(&field, SenseChannel::AtmospherePa), None);
     }
 
-    /// Golden: every body, every voxel shape, eight ticks, folded to one hash.
+    /// Golden: every body, every field shape, eight ticks, folded to one hash.
     /// A refactor that changes any byte of any woven room fails right here.
     #[test]
     fn the_woven_rooms_are_byte_for_byte_what_they_were() {
         let s = senses(0);
-        let quiet = VoxelState { scent_age_t: 10_000, ..Default::default() };
-        let faint = VoxelState {
-            pressure_delta_q: 2_000,
-            life_entropy_q: 2_000,
-            stone_stress_q: 2_000,
-            scent_age_t: 6,
-            ..Default::default()
+        let quiet_field = {
+            let at = [0, 0, 0, 0, 0];
+            quiet_cell_field(at).oriented(cell_key(at))
         };
+        let faint_field = {
+            let at = [0, 0, 0, 0, 0];
+            let mut f = quiet_cell_field(at);
+            f[SenseChannel::AtmospherePa] = 2_000;
+            f[SenseChannel::NecroticDecay] = 2_000;
+            f[SenseChannel::MasonryStress] = 2_000;
+            f.oriented(cell_key(at))
+        };
+        let (hot_field, _) = hot_field();
         let mut h: u64 = 0xCBF2_9CE4_8422_2325;
         for form in [
             Form::Djinn,
@@ -496,9 +470,9 @@ mod tests {
             Form::Wraith,
             Form::Mortal,
         ] {
-            for voxel in [hot(), faint, quiet] {
+            for (field, scent_age) in [(hot_field, 1i64), (faint_field, 6i64), (quiet_field, 10_000i64)] {
                 for t in 0..8 {
-                    let line = weave(form, &s, &voxel, [3, 5, 1, t, 2], slow_bank_hz());
+                    let line = weave(form, &s, &field, scent_age, [3, 5, 1, t, 2], slow_bank_hz());
                     for b in line.bytes() {
                         h = (h ^ b as u64).wrapping_mul(0x0000_0100_0000_01B3);
                     }
@@ -516,11 +490,17 @@ mod tests {
     #[test]
     fn a_body_is_deafened_by_a_room_shaped_like_something_else() {
         let at = [7, 7, 0, 3, 0];
-        let mine = VoxelState { life_entropy_q: 1_800, scent_age_t: 10_000, ..Default::default() };
-        let foreign = VoxelState { heat_gradient_q: 18_000, ..mine };
+        let mut mine_f = quiet_cell_field(at);
+        mine_f[SenseChannel::NecroticDecay] = 1_800;
+        let mine = mine_f.oriented(cell_key(at));
 
-        let aligned = FormFilter::attuned(Form::Lich, &mine.field(at));
-        let off = FormFilter::attuned(Form::Lich, &foreign.field(at));
+        let mut foreign_f = quiet_cell_field(at);
+        foreign_f[SenseChannel::NecroticDecay] = 1_800;
+        foreign_f[SenseChannel::HeatGradient] = 18_000;
+        let foreign = foreign_f.oriented(cell_key(at));
+
+        let aligned = FormFilter::attuned(Form::Lich, &mine);
+        let off = FormFilter::attuned(Form::Lich, &foreign);
         // Unity to within the BAM table's quantization, never past it.
         assert!(aligned.gain[SenseChannel::NecroticDecay] >= 9_990, "its own room is unity");
         assert!(
@@ -532,8 +512,8 @@ mod tests {
         assert_eq!(aligned.mask, off.mask, "the mask is birth, only the gain moves");
 
         // And that cost reaches the prose: the same burn goes unnameable.
-        let named = weave(Form::Lich, &senses(0), &mine, at, slow_bank_hz());
-        let lost = weave(Form::Lich, &senses(0), &foreign, at, slow_bank_hz());
+        let named = weave(Form::Lich, &senses(0), &mine, 10_000, at, slow_bank_hz());
+        let lost = weave(Form::Lich, &senses(0), &foreign, 10_000, at, slow_bank_hz());
         assert!(!named.contains("spending anything"), "the aligned body must name it: {named}");
         assert!(lost.contains("spending anything"), "the deafened body must not: {lost}");
     }
@@ -541,12 +521,13 @@ mod tests {
     #[test]
     fn the_noise_you_carry_is_always_stated() {
         let at = [5, 5, 0, 0, 0];
-        let loud = weave(Form::Mortal, &senses(AUTHORED_Q), &hot(), at, slow_bank_hz());
+        let (field, scent_age_t) = hot_field();
+        let loud = weave(Form::Mortal, &senses(AUTHORED_Q), &field, scent_age_t, at, slow_bank_hz());
         assert!(
             loud.contains("racket") || loud.contains("loudest") || loud.contains("noise you brought"),
             "{loud}"
         );
-        let quiet = weave(Form::Mortal, &senses(0), &hot(), at, slow_bank_hz());
+        let quiet = weave(Form::Mortal, &senses(0), &field, scent_age_t, at, slow_bank_hz());
         assert!(quiet.contains("Nothing of yours") || quiet.contains("giving the room nothing"), "{quiet}");
     }
 }

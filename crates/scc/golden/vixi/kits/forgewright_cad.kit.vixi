@@ -1,0 +1,16 @@
+#vixi:kit v1
+surface: forgewright_cad
+profile: forge_primeflow
+classification: cad_gpu_artifact_proof
+
+slot wright.root kind=region layout=split_view
+slot wright.viewport kind=region role=offscreen_render_preview
+slot wright.mesh_catalog kind=region role=mesh_catalog searchable=true
+slot wright.primitive_provenance kind=region role=proof_panel
+slot wright.surface_diff kind=region role=diff_panel
+slot wright.phash kind=text role=proof_hash font=mono
+
+gate gpu_pixels_real = required
+gate phash_from_render = required
+gate primitive_provenance_known_or_flagged = required
+gate mesh_manifold = required

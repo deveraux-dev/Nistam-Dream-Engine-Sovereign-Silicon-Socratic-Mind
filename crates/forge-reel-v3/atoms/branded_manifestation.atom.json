@@ -1,0 +1,51 @@
+{
+  "name": "branded_manifestation",
+  "description": "Brand corruption manifests visually: entity corruption ramp, chromatic aberration, distortion, era shift toward Decay, boss mood.",
+  "duration": 5.0,
+  "tracks": [
+    {
+      "name": "corruption_ramp",
+      "target_entity": null,
+      "keyframes": [
+        { "time": 0.0, "value": { "EntityState": { "visible": true, "ascension_tier": 0, "corruption_level": 0, "sprite_state": 0 } }, "easing": "Hold" },
+        { "time": 3.0, "value": { "EntityState": { "visible": true, "ascension_tier": 0, "corruption_level": 120, "sprite_state": 1 } }, "easing": "Hold" },
+        { "time": 5.0, "value": { "EntityState": { "visible": true, "ascension_tier": 0, "corruption_level": 180, "sprite_state": 2 } }, "easing": "Hold" }
+      ],
+      "condition": null
+    },
+    {
+      "name": "chromatic_aberration",
+      "target_entity": null,
+      "keyframes": [
+        { "time": 0.0, "value": { "Shader": { "uniform_name": "chromatic_aberration", "value": 0.0 } }, "easing": "Linear" },
+        { "time": 3.0, "value": { "Shader": { "uniform_name": "chromatic_aberration", "value": 0.3 } }, "easing": "EaseIn" },
+        { "time": 5.0, "value": { "Shader": { "uniform_name": "chromatic_aberration", "value": 0.5 } }, "easing": "EaseInOut" }
+      ],
+      "condition": null
+    },
+    {
+      "name": "distortion",
+      "target_entity": null,
+      "keyframes": [
+        { "time": 0.0, "value": { "Shader": { "uniform_name": "distortion", "value": 0.0 } }, "easing": "Linear" },
+        { "time": 5.0, "value": { "Shader": { "uniform_name": "distortion", "value": 0.9 } }, "easing": "EaseIn" }
+      ],
+      "condition": null
+    },
+    {
+      "name": "boss_mood",
+      "target_entity": null,
+      "keyframes": [
+        { "time": 0.0, "value": { "MusicMood": { "mood": 4, "intensity": 0.3, "crossfade_ticks": 90 } }, "easing": "Hold" },
+        { "time": 2.5, "value": { "MusicMood": { "mood": 4, "intensity": 0.7, "crossfade_ticks": 60 } }, "easing": "Hold" },
+        { "time": 5.0, "value": { "MusicMood": { "mood": 4, "intensity": 1.0, "crossfade_ticks": 30 } }, "easing": "Hold" }
+      ],
+      "condition": null
+    }
+  ],
+  "parameters": [
+    { "name": "duration", "param_type": "Duration", "default_value": 5.0 },
+    { "name": "intensity", "param_type": "Intensity", "default_value": 1.0 },
+    { "name": "entity", "param_type": "EntityId", "default_value": 0.0 }
+  ]
+}

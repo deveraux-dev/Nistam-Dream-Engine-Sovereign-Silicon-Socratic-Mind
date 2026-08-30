@@ -27,6 +27,9 @@
         <span class="astro-lbl">ASTROLABE</span>
       </div>
       <div class="head-right">
+        <!-- giveaway:cut -->
+        <button id="btn-fleet" class="btn" title="Three Bears Gemma Triad & 2.71 GB VRAM Fleet Telemetry">🐻 FLEET TRIAD</button>
+        <!-- /giveaway:cut -->
         <button id="btn-theory" class="btn">♪ THEORY</button>
         <button id="btn-chain" class="btn" title="Harmonic Constellation Chain Arpeggiator (Click/Drag stars to weave chords)">✦ CONSTELLATION</button>
         <button id="btn-mute" class="btn on" title="mute every voice — star rings, the terminal's ear, played scores (M)">SOUND</button>
@@ -36,6 +39,7 @@
 
     <main class="sky-stage"></main>
 
+    <!-- giveaway:cut -->
     <div id="fleet-panel" class="dossier hidden" style="width: 500px; top: 56px; left: 16px; z-index: 100;">
       <div class="reticle reticle-tl"></div>
       <div class="reticle reticle-tr"></div>
@@ -64,7 +68,7 @@
         <div class="fleet-bear-card">
           <span class="bear-tag">PAPA (27B)</span>
           <b class="bear-val">580 MB</b>
-          <span class="bear-sub">1.76–2.75M dec/s</span>
+          <span class="bear-sub">2.75M dec/s</span>
         </div>
       </div>
 
@@ -92,6 +96,7 @@
         <input type="text" id="fleet-prompt-input" class="rite-input" placeholder="Enter prompt (e.g. 'Synthesize radiant plasma thruster')..." value="Synthesize radiant plasma thruster" />
         <button type="button" class="btn" id="btn-fleet-route">ROUTE</button>
         <button type="button" class="btn" id="btn-fleet-step">TRIAD STEP</button>
+        <button type="button" class="btn" id="btn-fleet-celestial" title="Zero-Socket In-Process Celestial Gemma Bot 5D Hop & Socratic Dialogue">CELESTIAL BOT</button>
       </div>
 
       <div id="fleet-route-result" class="fleet-result-card hidden">
@@ -105,7 +110,7 @@
         </div>
         <div class="telemetry-row">
           <span>ROUTE CALL (IPC ROUND-TRIP):</span>
-          <b id="fleet-res-latency">— (router core: 363–568 ns, 3 release runs)</b>
+          <b id="fleet-res-latency">— (router core: 363.4 ns single-core)</b>
         </div>
       </div>
 
@@ -123,7 +128,23 @@
           <b id="fleet-mama-verdict" class="badge-gold" style="color: var(--accent-verdigris) !important;">—</b>
         </div>
       </div>
+
+      <div id="fleet-celestial-result" class="fleet-result-card hidden">
+        <div class="telemetry-row">
+          <span>IN-PROCESS CELESTIAL HOP:</span>
+          <b id="fleet-celestial-hop" class="badge-cyan">—</b>
+        </div>
+        <div class="telemetry-row">
+          <span>CONTINUOUS 5D VECTOR:</span>
+          <b id="fleet-celestial-5d" class="badge-gold">—</b>
+        </div>
+        <div class="telemetry-row">
+          <span>DIALOGUE / &lt;end_of_turn&gt;:</span>
+          <b id="fleet-celestial-turn" class="badge-verdigris" style="color: var(--accent-verdigris) !important;">—</b>
+        </div>
+      </div>
     </div>
+    <!-- /giveaway:cut -->
 
     <div id="theory-panel" class="dossier hidden">
       <div class="reticle reticle-tl"></div>
@@ -251,6 +272,7 @@
       <span class="status-card">DAEMON :13013 <span id="daemon-pill" class="status-pill offline">OFFLINE</span> <span id="daemon-uptime" class="muted">--</span></span>
       <span class="status-card"><span id="context-health" class="muted">HEALTH: --</span> <span id="shi-score" class="muted">SHI: --</span></span>
       <span class="status-card">S13 GEMMA <span id="sidecar-pill" class="status-pill offline">OFFLINE</span></span>
+      <!-- giveaway:cut -->
       <span class="status-card vram-card">
         <span class="vram-tag">VRAM</span>
         <span class="vram-stack">
@@ -258,6 +280,7 @@
           <span class="vram-row"><em>ACT</em><span class="vram-track"><i id="vram-fill"></i></span><b id="vram-text" class="muted">no probe</b></span>
         </span>
       </span>
+      <!-- /giveaway:cut -->
     </footer>
   </div>
 

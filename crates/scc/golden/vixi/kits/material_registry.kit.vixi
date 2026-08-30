@@ -1,0 +1,22 @@
+#vixi:kit v1
+surface: material_registry
+profile: forge_primeflow
+classification: voxel_item_material_slider_authoring
+
+slot mat.root kind=region layout=split_view bind=density.comfy
+slot mat.material_list kind=region role=material_inventory searchable=true
+slot mat.physics_sliders kind=region role=physics_profile_editor
+slot mat.render_sliders kind=region role=render_profile_editor
+slot mat.audio_sliders kind=region role=audio_profile_editor
+slot mat.accessibility kind=region role=accessibility_profile_editor
+slot mat.preview kind=region role=voxel_item_preview
+slot mat.bake_report kind=region role=forge_baker_validation
+
+rule sliders_edit_profiles_not_hotpath_runtime = required
+rule voxel_stores_material_id_not_behavior_blob = required
+rule item_parts_use_physical_surface = required
+
+gate no_hotpath_allocation = required
+gate no_runtime_string_lookup = required
+gate material_id_lookup_o1 = required
+gate accessibility_profile_required = required

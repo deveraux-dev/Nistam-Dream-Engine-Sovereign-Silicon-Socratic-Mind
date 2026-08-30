@@ -1,0 +1,14 @@
+[package]
+name = "forge-shader-build-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "WGSL → SPIR-V compiler. Air-gapped naga consumption for seal generation."
+
+[dependencies]
+naga = { version = "26", features = ["wgsl-in", "spv-out"] }
+sha2 = "0.10"
+
+[lints]
+workspace = true

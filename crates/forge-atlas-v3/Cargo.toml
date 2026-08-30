@@ -1,0 +1,19 @@
+# B3 of the 5-axis sprint (SPRINT-5AXIS-GLASS-ATLAS.md, B3-atlas-world-BRIEF.md).
+# The atlas is where a material coordinate becomes a PLACE. It owns exactly one
+# home (L05): AtlasCell + the atlas lookup. The material word lives in
+# forge-material-v3 and the 5-axis spatial key in forge-poll5d-v3 — neither is
+# re-minted here, both are imported. Integer only, no float anywhere.
+[package]
+name = "forge-atlas-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+
+[dependencies]
+forge-material-v3 = { path = "../forge-material-v3" }
+forge-poll5d-v3 = { path = "../forge-poll5d-v3" }
+
+[lints]
+workspace = true

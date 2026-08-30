@@ -1,0 +1,22 @@
+#vixi:shaderbind v1
+surface: hero
+profile: bake
+
+# The helios + physics half of forge_brand — read by the bake, same u32 slots the CPU
+# reference reads. Split out of forge_brand.shaderbind.vixi 2026-07-28 because v1 binds
+# ONE surface per file and this block feeds `hero`, not `canvas`. Slots 2/9/10/11 are
+# preserved verbatim; channel 2 is the bloom slot reused on this surface's own array.
+signal bloom source=vibematrix.bloom range=0..10000
+signal sun source=world.sun_dir range=0..10000
+signal exposure source=world.exposure range=0..10000
+signal gravity source=world.gravity range=0..10000
+
+# 2 bloom reuses the bloom slot on this surface's own array
+hero.channel[2] <- bloom
+hero.channel[9] <- sun
+hero.channel[10] <- exposure
+hero.channel[11] <- gravity
+
+# No `visual_only_mutates_authority`: no world.authority_q lane on this surface, and
+# the gate is a claim that one exists to protect (verify_gates).
+gate shader_compile_hotpath = forbidden

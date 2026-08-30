@@ -1,0 +1,7 @@
+//! 10-bit packed deterministic state.
+#![allow(dead_code)]
+#[derive(Debug,Clone,Copy,PartialEq,Eq)] pub struct Packed10(pub u64); pub const TEN_BIT_MASK:u64=0x03ff; pub const MAX_10BIT:u16=1023;
+impl Packed10{pub fn empty()->Self{Self(0)} pub fn set_lane(&mut self,lane:u8,value:u16){assert!(lane<6);let shift=lane as u64*10;let v=(value.min(MAX_10BIT)as u64)&TEN_BIT_MASK;self.0&=!(TEN_BIT_MASK<<shift);self.0|=v<<shift} pub fn lane(self,lane:u8)->u16{assert!(lane<6);((self.0>>(lane as u64*10))&TEN_BIT_MASK)as u16} pub fn from_values(values:[u16;6])->Self{let mut p=Self::empty();for(i,v)in values.into_iter().enumerate(){p.set_lane(i as u8,v)}p} pub fn values(self)->[u16;6]{[self.lane(0),self.lane(1),self.lane(2),self.lane(3),self.lane(4),self.lane(5)]}}
+#[derive(Debug,Clone,Copy,PartialEq,Eq)] pub struct PackedPhysicsFrame{pub pos_xy:Packed10,pub vel_xy:Packed10,pub flags:u32,pub tick_mod_1024:u16}
+impl PackedPhysicsFrame{pub fn checksum(self)->u64{let mut h=0xcbf29ce484222325u64;for v in[self.pos_xy.0,self.vel_xy.0,self.flags as u64,self.tick_mod_1024 as u64]{h^=v;h=h.wrapping_mul(0x100000001b3)}h}}
+pub fn quantize_signed_mm(value:i64,min:i64,max:i64)->u16{if max<=min{return 0}let c=value.clamp(min,max)-min;(((c as i128)*MAX_10BIT as i128)/(max-min)as i128)as u16} pub fn dequantize_signed_mm(value:u16,min:i64,max:i64)->i64{if max<=min{return min}min+(((value as i128)*(max-min)as i128)/MAX_10BIT as i128)as i64}

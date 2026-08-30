@@ -176,6 +176,26 @@ pub fn star_voice_on(
     if scale.is_empty() {
         return 0;
     }
+    let base = note_to_mhz(star_note_on(scale, kelvin, mag_pmy, dist_pc)) as u64;
+    if tuning_ref_a_mhz == 440_000 {
+        base
+    } else {
+        base * tuning_ref_a_mhz as u64 / 440_000
+    }
+}
+
+/// The MIDI note a star rings — the same three axes [`star_voice_on`] spends,
+/// stopped one step before the crossing into frequency. Hardware is a discrete
+/// 12-TET engine; this is the byte it actually wants, and any microtonal
+/// offset rides alongside as [`forge_harmonics::cents_floor::Cents`] to be
+/// resolved at the audio edge, never by arithmetic on the frequency.
+///
+/// Returns note 0 for an empty scale — callers that need "no voice" must check
+/// the scale themselves, as [`star_voice_on`] does.
+pub fn star_note_on(scale: &[u8], kelvin: i32, mag_pmy: i32, dist_pc: u16) -> u8 {
+    if scale.is_empty() {
+        return 0;
+    }
     let degree = MK_EDGES_KELVIN.iter().filter(|&&edge| kelvin >= edge).count();
     let step = scale[degree.min(scale.len() - 1)] as i32;
 
@@ -187,13 +207,7 @@ pub fn star_voice_on(
     // three, spread across the catalog's real -1.46..+9 magnitude span.
     let octave = mag_register_q(mag_pmy) * 9 / 10_001;
 
-    let midi = (12 * (octave + 1) + root_pc + step).clamp(0, 127) as u8;
-    let base = note_to_mhz(midi) as u64;
-    if tuning_ref_a_mhz == 440_000 {
-        base
-    } else {
-        base * tuning_ref_a_mhz as u64 / 440_000
-    }
+    (12 * (octave + 1) + root_pc + step).clamp(0, 127) as u8
 }
 
 /// The root pitch class `star_voice_on` derives from distance — exposed so a
@@ -217,7 +231,7 @@ fn mag_register_q(mag_pmy: i32) -> i32 {
 }
 
 /// Distance in parsecs to a 0..10_000 permyriad log position. Integer only:
-/// a binary log with a linear fill between powers.
+/// a 12-step binary log with a linear fill between powers.
 fn dist_log_q(dist_pc: u16) -> i32 {
     if dist_pc == 0 {
         return 10_000;
@@ -225,7 +239,7 @@ fn dist_log_q(dist_pc: u16) -> i32 {
     let d = dist_pc as u32;
     // The catalog's real span is 1..~2000 pc — eleven binary octaves, not
     // sixteen. Normalising over sixteen piled 65% of the sky into two roots.
-    let hi = (31 - d.leading_zeros()).min(11);
+    let hi = (31 - d.leading_zeros()).min(11); // floor(log2(d)), clamped to the real span
     let span = 1u32 << hi;
     let frac = ((d - span) * 10_000 / span.max(1)).min(9_999) as i32;
     (((hi as i32 * 10_000) + frac) / 12).clamp(0, 10_000)

@@ -1,0 +1,14 @@
+# T5 of the forge-vision drain (plan-2-welds.md tranche table, 2026-08-11):
+# the 07 geometry quarry's contour profile re-founded onto an 8-byte
+# quantized (u,v) word. Self-contained; SdfCell8 / mesh_reconstruct's
+# Quadric [f64;10] is a separate L weld, never bundled here.
+[package]
+name = "forge-contour-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+
+[lints]
+workspace = true

@@ -1,0 +1,18 @@
+#vixi:kit v1
+surface: audio_vis
+profile: forge_primeflow
+classification: dj_audio_performance
+
+slot audio.root kind=region layout=deck_mixer_deck bind=density.dense
+slot audio.deck_a kind=region role=deck primary=true
+slot audio.deck_b kind=region role=deck primary=true
+slot audio.mixer kind=region role=center_mixer fixed_position=true
+slot audio.waveform_a kind=widget role=waveform source=audio.deck_a.waveform
+slot audio.waveform_b kind=widget role=waveform source=audio.deck_b.waveform
+slot audio.meter_master kind=widget role=meter source=audio.master.rms semantic=green_yellow_red
+slot audio.crossfader kind=widget role=crossfader source=audio.crossfader
+
+rule progressive_disclosure = limited
+rule muscle_memory_layout = required
+gate mix_clarity = required
+gate meter_latency_budget = strict

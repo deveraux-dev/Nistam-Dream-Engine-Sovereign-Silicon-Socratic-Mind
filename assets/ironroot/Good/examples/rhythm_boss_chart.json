@@ -1,0 +1,14 @@
+{
+  "chart_id": "dirge_conductor_boss_movement_i",
+  "tempo_bpm": 72,
+  "meter": "4/4",
+  "lanes": ["block", "dodge", "parry", "strike", "relic"],
+  "events": [
+    { "beat": 1.0, "lane": "block", "velocity": 0.6, "duration": 0.5, "source": "shield_line" },
+    { "beat": 2.0, "lane": "parry", "velocity": 0.9, "duration": 0.25, "source": "boss_downbeat" },
+    { "beat": 3.5, "lane": "dodge", "velocity": 0.8, "duration": 0.4, "source": "curse_roots" },
+    { "beat": 4.0, "lane": "relic", "velocity": 1.0, "duration": 0.75, "source": "bell_cue" }
+  ],
+  "friction_points": ["<friction_metrical_physics>"],
+  "quality_gates": ["player_timing_window_fair", "major_physics_unquantized"]
+}

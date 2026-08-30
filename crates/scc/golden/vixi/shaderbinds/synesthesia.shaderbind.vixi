@@ -1,0 +1,21 @@
+#vixi:shaderbind v1
+# Termithesia audio -> vibe shader channels (Permyriad 0..10000). Loaded by the REAL
+# parser forge_gpu::shaderbind_dsl::parse_shaderbind (closed audio set: rms / beat_phase /
+# spectral_centroid). This is the §17.5 "SEE the audio" VibeUniforms face-wire: the MAPPING
+# of which signal drives which vibe channel is AUTHORED here, not hardcoded in Rust.
+#   ch0 -> vibe_glow   (rms, live now)
+#   ch1 -> vibe_pulse  (beat_phase, live once R11 lands the groove)
+#   ch2 -> reserved    (spectral_centroid, FFT is Branch-5)
+surface: terminal
+profile: synesthesia
+
+signal rms      source=audio.rms                range=0..10000
+signal beat     source=audio.beat_phase         range=0..10000
+signal spectral source=audio.spectral_centroid  range=0..10000
+
+terminal.channel[0] <- rms
+terminal.channel[1] <- beat
+terminal.channel[2] <- spectral
+
+gate shader_compile_hotpath = forbidden
+gate visual_only_mutates_authority = forbidden

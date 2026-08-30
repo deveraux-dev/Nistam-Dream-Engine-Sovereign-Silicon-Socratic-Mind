@@ -1,0 +1,15 @@
+[package]
+name = "forge-brush-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "The .brush.vixi authoring grammar + tip/pressure/jitter paint engine, ported from F:\\NewRepo\\crates\\forge-core\\src\\brush.rs and forge-gui\\src\\brush_engine.rs."
+
+# Zero dependencies. Both source files were already self-contained aside from
+# forge-core's MusicSieve/AcousticRegistry/VixelDiff coupling, which is NOT
+# ported here (see vixi.rs's module doc) — no v3 MusicSieve exists yet.
+[dependencies]
+
+[lints]
+workspace = true

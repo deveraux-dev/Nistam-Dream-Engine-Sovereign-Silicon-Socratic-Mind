@@ -108,6 +108,79 @@ impl Somatic27bProjectionWeights {
             out_dmodel[m] = (acc / (PERMYRIAD_ONE as i64)) as i32;
         }
     }
+
+    /// Unproject a 4608-dimensional hidden state vector back to 5D Pentaract coordinate space.
+    #[inline(always)]
+    pub fn unproject_dmodel_to_5d(&self, dmodel: &[i32; D_MODEL_27B], out_coords_pmy: &mut [i32; PENTARACT_5D_AXES]) {
+        for (a, slot) in out_coords_pmy.iter_mut().enumerate() {
+            let mut acc: i64 = 0;
+            for (m, row) in self.proj_weights.iter().enumerate() {
+                acc += (row[a] as i64) * (dmodel[m] as i64);
+            }
+            *slot = (acc / (D_MODEL_27B as i64 * 2)) as i32;
+        }
+    }
+}
+
+impl Default for Somatic27bProjectionWeights {
+    fn default() -> Self {
+        Self::default_fixed()
+    }
+}
+
+use crate::s13::s13_rms_norm_i32;
+
+/// S13 27B Layer RMSNorm scale container ($d_{\text{model}} = 4608$).
+///
+/// Stores per-dimension fixed-point Permyriad scale factors ($1.0000 = 10,000$).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct S13Norm27b {
+    /// Permyriad scale factors for each of the 4608 channels.
+    pub scales: [i16; D_MODEL_27B],
+}
+
+impl S13Norm27b {
+    /// Construct default unit-scaling RMSNorm layer (all scales = 10,000 Permyriad).
+    pub const fn default_unit() -> Self {
+        Self {
+            scales: [PERMYRIAD_ONE as i16; D_MODEL_27B],
+        }
+    }
+
+    /// Construct from slice of f32 scale values (e.g. decoded from `.s13n`).
+    pub fn from_f32_slice(f32_scales: &[f32]) -> Result<Self, &'static str> {
+        if f32_scales.len() < D_MODEL_27B {
+            return Err("f32 scale slice too short for Gemma 27B dimension");
+        }
+        let mut scales = [0i16; D_MODEL_27B];
+        for i in 0..D_MODEL_27B {
+            let pmy = f32_scales[i] * PERMYRIAD_ONE as f32;
+            scales[i] = pmy.clamp(i16::MIN as f32, i16::MAX as f32) as i16;
+        }
+        Ok(Self { scales })
+    }
+
+    /// Apply fixed-point RMSNorm scaling to a 4608-dimensional hidden state vector in-place.
+    #[inline(always)]
+    pub fn apply(&self, hidden: &mut [i32; D_MODEL_27B]) {
+        let mut out = [0i32; D_MODEL_27B];
+        s13_rms_norm_i32(hidden, Some(&self.scales), &mut out);
+        hidden.copy_from_slice(&out);
+    }
+
+    /// Apply unweighted unit RMSNorm scaling to a 4608-dimensional hidden state vector in-place.
+    #[inline(always)]
+    pub fn apply_raw(hidden: &mut [i32; D_MODEL_27B]) {
+        let mut out = [0i32; D_MODEL_27B];
+        s13_rms_norm_i32(hidden, None, &mut out);
+        hidden.copy_from_slice(&out);
+    }
+}
+
+impl Default for S13Norm27b {
+    fn default() -> Self {
+        Self::default_unit()
+    }
 }
 
 #[cfg(test)]
@@ -144,5 +217,25 @@ mod tests {
         let mut out_a_again = [0i32; D_MODEL_27B];
         proj.project_5d_to_dmodel(&coords_a, &mut out_a_again);
         assert_eq!(out_a, out_a_again, "projection must be bit-exact deterministic");
+    }
+
+    #[test]
+    fn test_s13_norm_27b_unit_and_custom() {
+        let norm = S13Norm27b::default_unit();
+        assert_eq!(norm.scales.len(), D_MODEL_27B);
+        assert_eq!(norm.scales[0], 10_000);
+
+        let mut hidden = [100i32; D_MODEL_27B];
+        norm.apply(&mut hidden);
+        // All elements are equal, RMS equals 100, (100 * 10000) / 100 = 10000
+        assert_eq!(hidden[0], 10_000);
+
+        let f32_scales = vec![1.5f32; D_MODEL_27B];
+        let custom_norm = S13Norm27b::from_f32_slice(&f32_scales).expect("valid f32 slice");
+        assert_eq!(custom_norm.scales[0], 15_000);
+
+        let mut hidden_custom = [100i32; D_MODEL_27B];
+        custom_norm.apply(&mut hidden_custom);
+        assert_eq!(hidden_custom[0], 15_000);
     }
 }

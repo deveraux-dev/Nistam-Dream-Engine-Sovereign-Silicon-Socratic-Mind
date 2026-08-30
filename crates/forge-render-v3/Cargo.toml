@@ -1,0 +1,16 @@
+# Corrosion visualization — ported from F:\NewRepo\crates\forge-render\src\corrosion.rs
+# (49 lines; shader + WGSL uniform contract; WGSL source in shaders/core/corrosion.wgsl).
+
+[package]
+name = "forge-render-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "Render surface primitives, ported from v2 forge-render (corrosion pass beachhead)."
+
+[dependencies]
+bytemuck = { version = "1", features = ["derive"] }
+
+[lints]
+workspace = true

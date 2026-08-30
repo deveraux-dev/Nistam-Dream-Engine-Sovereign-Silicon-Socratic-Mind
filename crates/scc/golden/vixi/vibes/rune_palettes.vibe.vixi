@@ -1,0 +1,25 @@
+#vixi:vibe v1
+name: rune_palettes
+profile: forge_ritual_typography
+seed: 2748684
+
+palette.ember_forge.base = rgb(12,10,9)
+palette.ember_forge.rust = rgb(122,54,31)
+palette.ember_forge.ember = rgb(231,94,38)
+palette.ember_forge.brass = rgb(198,147,63)
+palette.ember_forge.bone = rgb(226,214,181)
+
+palette.deep_jade.base = rgb(8,13,12)
+palette.deep_jade.verdigris = rgb(48,122,105)
+palette.deep_jade.jade = rgb(53,178,131)
+palette.deep_jade.mint = rgb(178,232,202)
+palette.deep_jade.bone = rgb(222,216,190)
+
+palette.storm_sigil.base = rgb(12,14,22)
+palette.storm_sigil.indigo = rgb(46,57,112)
+palette.storm_sigil.electric = rgb(72,169,255)
+palette.storm_sigil.silver = rgb(190,202,213)
+palette.storm_sigil.static = rgb(240,248,255)
+
+rule no_colour_only_meaning = required
+rule palette_layered_materials = required

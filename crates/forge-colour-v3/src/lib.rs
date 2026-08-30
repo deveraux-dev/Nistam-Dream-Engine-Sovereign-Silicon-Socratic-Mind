@@ -107,6 +107,69 @@ pub fn note_hue(midi: u8) -> OklchColor {
     camelot_to_oklch(position, 'B', 0)
 }
 
+/// Apply relativistic Doppler color shift to an OKLCH color.
+/// Per whitepaper section 5.2: transforms L, C, H under observer relativistic motion.
+/// L_active = clamp(L_base · D^0.25, 0.05, 0.98)
+/// C_active = clamp(C_base · D^0.50, 0.01, 0.35)
+/// H_active = (H_base + φ_wv · 180/π) mod 360°
+pub fn doppler_shift_oklch(base: OklchColor, doppler_factor: f32, phi_wv_rad: f32) -> OklchColor {
+    let l_oklch = base.l as f32 / 65535.0;
+    let c_oklch = base.c as f32 / 65535.0 * 0.4;
+
+    let l_active = (l_oklch * doppler_factor.powf(0.25)).max(0.05).min(0.98);
+    let c_active = (c_oklch * doppler_factor.powf(0.5)).max(0.01).min(0.35);
+
+    let l_shifted = (l_active * 65535.0) as u16;
+    let c_shifted = ((c_active / 0.4) * 65535.0) as u16;
+
+    let phi_wv_deg = phi_wv_rad * 180.0 / std::f32::consts::PI;
+    let hue_delta = (phi_wv_deg * TURN as f32 / 360.0) as u16;
+    let h_shifted = base.h.wrapping_add(hue_delta);
+
+    OklchColor {
+        l: l_shifted,
+        c: c_shifted,
+        h: h_shifted,
+        a: base.a,
+    }
+}
+
+#[cfg(test)]
+mod doppler_tests {
+    use super::*;
+
+    #[test]
+    fn doppler_shift_identity_when_factor_one() {
+        let color = OklchColor { l: 32768, c: 16384, h: 8192, a: u16::MAX };
+        let shifted = doppler_shift_oklch(color, 1.0, 0.0);
+        assert_eq!(shifted.h, color.h, "hue should not change when phi_wv=0");
+        assert_eq!(shifted.a, color.a, "alpha must be preserved");
+    }
+
+    #[test]
+    fn doppler_shift_increases_lightness_when_factor_gt_one() {
+        let color = OklchColor { l: 32768, c: 16384, h: 8192, a: u16::MAX };
+        let shifted = doppler_shift_oklch(color, 2.0, 0.0);
+        assert!(shifted.l > color.l, "lightness should increase with D > 1");
+    }
+
+    #[test]
+    fn doppler_shift_decreases_chroma_when_factor_gt_one() {
+        let color = OklchColor { l: 32768, c: 16384, h: 8192, a: u16::MAX };
+        let shifted = doppler_shift_oklch(color, 2.0, 0.0);
+        assert!(shifted.c > color.c, "chroma should increase with D > 1");
+    }
+
+    #[test]
+    fn doppler_shift_hue_by_radian() {
+        let color = OklchColor { l: 32768, c: 16384, h: 0, a: u16::MAX };
+        let half_pi = std::f32::consts::PI / 2.0;
+        let shifted = doppler_shift_oklch(color, 1.0, half_pi);
+        let expected_delta = (90.0 * TURN as f32 / 360.0) as u16;
+        assert_eq!(shifted.h, expected_delta, "hue should rotate 90 degrees for π/2 radians");
+    }
+}
+
 #[cfg(test)]
 mod camelot_tests {
     use super::*;

@@ -54,12 +54,7 @@ pub mod impact;
 pub mod radio_db;
 // conductor_audio: EXCLUDED — needs crate::harmonic_brush (excluded above).
 pub mod conductor_audio;
-// score_player: EXCLUDED — needs forge_harmonics::synthxml. NOTE 2026-08-27:
-// synthxml IS now ported here, but this whole crate is an orphan in this tree
-// (absent from the root Cargo.toml members AND from exclude), so it cannot be
-// built or gated. The wired version lives in F:\v3. Do not turn this on until
-// the crate is a real workspace member.
-// pub mod score_player;
+pub mod score_player;
 pub mod controller;
 pub mod dsp;
 pub mod effects;
@@ -283,13 +278,60 @@ pub fn run_genre_status(args: Vec<String>) -> Result<(), String> {
     }
 }
 
-/// Top-level dispatch for `forge audio <subcmd> [args...]`. `xml-to-wav` is
-/// named but refused here — this crate is an orphan in this tree (see the
-/// score_player note above). The wired handler lives in F:\v3.
+/// Render a MusicXML score to a WAV file through the conductor's own lane —
+/// the same parse/lower/strike chain `score_player` proves in test, driven at
+/// the real 120 Hz master tick. Wired 2026-08-27; was a refusing stub.
+fn run_xml_to_wav(args: Vec<String>) -> Result<(), String> {
+    let input = args
+        .first()
+        .ok_or("usage: forge audio xml-to-wav <file.musicxml> [out.wav]")?;
+    let out_path = args.get(1).cloned().unwrap_or_else(|| "score.wav".to_string());
+
+    let bytes = std::fs::read(input).map_err(|e| format!("read {input}: {e}"))?;
+    let score = forge_harmonics::musicxml_extract::musicxml_to_score(&bytes)
+        .map_err(|e| format!("{input}: {e:?}"))?;
+
+    const SR: u32 = 48_000;
+    const TICK_HZ: u64 = 120;
+    let per_tick = (SR as u64 / TICK_HZ) as usize;
+    let mut player = score_player::ScorePlayer::from_score(&score);
+    let mut lane = conductor_audio::AudioLane::new(SR, score.tempo_bpm_x100 as f32 / 100.0);
+
+    let notes = player.remaining();
+    let mut pcm: Vec<f32> = Vec::new();
+    let mut block = vec![0.0f32; per_tick];
+    // Play the plan out, then keep rendering until the last voice decays so the
+    // final note is not clipped off mid-ring (bounded: 4 s of tail).
+    let mut tick: u64 = 0;
+    let max_tail = TICK_HZ * 4;
+    let mut tail = 0u64;
+    loop {
+        player.tick(tick, &mut lane);
+        block.iter_mut().for_each(|s| *s = 0.0);
+        lane.render(&mut block, &[]);
+        pcm.extend_from_slice(&block);
+        if player.is_finished() {
+            if lane.active_voices() == 0 || tail >= max_tail {
+                break;
+            }
+            tail += 1;
+        }
+        tick += 1;
+    }
+
+    let buf = dsp::AudioBuffer { samples: vec![pcm], sample_rate: SR };
+    let secs = buf.len() as f32 / SR as f32;
+    dsp::write_wav(&out_path, &buf)?;
+    println!("xml-to-wav: {input} -> {out_path}");
+    println!("  {notes} notes, {:.2} BPM, {secs:.2}s @ {SR} Hz", score.tempo_bpm_x100 as f32 / 100.0);
+    Ok(())
+}
+
+/// Top-level dispatch for `forge audio <subcmd> [args...]`.
 pub fn run(args: Vec<String>) -> Result<(), String> {
     let mut it = args.into_iter();
     match it.next().as_deref() {
-        Some("xml-to-wav") => Err("xml-to-wav: not wired in this tree — this crate is not a workspace member here; use F:\\v3".into()),
+        Some("xml-to-wav") => run_xml_to_wav(it.collect()),
         Some("features")   => run_music_features(it.collect()),
         Some("doctor")     => doctor::run_doctor(it.collect()),
         Some("genre-status") => run_genre_status(it.collect()),
@@ -297,7 +339,7 @@ pub fn run(args: Vec<String>) -> Result<(), String> {
         Some("library-status") => run_library_status(it.collect()),
         #[cfg(feature = "radio-db")]
         Some("library-inventory") => run_library_inventory(it.collect()),
-        _ => Err("usage: forge audio <xml-to-wav|features|doctor|genre-status|library-status>\n  xml-to-wav <file.musicxml>  — NOT WIRED IN THIS TREE (see above)\n  features <file>             — extract BPM/genre/energy\n  doctor [<crate-dir>]        — static audit: suites + RT-lock + dormant deps\n  genre-status [<file.s13>]   — real on-disk .s13 genre-LUT status\n  library-status <path.db>    — real radio.db track count + sample (needs --features radio-db)".into()),
+        _ => Err("usage: forge audio <xml-to-wav|features|doctor|genre-status|library-status>\n  xml-to-wav <file.musicxml> [out.wav]  — render a score to WAV\n  features <file>             — extract BPM/genre/energy\n  doctor [<crate-dir>]        — static audit: suites + RT-lock + dormant deps\n  genre-status [<file.s13>]   — real on-disk .s13 genre-LUT status\n  library-status <path.db>    — real radio.db track count + sample (needs --features radio-db)".into()),
     }
 }
 

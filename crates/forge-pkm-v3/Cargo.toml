@@ -1,0 +1,21 @@
+# forge-pkm-v3 — Sovereign PKM beachhead, ported from F:\NewRepo\crates\forge-pkm.
+# Scope cut (C09): core ingest->corpus->query loop only (atom, chunk, distill, corpus,
+# query, ingest). NOT ported: verify.rs (needs live web check, network dependency),
+# invention_bridge.rs/amortize.rs/flock.rs (unread this pass, scope unclear).
+[package]
+name = "forge-pkm-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "Sovereign Personal Knowledge Management — trit-native domain/structure classification, content-addressed dedup, staleness decay."
+
+[dependencies]
+forge-core-v3 = { path = "../forge-core-v3" }
+forge-vcs-v3 = { path = "../forge-vcs-v3" }
+forge-ttl-v3 = { path = "../forge-ttl-v3" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[lints]
+workspace = true

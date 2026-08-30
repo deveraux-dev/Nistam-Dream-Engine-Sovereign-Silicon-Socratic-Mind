@@ -150,24 +150,47 @@ pub fn check_claude_ron(root: &Path) -> Option<Result<usize, String>> {
 }
 
 /// L25 arm-state lines: .loop-active age (STALE past 60min) and current.json
-/// presence — file-stat only, proof_command is never run here.
-fn arm_state(root: &Path) -> String {
+/// presence — file-stat only, proof_command is never run here. The `bool` is
+/// true when BOTH are healthy, so a caller can stay silent on an ordinary turn.
+fn arm_state(root: &Path) -> (String, bool) {
     let mut s = String::new();
+    let mut ok = true;
     let flag = root.join(".claude").join("hooks").join(".loop-active");
     match std::fs::metadata(&flag).and_then(|m| m.modified()) {
         Ok(t) => {
             let mins = t.elapsed().map(|a| a.as_secs() / 60).unwrap_or(0);
             if mins > 60 {
+                ok = false;
                 s.push_str(&format!("ARM .loop-active:STALE({mins}min>60) L25 gate disarmed\n"));
             } else {
                 s.push_str(&format!("ARM .loop-active:live({mins}min)\n"));
             }
         }
-        Err(_) => s.push_str("ARM .loop-active:absent (L25 gate not armed)\n"),
+        Err(_) => {
+            ok = false;
+            s.push_str("ARM .loop-active:absent (L25 gate not armed)\n");
+        }
     }
     let cur = root.join(".claude").join("hooks").join(".phase0").join("current.json");
-    s.push_str(if cur.is_file() { "ARM phase0:current.json present\n" } else { "ARM phase0:current.json MISSING\n" });
-    s
+    if cur.is_file() {
+        s.push_str("ARM phase0:current.json present\n");
+    } else {
+        ok = false;
+        s.push_str("ARM phase0:current.json MISSING\n");
+    }
+    (s, ok)
+}
+
+/// The drift report plus whether every gate was green. `green` exists so the
+/// door can take `door_hook.rs`'s documented silent path on an ordinary turn
+/// instead of spending four lines of every agent's context saying nothing.
+/// The text is built identically either way — the record is never suppressed,
+/// only its per-turn display.
+pub struct DriftReport {
+    /// The full multi-line report, exactly as `run_report` returns it.
+    pub text: String,
+    /// True when there is no drift, no staleness, the RON parsed, and L25 is armed.
+    pub green: bool,
 }
 
 /// Full `foreman drift` report as one string: drift rows, staleness line (if
@@ -175,6 +198,11 @@ fn arm_state(root: &Path) -> String {
 /// `main.rs` printed, factored out so `door.rs`'s `hook_drift` verb (2026-08-21)
 /// can produce the identical report without a `foreman.exe` subprocess.
 pub fn run_report(root: &Path) -> String {
+    run_report_full(root).text
+}
+
+/// [`run_report`] plus the green flag — see [`DriftReport`].
+pub fn run_report_full(root: &Path) -> DriftReport {
     let settings_path = root.join(".claude/settings.json");
     let mut disk_wiring: Vec<(String, String, String)> = Vec::new();
     if let Ok(content) = std::fs::read_to_string(&settings_path) {
@@ -211,8 +239,9 @@ pub fn run_report(root: &Path) -> String {
         out.push_str(row);
         out.push('\n');
     }
-    if let Some(msg) = crate::staleness::check(root) {
-        out.push_str(&msg);
+    let stale = crate::staleness::check(root);
+    if let Some(msg) = &stale {
+        out.push_str(msg);
         out.push('\n');
     }
     let ron_check = check_claude_ron(root);
@@ -222,10 +251,18 @@ pub fn run_report(root: &Path) -> String {
         Some(Err(e)) => out.push_str(&format!("CLAUDE.md ron:FAIL({e})\n")),
         None => {}
     }
-    out.push_str(&arm_state(root));
-    let verdict_rows = if ron_failed { drift_rows.len() + 1 } else { drift_rows.len() };
+    let (arm, armed) = arm_state(root);
+    out.push_str(&arm);
+    // Staleness counts toward the verdict here (2026-08-28) so the door no
+    // longer has to re-check it and splice PASS->FAIL by hand — that second
+    // pass printed the same STALE BINARY line twice.
+    let verdict_rows =
+        drift_rows.len() + usize::from(ron_failed) + usize::from(stale.is_some());
     out.push_str(&format!("DRIFT verdict:{}", verdict(verdict_rows)));
-    out
+    DriftReport {
+        text: out,
+        green: drift_rows.is_empty() && stale.is_none() && !ron_failed && armed,
+    }
 }
 
 #[cfg(test)]

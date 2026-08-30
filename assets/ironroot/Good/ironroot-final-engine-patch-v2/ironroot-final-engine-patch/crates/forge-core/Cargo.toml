@@ -1,0 +1,9 @@
+[package]
+name = "forge-core"
+version = "0.1.0-alpha"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+description = "Minimal 13Forge core spine/hash surface for UMP authority ticket integration."
+
+[dependencies]
+bytemuck = { version = "1.15", features = ["derive"] }

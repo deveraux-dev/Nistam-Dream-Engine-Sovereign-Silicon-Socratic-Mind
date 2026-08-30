@@ -31,17 +31,17 @@ const fn rgb(r: u32, g: u32, b: u32) -> u32 {
 // lifted hardest. Black stays 0; whites stay near-max.
 const PALETTE16: [u32; 16] = [
     rgb(0, 0, 0),
-    rgb(214, 78, 78),
+    rgb(200, 110, 110),
     rgb(96, 210, 116),
-    rgb(214, 196, 96),
+    rgb(200, 190, 120),
     rgb(112, 146, 228),
     rgb(210, 112, 210),
     rgb(96, 210, 210),
     rgb(228, 228, 228),
     rgb(150, 154, 164),
-    rgb(255, 92, 92),
+    rgb(240, 140, 140),
     rgb(96, 255, 120),
-    rgb(255, 240, 110),
+    rgb(245, 230, 150),
     rgb(108, 150, 255),
     rgb(255, 110, 255),
     rgb(110, 255, 255),
@@ -100,20 +100,22 @@ impl Swatch {
 const ACCESSIBLE_CHROMA: u32 = 3_000;
 const ACCESSIBLE_L_NORMAL: u32 = 7_200;
 const ACCESSIBLE_L_BRIGHT: u32 = 8_800;
+const RED_CHROMA: u32 = 2_200;
+const YELLOW_CHROMA: u32 = 2_200;
 
 const ACCESSIBLE_SWATCHES: [Swatch; 16] = [
     Swatch::achromatic(0), // 0 black
-    Swatch { l_pmy: ACCESSIBLE_L_NORMAL, c_pmy_of_ceiling: ACCESSIBLE_CHROMA, hue_deg: 25 }, // 1 red
+    Swatch { l_pmy: ACCESSIBLE_L_NORMAL, c_pmy_of_ceiling: RED_CHROMA, hue_deg: 25 }, // 1 red
     Swatch { l_pmy: ACCESSIBLE_L_NORMAL, c_pmy_of_ceiling: ACCESSIBLE_CHROMA, hue_deg: 142 }, // 2 green
-    Swatch { l_pmy: ACCESSIBLE_L_NORMAL, c_pmy_of_ceiling: ACCESSIBLE_CHROMA, hue_deg: 95 }, // 3 yellow
+    Swatch { l_pmy: ACCESSIBLE_L_NORMAL, c_pmy_of_ceiling: YELLOW_CHROMA, hue_deg: 95 }, // 3 yellow
     Swatch { l_pmy: ACCESSIBLE_L_NORMAL, c_pmy_of_ceiling: ACCESSIBLE_CHROMA, hue_deg: 258 }, // 4 blue
     Swatch { l_pmy: ACCESSIBLE_L_NORMAL, c_pmy_of_ceiling: ACCESSIBLE_CHROMA, hue_deg: 328 }, // 5 magenta
     Swatch { l_pmy: ACCESSIBLE_L_NORMAL, c_pmy_of_ceiling: ACCESSIBLE_CHROMA, hue_deg: 195 }, // 6 cyan
     Swatch::achromatic(9_000),                                    // 7 white
     Swatch::achromatic(5_500),                                    // 8 bright black (gray)
-    Swatch { l_pmy: ACCESSIBLE_L_BRIGHT, c_pmy_of_ceiling: ACCESSIBLE_CHROMA, hue_deg: 25 }, // 9 bright red
+    Swatch { l_pmy: ACCESSIBLE_L_BRIGHT, c_pmy_of_ceiling: RED_CHROMA, hue_deg: 25 }, // 9 bright red
     Swatch { l_pmy: ACCESSIBLE_L_BRIGHT, c_pmy_of_ceiling: ACCESSIBLE_CHROMA, hue_deg: 142 }, // 10 bright green
-    Swatch { l_pmy: ACCESSIBLE_L_BRIGHT, c_pmy_of_ceiling: ACCESSIBLE_CHROMA, hue_deg: 95 }, // 11 bright yellow
+    Swatch { l_pmy: ACCESSIBLE_L_BRIGHT, c_pmy_of_ceiling: YELLOW_CHROMA, hue_deg: 95 }, // 11 bright yellow
     Swatch { l_pmy: ACCESSIBLE_L_BRIGHT, c_pmy_of_ceiling: ACCESSIBLE_CHROMA, hue_deg: 258 }, // 12 bright blue
     Swatch { l_pmy: ACCESSIBLE_L_BRIGHT, c_pmy_of_ceiling: ACCESSIBLE_CHROMA, hue_deg: 328 }, // 13 bright magenta
     Swatch { l_pmy: ACCESSIBLE_L_BRIGHT, c_pmy_of_ceiling: ACCESSIBLE_CHROMA, hue_deg: 195 }, // 14 bright cyan
@@ -566,9 +568,58 @@ impl VtScreen {
     }
 }
 
+/// Append `0xRRGGBBAA` as an xterm OSC colour answer body: `rgb:RRRR/GGGG/BBBB`.
+/// Each 8-bit channel widens to 16 bits by `v * 257`, so `0xFF` answers `ffff`.
+fn push_osc_rgb(out: &mut Vec<u8>, packed: u32) {
+    const DIGITS: &[u8; 16] = b"0123456789abcdef";
+    let hex = |shift: u32, out: &mut Vec<u8>| {
+        let v = ((packed >> shift) & 0xFF) as u16 * 257;
+        out.push(DIGITS[((v >> 12) & 0xF) as usize]);
+        out.push(DIGITS[((v >> 8) & 0xF) as usize]);
+        out.push(DIGITS[((v >> 4) & 0xF) as usize]);
+        out.push(DIGITS[(v & 0xF) as usize]);
+    };
+    out.extend_from_slice(b"rgb:");
+    hex(24, out);
+    out.push(b'/');
+    hex(16, out);
+    out.push(b'/');
+    hex(8, out);
+}
+
 impl Perform for VtScreen {
     fn print(&mut self, c: char) {
         self.put(c);
+    }
+
+    /// OSC 4 / OSC 11 with a `?` argument are QUESTIONS, same class as DSR: the
+    /// asking program blocks, and an unanswered query surfaces its bytes at the
+    /// prompt as phantom input. Answers come from `active_palette` so
+    /// `FORGE_PALETTE=accessible` reports what it actually renders. The
+    /// set-colour forms carry no `?` and are ignored, not answered.
+    fn osc_dispatch(&mut self, params: &[&[u8]], _bell_terminated: bool) {
+        let is_query = |p: &[u8]| p == b"?".as_slice();
+        if params.len() == 2 && params[0] == b"11".as_slice() && is_query(params[1]) {
+            self.reply.extend_from_slice(b"\x1b]11;");
+            let bg = active_palette()[0];
+            push_osc_rgb(&mut self.reply, bg);
+            self.reply.extend_from_slice(b"\x1b\\");
+        } else if params.len() == 3 && params[0] == b"4".as_slice() && is_query(params[2]) {
+            let Ok(text) = std::str::from_utf8(params[1]) else {
+                return;
+            };
+            let Ok(idx) = text.parse::<u16>() else {
+                return;
+            };
+            if idx > 255 {
+                return;
+            }
+            self.reply.extend_from_slice(b"\x1b]4;");
+            self.reply.extend_from_slice(params[1]);
+            self.reply.push(b';');
+            push_osc_rgb(&mut self.reply, ansi256(idx));
+            self.reply.extend_from_slice(b"\x1b\\");
+        }
     }
 
     fn execute(&mut self, byte: u8) {
@@ -638,10 +689,19 @@ impl Perform for VtScreen {
             // shell blocks on the answer: ConPTY's very first bytes are this query, so
             // an unanswered terminal gets 4 bytes and then silence forever. That is
             // exactly what an empty grid behind a living shell looks like.
+            // Appends, never clears: DA1 and DSR arrive in the SAME chunk from
+            // ConPTY, and clearing here would drop the answer written first.
+            // `take_reply` drains the whole buffer, so nothing accumulates.
             'n' if !private && p.first().copied() == Some(6) => {
-                self.reply.clear();
                 use std::io::Write as _;
                 let _ = write!(self.reply, "\x1b[{};{}R", self.cy + 1, self.cx + 1);
+            }
+            // DA1 — Primary Device Attributes. `CSI c` asks WHAT THIS TERMINAL IS.
+            // Unanswered, the reply never comes and the querying program's bytes
+            // surface at the prompt as phantom input. `?62;22` = VT220 + ANSI colour,
+            // which is what this screen implements (truecolour SGR, alt screen 1049).
+            'c' if !private => {
+                self.reply.extend_from_slice(b"\x1b[?62;22c");
             }
             's' => self.saved = (self.cx, self.cy),
             'u' => {
@@ -973,5 +1033,88 @@ mod tests {
         assert_eq!(t.view_offset(), 0);
         t.scroll_view(-5);
         assert_eq!(t.view_offset(), 0);
+    }
+
+    /// Expected `rgb:RRRR/GGGG/BBBB` body for a packed `0xRRGGBBAA` palette entry.
+    fn rgb_body(packed: u32) -> String {
+        let ch = |shift: u32| ((packed >> shift) & 0xFF) as u16 * 257;
+        format!("rgb:{:04x}/{:04x}/{:04x}", ch(24), ch(16), ch(8))
+    }
+
+    #[test]
+    fn da1_query_is_answered() {
+        let mut t = Terminal::new(20, 4);
+        t.feed(b"\x1b[c");
+        assert_eq!(t.take_reply().as_deref(), Some(&b"\x1b[?62;22c"[..]));
+    }
+
+    #[test]
+    fn da1_private_form_is_not_answered() {
+        // `CSI ? c` is not DA1; answering it would put bytes on the wire unasked.
+        let mut t = Terminal::new(20, 4);
+        t.feed(b"\x1b[?c");
+        assert!(t.take_reply().is_none());
+    }
+
+    #[test]
+    fn osc11_background_query_answers_from_live_palette() {
+        let mut t = Terminal::new(20, 4);
+        t.feed(b"\x1b]11;?\x07");
+        let reply = t.take_reply().expect("OSC 11 query must be answered");
+        let want = format!("\x1b]11;{}\x1b\\", rgb_body(active_palette()[0]));
+        assert_eq!(String::from_utf8_lossy(&reply), want);
+    }
+
+    #[test]
+    fn osc4_palette_query_answers_the_named_slot() {
+        let mut t = Terminal::new(20, 4);
+        t.feed(b"\x1b]4;9;?\x07");
+        let reply = t.take_reply().expect("OSC 4 query must be answered");
+        let want = format!("\x1b]4;9;{}\x1b\\", rgb_body(ansi256(9)));
+        assert_eq!(String::from_utf8_lossy(&reply), want);
+    }
+
+    #[test]
+    fn osc4_set_form_is_ignored_not_answered() {
+        let mut t = Terminal::new(20, 4);
+        t.feed(b"\x1b]4;9;rgb:1111/2222/3333\x07");
+        assert!(t.take_reply().is_none(), "set-colour is not a question");
+    }
+
+    #[test]
+    fn osc4_out_of_range_index_is_ignored() {
+        let mut t = Terminal::new(20, 4);
+        t.feed(b"\x1b]4;999;?\x07");
+        assert!(t.take_reply().is_none());
+    }
+
+    /// The regression the BEL strip caused: with 0x07 removed before the parser,
+    /// the OSC never terminated and swallowed everything after it.
+    #[test]
+    fn text_after_a_bel_terminated_osc_still_prints() {
+        let mut t = Terminal::new(20, 4);
+        t.feed(b"\x1b]0;title\x07hi");
+        assert_eq!(t.grid().get(0, 0).glyph, b'h' as u32);
+        assert_eq!(t.grid().get(1, 0).glyph, b'i' as u32);
+    }
+
+    /// DA1 and DSR arrive in one ConPTY chunk; both answers must survive.
+    #[test]
+    fn two_queries_in_one_chunk_both_answered() {
+        let mut t = Terminal::new(20, 4);
+        t.feed(b"\x1b[c\x1b[6n");
+        let reply = t.take_reply().expect("both queries answered");
+        let text = String::from_utf8_lossy(&reply);
+        assert!(text.contains("\x1b[?62;22c"), "DA1 answer dropped: {text:?}");
+        assert!(text.contains("R"), "DSR answer dropped: {text:?}");
+    }
+
+    /// L18 sabotage: a stream carrying NO query must leave the reply empty, so
+    /// the assertions above cannot pass on an unconditional write.
+    #[test]
+    fn plain_text_owes_the_shell_nothing() {
+        let mut t = Terminal::new(20, 4);
+        t.feed(b"hello world");
+        assert!(t.take_reply().is_none());
     }
 }

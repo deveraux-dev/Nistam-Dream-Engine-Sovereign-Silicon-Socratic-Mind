@@ -1,0 +1,24 @@
+#vixi:shaderbind v1
+surface: udle
+profile: forge_primeflow
+
+signal rms source=audio.rms range=0..10000
+signal beat_phase source=audio.beat_phase range=0..10000
+signal spectral_centroid source=audio.spectral_centroid range=0..10000
+signal rain_intensity source=vibematrix.rain_intensity range=0..10000
+signal artifact_glow source=vibematrix.artifact_glow range=0..10000
+signal threat_color source=vibematrix.threat_color range=0..10000
+signal pressure source=input.pen_pressure range=0..10000
+signal authority source=world.authority_q range=0..10000
+
+udle.channel[0] <- rms
+udle.channel[1] <- beat_phase
+udle.channel[2] <- spectral_centroid
+udle.channel[3] <- rain_intensity
+udle.channel[4] <- artifact_glow
+udle.channel[5] <- threat_color
+udle.channel[6] <- pressure
+udle.channel[7] <- authority
+
+gate shader_compile_hotpath = forbidden
+gate visual_only_mutates_authority = forbidden

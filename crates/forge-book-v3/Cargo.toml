@@ -1,0 +1,45 @@
+[package]
+name = "forge-book-v3"
+version.workspace = true
+edition.workspace = true
+
+# forge-book-v3 — full topic-drain merge of F:\NewRepo\crates\forge-book (v2,
+# 182 src files + src/lore/ 15 files + book/src/tablets/ ARCH docs) into v3.
+# Supersedes the partial per-topic drains already landed (forge-midi-v3 ←
+# midi.rs, forge-cadence-v3 ← cadence lane, forge-export-v3 ← pacing.rs):
+# those crates stay the ONE HOME (L05) for that logic; this crate's midi.rs /
+# equivalents re-export from them instead of redefining.
+#
+# CORRECTED 2026-08-24: of the four named below, forge-calligraphy-v3 and
+# forge-items-v3 DO exist in crates/ and have for some time; the list went stale.
+# forge-calligraphy-v3 is now declared (evoke.rs's parity tripwire needs it).
+# v2 deps WITHOUT a v3 crate yet (forge-context-router, forge-calligraphy,
+# forge-game-systems, forge-items) are NOT declared here — files that need
+# them carry their minimal required slice ported in-place, scoped to this
+# crate, until those crates exist natively in v3 (C06a: quarry, not skipped).
+#
+# regex + walkdir dropped verbatim (CLAUDE.md forbidden_ops: no regex, no
+# unbound recursive IO) — every v2 use of either is rewritten to bounded
+# fs::read_dir / exact string matching (.starts_with/.split_once) per file.
+
+[dependencies]
+forge-core-v3 = { path = "../forge-core-v3" }
+forge-vcs-v3 = { path = "../forge-vcs-v3" }
+pp-math-v3 = { path = "../pp-math-v3" }
+forge-vix-v3 = { path = "../forge-vix-v3" }
+forge-sieve-v3 = { path = "../forge-sieve-v3" }
+forge-mud-v3 = { path = "../forge-mud-v3" }
+forge-midi-v3 = { path = "../forge-midi-v3" }
+forge-export-v3 = { path = "../forge-export-v3" }
+forge-cadence-v3 = { path = "../forge-cadence-v3" }
+forge-daemon-door = { path = "../forge-daemon-door" }
+forge-calligraphy-v3 = { path = "../forge-calligraphy-v3" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha2 = "0.10"
+hmac = "0.12"
+rand = "0.8"
+hex = "0.4"
+
+[lints]
+workspace = true

@@ -1,0 +1,19 @@
+# The deveraux voice linter, v3. Ported from `F:\NewRepo\forge-dialogue\
+# voice_lint.py`, calibrated to Sean's actual voice (word lists drained
+# from voice-linter.md, TRUTH-GUIDE.md, brand-voice-guidelines.md, the
+# Threads corpus, and -- 2026-08-16 -- two of his own real monologues,
+# `TIM.html` and `453am`). Story mode only (the mode all six real samples
+# tonight actually used); biz/post modes and multi-unit book-splitting
+# are not ported, named here rather than left silent (L15).
+[package]
+name = "forge-dialogue-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+
+[dependencies]
+
+[lints]
+workspace = true

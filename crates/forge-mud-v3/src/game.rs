@@ -956,26 +956,29 @@ impl Game {
         }
     }
 
-    /// What this cell is doing, off the landed systems that measure it: the
-    /// weather sieve, the haunt, the square, and the stone under a town.
-    fn voxel_here(&self) -> crate::umwelt_loom::VoxelState {
+    /// The sensory field at this cell, built from landed systems: weather sieve,
+    /// haunt, square, and the stone under a town. Also returns scent age separately
+    /// (t-axis position, not a permyriad channel magnitude).
+    fn sense_field_here(&self, at: crate::umwelt_loom::Cell5) -> (crate::umwelt_loom::PentaractField, i64) {
         let w = &self.weather_sieve;
         let (x, y) = (self.x(), self.y());
         let (tx, ty) = world::town_square(self.op.node_seed);
         let b = world::biome_at(self.op.node_seed, x, y, self.op.bias);
         let worked = if (x, y) == (tx, ty) { i32::from(self.law_now()) * 80 } else { 0 };
         let delved = if b.name == "dungeon" { 6_000 } else { 0 };
-        crate::umwelt_loom::VoxelState {
-            pressure_delta_q: (w.chinook_buildup.max(0) * 1_000 + w.wind_speed.max(0) * 200)
-                .clamp(0, 10_000),
-            life_entropy_q: self.haunt.pressure_q().clamp(0, 10_000),
-            stone_stress_q: (worked + delved).clamp(0, 10_000),
-            scent_age_t: (self.ticks % 16) as i64,
-            heat_gradient_q: ((w.temperature - 20).abs() * 400).clamp(0, 10_000),
-            particulate_flux_q: (w.drought_ticks.min(25) as i32 * 400).clamp(0, 10_000),
-            hate_vector_q: i32::from(self.haunt.aggression_level()) * 1_000,
-            vitality_lux_q: self.square.level_q().clamp(0, 10_000) as i32,
-        }
+
+        let mut field = crate::umwelt_loom::quiet_cell_field(at);
+        field[crate::umwelt_loom::SenseChannel::AtmospherePa] = (w.chinook_buildup.max(0) * 1_000 + w.wind_speed.max(0) * 200)
+            .clamp(0, 10_000);
+        field[crate::umwelt_loom::SenseChannel::NecroticDecay] = self.haunt.pressure_q().clamp(0, 10_000);
+        field[crate::umwelt_loom::SenseChannel::MasonryStress] = (worked + delved).clamp(0, 10_000);
+        field[crate::umwelt_loom::SenseChannel::HeatGradient] = ((w.temperature - 20).abs() * 400).clamp(0, 10_000);
+        field[crate::umwelt_loom::SenseChannel::ParticulateFlux] = (w.drought_ticks.min(25) as i32 * 400).clamp(0, 10_000);
+        field[crate::umwelt_loom::SenseChannel::HateVector] = i32::from(self.haunt.aggression_level()) * 1_000;
+        field[crate::umwelt_loom::SenseChannel::VitalityLux] = self.square.level_q().clamp(0, 10_000) as i32;
+
+        let scent_age_t = (self.ticks % 16) as i64;
+        (field.oriented(crate::umwelt_loom::cell_key(at)), scent_age_t)
     }
 
     /// Room description at the current position: biome, landmarks, presences.
@@ -1034,13 +1037,13 @@ impl Game {
         }
         // The woven room (umwelt_loom, donor v2 mud.rs:1356): the worn body
         // reads this cell deterministically, off the world systems that speak.
+        let at = [x as i64, y as i64, self.z() as i64, (self.ticks % 64) as i64, 0];
         let senses = magic::senses_now(&self.op, self.room_sightline(), &self.ledger);
         let worn = magic::umwelt::Form::from_u8(self.op.form).unwrap_or_default();
-        let voxel = self.voxel_here();
-        let at = [x as i64, y as i64, self.z() as i64, (self.ticks % 64) as i64, 0];
+        let (field, scent_age_t) = self.sense_field_here(at);
         body.push_str(&format!(
             "\r\n{}",
-            crate::umwelt_loom::weave(worn, &senses, &voxel, at, 1)
+            crate::umwelt_loom::weave(worn, &senses, &field, scent_age_t, at, 1)
         ));
         // The land offers the walk: 2-4 tick-dealt options under the body,
         // and at night the stars add their own quiet wayfinding line.
@@ -4010,7 +4013,8 @@ mod tests {
     fn a_dungeon_cell_carries_stone_the_open_ground_does_not() {
         use crate::umwelt_loom::SenseChannel;
         let mut g = game();
-        let open = g.voxel_here().field([0, 0, 0, 0, 0]);
+        let at = [0i64, 0i64, 0i64, 0i64, 0i64];
+        let (open, _) = g.sense_field_here(at);
         let mut found = None;
         for y in 0..MAP_SIDE {
             for x in 0..MAP_SIDE {
@@ -4025,7 +4029,7 @@ mod tests {
         }
         let (x, y) = found.expect("this seed's land holds a dungeon somewhere");
         g.op.pos = MortonKey5D::encode([x, y, 0, 0, 0]);
-        let delved = g.voxel_here().field([0, 0, 0, 0, 0]);
+        let (delved, _) = g.sense_field_here(at);
         assert_eq!(open[SenseChannel::MasonryStress], 0, "open ground bears nothing");
         assert!(delved[SenseChannel::MasonryStress] > 0, "worked stone must reach the field");
     }
@@ -4132,7 +4136,7 @@ mod tests {
     }
 
     /// The loom reads the weather through the sieve: a moving sky must move
-    /// the channels voxel_here() feeds the field.
+    /// the channels sense_field_here() feeds the field.
     #[test]
     fn the_loom_channels_move_with_the_sky() {
         use crate::umwelt_loom::SenseChannel;
@@ -4141,7 +4145,7 @@ mod tests {
         let mut seen = std::collections::HashSet::new();
         for _ in 0..(crate::weather::SKY_BANK_PERIOD * 12) {
             g.process("look");
-            let f = g.voxel_here().field(at);
+            let (f, _) = g.sense_field_here(at);
             seen.insert((
                 f[SenseChannel::HeatGradient],
                 f[SenseChannel::AtmospherePa],

@@ -3,12 +3,15 @@ name = "gemma-s13"
 version = "3.0.0-s13"
 edition = "2021"
 authors = ["Sean Morin"]
-license = "MIT"
+license = "MIT OR Apache-2.0"
 description = "Zero-heap 1.58-bit balanced ternary inference and sentinel governor for Gemma"
 
 [dependencies]
+forge-hal-clockspine = { path = "../forge-hal-clockspine" }
+forge-harmonics = { path = "../forge-harmonics" }
 memmap2 = "0.9"
 rayon = "1.10"
+serde = { version = "1.0", default-features = false, features = ["derive"], optional = true }
 
 [dev-dependencies]
 serde_json = "1.0"
@@ -18,6 +21,7 @@ pollster = "0.4"
 [features]
 default = ["std"]
 std = []
+serde = ["dep:serde"]
 
 [lints]
 workspace = true

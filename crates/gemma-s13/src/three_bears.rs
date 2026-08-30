@@ -19,7 +19,7 @@
 use crate::logit_mask::{WitnessedNode, LOGIT_MASKED_ZERO_PROB};
 use crate::m5_geodesic::M5Coordinate;
 use crate::model_9b::Gemma9bConfig;
-use crate::nipr::{NormalizedIpr, LANDMARK_PMY};
+use forge_hal_clockspine::nipr::{NormalizedIpr, LANDMARK_PMY};
 use crate::s13::{unpack_5_trits, S13Error, TRITS_PER_BYTE};
 use crate::sentinel::{SentinelBand, SENTINEL_MIN_BYTE};
 use crate::vault::ZeroRetentionVault;
@@ -38,7 +38,7 @@ pub const fn s13m_file_bytes(weights: usize) -> usize {
 /// Dimensions are MEASURED off the packed bear at `s13_gemma_2b/` (2026-08-26),
 /// not declared: the previous values (2048/1/18/8192) matched no tensor on disk
 /// and would have indexed off the end of every one. See
-/// [`tests::baby_bear_config_matches_the_packed_bear_on_disk`].
+/// `tests::baby_bear_config_matches_the_packed_bear_on_disk`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct BabyBear2bConfig {
     /// Hidden dimension ($d_{\text{model}} = 2304$).

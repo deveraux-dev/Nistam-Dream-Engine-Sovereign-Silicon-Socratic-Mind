@@ -1,0 +1,16 @@
+#vixi:kit v1
+surface: vision_review
+profile: forge_primeflow
+classification: dream_maker_cv_review
+
+slot vision.root kind=region layout=quad_view
+slot vision.source kind=image role=input_image
+slot vision.segmentation kind=image role=mask_candidate
+slot vision.material kind=region role=material_evidence
+slot vision.depth_sdf kind=region role=depth_sdf_candidate
+slot vision.friction kind=region role=friction_warnings
+
+gate mask_not_semantic_truth = required
+gate material_requires_multicue = required
+gate shadow_not_geometry = required
+gate colour_not_material = required

@@ -88,9 +88,100 @@ impl Default for MetronomeClock {
     }
 }
 
+/// Wall microseconds in, whole metronome ticks out, the sub-tick remainder
+/// carried. This is the Two Clocks boundary itself: the one place a variable
+/// real interval becomes a fixed tick count, integer-only, so no float and no
+/// wall reading ever reaches the deterministic plane.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub struct TickAccumulator {
+    rem_us: u64,
+}
+
+impl TickAccumulator {
+    /// The longest wall interval one call may bank. A debugger pause or a
+    /// sleeping machine cannot fast-forward the sim on resume.
+    pub const STALL_GUARD_US: u64 = 250_000;
+
+    /// A fresh accumulator holding no remainder.
+    #[inline]
+    pub const fn new() -> Self {
+        Self { rem_us: 0 }
+    }
+
+    /// Bank `elapsed_us` and return the whole ticks it completed.
+    #[inline]
+    pub const fn advance(&mut self, elapsed_us: u64) -> u32 {
+        let capped =
+            if elapsed_us > Self::STALL_GUARD_US { Self::STALL_GUARD_US } else { elapsed_us };
+        self.rem_us += capped;
+        let ticks = self.rem_us / MetronomeClock::TICK_US;
+        self.rem_us %= MetronomeClock::TICK_US;
+        ticks as u32
+    }
+
+    /// Sub-tick microseconds banked but not yet spent.
+    #[inline]
+    pub const fn remainder_us(&self) -> u64 {
+        self.rem_us
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    /// A real interval arrives in ragged pieces; the tick grid must not care.
+    /// One second of 1 ms slices is exactly 120 ticks, and it stays exact over
+    /// a long run — the remainder is what makes that true.
+    #[test]
+    fn tick_accumulator_carries_the_remainder() {
+        let mut acc = TickAccumulator::new();
+        let mut ticks = 0u64;
+        for _ in 0..1_000 {
+            ticks += u64::from(acc.advance(1_000));
+        }
+        assert_eq!(ticks, 120, "one second of millisecond slices is 120 ticks");
+
+        // Sixty seconds of the same, and the grid has still not slipped.
+        let mut acc = TickAccumulator::new();
+        let mut ticks = 0u64;
+        for _ in 0..60_000 {
+            ticks += u64::from(acc.advance(1_000));
+        }
+        assert_eq!(ticks, 7_200, "sixty seconds is 7200 ticks, no drift");
+        assert!(acc.remainder_us() < MetronomeClock::TICK_US, "remainder must stay sub-tick");
+    }
+
+    /// A debugger pause or a sleeping machine must not fast-forward the sim.
+    #[test]
+    fn a_stall_cannot_fast_forward() {
+        let mut acc = TickAccumulator::new();
+        let ten_seconds = acc.advance(10_000_000);
+        let capped = (TickAccumulator::STALL_GUARD_US / MetronomeClock::TICK_US) as u32;
+        assert_eq!(ten_seconds, capped, "a ten-second gap banks the guard, not the gap");
+        assert!(ten_seconds < 1_200, "1200 ticks would be the un-guarded ten seconds");
+    }
+
+    /// L18: the remainder is load-bearing. Dropping it starves the grid —
+    /// asserted to fail FIRST, then the real accumulator asserted to hold.
+    #[test]
+    fn sabotaged_accumulator_would_drift() {
+        // Sabotage: convert each slice on its own and discard the remainder.
+        let mut sabotaged = 0u64;
+        for _ in 0..1_000 {
+            sabotaged += 1_000 / MetronomeClock::TICK_US;
+        }
+        assert_ne!(sabotaged, 120, "a remainder-less accumulator must visibly drift");
+        assert_eq!(sabotaged, 0, "every 1 ms slice floors to zero ticks on its own");
+
+        // Revert: the real one is untouched and lands on the grid.
+        let mut acc = TickAccumulator::new();
+        let mut real = 0u64;
+        for _ in 0..1_000 {
+            real += u64::from(acc.advance(1_000));
+        }
+        assert_eq!(real, 120, "the real accumulator must pass where the sabotage failed");
+    }
 
     #[test]
     fn tick_to_us_and_back_is_lossless_on_the_grid() {

@@ -10,7 +10,7 @@ in a clearly-labeled Research Roadmap section.
 ## THE ENTRY (one paragraph)
 "Surface Ledger" — Taskmaster category, Sean's first-person Sovereign Community voice. An
 autonomous inspection auditor on Cloud Run: photos in → deterministic byte-sieve triage → local
-Gemma 4 E2B vision triage → Gemini 2.5 Flash schema-locked audit → cross-check vs the closed-form
+Gemma 4 E2B vision triage → Gemini 3.7 Flash schema-locked audit → cross-check vs the closed-form
 degradation model → forge-envelope attests the disposition into a rolling SHA-256 EvidenceChain →
 32-byte sharded heads in Firestore → cloud staging wiped ONLY after Firestore ack. Raw evidence
 stays with the inspector (zero-CLOUD-retention). Operator actions are self-attested onto the SAME
@@ -19,7 +19,7 @@ chain (accountability as self-attestation, not observation — Sean's framing, k
 ## WHAT IS ALREADY DONE (do not redo)
 - forge-envelope crate: 28 unit + 1 scale + 1 doc test green. Core is publishable-quality.
 - Trinity locked: Gemma 4 E2B (multimodal, Apache 2.0, verified released 2026-03-31) +
-  2× Gemma 3 270M QAT ≈ 1.55GB Q4 < 2GB. Gemini 2.5 Flash = cloud oracle (verified released
+  2× Gemma 3 270M QAT ≈ 1.55GB Q4 < 2GB. Gemini 3.7 Flash = cloud oracle (verified released
   2026-08-13). Floor beneath models: byte_sieve.s13 (72 bytes) + --manual identical-path trigger.
 - Byte-frontier port: sidecar\src\ml\{byte_classifier,byte_corpus}.rs — 13/13 tests green.
 - Passive training flywheel LIVE: .forge\train\flywheel\{capture-route,seed-route-pairs,
@@ -39,7 +39,7 @@ chain (accountability as self-attestation, not observation — Sean's framing, k
    on stdout. TWO event classes on one chain: asset events AND operator events (tag inside sealed
    payload; operator event precedes the audit it triggered). Batch mode (many records, one
    process) — C2's subprocess-tax ruling. Tests + L18 sabotage check.
-2. **Model bump:** scripts\vertex_schema_client.py:34 → "gemini-2.5-flash" (one line).
+2. **Model bump:** scripts\vertex_schema_client.py:34 → "gemini-3.7-flash" (one line).
 3. **agent_loop.py:** start from D1 draft; fix: (a) call the real attest binary from step 1;
    (b) divergence path must WRITE a receipted escalation record, never log-and-return (that is
    the purgatory bucket — no third unrecorded state may exist); (c) staging = tmpfs (STAGING_DIR

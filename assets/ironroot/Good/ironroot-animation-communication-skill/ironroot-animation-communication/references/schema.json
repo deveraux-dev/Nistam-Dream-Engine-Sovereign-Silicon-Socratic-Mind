@@ -1,0 +1,148 @@
+{
+  "type": "object",
+  "required": [
+    "animation_event_id",
+    "scene_kind",
+    "actor_kind",
+    "communication_goal",
+    "motion_phrase",
+    "timing_contract",
+    "communication_priors",
+    "worldstate_effects",
+    "friction_points",
+    "validation_gates"
+  ],
+  "properties": {
+    "animation_event_id": {
+      "type": "string"
+    },
+    "scene_kind": {
+      "type": "string"
+    },
+    "actor_kind": {
+      "type": "string"
+    },
+    "communication_goal": {
+      "type": "string"
+    },
+    "combat_aspect": {
+      "type": "string"
+    },
+    "identity_integrity": {
+      "type": "string"
+    },
+    "disclosure_level": {
+      "type": "integer"
+    },
+    "active_pressure": {
+      "type": "string"
+    },
+    "motion_phrase": {
+      "type": "object",
+      "required": [
+        "start_pose",
+        "anticipation",
+        "action",
+        "impact_or_turn",
+        "recovery",
+        "hold_or_afterimage"
+      ],
+      "properties": {
+        "start_pose": {
+          "type": "string"
+        },
+        "anticipation": {
+          "type": "string"
+        },
+        "action": {
+          "type": "string"
+        },
+        "impact_or_turn": {
+          "type": "string"
+        },
+        "recovery": {
+          "type": "string"
+        },
+        "hold_or_afterimage": {
+          "type": "string"
+        }
+      }
+    },
+    "timing_contract": {
+      "type": "object",
+      "required": [
+        "anticipation_ticks",
+        "active_ticks",
+        "recovery_ticks",
+        "input_locked",
+        "readable_at_camera_distance"
+      ],
+      "properties": {
+        "anticipation_ticks": {
+          "type": "integer"
+        },
+        "active_ticks": {
+          "type": "integer"
+        },
+        "recovery_ticks": {
+          "type": "integer"
+        },
+        "cancel_window_ticks": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "input_locked": {
+          "type": "boolean"
+        },
+        "readable_at_camera_distance": {
+          "type": "boolean"
+        }
+      }
+    },
+    "dialogue_sync": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "sound_sync": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "communication_priors": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "worldstate_effects": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "friction_points": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "validation_gates": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "proof_hash": {
+      "type": [
+        "string",
+        "integer",
+        "null"
+      ]
+    }
+  }
+}

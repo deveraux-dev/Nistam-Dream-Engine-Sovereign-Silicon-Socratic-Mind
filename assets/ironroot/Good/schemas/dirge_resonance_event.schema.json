@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Dirge Resonance Compiler Asset/Event Prior",
+  "type": "object",
+  "properties": {
+    "asset_id": { "type": "string" },
+    "target_kind": {
+      "type": "string",
+      "enum": ["creature", "crowd", "object", "material", "zone", "topology", "memory", "corpse"]
+    },
+    "source_priors": {
+      "type": "object",
+      "properties": {
+        "visual_priors": { "type": "object" },
+        "material_priors": { "type": "object" },
+        "movement_priors": { "type": "object" },
+        "music_priors": { "type": "object" },
+        "brand_priors": { "type": "object" },
+        "topology_priors": { "type": "object" },
+        "glyph_priors": { "type": "object" }
+      }
+    },
+    "authority": {
+      "type": "object",
+      "properties": {
+        "material_id": { "type": "string" },
+        "faction_id": { "type": "string" },
+        "brand_id": { "type": "string" },
+        "instrument_id": { "type": "string" },
+        "resonance_target_id": { "type": "string" },
+        "glyph_operator_id": { "type": "string" }
+      }
+    },
+    "validators": {
+      "type": "object",
+      "properties": {
+        "material_validated": { "type": "boolean" },
+        "physics_validated": { "type": "boolean" },
+        "brand_validated": { "type": "boolean" },
+        "rhythm_validated": { "type": "boolean" },
+        "topology_validated": { "type": "boolean" },
+        "cultural_review_required": { "type": "boolean" }
+      }
+    },
+    "runtime_effects": {
+      "type": "object",
+      "properties": {
+        "ai_modifiers": { "type": "array", "items": { "type": "string" } },
+        "animation_modifiers": { "type": "array", "items": { "type": "string" } },
+        "audio_motifs": { "type": "array", "items": { "type": "string" } },
+        "material_overlays": { "type": "array", "items": { "type": "string" } },
+        "topology_operations": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "friction_points": { "type": "array", "items": { "type": "string" } },
+    "quality_gates": { "type": "array", "items": { "type": "string" } }
+  },
+  "required": ["asset_id", "target_kind", "source_priors", "validators", "friction_points"]
+}

@@ -1,0 +1,516 @@
+// Dirge of Ironroot — Headless Flash Compiled Datapack
+// Autonomous Compilation by Gemma Triad S13 Code-Merge Engine
+// Source Quarry: 327 Rust AST files | Merkle Root: e3365833c428d9a775fff53c692887b71471ab35ca8c1f4d33822ec21dc048d4
+// Format: Zero-Allocation sf-wasm MUD Engine Layout
+
+Datapack(
+    project: "Dirge of Ironroot",
+    version: (major: 0, minor: 1, patch: 0),
+    compiled_at_tick: 147820,
+    source_merkle_root: "e3365833c428d9a775fff53c692887b71471ab35ca8c1f4d33822ec21dc048d4",
+    
+    // Character Classes (Tria Prima starting coefficients & Base Stats)
+    classes: [
+        Class(
+            id: "alchemist",
+            name: "Hermetic Alchemist",
+            starting_stats: (salt: 4000, sulfur: 4000, mercury: 7000), // High Mind/Mercury
+            stat_multipliers: (vigor: 1.0, shadow_weight: 0.8, logic_depth: 1.5, clarity: 1.3)
+        ),
+        Class(
+            id: "vanguard",
+            name: "Iron Vanguard",
+            starting_stats: (salt: 7000, sulfur: 5000, mercury: 3000), // High Body/Salt
+            stat_multipliers: (vigor: 1.5, shadow_weight: 1.4, logic_depth: 0.6, clarity: 0.8)
+        ),
+        Class(
+            id: "chanter",
+            name: "Resonance Chanter",
+            starting_stats: (salt: 4500, sulfur: 6000, mercury: 4500), // High Soul/Sulfur
+            stat_multipliers: (vigor: 0.9, shadow_weight: 0.9, logic_depth: 1.1, clarity: 1.1)
+        ),
+        Class(
+            id: "shadow_weft",
+            name: "Shadow Weft",
+            starting_stats: (salt: 3500, sulfur: 7000, mercury: 5500), // High Soul/Void
+            stat_multipliers: (vigor: 0.8, shadow_weight: 1.6, logic_depth: 1.2, clarity: 1.4)
+        ),
+        Class(
+            id: "iron_warden",
+            name: "Iron Warden",
+            starting_stats: (salt: 8000, sulfur: 4000, mercury: 4000), // High Ashlar/Fortress
+            stat_multipliers: (vigor: 1.6, shadow_weight: 1.5, logic_depth: 0.7, clarity: 0.7)
+        )
+    ],
+
+    // Twelve Canonical First Lock Specifications (Compiled from 12_logic_closure)
+    first_locks: [
+        FirstLock(
+            id: 0,
+            slug: "red_debt_first_strike_not_taken",
+            account: "RedDebt",
+            zone_hash: 0x1001,
+            required_eras: ["Ancient", "Decay", "Void"],
+            demand_a: Aggression,
+            demand_b: Patience,
+            final_action: DoNotRingBell,
+            world_first_relic: 1,
+            echo_relic: 1001,
+            public_ledger_line: "The first strike was found and left unused."
+        ),
+        FirstLock(
+            id: 1,
+            slug: "stone_root_weight_carried_across_void",
+            account: "StoneRoot",
+            zone_hash: 0x1002,
+            required_eras: ["Ancient", "Golden", "Decay", "Void"],
+            demand_a: StationaryChannel,
+            demand_b: Mobility,
+            final_action: Bury,
+            world_first_relic: 2,
+            echo_relic: 1002,
+            public_ledger_line: "The impossible weight was carried until it became ground."
+        ),
+        FirstLock(
+            id: 2,
+            slug: "double_witness_contradiction_preserved",
+            account: "DoubleWitness",
+            zone_hash: 0x1003,
+            required_eras: ["Golden", "Decay", "Void"],
+            demand_a: Diplomacy,
+            demand_b: Theft,
+            final_action: SpeakName,
+            world_first_relic: 3,
+            echo_relic: 1003,
+            public_ledger_line: "Two witnesses disagreed and both survived the page."
+        ),
+        FirstLock(
+            id: 3,
+            slug: "grave_water_name_kept_wet",
+            account: "GraveWater",
+            zone_hash: 0x1004,
+            required_eras: ["Ancient", "Golden", "Decay", "Void"],
+            demand_a: DeathRoute,
+            demand_b: WitnessBuilding,
+            final_action: DieInPlace,
+            world_first_relic: 4,
+            echo_relic: 1004,
+            public_ledger_line: "A name was kept wet enough to return."
+        ),
+        FirstLock(
+            id: 4,
+            slug: "crownless_roar_command_refused",
+            account: "CrownlessRoar",
+            zone_hash: 0x1005,
+            required_eras: ["Golden", "Decay", "Void"],
+            demand_a: Aggression,
+            demand_b: Diplomacy,
+            final_action: Refuse,
+            world_first_relic: 5,
+            echo_relic: 1005,
+            public_ledger_line: "Command gathered around a head that would not take the crown."
+        ),
+        FirstLock(
+            id: 5,
+            slug: "clean_index_record_corrected_without_erasure",
+            account: "CleanIndex",
+            zone_hash: 0x1006,
+            required_eras: ["Ancient", "Golden", "Decay", "Void"],
+            demand_a: InventoryPrecision,
+            demand_b: Patience,
+            final_action: Craft,
+            world_first_relic: 6,
+            echo_relic: 1006,
+            public_ledger_line: "The record was corrected without becoming clean of warmth."
+        ),
+        FirstLock(
+            id: 6,
+            slug: "equal_knife_harm_balanced_without_revenge",
+            account: "EqualKnife",
+            zone_hash: 0x1007,
+            required_eras: ["Ancient", "Decay", "Void"],
+            demand_a: ParryTiming,
+            demand_b: Diplomacy,
+            final_action: Spare,
+            world_first_relic: 7,
+            echo_relic: 1007,
+            public_ledger_line: "The wound was measured until revenge ran out."
+        ),
+        FirstLock(
+            id: 7,
+            slug: "venom_wedding_oath_poison_not_cured",
+            account: "VenomWedding",
+            zone_hash: 0x1008,
+            required_eras: ["Golden", "Decay", "Void"],
+            demand_a: Theft,
+            demand_b: WitnessBuilding,
+            final_action: StaySilent,
+            world_first_relic: 8,
+            echo_relic: 1008,
+            public_ledger_line: "An oath tasted of poison and was not cured."
+        ),
+        FirstLock(
+            id: 8,
+            slug: "far_wound_route_outside_known_map",
+            account: "FarWound",
+            zone_hash: 0x1009,
+            required_eras: ["Ancient", "Golden", "Decay", "Void"],
+            demand_a: Mobility,
+            demand_b: Crafting,
+            final_action: WalkAway,
+            world_first_relic: 9,
+            echo_relic: 1009,
+            public_ledger_line: "The road opened outward and did not ask to be named."
+        ),
+        FirstLock(
+            id: 9,
+            slug: "last_toll_bell_not_rung",
+            account: "LastToll",
+            zone_hash: 0x1010,
+            required_eras: ["Ancient", "Golden", "Decay", "Void"],
+            demand_a: StationaryChannel,
+            demand_b: Theft,
+            final_action: DoNotRingBell,
+            world_first_relic: 10,
+            echo_relic: 1010,
+            public_ledger_line: "The bell that proved the debt was buried under the road."
+        ),
+        FirstLock(
+            id: 10,
+            slug: "hollow_star_map_body_soul_unstitched",
+            account: "HollowStar",
+            zone_hash: 0x1011,
+            required_eras: ["Ancient", "Golden", "Decay", "Void"],
+            demand_a: Theft,
+            demand_b: InventoryPrecision,
+            final_action: LoseOnPurpose,
+            world_first_relic: 11,
+            echo_relic: 1011,
+            public_ledger_line: "The map stopped believing the body."
+        ),
+        FirstLock(
+            id: 11,
+            slug: "mercy_drowned_debt_dissolved_unrescued",
+            account: "MercyDrowned",
+            zone_hash: 0x1012,
+            required_eras: ["Ancient", "Decay", "Void"],
+            demand_a: Patience,
+            demand_b: Refusal,
+            final_action: Spare,
+            world_first_relic: 12,
+            echo_relic: 1012,
+            public_ledger_line: "The debt softened under water and no one was rescued from mercy."
+        )
+    ],
+
+    // Talents & Progression Gating
+    talents: [
+        Talent(
+            id: "beast_taming",
+            name: "Sovereign Tamer",
+            description: "Allows taming of wild non-boss entities under 25% HP.",
+            required_level: 2,
+            stat_gating: (stat: "mercury", min_value: 5500),
+            effect: GrantSkill("tame")
+        ),
+        Talent(
+            id: "resonance_shatter",
+            name: "Harmonic Shatter",
+            description: "Striking an enemy at their alchemical frequency triggers a physical shatter.",
+            required_level: 5,
+            stat_gating: (stat: "sulfur", min_value: 6000),
+            effect: EnableCombatProc("shatter")
+        ),
+        Talent(
+            id: "central_third_mastery",
+            name: "Centering",
+            description: "Boosts the central-third skill gain rate by 15% for lagging low-level skills.",
+            required_level: 3,
+            stat_gating: (stat: "salt", min_value: 5000),
+            effect: ScaleSkillRecovery(1150) // 1.15x scaled in permyriad
+        ),
+        Talent(
+            id: "bell_parry",
+            name: "Bell Toll Deflection",
+            description: "Exact 3-frame window parry rings harmonic resonance into nearby enemies.",
+            required_level: 4,
+            stat_gating: (stat: "salt", min_value: 6500),
+            effect: EnableCombatProc("bell_ring")
+        ),
+        Talent(
+            id: "void_stitch",
+            name: "Void Stitching",
+            description: "Fold across Pentaract depths without triggering terrain collision penalty.",
+            required_level: 6,
+            stat_gating: (stat: "mercury", min_value: 7500),
+            effect: GrantSkill("void_step")
+        )
+    ],
+
+    // Ingested Wild Pets (For the Pet Subsystem)
+    pets: [
+        PetTemplate(
+            id: "prairie_wolf",
+            name: "Prairie Wolf",
+            level: 1,
+            base_stats: (hp: 6000, armor: 100, attack: 400),
+            tameable: true,
+            material_family: "Bone"
+        ),
+        PetTemplate(
+            id: "elder_bison",
+            name: "Elder Bison",
+            level: 3,
+            base_stats: (hp: 15000, armor: 400, attack: 800),
+            tameable: true,
+            material_family: "Stone"
+        ),
+        PetTemplate(
+            id: "iron_treant",
+            name: "Iron Bark Treant",
+            level: 5,
+            base_stats: (hp: 24000, armor: 850, attack: 1200),
+            tameable: false,
+            material_family: "Iron"
+        ),
+        PetTemplate(
+            id: "shadow_stalker",
+            name: "Shadow Stalker",
+            level: 4,
+            base_stats: (hp: 9500, armor: 220, attack: 1400),
+            tameable: true,
+            material_family: "Shadow"
+        )
+    ],
+
+    // Crafting Recipes & Alchemical Formulas
+    recipes: [
+        Recipe(
+            id: "iron_root_elixir",
+            name: "Iron Root Elixir",
+            reagents: [
+                (item_id: "iron_ore", quantity: 3),
+                (item_id: "ash_bloom", quantity: 1)
+            ],
+            gate_required: Calcination,
+            success_chance_pmy: 9500, // 95%
+            output_item: "iron_root_elixir",
+            stat_reward: (salt: 100, sulfur: 0, mercury: 50)
+        ),
+        Recipe(
+            id: "sovereign_catalyst",
+            name: "Sovereign Catalyst",
+            reagents: [
+                (item_id: "quicksilver", quantity: 2),
+                (item_id: "sulfur_ash", quantity: 2)
+            ],
+            gate_required: Separation,
+            success_chance_pmy: 8000, // 80%
+            output_item: "sovereign_catalyst",
+            stat_reward: (salt: 0, sulfur: 150, mercury: 150)
+        ),
+        Recipe(
+            id: "quicksilver_tincture",
+            name: "Quicksilver Tincture",
+            reagents: [
+                (item_id: "quicksilver", quantity: 4),
+                (item_id: "distilled_grave_water", quantity: 1)
+            ],
+            gate_required: Distillation,
+            success_chance_pmy: 8500,
+            output_item: "quicksilver_tincture",
+            stat_reward: (salt: 50, sulfur: 50, mercury: 200)
+        ),
+        Recipe(
+            id: "bell_vein_polish",
+            name: "Bell Vein Polish",
+            reagents: [
+                (item_id: "crushed_bell_metal", quantity: 2),
+                (item_id: "pine_resin", quantity: 1)
+            ],
+            gate_required: Coagulation,
+            success_chance_pmy: 9000,
+            output_item: "bell_vein_polish",
+            stat_reward: (salt: 120, sulfur: 80, mercury: 0)
+        )
+    ],
+
+    // Topology: 13 Zones matching Quincunx World Mandala (Center Hub + 12 Outer Petals)
+    zones: [
+        Zone(
+            id: "thornhaven_core",
+            name: "Thornhaven Parish Core",
+            biome: Town,
+            width_m: 80,
+            height_m: 80,
+            spawn_point: (0.0, 0.0, 0.0),
+            coordinate_5d: PackedPoint5D(
+                axis_0_lat: 0,
+                axis_1_lon: 0,
+                axis_2_depth: 0,
+                axis_3_time: 0,
+                axis_4_soul: 100
+            ),
+            npcs: [
+                Npc(id: 1, name: "Master Blacksmith", behavior: Passive, material: "Iron", health: 25000),
+                Npc(id: 2, name: "Bell Parish Elder", behavior: Passive, material: "Bone", health: 12000, triggers_quest: Some("toll_bell_silence")),
+                Npc(id: 3, name: "Wandering Trader", behavior: Passive, material: "Bone", health: 10000, triggers_quest: Some("first_hunt"))
+            ],
+            portals: [
+                Portal(id: 1, target_zone: "ash_foundry", label: "→ Ash Foundry (Aries)"),
+                Portal(id: 2, target_zone: "verdant_orchard", label: "→ Verdant Orchard (Taurus)"),
+                Portal(id: 7, target_zone: "parry_grounds", label: "↓ The Bell Pit Arena (Libra)")
+            ]
+        ),
+        Zone(
+            id: "ash_foundry",
+            name: "The Ash Foundry",
+            biome: IndustrialFoundry,
+            width_m: 1090,
+            height_m: 1090,
+            spawn_point: (10.0, 5.0, 0.0),
+            coordinate_5d: PackedPoint5D(
+                axis_0_lat: 10,
+                axis_1_lon: 0,
+                axis_2_depth: 1,
+                axis_3_time: 0,
+                axis_4_soul: 80
+            ),
+            npcs: [
+                Npc(id: 10, name: "Slag Golem", behavior: Hostile, material: "Iron", health: 14000),
+                Npc(id: 11, name: "Foundry Foreman", behavior: Territorial, material: "Ashlar", health: 18000)
+            ],
+            portals: [
+                Portal(id: 101, target_zone: "thornhaven_core", label: "← Thornhaven Parish")
+            ]
+        ),
+        Zone(
+            id: "verdant_orchard",
+            name: "The Under-Orchard",
+            biome: PrimordialForest,
+            width_m: 1090,
+            height_m: 1090,
+            spawn_point: (5.0, 15.0, 0.0),
+            coordinate_5d: PackedPoint5D(
+                axis_0_lat: 15,
+                axis_1_lon: 8,
+                axis_2_depth: 2,
+                axis_3_time: 1,
+                axis_4_soul: 130
+            ),
+            npcs: [
+                Npc(id: 20, name: "Prairie Wolf", behavior: Hostile, material: "Bone", health: 6000),
+                Npc(id: 21, name: "Elder Bison", behavior: Territorial, material: "Stone", health: 15000),
+                Npc(id: 22, name: "Queen's Fae Messenger", behavior: Passive, material: "Ash", health: 8000, triggers_quest: Some("glen_treaty"))
+            ],
+            portals: [
+                Portal(id: 102, target_zone: "thornhaven_core", label: "← Thornhaven Parish")
+            ]
+        ),
+        Zone(
+            id: "parry_grounds",
+            name: "The Bell Pit (PVP Arena)",
+            biome: SubterraneanArena,
+            width_m: 350,
+            height_m: 350,
+            spawn_point: (0.0, 0.0, -16.0),
+            coordinate_5d: PackedPoint5D(
+                axis_0_lat: 0,
+                axis_1_lon: 0,
+                axis_2_depth: -16,
+                axis_3_time: 2,
+                axis_4_soul: 50
+            ),
+            npcs: [
+                Npc(id: 30, name: "Arena Bell Keeper", behavior: Passive, material: "Bronze", health: 50000),
+                Npc(id: 31, name: "Bell Pit Gladiator", behavior: Hostile, material: "Steel", health: 22000)
+            ],
+            portals: [
+                Portal(id: 107, target_zone: "thornhaven_core", label: "↑ Ground Surface"),
+                Portal(id: 108, target_zone: "void_archway", label: "↓ Deep Locked Door")
+            ]
+        ),
+        Zone(
+            id: "void_archway",
+            name: "The Subterranean Locked Deep Door",
+            biome: AbyssalVoid,
+            width_m: 500,
+            height_m: 500,
+            spawn_point: (0.0, 0.0, -256.0),
+            coordinate_5d: PackedPoint5D(
+                axis_0_lat: 0,
+                axis_1_lon: 0,
+                axis_2_depth: -256,
+                axis_3_time: 4,
+                axis_4_soul: 0
+            ),
+            npcs: [
+                Npc(id: 40, name: "The Nameless Warden", behavior: Hostile, material: "Obsidian", health: 80000)
+            ],
+            portals: [
+                Portal(id: 109, target_zone: "parry_grounds", label: "↑ The Bell Pit")
+            ]
+        )
+    ],
+
+    // Quests (Ingested from narrative TOML & CYOA trees)
+    quests: [
+        Quest(
+            id: "first_hunt",
+            name: "The First Hunt",
+            description: "The trader needs wolf pelts. Hunt a Prairie Wolf.",
+            zone: "verdant_orchard",
+            objectives: [
+                Objective(type: Kill, target: "Prairie Wolf", target_count: 1)
+            ],
+            rewards: Reward(xp: 100, item_id: "wolf_pelt", tria_prima_delta: (salt: 50, sulfur: 0, mercury: 0))
+        ),
+        Quest(
+            id: "iron_descent",
+            name: "Iron Descent",
+            description: "Descend into the iron caverns to reclaim the root sigil.",
+            zone: "ash_foundry",
+            objectives: [
+                Objective(type: ReachZone, target: "ash_foundry", target_count: 1)
+            ],
+            rewards: Reward(xp: 300, item_id: "iron_root_sigil", tria_prima_delta: (salt: 100, sulfur: 100, mercury: 100))
+        ),
+        Quest(
+            id: "toll_bell_silence",
+            name: "Silence the Bell",
+            description: "Descend into the Bell Pit at -16m and witness the un-rung toll.",
+            zone: "parry_grounds",
+            objectives: [
+                Objective(type: UnlockFirstLock, target: "last_toll_bell_not_rung", target_count: 1)
+            ],
+            rewards: Reward(xp: 500, item_id: "bell_metal_shard", tria_prima_delta: (salt: 200, sulfur: 100, mercury: 50))
+        ),
+        Quest(
+            id: "glen_treaty",
+            name: "Treaty of the Green Court",
+            description: "Deliver the forged peace treaty to Regina Viriditas.",
+            zone: "verdant_orchard",
+            objectives: [
+                Objective(type: DialogueChoice, target: "glen_queen_agreement", target_count: 1)
+            ],
+            rewards: Reward(xp: 450, item_id: "crown_of_twigs", tria_prima_delta: (salt: 50, sulfur: 250, mercury: 150))
+        )
+    ],
+
+    // Alchemical & Harmonic Frequency Configuration (Hz + Permyriad Modifiers)
+    alchemical_resonance: {
+        Nigredo: (hz: 40, intensity_modifier_pmy: 8000),
+        Albedo: (hz: 432, intensity_modifier_pmy: 10000),
+        Citrinitas: (hz: 528, intensity_modifier_pmy: 12000),
+        Rubedo: (hz: 800, intensity_modifier_pmy: 15000),
+        Aspirational: (hz: 1200, intensity_modifier_pmy: 20000),
+    },
+
+    // Faction Setup & Territory Allocation
+    faction_rooms: [
+        (room_id: 0, faction: "thornhaven_guard"),
+        (room_id: 1, faction: "ashhold_horde"),
+        (room_id: 2, faction: "bell_pit_parriers"),
+        (room_id: 3, faction: "verdant_court")
+    ]
+)

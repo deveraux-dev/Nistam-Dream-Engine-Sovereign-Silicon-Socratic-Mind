@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Surface Ledger & Forge-Envelope — Gemini 2.5 Flash SDK Coding Assistant & Context Caching Hub
+Surface Ledger & Forge-Envelope — Gemini 3.7 Flash SDK Coding Assistant & Context Caching Hub
 
 This script implements:
 1. GCP ADC / Gemini API client initialization (Vertex AI or Gemini Developer API).
@@ -46,8 +46,8 @@ CORE_FILES = [
     "surfaceledger/ARCHITECTURE.md",
 ]
 
-# Rule G19 Mandate: gemini-2.5-flash at deterministic temperature 0.0
-MODEL_FLASH = os.environ.get("VERTEX_FLASH_MODEL", "gemini-2.5-flash")
+# Rule G19 Mandate: gemini-3.7-flash at deterministic temperature 0.0
+MODEL_FLASH = os.environ.get("VERTEX_FLASH_MODEL", "gemini-3.7-flash")
 
 CREE_SYLLABIC_REGEX = re.compile(r"[\u1400-\u167F]")
 SOVEREIGN_BLOCKED_PATTERNS = [
@@ -213,8 +213,8 @@ def query_assistant(client: genai.Client, prompt: str, cache_name: Optional[str]
 
 def main():
     print("======================================================================")
-    print("  SURFACE LEDGER / FORGE-ENVELOPE — GEMINI 2.5 FLASH CODING ASSISTANT HUB  ")
-    print("  [Rule G19: gemini-2.5-flash @ temp=0.0, top_k=1]  [ADR-0026: AIRGAP ACTIVE]")
+    print("  SURFACE LEDGER / FORGE-ENVELOPE — GEMINI 3.7 FLASH CODING ASSISTANT HUB  ")
+    print("  [Rule G19: gemini-3.7-flash @ temp=0.0, top_k=1]  [ADR-0026: AIRGAP ACTIVE]")
     print("======================================================================")
 
     bundle = bundle_repository()
@@ -241,11 +241,11 @@ def main():
         user_query = " ".join(sys.argv[1:])
         print(f"\n[QUERY] {user_query}\n")
         answer = query_assistant(client, user_query, cache_name)
-        print("------------------- GEMINI 2.5 FLASH RESPONSE -------------------")
+        print("------------------- GEMINI 3.7 FLASH RESPONSE -------------------")
         print(answer)
         print("-----------------------------------------------------------------")
     else:
-        print("\n[READY] Gemini 2.5 Flash Coding Assistant initialized with Full Repository Context.")
+        print("\n[READY] Gemini 3.7 Flash Coding Assistant initialized with Full Repository Context.")
         print("Type your query below (e.g. 'How does WeaverArbiter verify S13 tokens against the EvidenceChain?')")
         print("Type 'exit' or 'quit' to end.\n")
 
@@ -256,7 +256,7 @@ def main():
                     continue
                 if prompt.lower() in ["exit", "quit", "q"]:
                     break
-                print("\n[REASONING with Gemini 2.5 Flash at Temp=0.0, Top-K=1]...")
+                print("\n[REASONING with Gemini 3.7 Flash at Temp=0.0, Top-K=1]...")
                 answer = query_assistant(client, prompt, cache_name)
                 print(f"\n{answer}\n")
             except KeyboardInterrupt:

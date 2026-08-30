@@ -1,0 +1,54 @@
+{
+  "items": [
+    {
+      "classification": "native_missing_widget",
+      "id": "kit.channel_strip",
+      "recommendation": "channel_strip.kit.vixi: fixed vertical flow with named slots in signal-flow order: [input_section] [eq_section] [dynamics_section] [aux_section] [pan_slot] [routing_buttons] [mute_solo_row] [fader_slot] [scribble_strip]. Each slot is a ParameterGroupZone. Width: fixed 72px (scalable via ui_scale). Height: full panel height.",
+      "source": "analog_console.ChannelStripLayout"
+    },
+    {
+      "classification": "native_missing_widget",
+      "id": "kit.master_section",
+      "recommendation": "master_section.kit.vixi: right-aligned panel with master fader (LongThrowFader), bus meter (LedBarMeter x2 L/R), monitor source selector (RotaryKnob), dim/mute buttons.",
+      "source": "analog_console.MasterSectionLayout"
+    },
+    {
+      "classification": "native_missing_widget",
+      "id": "kit.parameter_group_zone",
+      "recommendation": "parameter_group_zone: CID_FRAME (1px) top+bottom border lines, CID_STATUS label (type.ramp[0], 8px, top-left corner), child slot area. Used for EQ, Dynamics, Aux sections within a ChannelStripLayout.",
+      "source": "analog_console.ParameterGroupZone"
+    },
+    {
+      "classification": "native_missing_widget",
+      "id": "kit.led_bar_meter",
+      "recommendation": "led_bar_meter: vertical bar, N segments (default 20), each segment = 1px gap + colored rect. Level = Permyriad input. Segment colors resolved via LedMeterColorSegment threshold tokens. Peak-hold segment blinks at CID_DANGER (1Hz = 120 ticks on/off). Width: 8px per meter. Zero heap — segment count is const.",
+      "source": "analog_console.LedBarMeter"
+    },
+    {
+      "classification": "native_missing_widget",
+      "id": "kit.long_throw_fader",
+      "recommendation": "long_throw_fader: vertical drag-track widget. Track height = 80px (scales with ui_scale). Cap = 12x4px rect. Value = Permyriad (0 to 13000 where 10000=unity). Snap at 10000 (0dB unity). dB label rendered at presentation layer from integer. Edict: set_fader(ch: u8, pos: Permyriad). CID_FRAME track, CID_TITLE cap, CID_ACCENT at unity snap.",
+      "source": "analog_console.LongThrowFader"
+    },
+    {
+      "classification": "native_missing_widget",
+      "id": "kit.rotary_knob",
+      "recommendation": "rotary_knob: 20x20px circle body (CID_BAR), indicator line (CID_TITLE), optional arc track (CID_FRAME). Range declared as (min: Permyriad, max: Permyriad, detents: [Permyriad;8]). Drag vertical for value change. Edict: set_knob(id: u16, value: Permyriad). Double-tap to reset to detent[0].",
+      "source": "analog_console.RotaryKnob"
+    },
+    {
+      "classification": "native_missing_token",
+      "id": "kit.mute_solo_token",
+      "recommendation": "mute_solo_token: two rows of small backlit-style toggle buttons. Mute (M): CID_ACCENT active, CID_STATUS inactive. Solo (S): CID_DANGER active, CID_STATUS inactive. Width: full channel strip width / 2 each.",
+      "source": "analog_console.MuteSoloButton"
+    },
+    {
+      "classification": "native_missing_token",
+      "id": "kit.group_assign_token",
+      "recommendation": "group_assign_token: compact button grid (2x4 for 8 buses). Each button = 12x8px. State = bitmask. CID_MARK assigned, CID_BAR unassigned. Edict: set_group_assign(ch: u8, groups: u8).",
+      "source": "analog_console.GroupAssignButton"
+    }
+  ],
+  "queue": "native_widget_queue",
+  "version": "0.1.0"
+}

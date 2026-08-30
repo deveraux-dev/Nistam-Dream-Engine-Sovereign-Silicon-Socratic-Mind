@@ -1,0 +1,19 @@
+[package]
+name = "link-wire"
+description = "13link wire contract: Packet/PacketType JSON envelope + cert fingerprinting, shared by link-core (desktop) and link-android (NDK, sync). No tokio/rustls/sqlite -- safe on an embedded cdylib target."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+uuid = { version = "1", features = ["v4"] }
+sha2 = "0.10"
+hex = "0.4"
+
+[dev-dependencies]
+base64 = "0.22"
+
+[lints]
+workspace = true

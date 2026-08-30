@@ -9,6 +9,8 @@
 extern crate alloc;
 use alloc::vec::Vec;
 
+use super::cognitive_watchdog::{CognitiveWatchdog, WatchdogDecision};
+
 /// Default number of tokens to propose in speculative decoding.
 pub const SPEC_K: usize = 4;
 
@@ -55,6 +57,8 @@ pub struct SpeculativeDecoder {
 	pub total_rounds: usize,
 	/// PRNG state for rejection sampling.
 	rng_state: u64,
+	/// Cognitive Watchdog (N × IPR metric) monitoring divergence/convergence.
+	watchdog: CognitiveWatchdog,
 }
 
 #[cfg(feature = "std")]
@@ -69,6 +73,7 @@ impl SpeculativeDecoder {
 			total_generated: 0,
 			total_rounds: 0,
 			rng_state: 0x85a308d313198a2eu64,
+			watchdog: CognitiveWatchdog::default(),
 		}
 	}
 
@@ -102,7 +107,7 @@ impl SpeculativeDecoder {
 		&self.draft_tokens
 	}
 
-	/// Verify draft tokens against target model using rejection sampling.
+	/// Verify draft tokens against target model using rejection sampling with watchdog.
 	/// `verify_forward` is called once per draft token.
 	/// Returns the number of accepted tokens (0..=K).
 	pub fn verify(&mut self, mut verify_forward: impl FnMut(u32) -> Vec<f32>) -> usize {
@@ -113,12 +118,24 @@ impl SpeculativeDecoder {
 			let target_logits = verify_forward(draft_token);
 
 			if i < self.draft_logits.len() {
-				let draft_prob = softmax_prob(&self.draft_logits[i], draft_token as usize);
 				let target_prob = softmax_prob(&target_logits, draft_token as usize);
+				let watchdog_decision = self.watchdog.evaluate(&target_logits);
 
+				let draft_prob = softmax_prob(&self.draft_logits[i], draft_token as usize);
 				if target_prob > 0.0 && draft_prob > 0.0 {
-					let accept_prob = (target_prob / draft_prob).min(1.0);
-					if self.xorshift() < accept_prob {
+					let mut accept_prob = (target_prob / draft_prob).min(1.0);
+
+					match watchdog_decision {
+						WatchdogDecision::DivergenceAlert { .. } => {
+							accept_prob *= 0.8;
+						}
+						WatchdogDecision::ConvergenceSpikeRefusal { .. } => {
+							accept_prob = 0.0;
+						}
+						WatchdogDecision::NormalEquilibrium { .. } => {}
+					}
+
+					if accept_prob > 0.0 && self.xorshift() < accept_prob {
 						accepted += 1;
 					} else {
 						break;

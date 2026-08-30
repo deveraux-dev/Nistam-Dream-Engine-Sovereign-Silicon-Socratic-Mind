@@ -1,0 +1,12 @@
+# Media/story export pacing math, ported verbatim from
+# F:\NewRepo\crates\forge-export\src\pacing.rs (2026-08-15). Zero deps by
+# construction — the donor module has none, and this crate keeps that.
+[package]
+name = "forge-export-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[lints]
+workspace = true

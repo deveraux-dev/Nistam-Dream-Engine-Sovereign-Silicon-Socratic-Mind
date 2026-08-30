@@ -1,0 +1,15 @@
+# Ported as-is from F:\NewRepo\crates\ironroot-signal. Generic signal-routed
+# creation and ambience primitives for Ironroot/13Forge. Zero external dependencies.
+[package]
+name = "ironroot-signal-v3"
+version.workspace = true
+edition.workspace = true
+description = "Deterministic signal-routed creation and ambience primitives for Ironroot/13Forge."
+license = "MIT OR Apache-2.0"
+
+[dependencies]
+
+[dev-dependencies]
+
+[lints]
+workspace = true

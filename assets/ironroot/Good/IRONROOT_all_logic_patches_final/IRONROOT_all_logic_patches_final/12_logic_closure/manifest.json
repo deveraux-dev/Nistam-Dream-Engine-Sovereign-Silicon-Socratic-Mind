@@ -1,0 +1,66 @@
+[
+  {
+    "filename": "README.md",
+    "size_bytes": 1483
+  },
+  {
+    "filename": "balance_tables.rs",
+    "size_bytes": 993
+  },
+  {
+    "filename": "cutscene_atoms.rs",
+    "size_bytes": 1102
+  },
+  {
+    "filename": "disclosure_policy.rs",
+    "size_bytes": 1133
+  },
+  {
+    "filename": "first_lock_specs.rs",
+    "size_bytes": 5438
+  },
+  {
+    "filename": "gjk_integer.rs",
+    "size_bytes": 2210
+  },
+  {
+    "filename": "harmonic_substrate.rs",
+    "size_bytes": 3271
+  },
+  {
+    "filename": "lore_core.rs",
+    "size_bytes": 4363
+  },
+  {
+    "filename": "lore_determinism_tests.rs",
+    "size_bytes": 1209
+  },
+  {
+    "filename": "lore_registry.rs",
+    "size_bytes": 2250
+  },
+  {
+    "filename": "name_shear_accessibility.rs",
+    "size_bytes": 1291
+  },
+  {
+    "filename": "packed_state.rs",
+    "size_bytes": 1433
+  },
+  {
+    "filename": "photometric_waveform.rs",
+    "size_bytes": 1627
+  },
+  {
+    "filename": "save_migration.rs",
+    "size_bytes": 1600
+  },
+  {
+    "filename": "server_proofs.rs",
+    "size_bytes": 1171
+  },
+  {
+    "filename": "vixiscript_rules.rs",
+    "size_bytes": 1306
+  }
+]

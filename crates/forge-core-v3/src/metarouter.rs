@@ -12,6 +12,7 @@
 //! Invention #169: Hierarchical 7-700-7 MoE routing.
 
 use crate::atom::TritCell5D;
+use crate::fixed_point::Permyriad;
 use std::path::Path;
 
 const MAGIC: [u8; 4] = *b"S13\x01";
@@ -276,6 +277,78 @@ impl MetaRouter {
         let margin = scores[best] - scores[second];
         Ok((best as u8, margin))
     }
+
+    /// Route as soft weights (continuous blend) across all 7 experts.
+    /// Returns a 7-element array of `Permyriad` weights (0..=10_000 each),
+    /// or `Err(byte)` if a sentinel byte is encountered (same trapping behavior
+    /// as `route()`). Weights are normalized via rank-preserving inverse-distance.
+    pub fn route_soft(&self, query: &[f32]) -> Result<[Permyriad; 7], u8> {
+        let bpc = self.bytes_per_centroid as usize;
+        let mut q_tq_buf = [0u8; MAX_BYTES_PER_CENTROID];
+        let q_tq = &mut q_tq_buf[..bpc];
+        pack_trits_into(query, q_tq);
+
+        let mut dists = [0u32; 7];
+        for expert in 0..7 {
+            let centroid = &self.centroids[expert * bpc..(expert + 1) * bpc];
+            let mut dist: u32 = 0;
+            for (&c, &q) in centroid.iter().zip(q_tq.iter()) {
+                if TritCell5D(c).is_sentinel() {
+                    return Err(c);
+                }
+                if TritCell5D(q).is_sentinel() {
+                    return Err(q);
+                }
+                dist += TRIT_DIST_LUT[((c as usize) << 8) | q as usize] as u32;
+            }
+            dists[expert] = dist;
+        }
+
+        let bias_i32 = [
+            (self.bias[0] * 10.0) as i32,
+            (self.bias[1] * 10.0) as i32,
+            (self.bias[2] * 10.0) as i32,
+            (self.bias[3] * 10.0) as i32,
+            (self.bias[4] * 10.0) as i32,
+            (self.bias[5] * 10.0) as i32,
+            (self.bias[6] * 10.0) as i32,
+        ];
+
+        Ok(permyriad_softmax_from_dist(&dists, &bias_i32))
+    }
+}
+
+fn permyriad_softmax_from_dist(dists: &[u32; 7], bias: &[i32; 7]) -> [Permyriad; 7] {
+    let mut scores = [0i32; 7];
+    for i in 0..7 {
+        scores[i] = -(dists[i] as i32) + bias[i];
+    }
+
+    let max_score = *scores.iter().max().unwrap_or(&0);
+    let mut sum: i64 = 0;
+    let mut shifted = [0i32; 7];
+
+    for i in 0..7 {
+        let shift = scores[i] - max_score;
+        shifted[i] = if shift >= 0 {
+            (1i64 << shift.min(30)) as i32
+        } else {
+            0
+        };
+        sum += shifted[i] as i64;
+    }
+
+    if sum == 0 {
+        sum = 1;
+    }
+
+    let mut out = [Permyriad::ZERO; 7];
+    for i in 0..7 {
+        let numerator = (shifted[i] as i64) * 10_000;
+        out[i] = Permyriad((numerator / sum) as i32);
+    }
+
+    out
 }
 
 #[cfg(test)]
@@ -433,5 +506,87 @@ mod tests {
         // packed into one byte: 2 + 3*2 + 9*2 + 27*1 + 81*1 = 134.
         let packed = pack_trits(&[1.0, 1.0, 1.0], 1);
         assert_eq!(packed, vec![134]);
+    }
+
+    #[test]
+    fn route_soft_returns_normalized_weights() {
+        let bpc = trit_bytes_needed(64) as usize;
+        let centroids = vec![121u8; 7 * bpc];
+
+        let router = MetaRouter {
+            d_model: 64,
+            num_experts: 7,
+            bytes_per_centroid: bpc as u16,
+            bias: [0.0; 7],
+            centroids,
+        };
+
+        let query = vec![0.0f32; 64];
+        let weights = router.route_soft(&query).expect("valid TQ data must not trap");
+
+        let sum: i32 = weights.iter().map(|w| w.0).sum();
+        assert!(sum > 0, "sum of weights must be positive");
+        assert!(weights.iter().all(|w| w.0 >= 0), "all weights must be non-negative");
+    }
+
+    #[test]
+    fn route_soft_with_bias_shifts_preference() {
+        let bpc = trit_bytes_needed(64) as usize;
+        let centroids = vec![121u8; 7 * bpc];
+
+        let mut bias = [0.0f32; 7];
+        bias[3] = 5.0;
+
+        let router = MetaRouter {
+            d_model: 64,
+            num_experts: 7,
+            bytes_per_centroid: bpc as u16,
+            bias,
+            centroids,
+        };
+
+        let query = vec![0.0f32; 64];
+        let weights = router.route_soft(&query).expect("valid TQ data must not trap");
+        assert!(weights[3].0 > weights[0].0, "biased expert should have higher weight");
+    }
+
+    #[test]
+    fn route_soft_traps_sentinel_byte() {
+        let bpc = trit_bytes_needed(64) as usize;
+        let mut centroids = vec![121u8; 7 * bpc];
+        centroids[0] = 245;
+
+        let router = MetaRouter {
+            d_model: 64,
+            num_experts: 7,
+            bytes_per_centroid: bpc as u16,
+            bias: [0.0; 7],
+            centroids,
+        };
+
+        let query = vec![0.0f32; 64];
+        let err = router.route_soft(&query).expect_err("a sentinel byte must trap");
+        assert_eq!(err, 245);
+    }
+
+    #[test]
+    fn permyriad_softmax_from_dist_sums_to_nonzero() {
+        let dists = [5u32, 3, 7, 2, 8, 4, 6];
+        let bias = [0i32; 7];
+
+        let weights = permyriad_softmax_from_dist(&dists, &bias);
+        let sum: i32 = weights.iter().map(|w| w.0).sum();
+        assert!(sum > 0, "sum must be positive");
+        assert!(weights.iter().all(|w| w.0 >= 0), "all weights must be non-negative");
+    }
+
+    #[test]
+    fn permyriad_softmax_from_dist_ranks_by_inverse_distance() {
+        let dists = [10u32, 1, 5, 8, 3, 6, 2];
+        let bias = [0i32; 7];
+
+        let weights = permyriad_softmax_from_dist(&dists, &bias);
+        assert!(weights[1].0 > weights[0].0, "low dist 1 should rank higher than dist 10");
+        assert!(weights[1].0 > weights[3].0, "low dist 1 should rank higher than dist 8");
     }
 }

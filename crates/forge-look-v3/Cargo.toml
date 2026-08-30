@@ -1,0 +1,17 @@
+[package]
+name = "forge-look-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[dependencies]
+glam = "0.33"
+forge-core-v3 = { path = "../forge-core-v3" }
+forge-shaderbind = { path = "../forge-shaderbind" }
+
+[dev-dependencies]
+proptest = "1"
+
+[lints]
+workspace = true

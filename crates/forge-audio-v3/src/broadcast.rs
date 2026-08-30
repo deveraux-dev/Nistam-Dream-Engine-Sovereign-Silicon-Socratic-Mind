@@ -23,7 +23,7 @@ impl Default for BroadcastConfig {
             host: "localhost".into(),
             port: 8000,
             mount: "/stream".into(),
-            password: std::env::var("ICECAST_SOURCE_PASSWORD").unwrap_or_else(|_| "hackme".into()),
+            password: "deveraux_source_2026".into(),
             stream_name: "Deveraux.FM".into(),
             bitrate: 192,
         }

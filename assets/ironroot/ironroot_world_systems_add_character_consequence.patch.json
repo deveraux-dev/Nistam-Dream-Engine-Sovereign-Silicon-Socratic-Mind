@@ -1,0 +1,931 @@
+{
+  "schema": "ironroot.repo_ingest.merge_patch.v1",
+  "generated_date": "2026-05-16",
+  "target_schema": "ironroot.repo_ingest.world_systems_bundle.v1",
+  "operation": "add",
+  "path": "/character_consequence_engine",
+  "value": {
+    "schema": "ironroot.character_consequence_engine.v1",
+    "generated_date": "2026-05-16",
+    "status": "repo_ingestion_patch",
+    "purpose": "Machine-readable additive patch mapping character progression to the same governance grammar as the World Consequence Engine.",
+    "supersedes": [],
+    "depends_on": [
+      "ironroot.world_systems_bundle.v1",
+      "ironroot.world_consequence_engine",
+      "ironroot.stereotomic_governance"
+    ],
+    "core_thesis": {
+      "short": "Character progression is the player's personal consequence engine.",
+      "long": "The world changes because sources act on targets. The character changes because the player acts on the world. Both use the same governance grammar, curve logic, query/descriptor pattern, root flux, celestial context, and deterministic consequence accounting."
+    },
+    "design_laws": [
+      "Progression is not external reward; progression is personal worldstate.",
+      "Character growth mirrors world consequence.",
+      "Use-based progression should feel UO/EQ-like: slow, contextual, and rewarding.",
+      "Skill gain is governed by Central-Third difficulty bands.",
+      "Superior-Dexter decides which skill receives primary credit when multiple domains apply.",
+      "Tas-de-Charge creates mastery outcomes when three or more skills converge.",
+      "Streak and fatigue suppress repetitive grind loops.",
+      "Discovery outputs are as important as XP.",
+      "Root Harmony affects both player progression and local world physics.",
+      "Root-Mask branches are attractor fields, not hard talent trees.",
+      "Dialogue is a progression domain.",
+      "No runtime retraining; static tables/models may be baked from authored progression curves."
+    ],
+    "unified_mapping": {
+      "world": {
+        "query": "InteractionQuery",
+        "output": "ConsequenceDescriptor",
+        "curve": "StateCurve",
+        "target": "world_state",
+        "meaning": "Source acts on target and world state changes."
+      },
+      "character": {
+        "query": "ProgressionQuery",
+        "output": "GrowthDescriptor",
+        "curve": "SkillCurve",
+        "target": "player_state",
+        "meaning": "Player acts on world and character state changes."
+      },
+      "shared_governance": [
+        "SuperiorDexter",
+        "CentralThird",
+        "TasDeCharge",
+        "ConstraintDAG",
+        "ChaosPerturbation",
+        "RatioPolicy",
+        "PrimitivePriors",
+        "ThirteenTollsContext",
+        "RootFluxContext"
+      ]
+    },
+    "new_required_module": {
+      "module": "character_consequence",
+      "suggested_path": "game/src/character_consequence/",
+      "purpose": "Use-based dynamic progression using the same consequence grammar as WCE.",
+      "files": [
+        {
+          "file": "mod.rs",
+          "purpose": "Public exports and integration entrypoint."
+        },
+        {
+          "file": "query.rs",
+          "purpose": "ProgressionQuery packing, alignment checks, validation, and helper constructors."
+        },
+        {
+          "file": "descriptor.rs",
+          "purpose": "GrowthDescriptor flags, bit helpers, and application helpers."
+        },
+        {
+          "file": "skill_curve.rs",
+          "purpose": "Precompiled skill gain curves and Central-Third skill gate."
+        },
+        {
+          "file": "domains.rs",
+          "purpose": "Gather, craft, build, social, root, secret, combat domains."
+        },
+        {
+          "file": "credit.rs",
+          "purpose": "Superior-Dexter skill credit arbitration."
+        },
+        {
+          "file": "streak.rs",
+          "purpose": "Diminishing returns, anti-grind state, reset conditions."
+        },
+        {
+          "file": "fatigue.rs",
+          "purpose": "Fatigue cost and recovery interaction with campfires, rest, travel, and social context."
+        },
+        {
+          "file": "discovery.rs",
+          "purpose": "Recipe, route, secret, title, dialogue, and worldstate unlock outputs."
+        },
+        {
+          "file": "dialogue_progression.rs",
+          "purpose": "Dialogue roads and social skill progression."
+        },
+        {
+          "file": "root_harmony.rs",
+          "purpose": "Player relationship to Ironroot and bidirectional progression/world effects."
+        },
+        {
+          "file": "root_mask_fields.rs",
+          "purpose": "Root-Mask attractor field progression."
+        },
+        {
+          "file": "router.rs",
+          "purpose": "Static baked progression router or deterministic primitive progression table."
+        },
+        {
+          "file": "apply.rs",
+          "purpose": "Applies GrowthDescriptor to player state, diplomacy, root state, discoveries, and fatigue."
+        }
+      ]
+    },
+    "schemas": {
+      "ProgressionQuery": {
+        "size_bytes": 16,
+        "alignment": "repr(C, align(16))",
+        "description": "Packed context for a player action that may produce skill growth, discovery, reputation, fatigue, or root shift.",
+        "fields": [
+          {
+            "name": "action_tag",
+            "type": "u8",
+            "examples": [
+              "fish",
+              "hunt",
+              "forage",
+              "mine",
+              "craft",
+              "build",
+              "speak",
+              "trade",
+              "witness",
+              "tend_root",
+              "discover",
+              "fight",
+              "repair",
+              "teach",
+              "refuse"
+            ]
+          },
+          {
+            "name": "action_intensity",
+            "type": "u8",
+            "description": "How well or forcefully the action was performed."
+          },
+          {
+            "name": "target_difficulty",
+            "type": "u8",
+            "description": "Fish rarity, ore tier, debate difficulty, structure complexity, mob level, root pressure, etc."
+          },
+          {
+            "name": "current_skill",
+            "type": "u8",
+            "description": "Primary skill value in relevant domain."
+          },
+          {
+            "name": "secondary_skill",
+            "type": "u8",
+            "description": "Relevant secondary skill, or zero/none."
+          },
+          {
+            "name": "tool_quality",
+            "type": "u8",
+            "description": "Rod, bow, forge, hammer, station, guildhall bench, legal document, etc."
+          },
+          {
+            "name": "zone_affinity",
+            "type": "u8",
+            "description": "Whether the zone favours this action."
+          },
+          {
+            "name": "celestial",
+            "type": "u8",
+            "description": "Thirteen Tolls / season / darkness / conjunction context."
+          },
+          {
+            "name": "root_flux",
+            "type": "u8",
+            "description": "Global/local Root volatility and predictability."
+          },
+          {
+            "name": "streak",
+            "type": "u8",
+            "description": "Recent repeated same-action count."
+          },
+          {
+            "name": "fatigue",
+            "type": "u8",
+            "description": "Current tiredness or overuse pressure."
+          },
+          {
+            "name": "social_context",
+            "type": "u8",
+            "values": {
+              "0": "alone",
+              "1": "party",
+              "2": "guild",
+              "3": "mentor",
+              "4": "student",
+              "5": "witnessed_publicly",
+              "6": "court_or_contract",
+              "7": "ritual_or_civic"
+            }
+          },
+          {
+            "name": "reputation",
+            "type": "u8",
+            "description": "Relevant faction or public standing."
+          },
+          {
+            "name": "discovery_state",
+            "type": "u8",
+            "description": "First-time / known / mastered / exhausted status for this context."
+          },
+          {
+            "name": "root_harmony",
+            "type": "u8",
+            "description": "Player relationship to the Ironroot."
+          },
+          {
+            "name": "chaos_phase",
+            "type": "u8",
+            "description": "Tick + celestial + position phase for rare moments."
+          }
+        ]
+      },
+      "GrowthDescriptor": {
+        "size_bytes": 8,
+        "alignment": "repr(C, align(8))",
+        "description": "Compact growth output applied to character, discoveries, reputation, fatigue, and root state.",
+        "fields": [
+          {
+            "name": "primary_xp",
+            "type": "u8"
+          },
+          {
+            "name": "secondary_xp",
+            "type": "u8"
+          },
+          {
+            "name": "discovery_id",
+            "type": "u8"
+          },
+          {
+            "name": "reputation_delta",
+            "type": "i8"
+          },
+          {
+            "name": "fatigue_cost",
+            "type": "u8"
+          },
+          {
+            "name": "rare_event",
+            "type": "u8"
+          },
+          {
+            "name": "root_shift",
+            "type": "i8"
+          },
+          {
+            "name": "flags",
+            "type": "u8",
+            "bits": {
+              "0": "skill_up",
+              "1": "title_earned",
+              "2": "secret_found",
+              "3": "mentor_bonus",
+              "4": "streak_broken",
+              "5": "mastery_proc",
+              "6": "root_resonance_changed",
+              "7": "worldstate_unlock"
+            }
+          }
+        ]
+      },
+      "SkillCurve": {
+        "description": "Precompiled curve for use-based progression.",
+        "fields": [
+          "skill_id",
+          "thresholds",
+          "sweet_spot_width",
+          "difficulty_band",
+          "fatigue_curve",
+          "streak_decay_curve",
+          "discovery_chance_curve",
+          "root_harmony_modifier",
+          "celestial_modifier",
+          "mentor_modifier"
+        ],
+        "rule": "Skill gain occurs when action difficulty falls inside the Central-Third band for the player's current skill."
+      }
+    },
+    "progression_domains": [
+      {
+        "id": "gather",
+        "skills": [
+          "fishing",
+          "hunting",
+          "foraging",
+          "mining",
+          "herbalism",
+          "trapping",
+          "water_reading"
+        ],
+        "primary_world_links": [
+          "waterflow",
+          "ecology",
+          "materials",
+          "season",
+          "root_state",
+          "weather",
+          "fauna_ai"
+        ],
+        "example_actions": [
+          "catch_fish",
+          "track_animal",
+          "harvest_herb",
+          "mine_ore",
+          "set_trap",
+          "read_river"
+        ]
+      },
+      {
+        "id": "craft",
+        "skills": [
+          "smithing",
+          "alchemy",
+          "cooking",
+          "instrument_making",
+          "socketing",
+          "repair",
+          "brewing",
+          "tailoring"
+        ],
+        "primary_world_links": [
+          "work_rites",
+          "material_personality",
+          "fire_heat",
+          "water_memory",
+          "celestial_windows",
+          "guildhall_stations"
+        ],
+        "example_actions": [
+          "forge_blade",
+          "brew_tincture",
+          "socket_ward",
+          "repair_bridge_piece",
+          "craft_instrument",
+          "prepare_food"
+        ]
+      },
+      {
+        "id": "build",
+        "skills": [
+          "masonry",
+          "carpentry",
+          "mortise_works",
+          "guildhall_design",
+          "roadwork",
+          "damwork",
+          "foundation_reading",
+          "ward_architecture"
+        ],
+        "primary_world_links": [
+          "voxel_building",
+          "structure_support",
+          "root_pressure",
+          "water_rights",
+          "guildhalls",
+          "roads",
+          "terrain_topology"
+        ],
+        "example_actions": [
+          "place_foundation",
+          "brace_wall",
+          "build_dam",
+          "cut_road",
+          "install_socket_node",
+          "raise_guildhall_heart"
+        ]
+      },
+      {
+        "id": "social",
+        "skills": [
+          "diplomacy",
+          "trade",
+          "law",
+          "witnessing",
+          "teaching",
+          "negotiation",
+          "grief_reading",
+          "secret_keeping"
+        ],
+        "primary_world_links": [
+          "witness_liability_ledger",
+          "faction_pressure",
+          "market_routes",
+          "dialogue",
+          "guildhall_charters",
+          "legal_claims"
+        ],
+        "example_actions": [
+          "negotiate_water_rights",
+          "settle_liability",
+          "teach_apprentice",
+          "broker_trade",
+          "testify",
+          "refuse_crown"
+        ]
+      },
+      {
+        "id": "root",
+        "skills": [
+          "root_tending",
+          "root_listening",
+          "purification",
+          "vowless_refusal",
+          "root_pressure_reading",
+          "surge_counterplay",
+          "forest_repair"
+        ],
+        "primary_world_links": [
+          "root_flux",
+          "root_stain",
+          "root_tithe",
+          "ecology",
+          "surge_counterplay",
+          "Thirteen_Tolls"
+        ],
+        "example_actions": [
+          "listen_to_root",
+          "heal_root_stain",
+          "refuse_tithe",
+          "redirect_surge",
+          "purify_soil",
+          "read_foundation_pressure"
+        ]
+      },
+      {
+        "id": "secret",
+        "skills": [
+          "ash_eye_sight",
+          "memory_reading",
+          "hidden_routes",
+          "name_repair",
+          "grave_listening",
+          "ledger_decoding",
+          "erasure_detection"
+        ],
+        "primary_world_links": [
+          "location_memory",
+          "erasure_trace",
+          "Thirteen_Tolls",
+          "Root_Masks",
+          "grave_state",
+          "witness_chains"
+        ],
+        "example_actions": [
+          "read_erased_name",
+          "find_hidden_route",
+          "listen_to_blank_grave",
+          "repair_name_edge",
+          "decode_ledger",
+          "identify_false_witness"
+        ]
+      },
+      {
+        "id": "combat",
+        "skills": [
+          "weapon_use",
+          "parry",
+          "ambush",
+          "group_fighting",
+          "survival",
+          "shielding",
+          "resonance_combat",
+          "root_mask_control"
+        ],
+        "primary_world_links": [
+          "physics_combat",
+          "root_masks",
+          "sound",
+          "terrain",
+          "diplomacy_liability",
+          "witness_generation"
+        ],
+        "example_actions": [
+          "parry_attack",
+          "ambush",
+          "shield_ally",
+          "fight_in_group",
+          "use_root_mask",
+          "cancel_execution"
+        ]
+      }
+    ],
+    "shared_governance_mapping": {
+      "CentralThird": {
+        "world_use": "Threshold: whether a material/world event happens.",
+        "character_use": "Skill gate: too easy gives little/no XP, sweet spot gives gain, too hard gives failure-learning or none.",
+        "progression_rule": {
+          "too_easy": "primary_xp = 0 or 1",
+          "sweet_spot": "primary_xp scales with difficulty and action intensity",
+          "too_hard": "primary_xp = 0, optional discovery/failure flag"
+        }
+      },
+      "SuperiorDexter": {
+        "world_use": "Authority order for competing world consequences.",
+        "character_use": "Credit arbitration when one action touches multiple skills.",
+        "progression_rule": "Highest authority skill receives primary XP; eligible secondary skill receives secondary XP if inside Central-Third."
+      },
+      "TasDeCharge": {
+        "world_use": "Three or more source convergence becomes apex consequence.",
+        "character_use": "Three or more skills converge into mastery proc, rare discovery, or quality jump.",
+        "examples": [
+          "smithing + mining + fire_tending = masterwork blade",
+          "diplomacy + law + witness = binding contract",
+          "building + water_reading + root_pressure_reading = stable floodgate",
+          "fishing + season_lore + water_memory = rare catch"
+        ]
+      },
+      "ConstraintDAG": {
+        "world_use": "Caps chain reactions.",
+        "character_use": "Caps recursive unlock chains per action.",
+        "rule": "One action may cause XP, discovery, title, and root shift, but recursive unlock expansion must stop within max depth."
+      },
+      "ChaosPerturbation": {
+        "world_use": "Controlled threshold shift for unpredictable events.",
+        "character_use": "Rare lucky catch, secret discovery, mastery proc, or unusual dialogue opening.",
+        "rule": "Chaos changes near-boundary outcomes only; it does not replace curves."
+      },
+      "PrimitivePriors": {
+        "world_use": "Safe fallback for low-confidence material/world interactions.",
+        "character_use": "Safe fallback for unclassified actions or new skills.",
+        "rule": "If router/table cannot classify, award conservative XP/fatigue only; no major unlock."
+      },
+      "ThirteenTollsContext": {
+        "world_use": "Season, moon, tide, crafting window, and celestial seed.",
+        "character_use": "Progression modifier for domain-relevant timing.",
+        "examples": [
+          "fishing stronger during Flood season",
+          "secret reading stronger in Ash/deep dark",
+          "crafting bonus during conjunction",
+          "root tending altered by hidden toll"
+        ]
+      },
+      "RootFluxContext": {
+        "world_use": "Volatility and consequence predictability.",
+        "character_use": "Discovery, root harmony, skill drift, and local WCE behavior around player.",
+        "rule": "Character build can locally alter how predictable the world is near the player."
+      }
+    },
+    "skill_credit_arbitration": {
+      "system": "skill_credit_arbitration",
+      "uses": "Superior-Dexter",
+      "rule": "When one action maps to multiple skills, credit goes to the skill with highest authority while secondary XP may be awarded if Central-Third conditions are met.",
+      "authority_inputs": [
+        "action_intensity",
+        "target_difficulty",
+        "current_skill_gap",
+        "tool_quality",
+        "worldstate_relevance",
+        "social_context",
+        "root_harmony",
+        "craft_provenance",
+        "witness_context",
+        "faction_relevance"
+      ],
+      "example": {
+        "action": "build_floodgate_from_riverstone_during_high_water",
+        "candidate_skills": [
+          "building",
+          "masonry",
+          "water_reading",
+          "diplomacy",
+          "root_tending",
+          "crafting"
+        ],
+        "resolution": "Superior-Dexter picks primary credit; remaining eligible domains may receive secondary XP or discovery flags."
+      }
+    },
+    "streak_and_fatigue": {
+      "streak_rule": {
+        "0_10": "full XP",
+        "10_30": "XP × 0.7",
+        "30_60": "XP × 0.3",
+        "60_plus": "XP × 0.05"
+      },
+      "streak_resets": [
+        "perform_different_action",
+        "rest_at_campfire",
+        "enter_new_zone",
+        "social_interaction",
+        "mentor_training",
+        "significant_discovery",
+        "vowless_refusal"
+      ],
+      "fatigue_rule": "Fatigue suppresses XP, increases failure chance, and may alter dialogue or combat performance.",
+      "anti_grind_rule": "The optimal path should be deep engagement, not repeated identical inputs."
+    },
+    "discovery_outputs": [
+      "recipe_unlock",
+      "material_truth",
+      "water_memory_read",
+      "hidden_route",
+      "guildhall_plan",
+      "diplomatic_phrase",
+      "root_tell",
+      "seasonal_window",
+      "root_mask_node",
+      "vowless_escape",
+      "title",
+      "faction_secret",
+      "fishing_spot",
+      "hunting_pattern",
+      "terrain_socket_plan",
+      "market_leverage",
+      "name_repair_method",
+      "dialogue_road"
+    ],
+    "dialogue_progression": {
+      "query_source": "ProgressionQuery",
+      "skills": [
+        "diplomacy",
+        "law",
+        "witnessing",
+        "trade",
+        "grief_reading",
+        "secret_keeping",
+        "vowless_refusal",
+        "teaching",
+        "negotiation"
+      ],
+      "world_inputs": [
+        "faction_reputation",
+        "witness_ledger",
+        "recent_damage_liability",
+        "guildhall_status",
+        "root_trust_q",
+        "known_secrets",
+        "current_toll",
+        "water_rights",
+        "market_disruption",
+        "public_fear_q"
+      ],
+      "outputs": [
+        "reputation_delta",
+        "dialogue_road_unlock",
+        "contract_offer",
+        "grievance_reduction",
+        "war_pressure",
+        "faction_clock_advance",
+        "secret_found",
+        "title_earned",
+        "liability_reassigned",
+        "civic_project_opened"
+      ]
+    },
+    "root_harmony": {
+      "range": [
+        0,
+        255
+      ],
+      "bands": {
+        "0_50": {
+          "id": "neutral",
+          "description": "Normal progression and normal world response."
+        },
+        "51_100": {
+          "id": "harmonious",
+          "description": "Nature skills boosted; natural materials and ecology discoveries improve; corrupted zones resist the player."
+        },
+        "101_150": {
+          "id": "discordant",
+          "description": "Destruction, mining, combat, and building pressure skills improve; natural zones provide less XP."
+        },
+        "151_200": {
+          "id": "deep_harmony",
+          "description": "Can hear root network; secret locations and rare plants become visible; corruption causes psychic cost."
+        },
+        "201_255": {
+          "id": "deep_discord",
+          "description": "Can temporarily command root pressure; natural creatures become hostile; root surges may target the player."
+        }
+      },
+      "affects_player": [
+        "skill_gain",
+        "discovery_rate",
+        "root_tell_visibility",
+        "natural_creature_response",
+        "crafting_affinity",
+        "secret_access",
+        "fatigue_cost",
+        "rare_event_window"
+      ],
+      "affects_world": [
+        "local_root_pressure",
+        "chaos_perturbation",
+        "reaction_predictability",
+        "root_surge_targeting",
+        "plant_growth_behavior",
+        "fauna_ai",
+        "water_memory_response",
+        "root_mask_shadow_pressure"
+      ],
+      "rule": "Character build changes how WCE behaves near the player."
+    },
+    "root_mask_progression_diff": {
+      "system": "root_masks",
+      "before": "Root-Masks have masculine, feminine, shadow, and vowless branches.",
+      "after": "Root-Masks have masculine, feminine, shadow, and vowless attractor fields. Player behavior moves them through the field; nodes unlock when skill, worldstate, and root-harmony thresholds align.",
+      "impact": [
+        "No hard class lock.",
+        "No respec required.",
+        "Progression emerges from repeated world interaction.",
+        "Shadow increases through compulsion, not selection.",
+        "Vowless increases through refusal, restraint, cancelled escalation, and chosen non-participation.",
+        "Masculine/feminine polarities act as attractors, not mutually exclusive tracks."
+      ],
+      "attractor_fields": {
+        "masculine": "assertion/cut/pursuit/exposure/command actions",
+        "feminine": "containment/binding/memory/concealment/preservation actions",
+        "shadow": "compulsive repetition, false witness, identity-cost shortcuts, root feeding",
+        "vowless": "refusal, restraint, cancellation, accepting loss to prevent corruption"
+      }
+    },
+    "router_policy": {
+      "allowed": [
+        "static_baked_progression_router",
+        "deterministic_lookup_tables",
+        "primitive_progression_priors",
+        "authored_skill_curves"
+      ],
+      "forbidden": [
+        "runtime_retraining",
+        "unbounded_random_xp",
+        "hidden_non_deterministic_skill_rolls",
+        "xp_without_context",
+        "hard_talent_class_lock"
+      ],
+      "fallback": {
+        "name": "PrimitiveProgressionPrior",
+        "rule": "If an action cannot be classified, apply conservative fatigue and optional tiny XP only; no major discovery or title."
+      }
+    },
+    "integration_points": {
+      "world_consequence_engine": [
+        "world events can emit ProgressionQuery when player meaningfully participates",
+        "GrowthDescriptor can emit small WCE context changes via root_shift or worldstate_unlock"
+      ],
+      "diplomacy": [
+        "dialogue and witnessed actions produce social progression",
+        "GrowthDescriptor reputation_delta is interpreted by Witness-Liability Ledger"
+      ],
+      "crafting": [
+        "craft attempts emit ProgressionQuery",
+        "masterwork convergence can produce discovery_id and mastery_proc"
+      ],
+      "voxel_building": [
+        "building placement, repair, brace, socketing, and civic works emit build-domain ProgressionQuery"
+      ],
+      "waterflow": [
+        "fishing, river reading, damming, floodgate work, irrigation, and water rights emit gather/build/social/root progression"
+      ],
+      "root_masks": [
+        "root-mask use updates attractor fields and shadow/vowless pressures"
+      ],
+      "thirteen_tolls": [
+        "celestial field modifies skill windows, rare events, and discoveries"
+      ]
+    },
+    "repo_ingestion_checks": [
+      "ProgressionQuery must be exactly 16 bytes.",
+      "GrowthDescriptor must be exactly 8 bytes.",
+      "Every XP award must cite a domain and action_tag.",
+      "Every major discovery must have discovery_id and source context.",
+      "Every multi-skill action must pass skill_credit_arbitration.",
+      "Every repeated-action loop must update streak.",
+      "Every fatigue-causing action must update fatigue or explicitly opt out.",
+      "Root Harmony changes must be signed and auditable.",
+      "Dialogue progression must go through ProgressionQuery, not bespoke branch-only XP.",
+      "Root-Mask unlocks must use attractor fields, not hard class selection.",
+      "No runtime retraining.",
+      "PrimitiveProgressionPrior required for unknown actions."
+    ],
+    "suggested_rust_types": {
+      "ProgressionQuery": "repr(C, align(16)) struct with 16 u8 fields",
+      "GrowthDescriptor": "repr(C, align(8)) struct with primary_xp:u8, secondary_xp:u8, discovery_id:u8, reputation_delta:i8, fatigue_cost:u8, rare_event:u8, root_shift:i8, flags:u8",
+      "SkillDomain": [
+        "Gather",
+        "Craft",
+        "Build",
+        "Social",
+        "Root",
+        "Secret",
+        "Combat"
+      ],
+      "ActionTag": [
+        "Fish",
+        "Hunt",
+        "Forage",
+        "Mine",
+        "Craft",
+        "Build",
+        "Speak",
+        "Trade",
+        "Witness",
+        "TendRoot",
+        "Discover",
+        "Fight",
+        "Repair",
+        "Teach",
+        "Refuse"
+      ]
+    },
+    "implementation_priority": [
+      {
+        "phase": 1,
+        "name": "Core Character Consequence Types",
+        "deliverables": [
+          "ProgressionQuery",
+          "GrowthDescriptor",
+          "SkillDomain",
+          "ActionTag",
+          "alignment/size tests"
+        ]
+      },
+      {
+        "phase": 2,
+        "name": "Skill Curves and Central-Third Gate",
+        "deliverables": [
+          "SkillCurve",
+          "difficulty sweet spot",
+          "XP scaling",
+          "too_easy/too_hard handling"
+        ]
+      },
+      {
+        "phase": 3,
+        "name": "Credit Arbitration",
+        "deliverables": [
+          "Superior-Dexter skill resolver",
+          "primary/secondary XP",
+          "multi-domain action tests"
+        ]
+      },
+      {
+        "phase": 4,
+        "name": "Streak/Fatigue/Anti-Grind",
+        "deliverables": [
+          "streak state",
+          "fatigue state",
+          "reset triggers",
+          "XP suppression"
+        ]
+      },
+      {
+        "phase": 5,
+        "name": "Discovery and Dialogue Integration",
+        "deliverables": [
+          "discovery_id table",
+          "dialogue_road_unlock",
+          "reputation_delta",
+          "secret_found"
+        ]
+      },
+      {
+        "phase": 6,
+        "name": "Root Harmony and Root-Mask Attractor Fields",
+        "deliverables": [
+          "root_harmony bands",
+          "world/local WCE effects",
+          "root-mask attractor deltas",
+          "shadow/vowless progression"
+        ]
+      }
+    ],
+    "mvp_examples": [
+      {
+        "scenario": "Fishing in hard river under Flood Toll with mentor nearby",
+        "query_effect": "gather/fishing sweet spot, celestial bonus, mentor bonus",
+        "expected_growth": [
+          "primary_xp > baseline",
+          "mentor_bonus flag",
+          "possible discovery_id for fishing spot or water memory"
+        ]
+      },
+      {
+        "scenario": "Build floodgate during high water using crafted stone",
+        "query_effect": "build + water_reading + crafting convergence",
+        "expected_growth": [
+          "primary build XP",
+          "secondary water_reading or crafting XP",
+          "possible mastery_proc",
+          "possible diplomacy reputation_delta if public benefit"
+        ]
+      },
+      {
+        "scenario": "Refuse execution while Red-Leap active",
+        "query_effect": "combat/root_mask/vowless attractor",
+        "expected_growth": [
+          "vowless attractor increase",
+          "shadow pressure reduction",
+          "possible reputation or dialogue change"
+        ]
+      },
+      {
+        "scenario": "Negotiate liability after accidental flood",
+        "query_effect": "social/law/witness/diplomacy progression",
+        "expected_growth": [
+          "social XP",
+          "reputation_delta",
+          "dialogue_road_unlock",
+          "grievance reduction"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+#vixi:shaderbind v1
+surface: terminal
+profile: glass
+
+# Routes the sand→glass entrance opacity into the terminal glass channel.
+# glass_opacity_pmy (0..10000) is produced by VoxelFontAnimator each tick;
+# the render loop writes it to CanvasUniforms.glass_opacity_q directly.
+# This file is the declarative SoT for the signal intent (authoring contract).
+
+signal glass_entrance source=world.authority_q range=0..10000
+
+terminal.channel[0] <- glass_entrance

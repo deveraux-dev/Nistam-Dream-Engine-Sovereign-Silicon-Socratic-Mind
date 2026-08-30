@@ -1,0 +1,74 @@
+#vixi:kit v1
+surface: studio
+profile: forge_smithy
+classification: creative_tool_workspace
+
+# ── Studio shell — Smithy register (anchor: 2026-05-26) ──────────────────────
+# Three-tier vertical stack: window_bar (top, 28mu), sub_bar (below, 22mu),
+# content (fill), status_bar (bottom, 20mu, journal voice).
+# Mystery affordances ride on standard widget kinds via name= / attribute hints.
+
+slot root kind=region layout=stack_v bind=density.comfy
+
+# Window bar — 4 top-level windows: CREATE | DJ | PLAY | SHIP.
+# Active-state convention: baseline accent (bottom edge) + idle_pulse glow on the
+# active button only. NEVER fill the active button with accent_primary.
+slot root.window_bar kind=region layout=stack_h bind=palette.bg_near curve=chrome.curvature thick=chrome.thickness color=palette.bg_near name=window_bar
+slot root.window_bar.button kind=slot_list of=widget.button max=4
+slot root.window_bar.idle_pulse kind=brush bus_in=none
+slot root.window_bar.sigil_corner kind=widget name=sigil_corner
+
+# Sub-bar — per-window sub-panels. Render below window_bar.
+# Tab semantics: active = bronze baseline accent + bone text, inactive = ash-warm
+# bg + muted leather text, hover = subtle elevation lift, never fill-invert.
+slot root.sub_bar kind=region layout=stack_h bind=palette.bg_near curve=chrome.curvature thick=chrome.thickness color=palette.bg_near
+slot root.sub_bar.tab kind=slot_list of=widget.tab max=12
+
+# Main content area — hosts the active panel. Canvas-bearing panels render here.
+# Editor Surface Clarity hard rule: NO chrome texture/grain bleeds into this region.
+slot root.viewport kind=region layout=overlay role=canvas priority=primary
+
+# Right dock — context properties / inspector. Collapsible.
+# Material = Parchment (workshop register, log/journal surface).
+slot root.properties kind=region layout=stack_v role=context_properties collapsible=true bind=palette.bg_near
+
+# Asset browser — Academy/Library surface. Searchable grid.
+# Material = Wood (resting workbench surface, holds tools).
+slot root.asset_browser kind=region layout=grid role=asset_grid searchable=true bind=palette.bg_near
+
+# Timeline — animation/sequencer surface. Optional per-window.
+slot root.timeline kind=region layout=stack_v role=animation_timeline optional=true
+
+# Status bar — journal-voice bottom strip. Small caps, italic, muted leather.
+# Replaces ad-hoc per-panel status with one canonical row. Material = Parchment.
+slot root.status_bar kind=region layout=stack_h bind=palette.bg_near thick=chrome.thickness color=palette.bg_near name=status_bar
+slot root.status_bar.message kind=text ramp=type.ramp[0] color=palette.fg_muted
+slot root.status_bar.heartbeat kind=brush bus_in=none
+
+# Debug overlay — telemetry surface, hover-reveal only (long-press to pin).
+slot root.debug_overlay kind=region layout=overlay role=telemetry_overlay optional=true hover_reveal=true
+
+# Command palette — discoverable but not pinned. Hidden until summoned.
+slot root.command_palette kind=region layout=stack_v role=command_palette optional=true hover_reveal=false long_press_drawer=true
+
+# ── Gates ───────────────────────────────────────────────────────────────────────
+gate contrast_min = 4.5
+gate hit_target_min = mu(44)
+gate runtime_parse = forbidden
+gate alloc_steady = forbidden
+gate float_in_ir = forbidden
+
+# Kit-dialect gates (template_grammar.md §rules)
+gate slot_position_locked = required
+gate widget_inventory_resolved = required
+gate brush_declaration_resolved = required
+
+# Studio-shell discipline (Editor Surface Clarity, CLAUDE.md 2026-05-24)
+gate canvas_truth_priority = required
+gate controls_read_at_rest = required
+gate icon_recognition_before_style = required
+gate shared_widget_change_approved = required
+
+# Smithy register (forge_smithy.vibe.vixi inheritance)
+gate active_state_fill_invert = forbidden
+gate audio_chrome_modulation = scoped_to_dj

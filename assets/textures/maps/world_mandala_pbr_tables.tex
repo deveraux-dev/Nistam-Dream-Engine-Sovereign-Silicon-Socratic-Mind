@@ -1,0 +1,70 @@
+% 13FORGE V3 — WORLD MANDALA MATERIAL & PBR SPECIFICATION (PaTeX / LaTeX)
+% Authoritative 13-Zone x 5-Stratum PBR Mapping Table
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{booktabs}
+\usepackage{geometry}
+\geometry{a4paper, landscape, margin=1.5cm}
+
+\title{\textbf{13Forge v3: 13-Zone World Mandala PBR Material Registry}}
+\author{13Forge Master of Works}
+\date{August 21, 2026}
+
+\begin{document}
+\maketitle
+
+\section*{Mandala Zone to PBR Material Allocation}
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{@{}lllllll@{}}
+\toprule
+\textbf{Zone ID} & \textbf{Name} & \textbf{Element} & \textbf{Clock Pos.} & \textbf{Stratum} & \textbf{Mat ID} & \textbf{Primary Material / PBR Family} \\
+\midrule
+\textbf{Z0} & Thornhaven Core & Aether & Center & S0 (Base) & 100 & \texttt{pbr/stone/cobble/PavingStones146} \\
+            &                 &        &        & S1 (Ancient) & 101 & \texttt{zones/thornhaven\_market\_ancient} \\
+            &                 &        &        & S2 (Decay)   & 102 & \texttt{zones/thornhaven\_courtyard\_decay} \\
+            &                 &        &        & S3 (Golden)  & 103 & \texttt{zones/thornhaven\_courtyard\_golden} \\
+            &                 &        &        & S4 (Void)    & 104 & \texttt{zones/thornhaven\_gate\_void} \\
+\midrule
+\textbf{P1} & Aries           & Fire   & 1 o'clock & S0 (Base) & 110 & \texttt{pbr/special/lava/Lava004} (Emission + Normal) \\
+            &                 &        &           & S4 (Void) & 114 & \texttt{pbr/special/void/Road012B} (Basalt Void) \\
+\midrule
+\textbf{P2} & Taurus          & Earth  & 2 o'clock & S0 (Base) & 120 & \texttt{pbr/wood/planks/WoodFloor071} \\
+            &                 &        &           & S1 (Ancient) & 121 & \texttt{materials/raw\_earth\_ancient} \\
+\midrule
+\textbf{P3} & Gemini          & Air    & 3 o'clock & S0 (Base) & 130 & \texttt{pbr/stone/wall/Rock051} \\
+            &                 &        &           & S3 (Golden)  & 133 & \texttt{banners/ironmoor\_trade\_banner\_golden} \\
+\midrule
+\textbf{P4} & Cancer          & Water  & 4 o'clock & S0 (Base) & 140 & \texttt{pbr/water/wet/Ground050} \\
+            &                 &        &           & S4 (Void) & 144 & \texttt{pbr/special/crystal/Onyx006} \\
+\midrule
+\textbf{P5} & Leo             & Fire   & 5 o'clock & S0 (Base) & 150 & \texttt{pbr/ground/sand/Ground093C} \\
+            &                 &        &           & S2 (Decay)   & 152 & \texttt{pbr/metal/corroded/Metal061C} \\
+\midrule
+\textbf{P6} & Virgo           & Earth  & 6 o'clock & S0 (Base) & 160 & \texttt{pbr/stone/floor/Concrete048} \\
+            &                 &        &           & S3 (Golden)  & 163 & \texttt{pbr/metal/gold/Metal048C} \\
+\midrule
+\textbf{P7} & Libra           & Air    & 7 o'clock & S0 (Base) & 170 & \texttt{pbr/ground/grass/Ground037} \\
+            &                 &        &           & S1 (Ancient) & 171 & \texttt{pbr/special/plaster/Plaster001} \\
+\midrule
+\textbf{P8} & Scorpio         & Water  & 8 o'clock & S0 (Base) & 180 & \texttt{pbr/water/wet/Asphalt025C} \\
+            &                 &        &           & S4 (Void) & 184 & \texttt{pbr/special/void/Concrete033} \\
+\midrule
+\textbf{P9} & Sagittarius     & Fire   & 9 o'clock & S0 (Base) & 190 & \texttt{pbr/brick/red/Bricks100} \\
+            &                 &        &           & S1 (Ancient) & 191 & \texttt{pbr/stone/rock/Rock035} \\
+\midrule
+\textbf{P10} & Capricorn      & Earth  & 10 o'clock & S0 (Base) & 200 & \texttt{pbr/ground/snow/Snow013} \\
+             &                &        &            & S1 (Ancient) & 201 & \texttt{pbr/ground/dirt/Ground080} \\
+\midrule
+\textbf{P11} & Aquarius       & Air    & 11 o'clock & S0 (Base) & 210 & \texttt{pbr/ground/snow/Snow014} \\
+             &                &        &            & S4 (Void)    & 214 & \texttt{pbr/special/crystal/Onyx006} \\
+\midrule
+\textbf{P12} & Pisces         & Water  & 12 o'clock & S0 (Base) & 220 & \texttt{pbr/ground/sand/Ground093C} \\
+             &                &        &            & S3 (Golden)  & 223 & \texttt{pbr/stone/floor/Tiles081} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\end{document}

@@ -1,0 +1,26 @@
+#vixi:shaderbind v1
+surface: swarm_ambient
+profile: ambient
+
+# Command Hub living-swarm ambient bus -> shader channels (integer Permyriad 0..10000).
+# Sources are the SAME VibeMod fields forge_harmonics::swarm_ambience::apply_swarm_ambient
+# already folds into SemanticMixerState (swarm_ambience.rs:18-21):
+#   rms -> crowd_q · low -> root_q · mid -> warmth_q · hi -> bell_weight_q.
+#
+# Re-authored to the v1 grammar 2026-07-28 (was the old `surface X profile Y` /
+# `signal <src> channel N` dialect, which could not parse). The old header claimed
+# global slots 20-23 to dodge bard_aura's 4/5/8/12/13/14 — that was the shared-channel
+# era. v1 channels are PER SURFACE and must be contiguous from 0, so `swarm_ambient`
+# owns its own 0..3 array and collides with nothing.
+signal crowd source=audio.rms range=0..10000
+signal root source=audio.spectrum_low range=0..10000
+signal warmth source=audio.spectrum_mid range=0..10000
+signal bell source=audio.spectrum_high range=0..10000
+
+swarm_ambient.channel[0] <- crowd
+swarm_ambient.channel[1] <- root
+swarm_ambient.channel[2] <- warmth
+swarm_ambient.channel[3] <- bell
+
+gate shader_compile_hotpath = forbidden
+gate visual_only_mutates_authority = forbidden

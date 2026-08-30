@@ -1,0 +1,51 @@
+{
+  "quality_gates": {
+    "combat_gate": [
+      "hostile action has anticipation_ticks, active_ticks, recovery_ticks",
+      "active hitbox aligns with readable impact frame",
+      "critical threat has visual cue, not audio-only cue",
+      "camera distance preserves silhouette read"
+    ],
+    "scripted_scene_gate": [
+      "consequence has state_write_tick",
+      "cutscene post_state matches gameplay post_state",
+      "player control return tick is declared",
+      "dialogue/sound/camera do not replace ledger state"
+    ],
+    "bardic_gate": [
+      "action_phase is declared",
+      "vulnerability_state is declared",
+      "cancel_window is declared",
+      "sound sync agrees with motion phase",
+      "worldstate_effect is declared or explicitly none"
+    ],
+    "refusal_gate": [
+      "stillness is framed by active pressure",
+      "pose distinguishes refusal from idle/stun",
+      "refusal can create a valid outcome",
+      "silence is not treated as missing feedback"
+    ],
+    "shadow_gate": [
+      "motion cites player habit source",
+      "shadow remains recognizable as habit corruption",
+      "not generic enemy motion"
+    ],
+    "faction_gate": [
+      "motion_family declared",
+      "signal_family declared",
+      "world_function_hint declared",
+      "faction movement distinct from generic gothic staging"
+    ],
+    "dialogue_gesture_gate": [
+      "speaker_knowledge_bound declared",
+      "gesture obeys disclosure_level",
+      "gesture does not reveal impossible knowledge"
+    ],
+    "final_gate": [
+      "contract emits friction_points",
+      "contract emits validation_gates",
+      "contract emits proof_hash or hash inputs",
+      "motion does not infer mass/truth from movement alone"
+    ]
+  }
+}

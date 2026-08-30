@@ -1,0 +1,8 @@
+[package]
+name = "ironroot-signal"
+version = "0.1.0-alpha"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+description = "Deterministic signal-routed creation and ambience primitives for Ironroot/13Forge."
+
+[dependencies]

@@ -48,6 +48,7 @@ pub mod organs;
 pub mod palette;
 pub mod pentaract;
 pub mod pentaract_field;
+pub mod trit_bijection;
 pub mod poisson_disk;
 pub mod pose5d;
 /// Balanced-primality proof (`{0,1}` as the fixed point, Composite/Prime as the 2-orbit).
@@ -82,6 +83,13 @@ pub mod soul;
 /// Soliton-Phase Context Collapse — the interference kernel handed to `Field5D`.
 pub mod spcc;
 pub mod spine;
+/// Anti-Shannon Spectral — 32-channel concentration via pure quadratic form (SPATIAL_TEMPORAL_ISOMORPHISM.md:50-62).
+pub mod spectral;
+/// Dual-loop state machine with VestedTripleBuffer lock-free architecture.
+/// Decay → vesting → snapshot read → spectral → trit transition (no locks, O(1) swap).
+/// 6-primitive (3-duality) closed-loop system: energy flow, boundary, distribution axes.
+pub mod state_loop;
+pub use state_loop::TriDualityState;
 /// Sealed sprite-animation binary blob — the SoA/AoS boundary (ANIM-domain fold).
 pub mod sprite_blob;
 pub mod stack;
@@ -94,6 +102,7 @@ pub mod trit13;
 pub mod ump_word;
 /// Vixel automata cellular rules — fire, gravity, fluid flow, sand emergence/collapse.
 pub mod vixel_automata;
+pub mod vested_leaky;
 pub mod weighted_reservoir;
 
 pub use ability_scaling::{

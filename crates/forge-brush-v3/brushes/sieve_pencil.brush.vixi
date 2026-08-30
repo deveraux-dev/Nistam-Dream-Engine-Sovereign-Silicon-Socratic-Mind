@@ -1,0 +1,26 @@
+#vixi:brush v1
+surface: sieve_pencil
+
+# The Apprentice (Q) — the Voxel Painter.
+#
+# Base left-click. Flat 2D composition on the StructuralBox Front plane (Z=0):
+# block out world layout fast, like a pixel paint tool. Each stroke drops a
+# physical material block into the MATERIAL_REGISTRY and the MusicSieve accrues
+# that material's acoustic column — chunk mass · ring · attack — in O(1) per
+# voxel (no chunk scan, integer-only).
+#
+# Same immutable hotkey footprint, deeper tiers are sibling brush files:
+#   Shift+Drag  -> Journeyperson (Z-axis extrude / spatial-music)
+#   Right-Click -> Master        (raw logic / DSP routing / springs)
+
+brush sieve_pencil
+  tool     = SievePencil       # the Q hotkey
+  tier     = Apprentice        # base click: flat 2D composition
+  material = stone             # CE material group dropped per stroke
+  plane    = z0                # Apprentice locks the Front (Z=0) plane
+  feeds    = mass ring attack  # the AcousticRegistry columns this stroke drives
+  receives = bus_in            # audio snapshot modulates acoustic contribution
+
+gate float_in_ir  = forbidden
+gate alloc_steady = forbidden
+gate vibe_rms > 500            # suppress stroke when audio energy < 5% of max

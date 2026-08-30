@@ -1,0 +1,31 @@
+# T3 of the forge-vision drain (plan-2-welds.md tranche table, 2026-08-11):
+# the render-gate spine re-founded onto two exact words: RenderGate64 (the
+# 64-byte verdict word — embeds ColourTrit8, hence the one dependency) and
+# FrameHeader8 (the 8-byte frame descriptor). D1 exempt-hybrid ruling: raw
+# RGBA pixel bulk stays zero-copy binary BEHIND FrameHeader8; RenderGate64
+# signals the live lane; photographic raster is never re-encoded.
+[package]
+name = "forge-ocular-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+
+[dependencies]
+forge-colour-v3 = { path = "../forge-colour-v3" }
+forge-core-v3 = { path = "../forge-core-v3" }
+bytemuck = { version = "1", features = ["derive"] }
+sha2 = "0.10"
+wgpu = { version = "0.19", optional = true, features = ["spirv"] }
+pollster = { version = "0.3", optional = true }
+
+[dev-dependencies]
+naga = { version = "0.20", features = ["wgsl-in", "spv-out"] }
+hex = "0.4"
+
+[features]
+gpu-proof = ["dep:wgpu", "dep:pollster"]
+
+[lints]
+workspace = true

@@ -1,0 +1,29 @@
+#vixi:brush v1
+surface: hatch_fill
+
+# The Hatch brush — procedural cross-hatch FILL (not pixel-by-pixel shading).
+#
+# Authored as a sibling of the Q/W/E/R footprint but it is NOT a hotkey tool: it
+# is a procedural-FILL tool. A single authored data point — the `light` source —
+# sets a shade gradient across a boundary shape; the runtime fills the boundary
+# with cross-hatch LINES whose spacing tightens as the shade darkens (away from
+# the light), then crosses once dark enough. Integer-only, deterministic: the
+# same (boundary, light) always yields the same voxel set.
+#
+# `light` is one data point in voxel-cell coords (x y). The boundary rect is
+# supplied at paint time by the host (mirrors how the QWER tools receive voxels).
+
+brush hatch_fill
+  tool     = HatchBrush        # procedural-fill tool (non-QWER footprint)
+  tier     = Apprentice        # base: flat Z=0 composition
+  material = ash               # CE material group dropped per hatched cell
+  plane    = z0                # locks the Front (Z=0) plane
+  shape    = hatch             # procedural cross-hatch fill (vs Plain)
+  light    = 0 0               # THE light source: one data point, voxel-cell x y
+  feeds    = mass ring attack  # AcousticRegistry columns this fill drives
+  receives = bus_in            # audio snapshot modulates acoustic contribution
+
+gate float_in_ir  = forbidden
+gate alloc_steady = forbidden
+gate vibe_rms > 500            # suppress fill when audio energy < 5% of max
+end

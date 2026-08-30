@@ -1,0 +1,68 @@
+#vixi:shaderbind v1
+surface: dead_drop_daw
+profile: sound_studio
+
+# Audio-reactive signal channels for the Dead Drop synesthetic canvas.
+# Wires audio engine feeds to shader uniform slots (permyriad integer range).
+#
+# Channel allocation:
+#   0-5:   Broadband audio signals (RMS, beat, centroid, 3-band energy)
+#   6-7:   Per-deck RMS (VU meters + shader per-deck glow)
+#   8-9:   VibeMatrix feeds (ghost fire, beat pulse opacity)
+#   10-16: 7-band parametric spectrum (sub_bass → brilliance)
+#   17:    Crossfader position (visual A↔B blend in shader)
+#   18:    Sequencer step position (beat-synced grid highlight)
+#
+# Re-authored to the v1 grammar 2026-07-28 (was a 5-field `signal … channel=N …`
+# dialect that could not parse). The old `audio.bass_energy` / `mid_energy` /
+# `hi_energy` names re-point onto the three-band ladder that now exists in the closed
+# source set — `audio.spectrum_low` / `_mid` / `_high` — instead of three synonyms.
+signal rms source=audio.rms range=0..10000
+signal beat source=audio.beat_phase range=0..10000
+signal centroid source=audio.spectral_centroid range=0..10000
+signal bass source=audio.spectrum_low range=0..10000
+signal mid source=audio.spectrum_mid range=0..10000
+signal hi source=audio.spectrum_high range=0..10000
+signal deck_a source=audio.deck_a_rms range=0..10000
+signal deck_b source=audio.deck_b_rms range=0..10000
+signal ghost source=vibematrix.ghost_intensity range=0..10000
+signal pulse source=vibematrix.beat_phase range=0..10000
+
+# 7-band parametric spectrum (ISO 31 octave centers, permyriad energy per band)
+# Enables per-frequency visual reactivity in the synesthetic canvas brushes.
+signal band_sub_bass source=audio.spectrum_band_0 range=0..10000
+signal band_bass source=audio.spectrum_band_1 range=0..10000
+signal band_low_mid source=audio.spectrum_band_2 range=0..10000
+signal band_mid source=audio.spectrum_band_3 range=0..10000
+signal band_hi_mid source=audio.spectrum_band_4 range=0..10000
+signal band_presence source=audio.spectrum_band_5 range=0..10000
+signal band_brilliance source=audio.spectrum_band_6 range=0..10000
+
+# Mixer + sequencer state (visual blend effects)
+signal crossfader source=mixer.crossfader range=0..10000
+signal step source=seq.current_step range=0..10000
+
+dead_drop_daw.channel[0] <- rms
+dead_drop_daw.channel[1] <- beat
+dead_drop_daw.channel[2] <- centroid
+dead_drop_daw.channel[3] <- bass
+dead_drop_daw.channel[4] <- mid
+dead_drop_daw.channel[5] <- hi
+dead_drop_daw.channel[6] <- deck_a
+dead_drop_daw.channel[7] <- deck_b
+dead_drop_daw.channel[8] <- ghost
+dead_drop_daw.channel[9] <- pulse
+dead_drop_daw.channel[10] <- band_sub_bass
+dead_drop_daw.channel[11] <- band_bass
+dead_drop_daw.channel[12] <- band_low_mid
+dead_drop_daw.channel[13] <- band_mid
+dead_drop_daw.channel[14] <- band_hi_mid
+dead_drop_daw.channel[15] <- band_presence
+dead_drop_daw.channel[16] <- band_brilliance
+dead_drop_daw.channel[17] <- crossfader
+dead_drop_daw.channel[18] <- step
+
+# `visual_only_mutates_authority` is NOT declared: the DAW surface binds no
+# `world.authority_q` lane, and that gate is a claim an authority lane EXISTS to
+# protect (shaderbind_dsl.rs verify_gates). An empty stamp is worse than no stamp.
+gate shader_compile_hotpath = forbidden

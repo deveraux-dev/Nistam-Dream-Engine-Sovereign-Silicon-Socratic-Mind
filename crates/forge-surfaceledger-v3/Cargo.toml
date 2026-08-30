@@ -1,0 +1,8 @@
+[package]
+name = "forge-surfaceledger-v3"
+version = "0.3.0"
+edition = "2021"
+description = "SurfaceLedger — reversible sovereign asset grammar (packed deterministic image->mesh->SDF->GLB->motion round-trip ledger), ported verbatim from F:\\NewRepo\\crates\\forge-core\\src\\surfaceledger.rs. repr(C) + Pod + Zeroable types, integer/quantized canonical."
+
+[dependencies]
+bytemuck = { version = "1", features = ["derive"] }

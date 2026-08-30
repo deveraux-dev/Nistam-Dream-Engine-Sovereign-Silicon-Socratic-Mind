@@ -40,6 +40,43 @@ pub fn embed_prompt(prompt: &str) -> [i8; 512] {
     out
 }
 
+/// Embed a token-id query into a fixed [i8; 512] vector.
+///
+/// The token-space twin of [`embed_prompt`]: same FNV-1a seed accumulation and
+/// same M61 dimension reduction, folding each token's four little-endian bytes
+/// instead of the prompt's UTF-8 bytes. A token slice and the text it decodes
+/// to are NOT expected to embed alike — the two are separate entry points into
+/// the same geometry, not a round trip.
+///
+/// # Arguments
+/// * `tokens` - Token ids to embed
+///
+/// # Returns
+/// A 512-element vector derived deterministically from the token sequence.
+///
+/// # Determinism
+/// Pure function; no RNG, no heap allocation, no floats. Same input → same
+/// output, always.
+pub fn embed_tokens(tokens: &[u32]) -> [i8; 512] {
+    let mut seed: u64 = 0xcbf29ce484222325;
+    const FNV_PRIME: u64 = 0x100000001b3;
+
+    for token in tokens {
+        for byte in token.to_le_bytes() {
+            seed ^= byte as u64;
+            seed = seed.wrapping_mul(FNV_PRIME);
+        }
+    }
+
+    let mut out = [0i8; 512];
+    for d in 0..512 {
+        let mix = forge_core_v3::reduce_m61(seed ^ (d as u64 + 1).wrapping_mul(0x9E3779B97F4A7C15));
+        out[d] = (mix & 0xFF) as u8 as i8;
+    }
+
+    out
+}
+
 /// Map a crate name to a Modality specialist ID, if recognized.
 ///
 /// Returns `Some(id)` where id ∈ [0, 7) for known specialist domains,

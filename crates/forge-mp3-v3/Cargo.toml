@@ -1,0 +1,14 @@
+# mp3_sovereign — MPEG-1 Layer III bitstream reader (Stage 1: header + side-info
+# only, no PCM decode yet), ported from
+# F:\NewRepo\crates\forge-audio\src\mp3_sovereign.rs (2026-08-15) —
+# source-compiler ladder Owner: forge_audio::mp3_sovereign. Zero deps, matching
+# the donor's own Stage 1 scope.
+[package]
+name = "forge-mp3-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[lints]
+workspace = true

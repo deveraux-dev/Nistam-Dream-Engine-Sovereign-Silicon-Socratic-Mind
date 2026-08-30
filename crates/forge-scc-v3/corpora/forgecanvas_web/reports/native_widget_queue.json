@@ -1,0 +1,30 @@
+{
+  "items": [
+    {
+      "classification": "native_missing_widget",
+      "id": "kit.message_thread",
+      "recommendation": "",
+      "source": "forgecanvas_web.MessageThread"
+    },
+    {
+      "classification": "native_missing_widget",
+      "id": "kit.event_feed",
+      "recommendation": "",
+      "source": "forgecanvas_web.EventFeed"
+    },
+    {
+      "classification": "native_missing_widget",
+      "id": "kit.batch_queue",
+      "recommendation": "",
+      "source": "forgecanvas_web.BatchSubmitQueue"
+    },
+    {
+      "classification": "native_missing_widget",
+      "id": "kit.kanban_board",
+      "recommendation": "",
+      "source": "forgecanvas_web.KanbanBoard"
+    }
+  ],
+  "queue": "native_widget_queue",
+  "version": "0.1.0"
+}

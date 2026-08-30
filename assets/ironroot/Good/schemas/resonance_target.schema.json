@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Resonance Target",
+  "type": "object",
+  "properties": {
+    "target_id": { "type": "string" },
+    "target_kind": { "type": "string" },
+    "native_signature": { "type": "object" },
+    "material_profile": { "type": "object" },
+    "faction_brands": { "type": "array", "items": { "type": "string" } },
+    "resistance": { "type": "number" },
+    "current_state": { "type": "string" },
+    "accepted_intervals": { "type": "array", "items": { "type": "string" } },
+    "forbidden_intervals": { "type": "array", "items": { "type": "string" } },
+    "fracture_threshold": { "type": ["number", "null"] },
+    "conversion_threshold": { "type": ["number", "null"] },
+    "memory_threshold": { "type": ["number", "null"] }
+  },
+  "required": ["target_id", "target_kind", "native_signature", "material_profile", "resistance", "current_state"]
+}

@@ -1,0 +1,23 @@
+# forge-ml-v3 — Sovereign MoE training engine, ported from
+# F:\NewRepo\crates\forge-ml\src\{moe_train.rs,gpu_train.rs} (2026-08-26).
+# Scope cut (C09 aperture): v2's GPU dispatch lane (wgpu/cudarc, the whole
+# rest of the v2 forge-ml crate's dependency tree) is NOT ported. gpu_train.rs
+# is ported as its own always-CPU-fallback configuration -- has_gpu() always
+# false, matmul() always routes to cpu_matmul(). moe_train.rs is unchanged:
+# it already calls through gpu_train's has_gpu()/matmul() boundary and never
+# references a GPU feature directly, so the CPU-only path is not a rewrite,
+# it is the same fallback v2 already exercises on a machine with no device.
+# If a GPU lane is wanted later, wire wgpu behind gpu_train's existing
+# boundary; moe_train.rs's call sites do not change.
+[package]
+name = "forge-ml-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "Sovereign MoE training engine — manual backprop, Adam, integer-exact gradient accumulation, CPU-only by scope cut"
+
+[dependencies]
+
+[lints]
+workspace = true

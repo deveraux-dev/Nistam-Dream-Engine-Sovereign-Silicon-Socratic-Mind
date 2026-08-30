@@ -1,0 +1,20 @@
+[package]
+name = "forge-geo-v3"
+version = "0.3.0"
+edition = "2021"
+description = "forge-geo's rigging wing — the 20-bone Mobometric armature pipeline (MilliUnit/Permyriad end-to-end, f32 only at the GLB export boundary), ported verbatim from F:\\NewRepo\\crates\\forge-geo. Excludes the quarantined 3D mesh core (primitives/builder/sdf/csg) per BLUEPRINT-SUBSTRATE-CENSUS-2026-08-11.md — ForgeMesh here is the plain data container the rigging math consumes, not that generator machinery."
+
+[dependencies]
+forge-core-v3 = { path = "../forge-core-v3" }
+# auto_rig.rs pose rotation — the donor rolled its own sin/cos and fell back to
+# f64 by its own admission ("For now: use core float internally"). This is the
+# real table: deterministic, byte-identical on every CPU (L08).
+pp_math = { package = "pp-math-v3", path = "../pp-math-v3" }
+forge-physics-v3 = { path = "../forge-physics-v3" }
+forge-surfaceledger-v3 = { path = "../forge-surfaceledger-v3" }
+glam = "0.29"
+bytemuck = { version = "1", features = ["derive"] }
+rayon = "1"
+
+[dev-dependencies]
+proptest = "1"

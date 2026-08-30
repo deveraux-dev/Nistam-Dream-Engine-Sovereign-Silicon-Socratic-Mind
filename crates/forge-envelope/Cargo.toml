@@ -2,7 +2,7 @@
 name = "forge-envelope"
 version = "0.1.0"
 edition = "2021"
-license = "MIT"
+license = "MIT OR Apache-2.0"
 description = "Tick-bounded ephemeral buffer sealing with cryptographic zeroization and hash-before-drop evidence chains."
 repository = "https://github.com/deveraux-dev/forge-envelope"
 keywords = ["zeroize", "ephemeral", "deterministic", "tick", "evidence"]

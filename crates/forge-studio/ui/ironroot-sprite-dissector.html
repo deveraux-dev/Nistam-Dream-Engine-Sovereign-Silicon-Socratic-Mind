@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>IRONROOT — Sprite Dissector</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #0a0a0e; color: #c6beb0; font-family: 'IBM Plex Mono', monospace; display: flex; height: 100vh; }
+.sidebar { width: 280px; background: #111115; border-right: 1px solid #222; padding: 12px; overflow-y: auto; flex-shrink: 0; }
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+.canvases { flex: 1; display: flex; gap: 1px; background: #222; padding: 1px; overflow: auto; }
+.canvas-wrap { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; background: #0a0a0e; padding: 8px; }
+.canvas-wrap h3 { font-size: 9px; color: #4a9; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+canvas { image-rendering: pixelated; border: 1px solid #222; cursor: crosshair; }
+.controls { padding: 8px 12px; background: #111; border-top: 1px solid #222; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+h2 { font-size: 10px; color: #4a9; text-transform: uppercase; letter-spacing: 2px; margin: 12px 0 6px; }
+.slider-row { display: flex; align-items: center; gap: 6px; margin: 4px 0; }
+.slider-row label { font-size: 9px; color: #888; width: 80px; }
+.slider-row input[type=range] { flex: 1; accent-color: #4a9; }
+.slider-row .val { font-size: 9px; color: #4a9; font-weight: 700; width: 36px; text-align: right; }
+.chk { display: flex; align-items: center; gap: 6px; font-size: 9px; color: #888; cursor: pointer; margin: 3px 0; }
+.chk input { accent-color: #4a9; }
+.info { font-size: 8px; color: #555; padding: 6px; background: #0a0a0e; border: 1px solid #1a1a1f; border-radius: 3px; margin: 6px 0; }
+.pixel-info { font-size: 9px; color: #aaa; padding: 8px; background: #0e0e12; border: 1px solid #222; border-radius: 3px; margin: 8px 0; }
+.swatch { display: inline-block; width: 14px; height: 14px; border: 1px solid #333; vertical-align: middle; margin-right: 4px; }
+.layer-btn { font-size: 9px; padding: 4px 8px; border: 1px solid #333; background: #1a1a1f; color: #888; cursor: pointer; border-radius: 3px; font-family: inherit; }
+.layer-btn.active { border-color: #4a9; color: #4a9; background: #1a2a1f; }
+.stats { font-size: 8px; color: #666; margin: 4px 0; }
+.palette-strip { display: flex; flex-wrap: wrap; gap: 1px; margin: 6px 0; }
+.palette-strip .swatch { width: 12px; height: 12px; cursor: pointer; }
+.palette-strip .swatch:hover { outline: 1px solid #4a9; }
+#log { font-size: 8px; color: #555; max-height: 100px; overflow-y: auto; padding: 4px; background: #0a0a0e; border: 1px solid #1a1a1f; border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div style="font-size: 12px; color: #4a9; font-weight: 700; letter-spacing: 2px; margin-bottom: 8px;">SPRITE DISSECTOR</div>
+  <div class="info">Load a sprite. Strip it layer by layer. Learn the rules. Each layer = a material mask the generator will replicate.</div>
+
+  <h2>Source Sprite</h2>
+  <input type="file" id="fileInput" accept=".png,.jpg,.jpeg" style="font-size:9px;color:#888;width:100%">
+  <div id="spriteInfo" class="stats"></div>
+
+  <h2>Luminance Layers</h2>
+  <div class="info">Slice by brightness. Each slice = a layer the algorithm generates independently.</div>
+
+  <div class="slider-row">
+    <label>Slices</label>
+    <input type="range" id="sliceCount" min="3" max="12" value="5">
+    <span class="val" id="sliceCountVal">5</span>
+  </div>
+
+  <div id="layerButtons"></div>
+
+  <h2>Active Layer View</h2>
+  <div id="layerInfo" class="stats"></div>
+
+  <h2>Hover Pixel</h2>
+  <div id="pixelInfo" class="pixel-info">Hover over the sprite</div>
+
+  <h2>Layer Palette</h2>
+  <div id="layerPalette" class="palette-strip"></div>
+
+  <h2>Nearest 2DAK Color</h2>
+  <div id="nearestInfo" class="pixel-info">—</div>
+
+  <h2>Extracted Rules</h2>
+  <div id="rules" class="info" style="min-height:60px">Load a sprite to begin analysis</div>
+
+  <h2>Atlas Export</h2>
+  <button class="layer-btn" id="exportBtn" style="width:100%;margin:4px 0">Export Atlas JSON</button>
+
+  <h2>Log</h2>
+  <div id="log"></div>
+</div>
+
+<div class="main">
+  <div class="canvases">
+    <div class="canvas-wrap">
+      <h3>Original</h3>
+      <canvas id="originalCanvas" width="256" height="512"></canvas>
+    </div>
+    <div class="canvas-wrap">
+      <h3>Active Layer</h3>
+      <canvas id="layerCanvas" width="256" height="512"></canvas>
+    </div>
+    <div class="canvas-wrap">
+      <h3>Material Regions</h3>
+      <canvas id="regionCanvas" width="256" height="512"></canvas>
+    </div>
+    <div class="canvas-wrap">
+      <h3>Palette Mapped (64-color)</h3>
+      <canvas id="palettedCanvas" width="256" height="512"></canvas>
+    </div>
+  </div>
+  <div class="controls">
+    <label class="chk"><input type="checkbox" id="showOutline" checked> Outline</label>
+    <label class="chk"><input type="checkbox" id="showGrid"> Grid</label>
+    <label class="chk"><input type="checkbox" id="showJoints"> Joints</label>
+    <label class="chk"><input type="checkbox" id="showSymmetry"> Symmetry axis</label>
+    <span style="flex:1"></span>
+    <span style="font-size:8px;color:#333">Zoom:</span>
+    <input type="range" id="zoom" min="1" max="8" value="2" style="width:80px;accent-color:#4a9">
+    <span style="font-size:9px;color:#4a9;font-weight:700" id="zoomVal">2x</span>
+  </div>
+</div>
+
+<script>
+// ── 2DAK 64-Color Palette ────────────────────────────────────────────────
+const PALETTE = [
+  [23,13,9],[26,12,8],[32,10,5],[39,8,5],[29,13,7],[26,15,11],[28,15,9],[32,15,9],
+  [52,7,5],[30,17,12],[43,13,9],[33,19,13],[36,18,11],[35,21,15],[40,22,14],[37,24,18],
+  [53,18,13],[64,13,10],[40,24,18],[44,26,18],[41,28,22],[46,29,21],[46,31,25],[77,18,15],
+  [96,10,10],[51,32,24],[51,35,27],[55,38,30],[79,31,25],[59,42,33],[135,9,8],[66,44,34],
+  [62,46,38],[69,50,40],[69,53,45],[75,56,46],[104,47,40],[74,61,53],[82,63,51],[80,68,61],
+  [87,68,56],[92,74,62],[91,79,73],[100,81,67],[127,70,60],[104,87,76],[113,93,79],[108,97,91],
+  [120,102,87],[122,112,106],[130,111,95],[140,122,105],[135,127,121],[152,135,117],[145,138,132],[165,148,129],
+  [157,150,145],[177,162,142],[170,164,160],[189,176,155],[181,177,173],[198,190,176],[206,201,192],[216,214,208]
+];
+const PALETTE_HEX = PALETTE.map(([r,g,b]) => '#' + [r,g,b].map(v => v.toString(16).padStart(2,'0')).join(''));
+
+// ── State ────────────────────────────────────────────────────────────────
+let srcImage = null;
+let srcData = null;
+let srcW = 0, srcH = 0;
+let layers = [];
+let activeLayer = -1; // -1 = all
+let zoom = 2;
+
+const log = (msg) => {
+  const el = document.getElementById('log');
+  el.innerHTML += msg + '<br>';
+  el.scrollTop = el.scrollHeight;
+};
+
+// ── Luminance ────────────────────────────────────────────────────────────
+function luminance(r, g, b) {
+  return 0.299 * r + 0.587 * g + 0.114 * b;
+}
+
+function nearestPaletteColor(r, g, b) {
+  let best = 0, bestDist = Infinity;
+  for (let i = 0; i < PALETTE.length; i++) {
+    const [pr,pg,pb] = PALETTE[i];
+    const dr = r-pr, dg = g-pg, db = b-pb;
+    const d = dr*dr + dg*dg + db*db;
+    if (d < bestDist) { bestDist = d; best = i; }
+  }
+  return best;
+}
+
+// ── Layer Slicing ────────────────────────────────────────────────────────
+function sliceLayers(numSlices) {
+  if (!srcData) return;
+
+  // Collect all luminance values of non-transparent pixels
+  const lums = [];
+  for (let i = 0; i < srcW * srcH; i++) {
+    const a = srcData.data[i * 4 + 3];
+    if (a < 10) continue;
+    const r = srcData.data[i * 4], g = srcData.data[i * 4 + 1], b = srcData.data[i * 4 + 2];
+    lums.push(luminance(r, g, b));
+  }
+  lums.sort((a, b) => a - b);
+
+  // Find threshold boundaries using quantiles
+  layers = [];
+  const names = ['Outline/Void', 'Core Shadow', 'Deep Shade', 'Midtone Dark', 'Midtone', 'Midtone Light', 'Highlight', 'Bright Highlight', 'Specular', 'Peak Light', 'White', 'Max'];
+  const colors = ['#111','#2a1a1a','#3a2a20','#4a3a2a','#5a4a3a','#6a5a4a','#7a6a5a','#8a7a6a','#aa9a8a','#bbaa99','#ccbbaa','#ddccbb'];
+
+  for (let s = 0; s < numSlices; s++) {
+    const lo = lums[Math.floor(s / numSlices * lums.length)] || 0;
+    const hi = lums[Math.floor((s + 1) / numSlices * lums.length) - 1] || 255;
+    layers.push({
+      index: s,
+      name: names[s] || `Layer ${s}`,
+      lumMin: lo,
+      lumMax: hi,
+      color: colors[s] || '#888',
+      pixelCount: 0,
+      uniqueColors: new Set(),
+    });
+  }
+
+  // Count pixels per layer
+  for (let i = 0; i < srcW * srcH; i++) {
+    const a = srcData.data[i * 4 + 3];
+    if (a < 10) continue;
+    const r = srcData.data[i * 4], g = srcData.data[i * 4 + 1], b = srcData.data[i * 4 + 2];
+    const lum = luminance(r, g, b);
+    for (let s = 0; s < layers.length; s++) {
+      if (lum >= layers[s].lumMin && (s === layers.length - 1 || lum < layers[s + 1].lumMin)) {
+        layers[s].pixelCount++;
+        layers[s].uniqueColors.add(`${r},${g},${b}`);
+        break;
+      }
+    }
+  }
+
+  updateLayerButtons();
+  renderAll();
+  analyzeRules();
+  log(`Sliced into ${numSlices} layers`);
+}
+
+function updateLayerButtons() {
+  const container = document.getElementById('layerButtons');
+  container.innerHTML = '';
+
+  const allBtn = document.createElement('button');
+  allBtn.className = 'layer-btn' + (activeLayer === -1 ? ' active' : '');
+  allBtn.textContent = 'ALL';
+  allBtn.onclick = () => { activeLayer = -1; updateLayerButtons(); renderAll(); };
+  container.appendChild(allBtn);
+
+  for (const layer of layers) {
+    const btn = document.createElement('button');
+    btn.className = 'layer-btn' + (activeLayer === layer.index ? ' active' : '');
+    btn.innerHTML = `<span class="swatch" style="background:${layer.color}"></span> ${layer.name} <span style="color:#555">(${layer.pixelCount}px, ${layer.uniqueColors.size}c)</span>`;
+    btn.style.display = 'block';
+    btn.style.width = '100%';
+    btn.style.textAlign = 'left';
+    btn.style.margin = '2px 0';
+    btn.onclick = () => { activeLayer = layer.index; updateLayerButtons(); renderAll(); };
+    container.appendChild(btn);
+  }
+}
+
+// ── Rendering ────────────────────────────────────────────────────────────
+function renderAll() {
+  renderOriginal();
+  renderLayer();
+  renderRegions();
+  renderPaletted();
+}
+
+function renderOriginal() {
+  const c = document.getElementById('originalCanvas');
+  const ctx = c.getContext('2d');
+  c.width = srcW * zoom;
+  c.height = srcH * zoom;
+  ctx.imageSmoothingEnabled = false;
+  ctx.fillStyle = '#0a0a0e';
+  ctx.fillRect(0, 0, c.width, c.height);
+
+  if (!srcData) return;
+
+  for (let y = 0; y < srcH; y++) {
+    for (let x = 0; x < srcW; x++) {
+      const i = (y * srcW + x) * 4;
+      const a = srcData.data[i + 3];
+      if (a < 10) continue;
+      const r = srcData.data[i], g = srcData.data[i+1], b = srcData.data[i+2];
+      ctx.fillStyle = `rgb(${r},${g},${b})`;
+      ctx.fillRect(x * zoom, y * zoom, zoom, zoom);
+    }
+  }
+
+  if (document.getElementById('showGrid').checked && zoom >= 4) {
+    ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+    ctx.lineWidth = 0.5;
+    for (let x = 0; x <= srcW; x++) { ctx.beginPath(); ctx.moveTo(x*zoom,0); ctx.lineTo(x*zoom,srcH*zoom); ctx.stroke(); }
+    for (let y = 0; y <= srcH; y++) { ctx.beginPath(); ctx.moveTo(0,y*zoom); ctx.lineTo(srcW*zoom,y*zoom); ctx.stroke(); }
+  }
+
+  if (document.getElementById('showSymmetry').checked) {
+    ctx.strokeStyle = 'rgba(74,170,153,0.3)';
+    ctx.setLineDash([4,4]);
+    ctx.beginPath(); ctx.moveTo(srcW*zoom/2, 0); ctx.lineTo(srcW*zoom/2, srcH*zoom); ctx.stroke();
+    ctx.setLineDash([]);
+  }
+}
+
+function renderLayer() {
+  const c = document.getElementById('layerCanvas');
+  const ctx = c.getContext('2d');
+  c.width = srcW * zoom;
+  c.height = srcH * zoom;
+  ctx.fillStyle = '#0a0a0e';
+  ctx.fillRect(0, 0, c.width, c.height);
+
+  if (!srcData || layers.length === 0) return;
+
+  for (let y = 0; y < srcH; y++) {
+    for (let x = 0; x < srcW; x++) {
+      const i = (y * srcW + x) * 4;
+      const a = srcData.data[i + 3];
+      if (a < 10) continue;
+      const r = srcData.data[i], g = srcData.data[i+1], b = srcData.data[i+2];
+      const lum = luminance(r, g, b);
+
+      let layerIdx = 0;
+      for (let s = 0; s < layers.length; s++) {
+        if (lum >= layers[s].lumMin && (s === layers.length - 1 || lum < layers[s + 1].lumMin)) {
+          layerIdx = s; break;
+        }
+      }
+
+      if (activeLayer === -1 || activeLayer === layerIdx) {
+        ctx.fillStyle = activeLayer === -1 ? `rgb(${r},${g},${b})` : `rgb(${r},${g},${b})`;
+        ctx.fillRect(x * zoom, y * zoom, zoom, zoom);
+      }
+    }
+  }
+}
+
+function renderRegions() {
+  const c = document.getElementById('regionCanvas');
+  const ctx = c.getContext('2d');
+  c.width = srcW * zoom;
+  c.height = srcH * zoom;
+  ctx.fillStyle = '#0a0a0e';
+  ctx.fillRect(0, 0, c.width, c.height);
+
+  if (!srcData || layers.length === 0) return;
+
+  const regionColors = ['#111','#1a0a0a','#2a1500','#3a2a10','#2a3a2a','#3a3a1a','#4a3a2a','#5a4a3a','#6a5a4a','#7a6a5a','#8a7a6a','#aa9a8a'];
+
+  for (let y = 0; y < srcH; y++) {
+    for (let x = 0; x < srcW; x++) {
+      const i = (y * srcW + x) * 4;
+      const a = srcData.data[i + 3];
+      if (a < 10) continue;
+      const r = srcData.data[i], g = srcData.data[i+1], b = srcData.data[i+2];
+      const lum = luminance(r, g, b);
+
+      for (let s = 0; s < layers.length; s++) {
+        if (lum >= layers[s].lumMin && (s === layers.length - 1 || lum < layers[s + 1].lumMin)) {
+          ctx.fillStyle = regionColors[s] || '#888';
+          ctx.fillRect(x * zoom, y * zoom, zoom, zoom);
+          break;
+        }
+      }
+    }
+  }
+}
+
+function renderPaletted() {
+  const c = document.getElementById('palettedCanvas');
+  const ctx = c.getContext('2d');
+  c.width = srcW * zoom;
+  c.height = srcH * zoom;
+  ctx.fillStyle = '#0a0a0e';
+  ctx.fillRect(0, 0, c.width, c.height);
+
+  if (!srcData) return;
+
+  for (let y = 0; y < srcH; y++) {
+    for (let x = 0; x < srcW; x++) {
+      const i = (y * srcW + x) * 4;
+      const a = srcData.data[i + 3];
+      if (a < 10) continue;
+      const r = srcData.data[i], g = srcData.data[i+1], b = srcData.data[i+2];
+      const nearest = nearestPaletteColor(r, g, b);
+      ctx.fillStyle = PALETTE_HEX[nearest];
+      ctx.fillRect(x * zoom, y * zoom, zoom, zoom);
+    }
+  }
+}
+
+// ── Rule Analysis ────────────────────────────────────────────────────────
+function analyzeRules() {
+  if (!srcData || layers.length === 0) return;
+
+  // Find bounding box
+  let minX = srcW, minY = srcH, maxX = 0, maxY = 0;
+  for (let y = 0; y < srcH; y++) {
+    for (let x = 0; x < srcW; x++) {
+      if (srcData.data[(y * srcW + x) * 4 + 3] > 10) {
+        minX = Math.min(minX, x); minY = Math.min(minY, y);
+        maxX = Math.max(maxX, x); maxY = Math.max(maxY, y);
+      }
+    }
+  }
+
+  const charW = maxX - minX + 1;
+  const charH = maxY - minY + 1;
+  const centerX = (minX + maxX) / 2;
+
+  // Measure symmetry
+  let symMatch = 0, symTotal = 0;
+  for (let y = minY; y <= maxY; y++) {
+    for (let dx = 0; dx <= charW / 2; dx++) {
+      const lx = Math.floor(centerX) - dx;
+      const rx = Math.ceil(centerX) + dx;
+      if (lx < 0 || rx >= srcW) continue;
+      const li = (y * srcW + lx) * 4;
+      const ri = (y * srcW + rx) * 4;
+      const la = srcData.data[li + 3] > 10;
+      const ra = srcData.data[ri + 3] > 10;
+      if (la || ra) {
+        symTotal++;
+        if (la === ra) symMatch++;
+      }
+    }
+  }
+
+  // Outline pixel count (filled pixels adjacent to transparent)
+  let outlineCount = 0;
+  for (let y = minY; y <= maxY; y++) {
+    for (let x = minX; x <= maxX; x++) {
+      const i = (y * srcW + x) * 4;
+      if (srcData.data[i + 3] < 10) continue;
+      for (const [dx,dy] of [[-1,0],[1,0],[0,-1],[0,1]]) {
+        const nx = x+dx, ny = y+dy;
+        if (nx < 0 || nx >= srcW || ny < 0 || ny >= srcH || srcData.data[(ny*srcW+nx)*4+3] < 10) {
+          outlineCount++; break;
+        }
+      }
+    }
+  }
+
+  const totalFilled = layers.reduce((s,l) => s + l.pixelCount, 0);
+
+  const rulesEl = document.getElementById('rules');
+  rulesEl.innerHTML = `
+    <b>Bounding box:</b> ${charW}x${charH} (at ${minX},${minY})<br>
+    <b>Filled pixels:</b> ${totalFilled}<br>
+    <b>Fill ratio:</b> ${(totalFilled / (charW * charH) * 100).toFixed(1)}%<br>
+    <b>Symmetry:</b> ${(symMatch / symTotal * 100).toFixed(1)}%<br>
+    <b>Outline pixels:</b> ${outlineCount} (${(outlineCount/totalFilled*100).toFixed(1)}% of filled)<br>
+    <b>Layer distribution:</b><br>
+    ${layers.map(l => `  ${l.name}: ${l.pixelCount}px (${(l.pixelCount/totalFilled*100).toFixed(1)}%) ${l.uniqueColors.size}c`).join('<br>')}
+    <br><b>Darkest layer</b> = outline + core shadow<br>
+    <b>Lightest layer</b> = specular highlights<br>
+    <b>Middle layers</b> = material body (most pixels here)
+  `;
+}
+
+// ── Hover Info ───────────────────────────────────────────────────────────
+function setupHover(canvasId) {
+  const c = document.getElementById(canvasId);
+  c.addEventListener('mousemove', (e) => {
+    if (!srcData) return;
+    const rect = c.getBoundingClientRect();
+    const x = Math.floor((e.clientX - rect.left) / zoom);
+    const y = Math.floor((e.clientY - rect.top) / zoom);
+    if (x < 0 || x >= srcW || y < 0 || y >= srcH) return;
+
+    const i = (y * srcW + x) * 4;
+    const r = srcData.data[i], g = srcData.data[i+1], b = srcData.data[i+2], a = srcData.data[i+3];
+    const hex = '#' + [r,g,b].map(v => v.toString(16).padStart(2,'0')).join('');
+    const lum = luminance(r, g, b).toFixed(1);
+    const nearest = nearestPaletteColor(r, g, b);
+
+    document.getElementById('pixelInfo').innerHTML = a < 10
+      ? `(${x}, ${y}) — transparent`
+      : `(${x}, ${y}) — <span class="swatch" style="background:${hex}"></span>${hex} L:${lum} α:${a}`;
+
+    if (a >= 10) {
+      document.getElementById('nearestInfo').innerHTML =
+        `<span class="swatch" style="background:${PALETTE_HEX[nearest]}"></span>` +
+        `Index ${nearest} ${PALETTE_HEX[nearest]} (${PALETTE[nearest].join(',')})`;
+    }
+  });
+}
+setupHover('originalCanvas');
+setupHover('layerCanvas');
+setupHover('regionCanvas');
+setupHover('palettedCanvas');
+
+// ── File Input ───────────────────────────────────────────────────────────
+document.getElementById('fileInput').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    const img = new Image();
+    img.onload = () => {
+      srcW = img.width;
+      srcH = img.height;
+
+      const tmpC = document.createElement('canvas');
+      tmpC.width = srcW; tmpC.height = srcH;
+      const tmpCtx = tmpC.getContext('2d');
+      tmpCtx.drawImage(img, 0, 0);
+      srcData = tmpCtx.getImageData(0, 0, srcW, srcH);
+
+      let filled = 0, uniqueColors = new Set();
+      for (let i = 0; i < srcW * srcH; i++) {
+        if (srcData.data[i*4+3] > 10) {
+          filled++;
+          uniqueColors.add(`${srcData.data[i*4]},${srcData.data[i*4+1]},${srcData.data[i*4+2]}`);
+        }
+      }
+
+      document.getElementById('spriteInfo').innerHTML =
+        `${srcW}x${srcH} | ${filled} filled | ${uniqueColors.size} colors`;
+
+      log(`Loaded ${file.name}: ${srcW}x${srcH}, ${filled}px, ${uniqueColors.size} colors`);
+
+      sliceLayers(parseInt(document.getElementById('sliceCount').value));
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+});
+
+// ── Controls ─────────────────────────────────────────────────────────────
+document.getElementById('sliceCount').addEventListener('input', (e) => {
+  document.getElementById('sliceCountVal').textContent = e.target.value;
+  sliceLayers(parseInt(e.target.value));
+});
+
+document.getElementById('zoom').addEventListener('input', (e) => {
+  zoom = parseInt(e.target.value);
+  document.getElementById('zoomVal').textContent = zoom + 'x';
+  renderAll();
+});
+
+['showOutline','showGrid','showJoints','showSymmetry'].forEach(id => {
+  document.getElementById(id).addEventListener('change', renderAll);
+});
+
+// ── Export ────────────────────────────────────────────────────────────────
+document.getElementById('exportBtn').addEventListener('click', () => {
+  if (!srcData) return;
+
+  // Build atlas data
+  const atlas = {
+    version: 1,
+    type: 'dissected_sprite',
+    dimensions: { width: srcW, height: srcH },
+    layers: layers.map(l => ({
+      name: l.name,
+      lumRange: [l.lumMin, l.lumMax],
+      pixelCount: l.pixelCount,
+      uniqueColors: l.uniqueColors.size,
+      percentOfTotal: (l.pixelCount / layers.reduce((s,ll) => s + ll.pixelCount, 0) * 100).toFixed(1) + '%'
+    })),
+    paletteMapping: {},
+    timestamp: new Date().toISOString(),
+  };
+
+  // Build palette mapping stats
+  const paletteUsage = new Array(64).fill(0);
+  for (let i = 0; i < srcW * srcH; i++) {
+    if (srcData.data[i*4+3] < 10) continue;
+    const nearest = nearestPaletteColor(srcData.data[i*4], srcData.data[i*4+1], srcData.data[i*4+2]);
+    paletteUsage[nearest]++;
+  }
+  atlas.paletteMapping = Object.fromEntries(paletteUsage.map((count, i) => [i, count]).filter(([,c]) => c > 0));
+
+  const blob = new Blob([JSON.stringify(atlas, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'sprite-atlas.json'; a.click();
+  log('Exported atlas JSON');
+});
+
+log('Ready. Load a sprite to begin dissection.');
+</script>
+</body>
+</html>

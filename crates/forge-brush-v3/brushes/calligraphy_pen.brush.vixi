@@ -1,0 +1,33 @@
+#vixi:brush v1
+surface: calligraphy_pen
+
+# The Calligraphy Pen — a variable-width tapered stroke for authoring UCAS
+# (Unified Canadian Aboriginal Syllabics) and freehand calligraphic marks.
+#
+# Drives `ritual_glyph` (integer em-space strokes with per-point brush width)
+# through `forge-calligraphy` (GlyphDto → SVG + SHA-256 provenance seal).
+# The UCAS codepoint table (`cree_syllabics.rs`) provides reference geometry;
+# `codepoint = 0` is freehand (no guide). Pressure → width taper. The seal
+# binds the web SVG face and the (Phase-4) voxel face with one hash.
+#
+# `taper`     = Permyriad (7000 = 70% taper — soft fade at stroke ends).
+# `codepoint` = UCAS hex (0x1403 = ᐃ) or 0 for freehand. Guides overlay only.
+#
+# Cultural law: the syllabics are a REFERENCE (ghost overlay the user traces);
+# never rendered as machine text. The mark is hand-drawn, sovereign, sealed.
+
+brush calligraphy_pen
+  tool      = CalligraphyPen   # calligraphic variable-width stroke tool
+  tier      = Apprentice       # base: freehand calligraphy on Z=0
+  material  = bone             # CE material group: bone (natural, warm resonance)
+  plane     = z0               # locks the Front (Z=0) plane
+  shape     = calligraphy      # calligraphic stroke (vs Plain/Hatch/Symmetry)
+  taper     = 7000             # Permyriad taper intensity (7000 = 70%)
+  codepoint = 0                # 0 = freehand; set to UCAS hex for guided mode
+  feeds     = mass ring attack # AcousticRegistry columns the stroke drives
+  receives  = bus_in           # audio snapshot modulates calligraphic weight
+
+gate float_in_ir  = forbidden
+gate alloc_steady = forbidden
+gate vibe_rms > 300            # calligraphy gate: lighter than combat brushes
+end

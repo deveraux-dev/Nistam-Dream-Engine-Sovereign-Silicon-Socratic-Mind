@@ -1,0 +1,67 @@
+# glass·sand·ghost terminal tokens — verbatim drain of F:\NewRepo\crates\technothesia\vixi\glass\glass-terminal.tokens.vixi (Sean 2026-07-12)
+# ladder: primitives -> semantics -> components; NEVER hex at call sites — name these.
+# live consumers 2026-08-26: studio-tauri ui/style.css (--glass-*), ui/app.js (GLASS_TINT/TERM_SCRIM/SAND_*)
+
+primitive sand.50   #F5EFE0
+primitive sand.100  #E8DCC0
+primitive sand.200  #D8C69C
+primitive sand.300  #C7B07A
+primitive sand.400  #B5A278
+primitive sand.500  #9E8A5C
+primitive sand.600  #7E6E48
+primitive sand.700  #5E5236
+primitive sand.800  #3E3624
+primitive sand.900  #211D13
+
+primitive glass.frost   #9EC8E1
+primitive glass.pane    rgba(158,200,225,0.14)
+primitive glass.edge    rgba(206,232,247,0.55)
+primitive glass.deep    #6FA8C8
+
+primitive ecto.300  #A7FFD4
+primitive ecto.400  #4DFFB0
+primitive ecto.500  #2DE39A
+primitive ecto.glow rgba(77,255,176,0.35)
+
+primitive ghost.300 #DCB8FF
+primitive ghost.400 #C46BFF
+primitive ghost.500 #A64BEE
+
+primitive ink.600   #202834
+primitive ink.700   #161B22
+primitive ink.800   #10131A
+primitive ink.900   #0A0D12
+
+primitive amber.400 #F0D078
+primitive sour.400  #FF5C5C
+
+semantic surface.sand     sand.400
+semantic surface.glass    glass.pane
+semantic surface.chrome   ink.800
+semantic surface.edge     glass.edge
+semantic text.base        sand.100
+semantic text.muted       sand.300
+semantic accent           amber.400
+semantic haunt.ecto       ecto.400
+semantic haunt.ghost      ghost.400
+semantic note.clean       ecto.400
+semantic note.sour        sour.400
+
+component terminal.panel.fill    surface.glass over surface.chrome
+component terminal.panel.edge    surface.edge
+component terminal.title         accent
+component terminal.text          text.base
+component terminal.text.dim      text.muted
+
+component emerge.grain.lo        sand.600
+component emerge.grain.hi        sand.300
+component emerge.glass.opacity   0..1000 pmy
+
+component ghost.word.body        haunt.ecto
+component ghost.drift            haunt.ghost
+
+component hear.strip.fill        ink.800 @ 0.88
+component hear.strip.edge        surface.edge
+component hear.title             accent
+component hear.note.clean        note.clean
+component hear.note.sour         note.sour

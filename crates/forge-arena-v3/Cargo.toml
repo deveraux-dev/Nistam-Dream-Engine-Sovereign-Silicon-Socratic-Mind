@@ -1,0 +1,49 @@
+[package]
+name = "forge-arena-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "Arena Core — deterministic 2D/2.5D sidescroller combat kernel, ported from v2 forge-game-systems::arena_core."
+
+# Started minimal (serde only) and grown ONLY on real cargo check errors (L02:
+# never state a dep is needed without the compiler saying so) — the fold's own
+# `deps_to_absorb` list was a whole-crate Cargo.toml dump (forge-game-systems'),
+# not per-file usage, and would have pulled in ~20 crates unverified.
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+# The v3 home of SieveEvent (Sean 2026-08-15, "forge-sieve has been PORTED!"
+# — correction: v2's forge-sieve crate itself was never ported verbatim; v3's
+# real SieveEvent lives here instead, a deliberately smaller dispatch-only
+# type per forge-sieve-v3's own doc comment ("crate-wide SieveEvent wire is
+# dropped"). Gained a Mutate5D variant in this same stroke so mechanic_rail
+# has a real, single-home event type to observe instead of a dangling
+# reference to the never-ported v2 crate.
+forge-semantic-quadlane = { path = "../forge-semantic-quadlane" }
+# astrakey_sieve/derivation.rs: HMAC-SHA256 seed derivation (real cargo-check
+# requirement, not guessed — same version already used by forge-gpu-warden-v3).
+sha2 = "0.10"
+# 2026-08-18 (duel777-lockstep-wire, aspire.rs glyph 1489): named explicit,
+# not new — forge-core-v3 IS Crate Zero and was already transitive via
+# forge-semantic-quadlane (see that crate's own Cargo.toml comment: "IS Crate
+# Zero, the floor"). duel.rs's own module doc bans embedding a physics engine
+# or a full netcode STACK here ("no Rapier, no fortress-rollback... plugged in
+# by the app crate") — lockstep.rs's LockstepBarrier is not that: it is a
+# floor-tier, allocation-free primitive at the same tier as macaulay_pow,
+# already used this way by a sibling crate. Widening scope, not violating it.
+forge-core-v3 = { path = "../forge-core-v3" }
+# checksum.rs::execute_logic_frame_dump desync diagnostic (ported from
+# abraxas/ironroot-edict shared_core, 2026-08-28 fold) — pretty-JSON dump of
+# ArenaState to disk on desync. Was dev-only (procs.rs/item_loader.rs test
+# round-trips); now a real runtime dep for this fn.
+serde_json = "1"
+# inventory.rs Inventory::backpack fixed-array serde (2026-08-28 fold,
+# restores donor's 1,008-byte/player guarantee) — same version already used
+# by TODO\dirge-of-ironroot\OLDPYGOTHROUGH\rust\shared_core.
+serde_big_array = { package = "serde-big-array", version = "0.5" }
+# replay.rs::ReplayRecorder::export_bytes runtime serialization (2026-08-28
+# fold) — same version already used by forge-officina-v3.
+bincode = "1.3"
+
+[lints]
+workspace = true

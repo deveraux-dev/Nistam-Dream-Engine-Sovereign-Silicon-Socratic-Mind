@@ -1,0 +1,2802 @@
+[
+  {
+    "id": "ember_event_001",
+    "zone": "Ember",
+    "entity": "land_spirit",
+    "trigger": "random",
+    "health_range": [
+      0.7,
+      1.0
+    ],
+    "narrative": "A dry, brittle rustle whispers through the tall grass, too steady for the wind, making the heat haze shimmer unnaturally. I feel a prickling on my skin, as if unseen eyes are watching from the distortion.",
+    "sound_cue": "A rhythmic, dry rustling sound, like old, sun-bleached reeds shifting in sand, seems to follow my movements.",
+    "gameplay_effect": "Briefly increased peripheral vision blur; slight decrease in perception of small details (LCK debuff).",
+    "severity": "whisper"
+  },
+  {
+    "id": "ember_event_002",
+    "zone": "Ember",
+    "entity": "little_people",
+    "trigger": "spirit_root_active",
+    "health_range": [
+      0.5,
+      0.8
+    ],
+    "narrative": "From the nearby Spirit Root node, I hear faint, chittering giggles, like dry leaves skittering across hot stone. A small, carved piece of wood, which I know I placed here, now sits just out of reach, almost teasingly.",
+    "sound_cue": "High-pitched, rapid chittering sounds, accompanied by very faint, almost imperceptible laughter, seem to emanate from the ground.",
+    "gameplay_effect": "Minor items in inventory may shuffle or become temporarily unequipped; small resource nodes nearby have a chance to yield slightly less (LCK debuff).",
+    "severity": "presence"
+  },
+  {
+    "id": "ember_event_003",
+    "zone": "Ember",
+    "entity": "windigo",
+    "trigger": "reciprocity_low",
+    "health_range": [
+      0.3,
+      0.6
+    ],
+    "narrative": "The air grows heavy, thick with an unseen hunger, and I hear a faint, guttural moan carried on the hot wind, as if the land itself is starving. My stomach clenches, and I feel an unnerving pull towards the dwindling resource pile I've been hoarding.",
+    "sound_cue": "A low, resonating hum accompanied by a deep, hollow moan that seems to vibrate in my chest, intensifying the sense of unease.",
+    "gameplay_effect": "Momentary stamina drain debuff; resource nodes harvested within 30 seconds yield 10% less and grant a 'Greed' debuff increasing hunger rate.",
+    "severity": "encounter"
+  },
+  {
+    "id": "ember_event_004",
+    "zone": "Ember",
+    "entity": "pakakosh",
+    "trigger": "moon_transition",
+    "health_range": [
+      0.0,
+      0.2
+    ],
+    "narrative": "The world around me falls unnaturally silent, then a dry, brittle rattling begins, close enough to send shivers down my spine despite the heat. A deep chill permeates the air, and I catch a fleeting glimpse of something impossibly tall and skeletal against the fiery horizon.",
+    "sound_cue": "Distinct, sharp bone-on-bone clattering, accompanied by a rapid, percussive 'kosh-kosh' sound that seems to circle me, followed by an immediate drop in ambient temperature sound.",
+    "gameplay_effect": "Player's 'Luck' stat significantly reduced for a short duration; all crafting attempts have an increased chance of failure; 'Bad Omen' status effect applied, reducing gathering yield by 15%.",
+    "severity": "crisis"
+  },
+  {
+    "id": "ember_event_005",
+    "zone": "Ember",
+    "entity": "none",
+    "trigger": "night",
+    "health_range": [
+      0.4,
+      0.9
+    ],
+    "narrative": "The distant crackle of phantom fires seems to echo across the endless plains, too faint to be real, too persistent to ignore. The air smells faintly of smoke, though no flames are visible.",
+    "sound_cue": "Subtle, sporadic crackling and popping sounds, like far-off embers, with a low, underlying rumble.",
+    "gameplay_effect": "Temporary perception debuff as distant visual cues are obscured by 'smoke'; reduced visibility.",
+    "severity": "whisper"
+  },
+  {
+    "id": "ember_event_006",
+    "zone": "Ember",
+    "entity": "land_spirit",
+    "trigger": "zone_health_low",
+    "health_range": [
+      0.1,
+      0.4
+    ],
+    "narrative": "A low, mournful sigh rises from the parched earth, carried on a hot, weary wind that seems to drain the very moisture from my skin. The ground beneath my feet feels strangely hollow and brittle.",
+    "sound_cue": "A long, drawn-out exhalation sound, like wind through a hollow bone, accompanied by a faint, deep thrum from the ground.",
+    "gameplay_effect": "Minor 'Fatigue' debuff, increasing stamina consumption; small chance for fragile resource nodes to break when harvested.",
+    "severity": "presence"
+  },
+  {
+    "id": "ember_event_007",
+    "zone": "Ember",
+    "entity": "none",
+    "trigger": "random",
+    "health_range": [
+      0.6,
+      1.0
+    ],
+    "narrative": "The sun beats down relentlessly, and the air shimmers, creating mirages that twist the distant horizon. For a moment, I think I see movement, something impossibly tall, just at the edge of my vision.",
+    "sound_cue": "A high, wavering hum, almost like cicadas, but with an unnatural, sustained quality, distorts spatial awareness.",
+    "gameplay_effect": "Brief disorientation effect; distant visual cues appear to shift; slight chance to misidentify entities.",
+    "severity": "whisper"
+  },
+  {
+    "id": "ember_event_008",
+    "zone": "Ember",
+    "entity": "windigo",
+    "trigger": "reciprocity_low",
+    "health_range": [
+      0.1,
+      0.3
+    ],
+    "narrative": "The hot wind carries whispers, not of words, but of an insatiable craving that echoes in my own stomach. I feel a growing desperation, an urge to take more, even when I know I shouldn't, as shadows seem to writhe at the edge of my sight.",
+    "sound_cue": "A cacophony of overlapping, low-frequency whispers, unintelligible but urgent, seems to swirl around me, creating an auditory 'vacuum' at its center.",
+    "gameplay_effect": "Player gains a temporary 'Greed' status effect, increasing resource gathering speed but also increasing hunger and thirst rates significantly.",
+    "severity": "crisis"
+  },
+  {
+    "id": "ember_event_009",
+    "zone": "Ember",
+    "entity": "pakakosh",
+    "trigger": "moon_transition",
+    "health_range": [
+      0.3,
+      0.6
+    ],
+    "narrative": "A sudden, unnatural draft of cold air cuts through the desert heat, carrying with it a faint, dry clicking sound, like pebbles shifting, then something more deliberate. My shadow seems to stretch and shrink erratically, refusing to settle.",
+    "sound_cue": "A distinct, rhythmic 'click-clack' sound, like small bones shifting, accompanies the chilling draft, creating a sense of being pursued.",
+    "gameplay_effect": "Minor 'Dread' debuff, reducing movement speed slightly; player's LCK temporarily reduced for gathering and crafting.",
+    "severity": "encounter"
+  },
+  {
+    "id": "ember_event_010",
+    "zone": "Ember",
+    "entity": "little_people",
+    "trigger": "spirit_root_active",
+    "health_range": [
+      0.7,
+      1.0
+    ],
+    "narrative": "Near the pulsing Spirit Root, I hear faint, high-pitched scuffling sounds, like tiny creatures darting through the dry brush. I glance over, but only see the wind moving the grass, yet a small, carefully placed stone has vanished.",
+    "sound_cue": "Quick, light rustling noises, as if small, fast feet are moving through dry foliage, accompanied by a nearly subliminal, mischievous 'titter'.",
+    "gameplay_effect": "Random small, non-essential inventory items may briefly disappear and reappear in a different slot or nearby on the ground (LCK roll).",
+    "severity": "whisper"
+  },
+  {
+    "id": "ember_event_011",
+    "zone": "Ember",
+    "entity": "land_spirit",
+    "trigger": "night",
+    "health_range": [
+      0.2,
+      0.5
+    ],
+    "narrative": "The night air grows strangely heavy, and I hear a deep, resonant groan from deep within the earth, as if the land itself is suffering. The stars above seem to pulse with an angry, reddish hue for a moment.",
+    "sound_cue": "A deep, resonant, and sustained groan, felt more than heard, emanates from the ground, accompanied by a subtle tremor.",
+    "gameplay_effect": "Temporary 'Earthbound' debuff, slightly reducing jump height and movement speed; Spirit Root network efficiency temporarily reduced by 5%.",
+    "severity": "presence"
+  },
+  {
+    "id": "ember_event_012",
+    "zone": "Ember",
+    "entity": "none",
+    "trigger": "random",
+    "health_range": [
+      0.0,
+      0.1
+    ],
+    "narrative": "A sudden, violent gust of hot wind screams across the plains, carrying with it fine dust and the sound of distant, mournful wailing. For a moment, the sky seems to bleed red.",
+    "sound_cue": "A powerful, focused gust of wind, like a scream, with high-frequency whistling, accompanied by a low-frequency, drawn-out wail.",
+    "gameplay_effect": "Brief 'Stagger' effect; vision obscured by dust; temporary vulnerability to heat damage; minor health drain.",
+    "severity": "crisis"
+  },
+  {
+    "id": "ember_event_013",
+    "zone": "Ember",
+    "entity": "pakakosh",
+    "trigger": "moon_transition",
+    "health_range": [
+      0.0,
+      0.1
+    ],
+    "narrative": "The air crackles with a sudden, impossible cold, and the rapid, dry clatter of countless bones echoes in the silence, surrounding me completely. I feel a crushing weight, as if death itself is breathing down my neck, and the world seems to dim.",
+    "sound_cue": "An intense, rapid, and pervasive clattering of dry bones, growing louder and closer, coupled with a deep, chilling infrasound that causes involuntary muscle spasms.",
+    "gameplay_effect": "'Bad Omen' status effect applied, drastically reducing all stats by 20% for 60 seconds; player becomes vulnerable to additional damage from all sources.",
+    "severity": "crisis"
+  },
+  {
+    "id": "ember_event_014",
+    "zone": "Ember",
+    "entity": "little_people",
+    "trigger": "spirit_root_active",
+    "health_range": [
+      0.3,
+      0.6
+    ],
+    "narrative": "A mischievous chorus of tiny whispers and rustles emanates from the Spirit Root, and I feel a tug at my pouch. When I look, a vital component has vanished, only to reappear moments later atop a distant, impossibly high rock.",
+    "sound_cue": "A flurry of high-pitched, darting whispers and quick, dry rustles, creating a sense of rapid, unseen movement in all directions.",
+    "gameplay_effect": "A random equipped tool or item is temporarily unequipped and moved a short distance away; minor LCK debuff for crafting attempts.",
+    "severity": "encounter"
+  },
+  {
+    "id": "ember_event_015",
+    "zone": "Ember",
+    "entity": "land_spirit",
+    "trigger": "zone_health_low",
+    "health_range": [
+      0.0,
+      0.2
+    ],
+    "narrative": "The very air tastes of ash and despair, as a low, guttural growl rumbles from deep within the parched earth, shaking the ground beneath me. The intense heat feels malevolent, burning with a silent fury.",
+    "sound_cue": "A deep, continuous, growling rumble that reverberates through the ground, accompanied by faint, high-pitched shimmers of 'heat-screaming' air.",
+    "gameplay_effect": "Player receives continuous minor heat damage over time; 'Exhaustion' debuff applied, severely limiting stamina regeneration; all resource nodes in a small radius become 'barren'.",
+    "severity": "crisis"
+  },
+  {
+    "id": "ember_event_016",
+    "zone": "Ember",
+    "entity": "none",
+    "trigger": "night",
+    "health_range": [
+      0.7,
+      1.0
+    ],
+    "narrative": "The night sky seems to press down, darker than usual, and I hear a faint, almost imperceptible hum that seems to vibrate in my bones. The stars appear to shift slightly, forming unfamiliar patterns.",
+    "sound_cue": "A very low-frequency, almost sub-audible hum that resonates within the chest cavity, accompanied by a subtle high-frequency shimmer.",
+    "gameplay_effect": "Minor 'Disorientation' debuff, making navigation slightly more difficult; compass direction may briefly flicker.",
+    "severity": "whisper"
+  },
+  {
+    "id": "ember_event_017",
+    "zone": "Ember",
+    "entity": "land_spirit",
+    "trigger": "random",
+    "health_range": [
+      0.4,
+      0.7
+    ],
+    "narrative": "A sudden, inexplicable wave of intense heat washes over me, carrying the faint scent of something burning, though there is no smoke. I hear a rapid, almost frantic crackling sound in the dry brush nearby, but nothing is there.",
+    "sound_cue": "A burst of rapid, high-frequency crackling and popping, like dry kindling igniting, but with no visual source.",
+    "gameplay_effect": "Player receives a temporary 'Heat Stroke' debuff, reducing movement speed and increasing thirst rate.",
+    "severity": "presence"
+  },
+  {
+    "id": "ember_event_018",
+    "zone": "Ember",
+    "entity": "windigo",
+    "trigger": "reciprocity_low",
+    "health_range": [
+      0.5,
+      0.8
+    ],
+    "narrative": "A cold dread settles in, despite the blazing sun, as I hear a low, sucking sound from the earth, as if it's drawing something out. I feel a sudden, intense craving for resources, an urge to take everything I see.",
+    "sound_cue": "A deep, resonant 'slurp' and 'suck' sound, accompanied by a faint, high-pitched whine, seems to come from directly beneath me.",
+    "gameplay_effect": "Player's 'Gathering' efficiency temporarily increased by 15%, but any resources gathered have a 25% chance to attract additional hostile entities (not Windigo directly).",
+    "severity": "encounter"
+  },
+  {
+    "id": "ember_event_019",
+    "zone": "Ember",
+    "entity": "none",
+    "trigger": "zone_health_low",
+    "health_range": [
+      0.1,
+      0.4
+    ],
+    "narrative": "The air thickens with a palpable despair, and the sun, usually a source of life, now feels like a malevolent eye. I hear a faint, distant weeping carried on the wind, too human for any animal.",
+    "sound_cue": "A high, thin, and distant wailing sound, like a child crying, carried on a low, undulating wind.",
+    "gameplay_effect": "Temporary 'Despair' debuff, reducing damage output and critical hit chance; player's INT stat slightly reduced.",
+    "severity": "presence"
+  },
+  {
+    "id": "ember_event_020",
+    "zone": "Ember",
+    "entity": "little_people",
+    "trigger": "spirit_root_active",
+    "health_range": [
+      0.0,
+      0.2
+    ],
+    "narrative": "A chorus of maniacal giggling erupts around the Spirit Root, too close, too many, and small, impossibly fast shadows flit through the heat haze. My tools feel suddenly heavy, then impossibly light, as if their properties are being toyed with.",
+    "sound_cue": "A swirling, multi-directional cacophony of high-pitched, rapid giggles and quick, scurrying sounds, designed to disorient and overwhelm.",
+    "gameplay_effect": "Equipped tools have a chance to temporarily gain 'fragile' or 'heavy' properties, affecting swing speed and durability; crafting success chance significantly reduced.",
+    "severity": "crisis"
+  },
+  {
+    "id": "ember_event_021",
+    "zone": "Ember",
+    "entity": "none",
+    "trigger": "night",
+    "health_range": [
+      0.0,
+      0.1
+    ],
+    "narrative": "The darkness itself feels alive, pressing in, as a deep, resonant growl echoes from the unseen depths of the prairie. I feel an irrational urge to run, a primal fear seizing my heart as the wind whips up dust devils that seem to form shapes.",
+    "sound_cue": "A low-frequency, guttural growl that seems to emanate from the ground itself, accompanied by a sudden increase in wind noise and fine dust particle sounds.",
+    "gameplay_effect": "Temporary 'Terror' status effect, causing player to occasionally lose control and move erratically; stamina regeneration halted.",
+    "severity": "crisis"
+  },
+  {
+    "id": "ember_event_022",
+    "zone": "Ember",
+    "entity": "land_spirit",
+    "trigger": "random",
+    "health_range": [
+      0.8,
+      1.0
+    ],
+    "narrative": "A warm, gentle breeze whispers across the plains, carrying the faint, sweet scent of prairie blossoms that aren't in season. For a moment, the sky seems impossibly vast and serene, a fleeting comfort.",
+    "sound_cue": "A soft, undulating sigh of wind, accompanied by a subtle, high-frequency shimmer that evokes a sense of peace.",
+    "gameplay_effect": "Small, temporary boost to VIT; minor increase in resource gathering speed.",
+    "severity": "whisper"
+  },
+  {
+    "id": "ember_event_023",
+    "zone": "Ember",
+    "entity": "none",
+    "trigger": "zone_health_low",
+    "health_range": [
+      0.5,
+      0.8
+    ],
+    "narrative": "The air crackles with an unseen energy, and I hear a faint, electrical hum that seems to emanate from the very horizon. Distant heat lightning flashes, but the sky is clear.",
+    "sound_cue": "A high-frequency, static-like hum, punctuated by faint, sharp 'crackle' sounds, creating an unsettling atmospheric tension.",
+    "gameplay_effect": "Temporary 'Static Shock' debuff, causing minor periodic damage to player's tools; minor reduction in electrical Spirit Root output.",
+    "severity": "presence"
+  },
+  {
+    "id": "ember_event_024",
+    "zone": "Ember",
+    "entity": "pakakosh",
+    "trigger": "moon_transition",
+    "health_range": [
+      0.5,
+      0.8
+    ],
+    "narrative": "A sudden, dry breeze brings with it a sound like countless tiny pebbles skittering across hard ground, then a distinct, hollow clack. The air grows noticeably cooler, and my breath mists, even under the prairie sun.",
+    "sound_cue": "A rapid, dry 'shush-clack' sound, like small bones shifting, accompanied by a sudden, localized drop in temperature sound.",
+    "gameplay_effect": "Brief 'Chilled' debuff, slightly increasing stamina consumption; minor reduction in LCK for 30 seconds.",
+    "severity": "presence"
+  },
+  {
+    "id": "ember_event_025",
+    "zone": "Ember",
+    "entity": "windigo",
+    "trigger": "reciprocity_low",
+    "health_range": [
+      0.0,
+      0.1
+    ],
+    "narrative": "A sickening gurgle rises from the dry earth, and I feel an oppressive weight of insatiable hunger pressing down on me, as if the entire prairie is trying to consume me. My own hunger pangs become unbearable, and shadows seem to coalesce into grasping forms.",
+    "sound_cue": "A deep, wet, gurgling sound, like a thirsty throat, combined with a low, oppressive hum that seems to fill the entire soundscape.",
+    "gameplay_effect": "Player's hunger and thirst meters rapidly deplete; all food and water sources within a significant radius temporarily become 'tainted', causing sickness if consumed.",
+    "severity": "crisis"
+  },
+  {
+    "id": "ember_event_026",
+    "zone": "Ember",
+    "entity": "little_people",
+    "trigger": "spirit_root_active",
+    "health_range": [
+      0.1,
+      0.4
+    ],
+    "narrative": "A cacophony of tiny, mocking laughter erupts from the Spirit Root node, and a volley of small, sharp pebbles pelts me from unseen sources. My focus shatters, and I feel an intense urge to leave this place immediately.",
+    "sound_cue": "A rapid, multi-directional burst of high-pitched, taunting laughter, interwoven with distinct 'pinging' sounds of small stones hitting nearby surfaces.",
+    "gameplay_effect": "Player receives minor 'Distraction' debuff, reducing combat accuracy and crafting speed; brief visual distortion affecting peripheral vision.",
+    "severity": "encounter"
+  },
+  {
+    "id": "ember_event_027",
+    "zone": "Ember",
+    "entity": "none",
+    "trigger": "night",
+    "health_range": [
+      0.1,
+      0.4
+    ],
+    "narrative": "The vast prairie at night feels impossibly empty, yet I hear a faint, rhythmic thrumming sound, like a massive, unseen heart beating beneath the earth. The air feels charged, heavy with an ancient presence.",
+    "sound_cue": "A deep, slow, rhythmic thrumming, like a distant, powerful heartbeat, resonates through the ground, accompanied by a faint, high-frequency shimmer.",
+    "gameplay_effect": "Temporary 'Vibration Sickness' debuff, causing minor visual tremors; reduced 'Perception' stat for detecting entities.",
+    "severity": "presence"
+  },
+  {
+    "id": "ember_event_028",
+    "zone": "Ember",
+    "entity": "land_spirit",
+    "trigger": "random",
+    "health_range": [
+      0.1,
+      0.4
+    ],
+    "narrative": "A wave of stifling, oppressive heat washes over me, carrying the distinct scent of ozone and something burnt, though no fire is visible. I hear a faint, crackling groan that seems to emanate from the very stones, as if they are in pain.",
+    "sound_cue": "A low, guttural crackling and groaning sound, like rocks being ground together, accompanied by a sharp, high-frequency 'ozone' smell sound.",
+    "gameplay_effect": "Minor 'Burn' status effect, dealing small damage over time; tools' durability temporarily decreases faster.",
+    "severity": "presence"
+  },
+  {
+    "id": "ember_event_029",
+    "zone": "Ember",
+    "entity": "none",
+    "trigger": "zone_health_low",
+    "health_range": [
+      0.0,
+      0.1
+    ],
+    "narrative": "The sky above turns a sickly, jaundiced yellow, and a dust storm rises without warning, carrying with it not just dust, but the faint, desperate cries of unseen creatures. The very air feels poisoned.",
+    "sound_cue": "A roaring, chaotic wall of wind and fine dust, punctuated by high-pitched, desperate cries and low, mournful wails, creating an overwhelming sensory assault.",
+    "gameplay_effect": "Severe 'Dust Blight' status effect, drastically reducing vision, movement speed, and causing persistent health drain; all resource nodes are temporarily inaccessible.",
+    "severity": "crisis"
+  },
+  {
+    "id": "ember_event_030",
+    "zone": "Ember",
+    "entity": "pakakosh",
+    "trigger": "moon_transition",
+    "health_range": [
+      0.1,
+      0.4
+    ],
+    "narrative": "The air grows heavy with a sudden, unnatural stillness, then a sharp, dry clatter echoes, too precise for the wind. A fleeting, skeletal shadow darts across the ground, impossibly fast, leaving a trail of profound cold.",
+    "sound_cue": "A single, sharp, dry 'clack' followed by a rapid, rustling whisper that seems to pass directly behind the player, inducing a chill.",
+    "gameplay_effect": "Temporary 'Shivers' debuff, slightly reducing attack speed and increasing vulnerability to cold damage.",
+    "severity": "encounter"
+  },
+  {
+    "id": "ember_event_031",
+    "zone": "Ember",
+    "entity": "windigo",
+    "trigger": "reciprocity_low",
+    "health_range": [
+      0.2,
+      0.5
+    ],
+    "narrative": "A low, persistent growl reverberates from the ground beneath me, and I feel a sudden, intense craving for meat, a primal hunger that feels alien. The horizon seems to waver, and I feel a distinct sense of being watched, from afar.",
+    "sound_cue": "A deep, guttural growl that seems to resonate from the earth, accompanied by a subtle, high-frequency 'shimmer' that mimics visual distortion.",
+    "gameplay_effect": "Player's 'Meat' hunger rate significantly increased; raw meat consumption provides double satiation but also a 'Windigo's Kiss' debuff, slightly reducing sanity over time.",
+    "severity": "encounter"
+  },
+  {
+    "id": "ember_event_032",
+    "zone": "Ember",
+    "entity": "little_people",
+    "trigger": "spirit_root_active",
+    "health_range": [
+      0.5,
+      0.8
+    ],
+    "narrative": "Faint, high-pitched whistles dance around the Spirit Root node, like children playing a game of hide-and-seek, just out of sight. I turn, but only see the dry grass waving, yet a small pile of harvested wood has been perfectly rearranged.",
+    "sound_cue": "A series of quick, high-pitched whistles that seem to come from multiple, shifting directions, creating a playful yet unsettling atmosphere.",
+    "gameplay_effect": "Minor 'Distraction' debuff, briefly causing player's inventory to open/close randomly; small chance for crafted items to appear with slightly different stats (LCK roll).",
+    "severity": "presence"
+  },
+  {
+    "id": "ember_event_033",
+    "zone": "Ember",
+    "entity": "land_spirit",
+    "trigger": "night",
+    "health_range": [
+      0.5,
+      0.8
+    ],
+    "narrative": "The embers of a distant, unseen fire seem to pulse in the darkness, casting flickering shadows that dance unnaturally. I hear a faint, almost melodic hum, like a lullaby sung by the vast, dark prairie itself.",
+    "sound_cue": "A low, sustained, almost melodic hum, intertwined with faint, sporadic 'pop' sounds of unseen embers, creating a sense of ancient, watchful presence.",
+    "gameplay_effect": "Temporary 'Calming' buff, slightly increasing stamina regeneration; minor increase in 'Perception' stat for detecting passive resources.",
+    "severity": "whisper"
+  },
+  {
+    "id": "ember_event_034",
+    "zone": "Ember",
+    "entity": "none",
+    "trigger": "random",
+    "health_range": [
+      0.3,
+      0.6
+    ],
+    "narrative": "A sudden gust of wind carries with it the faint, sickly sweet scent of something decaying, and I hear a deep, rasping sigh that seems to come from all directions at once. The air feels heavy, stifling.",
+    "sound_cue": "A deep, drawn-out, raspy sigh, accompanied by a subtle, low-frequency 'pressure drop' sound, creating a feeling of suffocation.",
+    "gameplay_effect": "Player receives a temporary 'Nausea' debuff, slightly reducing movement speed and preventing food/water consumption for a short duration.",
+    "severity": "presence"
+  },
+  {
+    "id": "ember_event_035",
+    "zone": "Ember",
+    "entity": "land_spirit",
+    "trigger": "zone_health_low",
+    "health_range": [
+      0.3,
+      0.6
+    ],
+    "narrative": "The ground beneath my feet feels strangely loose and unstable, and I hear a faint, unsettling groan, as if the earth is shifting restlessly in its sleep. Small cracks appear in the dry soil around me.",
+    "sound_cue": "A low, rumbling groan that seems to emanate from beneath the ground, accompanied by subtle 'creaking' and 'shifting' sounds of earth.",
+    "gameplay_effect": "Small chance for temporary 'uneven ground' debuffs, occasionally causing player to stumble; minor structural integrity reduction for nearby player-built structures.",
+    "severity": "encounter"
+  },
+  {
+    "id": "ember_event_036",
+    "zone": "Ember",
+    "entity": "none",
+    "trigger": "moon_transition",
+    "health_range": [
+      0.7,
+      1.0
+    ],
+    "narrative": "As the moon shifts, the wind suddenly dies, leaving an oppressive silence, broken only by a faint, high-pitched whistle that seems to come from the stars themselves. The sky appears impossibly vast and uncaring.",
+    "sound_cue": "An abrupt cessation of all ambient sounds, replaced by a single, sustained, high-frequency whistle that seems to pierce the silence, emanating from above.",
+    "gameplay_effect": "Brief 'Silence' debuff, hindering detection of auditory cues; slight increase in 'Anxiety' stat.",
+    "severity": "whisper"
+  },
+  {
+    "id": "ember_event_037",
+    "zone": "Ember",
+    "entity": "windigo",
+    "trigger": "reciprocity_low",
+    "health_range": [
+      0.7,
+      1.0
+    ],
+    "narrative": "A faint, sweet scent, like overripe fruit, drifts on the hot air, accompanied by a subtle, almost imperceptible whisper that hints at hidden abundances. I feel a slight, unsettling urge to seek out and claim more.",
+    "sound_cue": "A very low-frequency, almost subliminal whisper that suggests 'more, more,' accompanied by a subtle, echoing 'thrum' in the air.",
+    "gameplay_effect": "Minor 'Temptation' buff, slightly increasing gathering speed but also subtly increasing resource consumption rates for 30 seconds.",
+    "severity": "whisper"
+  },
+  {
+    "id": "ember_event_038",
+    "zone": "Ember",
+    "entity": "little_people",
+    "trigger": "spirit_root_active",
+    "health_range": [
+      0.7,
+      1.0
+    ],
+    "narrative": "Around the Spirit Root, I hear faint, musical chimes, like tiny glass bells tinkling in the breeze, though no such objects are visible. A small, familiar pebble from my pocket feels warm, then cold, then returns to normal.",
+    "sound_cue": "Delicate, high-pitched tinkling sounds, like very small glass chimes, seemingly emanating from the air around the Spirit Root node.",
+    "gameplay_effect": "Small chance for minor healing potions to become slightly more effective; minor LCK buff for 30 seconds.",
+    "severity": "whisper"
+  },
+  {
+    "id": "ember_event_039",
+    "zone": "Ember",
+    "entity": "land_spirit",
+    "trigger": "night",
+    "health_range": [
+      0.0,
+      0.1
+    ],
+    "narrative": "The night air grows impossibly cold, despite the recent heat, and a low, mournful howl echoes across the plains, seeming to come from every direction at once. My vision blurs, and I feel a profound sense of isolation and dread.",
+    "sound_cue": "A sustained, multi-directional, low-frequency howl, carrying a distinct 'roughness' modulation, causing involuntary shivers and auditory disorientation.",
+    "gameplay_effect": "Severe 'Frostbite' debuff, causing continuous health drain and significantly reducing movement speed; player's INT stat temporarily halved.",
+    "severity": "crisis"
+  },
+  {
+    "id": "ember_event_040",
+    "zone": "Ember",
+    "entity": "none",
+    "trigger": "random",
+    "health_range": [
+      0.0,
+      0.1
+    ],
+    "narrative": "The ground beneath me trembles violently, and a deafening roar erupts from deep within the earth, as if the prairie itself is tearing apart. Fiery fissures briefly open in the ground, emitting plumes of scorching vapor.",
+    "sound_cue": "A sudden, overwhelming, multi-layered soundscape of violent seismic rumbling, explosive ground cracks, and high-pressure steam hissing, creating auditory overload.",
+    "gameplay_effect": "Player receives severe 'Stagger' and 'Burn' damage; all nearby structures take significant durability damage; temporary impassable terrain created by fissures.",
+    "severity": "crisis"
+  },
+  {
+    "id": "stone_event_001",
+    "zone": "Stone",
+    "entity": "land_spirit",
+    "trigger": "random",
+    "health_range": [
+      0.7,
+      1.0
+    ],
+    "narrative": "A low, resonant hum seems to emanate from the ancient stones around me, a vibration I feel more than hear. The air feels heavy, thick with the weight of ages, as if the earth is simply breathing.",
+    "sound_cue": "A deep, sustained, low-frequency hum, with subtle harmonic overtones, reverberates through the ground and air, creating a sense of vastness.",
+    "gameplay_effect": "Minor 'Earth's Embrace' buff, slightly increasing DEF and VIT for a short duration.",
+    "severity": "whisper"
+  },
+  {
+    "id": "stone_event_002",
+    "zone": "Stone",
+    "entity": "little_people",
+    "trigger": "spirit_root_active",
+    "health_range": [
+      0.5,
+      0.8
+    ],
+    "narrative": "From a nearby pile of ancient stones, I hear faint, rhythmic tapping, like tiny hammers on rock, accompanied by soft chittering. A small, carefully placed tool has been moved, now resting precariously on a high ledge.",
+    "sound_cue": "Faint, rapid tapping sounds, like small stone striking stone, interwoven with quick, high-pitched chittering that seems to dance around the Spirit Root.",
+    "gameplay_effect": "Random small inventory items may be temporarily 'hidden' in nearby rock piles, requiring a short search; minor reduction in crafting speed.",
+    "severity": "presence"
+  },
+  {
+    "id": "stone_event_003",
+    "zone": "Stone",
+    "entity": "windigo",
+    "trigger": "reciprocity_low",
+    "health_range": [
+      0.3,
+      0.6
+    ],
+    "narrative": "A dry, rasping whisper seems to slither from the cracks in the stone, speaking of barrenness and insatiable need, making my throat feel suddenly parched. I feel a strange urge to break apart every rock, searching for something hidden.",
+    "sound_cue": "A dry, hissing whisper, like sand-blasted rock, accompanied by a low, guttural growl that seems to emanate from the ground, inspiring thirst.",
+    "gameplay_effect": "Player's thirst rate significantly increased; consuming water provides only half the usual hydration; mining attempts have a chance to yield no resources.",
+    "severity": "encounter"
+  },
+  {
+    "id": "stone_event_004",
+    "zone": "Stone",
+    "entity": "pakakosh",
+    "trigger": "moon_transition",
+    "health_range": [
+      0.0,
+      0.2
+    ],
+    "narrative": "The echoing silence of the stone plains is shattered by a sharp, brittle clattering, like a thousand dry bones suddenly shifting, and an unnatural cold bites at my skin. A tall, gaunt shadow, impossibly thin, appears for a split second behind an ancient rock formation.",
+    "sound_cue": "A rapid, overwhelming chorus of dry, sharp 'clack-clack-clack' sounds, resonating off stone surfaces, accompanied by an abrupt, deep drop in ambient temperature sound.",
+    "gameplay_effect": "Player's 'DEF' stat significantly reduced for a short duration; all melee attacks have a chance to inflict 'Frailty' debuff on the player, reducing armor effectiveness.",
+    "severity": "crisis"
+  },
+  {
+    "id": "stone_event_005",
+    "zone": "Stone",
+    "entity": "none",
+    "trigger": "night",
+    "health_range": [
+      0.4,
+      0.9
+    ],
+    "narrative": "The vast night sky above seems to press down, darker than usual, and I hear faint, almost melodic creaks and groans from the ancient stone formations. The shadows cast by the moon seem to stretch and crawl.",
+    "sound_cue": "Slow, deep creaking and groaning sounds, like massive stone structures settling, accompanied by subtle, shifting 'whispers' of wind through rock.",
+    "gameplay_effect": "Minor 'Disorientation' debuff; distant landmarks may appear to shift slightly; increased chance of encountering 'ambush' type entities.",
+    "severity": "whisper"
+  },
+  {
+    "id": "stone_event_006",
+    "zone": "Stone",
+    "entity": "land_spirit",
+    "trigger": "zone_health_low",
+    "health_range": [
+      0.1,
+      0.4
+    ],
+    "narrative": "A deep, mournful rumble emanates from the ground, shaking my teeth, and the air grows heavy with the scent of dry dust and decay. Ancient cairns seem to sag, as if collapsing under an unseen weight.",
+    "sound_cue": "A low-frequency, continuous rumble that causes physical vibration, punctuated by sharp, cracking sounds, like stressed stone.",
+    "gameplay_effect": "Minor 'Earth Tremor' debuff, occasionally causing player to stumble; mining tools take increased durability damage; nearby stone resources yield less.",
+    "severity": "presence"
+  },
+  {
+    "id": "stone_event_007",
+    "zone": "Stone",
+    "entity": "none",
+    "trigger": "random",
+    "health_range": [
+      0.6,
+      1.0
+    ],
+    "narrative": "A strange, metallic ringing sound echoes off the distant rock faces, too precise and sustained for any natural occurrence. For a moment, the air feels charged, as if struck by lightning, but the sky is clear.",
+    "sound_cue": "A clear, high-pitched metallic ringing, resonating and echoing across the barren landscape, with a subtle, electric 'fizz' in the air.",
+    "gameplay_effect": "Brief 'Stun' effect on player's hearing, making sound cues harder to discern; minor LCK buff for finding rare metal ores.",
+    "severity": "whisper"
+  },
+  {
+    "id": "stone_event_008",
+    "zone": "Stone",
+    "entity": "windigo",
+    "trigger": "reciprocity_low",
+    "health_range": [
+      0.1,
+      0.3
+    ],
+    "narrative": "The ground itself seems to groan with a deep, guttural hunger, vibrating through my boots, and I hear a chorus of whispers urging me to hoard, to take all I can. A deep, gnawing emptiness settles in my stomach, refusing to be filled.",
+    "sound_cue": "A pervasive, low-frequency growl that seems to emanate from the ground, interwoven with rapid, insistent whispers of 'mine, all mine,' creating a sense of dread.",
+    "gameplay_effect": "Player's inventory capacity temporarily reduced by 10%; any resources gathered have a 20% chance to disappear immediately, leaving a 'Guilt' debuff reducing LCK.",
+    "severity": "crisis"
+  },
+  {
+    "id": "stone_event_009",
+    "zone": "Stone",
+    "entity": "pakakosh",
+    "trigger": "moon_transition",
+    "health_range": [
+      0.3,
+      0.6
+    ],
+    "narrative": "A sudden, bone-chilling draft sweeps through the rock formations, carrying with it a dry, clicking sound, like stones shifting, then something more deliberate, more skeletal. Shadows seem to deepen around me, even in broad daylight.",
+    "sound_cue": "A distinct, rhythmic 'click-clack' sound, like small bones shifting, accompanies the chilling draft, creating a sense of being pursued, echoing off stone.",
+    "gameplay_effect": "Minor 'Dread' debuff, reducing movement speed slightly; player's LCK temporarily reduced for mining and prospecting.",
+    "severity": "encounter"
+  },
+  {
+    "id": "stone_event_010",
+    "zone": "Stone",
+    "entity": "little_people",
+    "trigger": "spirit_root_active",
+    "health_range": [
+      0.7,
+      1.0
+    ],
+    "narrative": "Near the pulsing Spirit Root, I hear faint, high-pitched scuttling sounds, like tiny creatures darting through the rock crevices. I glance over, but only see shadows playing tricks, yet a small, carefully stacked pile of stones has been neatly toppled.",
+    "sound_cue": "Quick, light scratching and scuttling noises, as if small, fast feet are moving over rock, accompanied by a nearly subliminal, mischievous 'hee-hee'.",
+    "gameplay_effect": "Random small, non-essential inventory items may briefly disappear and reappear in a different slot or nearby on the ground (LCK roll).",
+    "severity": "whisper"
+  },
+  {
+    "id": "stone_event_011",
+    "zone": "Stone",
+    "entity": "land_spirit",
+    "trigger": "night",
+    "health_range": [
+      0.2,
+      0.5
+    ],
+    "narrative": "The profound silence of the stone desert is broken by a deep, resonant sigh from the very earth beneath me, a sound of ancient weariness. The stars above seem to pulse with a faint, blueish light, mirroring the deep sadness.",
+    "sound_cue": "A deep, sustained, resonating sigh, felt more than heard, emanates from the ground, accompanied by a subtle, ethereal hum.",
+    "gameplay_effect": "Temporary 'Weariness' debuff, slightly increasing stamina consumption and reducing max stamina; Spirit Root network power output temporarily reduced by 5%.",
+    "severity": "presence"
+  },
+  {
+    "id": "stone_event_012",
+    "zone": "Stone",
+    "entity": "none",
+    "trigger": "random",
+    "health_range": [
+      0.0,
+      0.1
+    ],
+    "narrative": "A sudden, violent tremor shakes the ground, and a deafening, grinding roar erupts from deep within the earth, as if the very mountains are tearing themselves apart. Cracks appear in the ground, emitting plumes of dust.",
+    "sound_cue": "A powerful, focused burst of seismic rumbling, like grinding tectonic plates, with high-frequency shattering sounds, causing physical discomfort.",
+    "gameplay_effect": "Brief 'Stagger' effect; vision obscured by dust; temporary vulnerability to 'Crush' damage; minor health drain.",
+    "severity": "crisis"
+  },
+  {
+    "id": "stone_event_013",
+    "zone": "Stone",
+    "entity": "pakakosh",
+    "trigger": "moon_transition",
+    "health_range": [
+      0.0,
+      0.1
+    ],
+    "narrative": "The air crackles with an impossible cold, and the rapid, dry clatter of countless bones echoes in the silence, surrounding me completely, seeming to come from the very stone. I feel a crushing weight, as if death itself is rising from the ground, and the world seems to dim.",
+    "sound_cue": "An intense, rapid, and pervasive clattering of dry bones, growing louder and closer, coupled with a deep, chilling infrasound that causes involuntary muscle spasms and a sense of bone-deep cold.",
+    "gameplay_effect": "'Bad Omen' status effect applied, drastically reducing all stats by 20% for 60 seconds; player becomes vulnerable to additional damage from all sources.",
+    "severity": "crisis"
+  },
+  {
+    "id": "stone_event_014",
+    "zone": "Stone",
+    "entity": "little_people",
+    "trigger": "spirit_root_active",
+    "health_range": [
+      0.3,
+      0.6
+    ],
+    "narrative": "A mischievous chorus of tiny whispers and faint stone-on-stone taps emanates from the Spirit Root, and I feel a tug at my pouch. When I look, a vital component has vanished, only to reappear moments later atop a distant, impossibly high, smooth rock.",
+    "sound_cue": "A flurry of high-pitched, darting whispers and quick, soft 'tink' sounds of stone, creating a sense of rapid, unseen movement in all directions.",
+    "gameplay_effect": "A random equipped tool or item is temporarily unequipped and moved a short distance away; minor LCK debuff for crafting attempts.",
+    "severity": "encounter"
+  },
+  {
+    "id": "stone_event_015",
+    "zone": "Stone",
+    "entity": "land_spirit",
+    "trigger": "zone_health_low",
+    "health_range": [
+      0.0,
+      0.2
+    ],
+    "narrative": "The very ground feels brittle and hollow, and a deep, guttural moan reverberates from deep within the earth, shaking the air around me. The ancient stones seem to weep dust, crumbling before my eyes.",
+    "sound_cue": "A deep, continuous, growling rumble that reverberates through the ground, accompanied by sharp, high-pitched 'fracture' sounds of breaking stone, creating a sense of imminent collapse.",
+    "gameplay_effect": "Player receives continuous minor 'Crush' damage over time; 'Exhaustion' debuff applied, severely limiting stamina regeneration; all stone resource nodes in a small radius become 'barren'.",
+    "severity": "crisis"
+  },
+  {
+    "id": "stone_event_016",
+    "zone": "Stone",
+    "entity": "none",
+    "trigger": "night",
+    "health_range": [
+      0.7,
+      1.0
+    ],
+    "narrative": "The night sky seems to glow faintly with an inner light, illuminating the ancient stone formations with an ethereal sheen. I hear a faint, almost melodic whispering, like the wind telling old, forgotten stories through the rocks.",
+    "sound_cue": "A very low-frequency, almost sub-audible hum that resonates within the chest cavity, accompanied by a subtle high-frequency whisper that seems to carry faint, unintelligible words.",
+    "gameplay_effect": "Minor 'Insight' buff, granting a small chance to find rare resources when mining; minor increase in INT for 30 seconds.",
+    "severity": "whisper"
+  },
+  {
+    "id": "stone_event_017",
+    "zone": "Stone",
+    "entity": "land_spirit",
+    "trigger": "random",
+    "health_range": [
+      0.4,
+      0.7
+    ],
+    "narrative": "A sudden, inexplicable wave of pressure washes over me, making my ears pop, and I hear a faint, grinding sound, as if massive rocks are slowly shifting beneath the surface. Small pebbles around me vibrate.",
+    "sound_cue": "A low, sustained grinding sound, like slow-moving tectonic plates, accompanied by a sudden, sharp 'pop' sound that mimics ear pressure changes.",
+    "gameplay_effect": "Player receives a temporary 'Pressure' debuff, reducing movement speed and increasing stamina consumption.",
+    "severity": "presence"
+  },
+  {
+    "id": "stone_event_018",
+    "zone": "Stone",
+    "entity": "windigo",
+    "trigger": "reciprocity_low",
+    "health_range": [
+      0.5,
+      0.8
+    ],
+    "narrative": "A cold dread settles in, despite the blazing sun, as I hear a low, scraping sound from the earth, as if something immense is dragging itself across rock, drawing sustenance. I feel a sudden, intense craving for rare minerals, an urge to strip the land bare.",
+    "sound_cue": "A deep, resonant 'scrape' and 'grind' sound, accompanied by a faint, high-pitched whine, seems to come from directly beneath me, intensifying the urge.",
+    "gameplay_effect": "Player's 'Mining' efficiency temporarily increased by 15%, but any resources gathered have a 25% chance to attract additional hostile entities (not Windigo directly).",
+    "severity": "encounter"
+  },
+  {
+    "id": "stone_event_019",
+    "zone": "Stone",
+    "entity": "none",
+    "trigger": "zone_health_low",
+    "health_range": [
+      0.1,
+      0.4
+    ],
+    "narrative": "The air thickens with a palpable despair, and the ancient stone formations seem to sag, groaning under an unseen weight. I hear a faint, distant, hollow knocking sound, too regular to be natural, echoing from deep underground.",
+    "sound_cue": "A deep, rhythmic, hollow knocking sound, resonating from beneath the ground, accompanied by a low, mournful groan of straining stone.",
+    "gameplay_effect": "Temporary 'Disquiet' debuff, reducing damage output and critical hit chance; player's LCK stat slightly reduced for mining.",
+    "severity": "presence"
+  },
+  {
+    "id": "stone_event_020",
+    "zone": "Stone",
+    "entity": "little_people",
+    "trigger": "spirit_root_active",
+    "health_range": [
+      0.0,
+      0.2
+    ],
+    "narrative": "A chorus of maniacal stone-clinking giggling erupts around the Spirit Root, too close, too many, and small, impossibly fast shadows flit through the rock crevices. My mining pick feels suddenly heavy, then impossibly light, as if its properties are being toyed with.",
+    "sound_cue": "A swirling, multi-directional cacophony of high-pitched, rapid giggles and quick, sharp 'tink-clink' sounds, designed to disorient and overwhelm, resonating off nearby rock.",
+    "gameplay_effect": "Equipped mining tools have a chance to temporarily gain 'fragile' or 'heavy' properties, affecting swing speed and durability; mining success chance significantly reduced.",
+    "severity": "crisis"
+  },
+  {
+    "id": "stone_event_021",
+    "zone": "Stone",
+    "entity": "none",
+    "trigger": "night",
+    "health_range": [
+      0.0,
+      0.1
+    ],
+    "narrative": "The darkness itself feels like a crushing weight, as a deep, resonant tremor echoes from the unseen depths of the prairie, shaking the very bones in my body. I feel an irrational urge to hide, a primal fear seizing my heart as the shadows in the stone seem to coalesce into grasping forms.",
+    "sound_cue": "A low-frequency, guttural growl that seems to emanate from the ground itself, accompanied by a sudden, intense seismic rumble and the sound of large stones grinding together.",
+    "gameplay_effect": "Temporary 'Terror' status effect, causing player to occasionally lose control and move erratically; stamina regeneration halted; player takes minor, continuous 'Crush' damage.",
+    "severity": "crisis"
+  },
+  {
+    "id": "stone_event_022",
+    "zone": "Stone",
+    "entity": "land_spirit",
+    "trigger": "random",
+    "health_range": [
+      0.8,
+      1.0
+    ],
+    "narrative": "A steady, deep pulse emanates from the earth, a soothing vibration that seems to calm my nerves. The ancient stones around me seem to glow with a faint, inner light, a sense of enduring strength.",
+    "sound_cue": "A deep, slow, rhythmic pulse, like a vast heartbeat, resonating through the ground, accompanied by a subtle, low-frequency hum that evokes stability.",
+    "gameplay_effect": "Small, temporary boost to DEF; minor increase in mining yield.",
+    "severity": "whisper"
+  },
+  {
+    "id": "stone_event_023",
+    "zone": "Stone",
+    "entity": "none",
+    "trigger": "zone_health_low",
+    "health_range": [
+      0.5,
+      0.8
+    ],
+    "narrative": "The air crackles with an unseen tension, and I hear a faint, high-pitched whine that seems to emanate from the cracks in the rock, almost like stressed metal. Distant sounds of stone fracturing echo unnaturally.",
+    "sound_cue": "A high-frequency, metallic whine, punctuated by faint, sharp 'snap' and 'crack' sounds of straining stone, creating an unsettling atmospheric tension.",
+    "gameplay_effect": "Temporary 'Stress' debuff, causing minor periodic damage to player's tools; minor reduction in structural integrity of nearby stone buildings.",
+    "severity": "presence"
+  },
+  {
+    "id": "stone_event_024",
+    "zone": "Stone",
+    "entity": "pakakosh",
+    "trigger": "moon_transition",
+    "health_range": [
+      0.5,
+      0.8
+    ],
+    "narrative": "A sudden, dry breeze brings with it a sound like countless tiny pebbles skittering across hard ground, then a distinct, hollow clack. The air grows noticeably cooler, and my breath mists, even under the prairie sun, as a gaunt shadow passes over a nearby rock.",
+    "sound_cue": "A rapid, dry 'shush-clack' sound, like small bones shifting, accompanied by a sudden, localized drop in temperature sound, echoing off stone.",
+    "gameplay_effect": "Brief 'Chilled' debuff, slightly increasing stamina consumption; minor reduction in LCK for 30 seconds for mining.",
+    "severity": "presence"
+  },
+  {
+    "id": "stone_event_025",
+    "zone": "Stone",
+    "entity": "windigo",
+    "trigger": "reciprocity_low",
+    "health_range": [
+      0.0,
+      0.1
+    ],
+    "narrative": "A sickening crunching sound rises from the dry earth, and I feel an oppressive weight of insatiable hunger pressing down on me, as if the entire prairie is trying to consume me, bone and all. My own hunger pangs become unbearable, and shadows seem to coalesce into grasping forms among the rocks.",
+    "sound_cue": "A deep, wet, crunching sound, like bone being chewed, combined with a low, oppressive hum that seems to fill the entire soundscape and induce physical hunger.",
+    "gameplay_effect": "Player's hunger and thirst meters rapidly deplete; all resource nodes within a significant radius temporarily become 'barren', yielding nothing and applying 'Despair' debuff.",
+    "severity": "crisis"
+  },
+  {
+    "id": "stone_event_026",
+    "zone": "Stone",
+    "entity": "little_people",
+    "trigger": "spirit_root_active",
+    "health_range": [
+      0.1,
+      0.4
+    ],
+    "narrative": "A chorus of maniacal, echoing giggling erupts from around the Spirit Root, too close, too many, and small, sharp pebbles pelt me from unseen sources. My focus shatters, and I feel an intense urge to leave this place immediately, as if the rocks themselves are laughing.",
+    "sound_cue": "A rapid, multi-directional burst of high-pitched, taunting laughter, interwoven with distinct 'pinging' sounds of small stones hitting nearby surfaces, echoing unnaturally.",
+    "gameplay_effect": "Player receives minor 'Distraction' debuff, reducing combat accuracy and crafting speed; brief visual distortion affecting peripheral vision.",
+    "severity": "encounter"
+  },
+  {
+    "id": "stone_event_027",
+    "zone": "Stone",
+    "entity": "none",
+    "trigger": "night",
+    "health_range": [
+      0.1,
+      0.4
+    ],
+    "narrative": "The vast stone plains at night feel impossibly empty, yet I hear a faint, rhythmic scraping sound, like a massive, unseen creature slowly dragging itself across rock. The air feels charged, heavy with an ancient, patient presence.",
+    "sound_cue": "A deep, slow, rhythmic scraping, like a giant rock being dragged, resonates through the ground, accompanied by a faint, high-frequency 'shhh' of dust.",
+    "gameplay_effect": "Temporary 'Vibration Sickness' debuff, causing minor visual tremors; reduced 'Perception' stat for detecting entities in darkness.",
+    "severity": "presence"
+  },
+  {
+    "id": "stone_event_028",
+    "zone": "Stone",
+    "entity": "land_spirit",
+    "trigger": "random",
+    "health_range": [
+      0.1,
+      0.4
+    ],
+    "narrative": "A wave of stifling, oppressive pressure washes over me, carrying the distinct scent of dry earth and something metallic, though no source is visible. I hear a faint, grinding groan that seems to emanate from the very stones, as if they are in ancient agony.",
+    "sound_cue": "A low, guttural grinding and groaning sound, like massive geological plates shifting, accompanied by a sharp, high-frequency 'static' charge sound.",
+    "gameplay_effect": "Minor 'Fatigue' debuff, increasing stamina consumption; tools' durability temporarily decreases faster when used on stone.",
+    "severity": "presence"
+  },
+  {
+    "id": "stone_event_029",
+    "zone": "Stone",
+    "entity": "none",
+    "trigger": "zone_health_low",
+    "health_range": [
+      0.0,
+      0.1
+    ],
+    "narrative": "The sky above turns a sickly, oppressive grey, and a dust storm rises without warning, carrying with it not just dust, but the faint, desperate cries of unseen creatures trapped beneath the earth. The very air feels choked.",
+    "sound_cue": "A roaring, chaotic wall of wind and fine dust, punctuated by high-pitched, desperate cries and low, mournful wails, creating an overwhelming sensory assault, with the added sound of rockfalls.",
+    "gameplay_effect": "Severe 'Dust Blight' status effect, drastically reducing vision, movement speed, and causing persistent health drain; all resource nodes are temporarily inaccessible; minor structural integrity damage to nearby buildings.",
+    "severity": "crisis"
+  },
+  {
+    "id": "stone_event_030",
+    "zone": "Stone",
+    "entity": "pakakosh",
+    "trigger": "moon_transition",
+    "health_range": [
+      0.1,
+      0.4
+    ],
+    "narrative": "The air grows heavy with a sudden, unnatural stillness, then a sharp, dry clatter echoes, too precise for the wind, off the stone formations. A fleeting, skeletal shadow darts across the ground, impossibly fast, leaving a trail of profound cold that chills the very rock.",
+    "sound_cue": "A single, sharp, dry 'clack' followed by a rapid, rustling whisper that seems to pass directly behind the player, inducing a deep chill in the resonant stone environment.",
+    "gameplay_effect": "Temporary 'Shivers' debuff, slightly reducing attack speed and increasing vulnerability to 'Frailty' damage from combat.",
+    "severity": "encounter"
+  },
+  {
+    "id": "stone_event_031",
+    "zone": "Stone",
+    "entity": "windigo",
+    "trigger": "reciprocity_low",
+    "health_range": [
+      0.2,
+      0.5
+    ],
+    "narrative": "A low, persistent growl reverberates from the dry ground, and I feel a sudden, intense craving for precious minerals, a primal hunger that feels alien. The distant rock formations seem to waver, and I feel a distinct sense of being watched, from within the earth.",
+    "sound_cue": "A deep, guttural growl that seems to resonate from the earth, accompanied by a subtle, high-frequency 'shimmer' that mimics visual distortion in the rock formations.",
+    "gameplay_effect": "Player's 'Mineral' gathering rate significantly increased; raw minerals provide double satiation but also a 'Windigo's Kiss' debuff, slightly reducing sanity over time.",
+    "severity": "encounter"
+  },
+  {
+    "id": "stone_event_032",
+    "zone": "Stone",
+    "entity": "little_people",
+    "trigger": "spirit_root_active",
+    "health_range": [
+      0.5,
+      0.8
+    ],
+    "narrative": "Faint, high-pitched whistles dance around the Spirit Root node, like children playing a game of hide-and-seek among the boulders, just out of sight. I turn, but only see shadows playing tricks, yet a small pile of harvested stone has been perfectly rearranged into a tiny cairn.",
+    "sound_cue": "A series of quick, high-pitched whistles that seem to come from multiple, shifting directions, creating a playful yet unsettling atmosphere, echoing off stone.",
+    "gameplay_effect": "Minor 'Distraction' debuff, briefly causing player's inventory to open/close randomly; small chance for crafted stone items to appear with slightly different stats (LCK roll).",
+    "severity": "presence"
+  },
+  {
+    "id": "stone_event_033",
+    "zone": "Stone",
+    "entity": "land_spirit",
+    "trigger": "night",
+    "health_range": [
+      0.5,
+      0.8
+    ],
+    "narrative": "The ancient stone formations seem to glow faintly under the moonlight, casting flickering shadows that dance unnaturally. I hear a faint, almost melodic hum, like a lullaby sung by the vast, silent prairie itself, through the rocks.",
+    "sound_cue": "A low, sustained, almost melodic hum, intertwined with faint, sporadic 'tick' sounds of unseen water droplets on stone, creating a sense of ancient, watchful presence.",
+    "gameplay_effect": "Temporary 'Calming' buff, slightly increasing stamina regeneration; minor increase in 'Perception' stat for detecting passive resources.",
+    "severity": "whisper"
+  },
+  {
+    "id": "stone_event_034",
+    "zone": "Stone",
+    "entity": "none",
+    "trigger": "random",
+    "health_range": [
+      0.3,
+      0.6
+    ],
+    "narrative": "A sudden gust of wind carries with it the faint, metallic scent of iron and something damp, and I hear a deep, rasping sigh that seems to come from all directions at once. The air feels heavy, stifling, as if deep underground.",
+    "sound_cue": "A deep, drawn-out, raspy sigh, accompanied by a subtle, low-frequency 'pressure drop' sound, creating a feeling of suffocation and dampness, echoing from subterranean spaces.",
+    "gameplay_effect": "Player receives a temporary 'Nausea' debuff, slightly reducing movement speed and preventing food/water consumption for a short duration.",
+    "severity": "presence"
+  },
+  {
+    "id": "stone_event_035",
+    "zone": "Stone",
+    "entity": "land_spirit",
+    "trigger": "zone_health_low",
+    "health_range": [
+      0.3,
+      0.6
+    ],
+    "narrative": "The ground beneath my feet feels strangely loose and unstable, and I hear a faint, unsettling groan, as if the earth is shifting restlessly in its ancient sleep. Small cracks appear in the dry soil and rock around me.",
+    "sound_cue": "A low, rumbling groan that seems to emanate from beneath the ground, accompanied by subtle 'creaking' and 'shifting' sounds of earth and cracking stone.",
+    "gameplay_effect": "Small chance for temporary 'uneven ground' debuffs, occasionally causing player to stumble; minor structural integrity reduction for nearby player-built stone structures.",
+    "severity": "encounter"
+  },
+  {
+    "id": "stone_event_036",
+    "zone": "Stone",
+    "entity": "none",
+    "trigger": "moon_transition",
+    "health_range": [
+      0.7,
+      1.0
+    ],
+    "narrative": "As the moon shifts, the wind suddenly dies, leaving an oppressive silence, broken only by a faint, high-pitched chime that seems to come from the ancient stones themselves. The sky appears impossibly vast and uncaring, mirroring the stoic rock.",
+    "sound_cue": "An abrupt cessation of all ambient sounds, replaced by a single, sustained, high-frequency chime that seems to resonate from the stone, emanating from above.",
+    "gameplay_effect": "Brief 'Silence' debuff, hindering detection of auditory cues; slight increase in 'Anxiety' stat.",
+    "severity": "whisper"
+  },
+  {
+    "id": "stone_event_037",
+    "zone": "Stone",
+    "entity": "windigo",
+    "trigger": "reciprocity_low",
+    "health_range": [
+      0.7,
+      1.0
+    ],
+    "narrative": "A faint, sweet scent, like damp earth after rain, drifts on the dry air, accompanied by a subtle, almost imperceptible whisper that hints at hidden veins of ore. I feel a slight, unsettling urge to seek out and claim more.",
+    "sound_cue": "A very low-frequency, almost subliminal whisper that suggests 'dig, dig,' accompanied by a subtle, echoing 'thrum' in the air.",
+    "gameplay_effect": "Minor 'Temptation' buff, slightly increasing gathering speed but also subtly increasing resource consumption rates for 30 seconds.",
+    "severity": "whisper"
+  },
+  {
+    "id": "stone_event_038",
+    "zone": "Stone",
+    "entity": "little_people",
+    "trigger": "spirit_root_active",
+    "health_range": [
+      0.7,
+      1.0
+    ],
+    "narrative": "Around the Spirit Root, I hear faint, musical clinking sounds, like tiny pebbles dancing in the breeze, though no such movement is visible. A small, familiar pebble from my pocket feels warm, then cold, then returns to normal, as if played with.",
+    "sound_cue": "Delicate, high-pitched clinking sounds, like very small stones tapping together, seemingly emanating from the air around the Spirit Root node.",
+    "gameplay_effect": "Small chance for minor healing potions to become slightly more effective; minor LCK buff for 30 seconds.",
+    "severity": "whisper"
+  },
+  {
+    "id": "stone_event_039",
+    "zone": "Stone",
+    "entity": "land_spirit",
+    "trigger": "night",
+    "health_range": [
+      0.0,
+      0.1
+    ],
+    "narrative": "The night air grows impossibly cold, despite the recent heat, and a low, mournful groan echoes across the plains, seeming to come from every rock at once. My vision blurs, and I feel a profound sense of isolation and dread, as if the ancient earth is closing in.",
+    "sound_cue": "A sustained, multi-directional, low-frequency groan, carrying a distinct 'roughness' modulation, causing involuntary shivers and auditory disorientation, resonating from the stone.",
+    "gameplay_effect": "Severe 'Earthbind' debuff, causing continuous health drain and significantly reducing movement speed; player's INT stat temporarily halved.",
+    "severity": "crisis"
+  },
+  {
+    "id": "stone_event_040",
+    "zone": "Stone",
+    "entity": "none",
+    "trigger": "random",
+    "health_range": [
+      0.0,
+      0.1
+    ],
+    "narrative": "The ground beneath me trembles violently, and a deafening, crushing roar erupts from deep within the earth, as if the prairie itself is being torn asunder. Deep fissures briefly open in the ground, emitting plumes of dust and a choking, mineral scent.",
+    "sound_cue": "A sudden, overwhelming, multi-layered soundscape of violent seismic rumbling, explosive ground cracks, and high-pressure dust hissing, creating auditory overload and a sense of impending collapse.",
+    "gameplay_effect": "Player receives severe 'Stagger' and 'Crush' damage; all nearby structures take significant durability damage; temporary impassable terrain created by fissures.",
+    "severity": "crisis"
+  },
+  {
+    "id": "frost_event_001",
+    "zone": "Frost",
+    "entity": "land_spirit",
+    "trigger": "random",
+    "health_range": [
+      0.7,
+      1.0
+    ],
+    "narrative": "A high, clear chime rings through the crisp air, like distant ice bells, a sound of profound stillness and cold beauty. The world around me seems to sparkle, momentarily held in a crystalline embrace.",
+    "sound_cue": "A delicate, high-pitched, sustained chime, with subtle harmonic resonance, permeates the air, creating a sense of serene, icy clarity.",
+    "gameplay_effect": "Minor 'Clarity' buff, slightly increasing INT and LCK for a short duration.",
+    "severity": "whisper"
+  },
+  {
+    "id": "frost_event_002",
+    "zone": "Frost",
+    "entity": "little_people",
+    "trigger": "spirit_root_active",
+    "health_range": [
+      0.5,
+      0.8
+    ],
+    "narrative": "From the nearby Spirit Root node, I hear faint, tinkling giggles, like tiny shards of ice dancing on the wind. A small, familiar object, which I know I left here, now rests impossibly high on an icy branch.",
+    "sound_cue": "Faint, rapid tinkling sounds, like tiny ice shards colliding, interwoven with quick, high-pitched giggling that seems to swirl around the Spirit Root.",
+    "gameplay_effect": "Minor items in inventory may shuffle or become temporarily unequipped; small resource nodes nearby have a chance to yield slightly less (LCK debuff).",
+    "severity": "presence"
+  },
+  {
+    "id": "frost_event_003",
+    "zone": "Frost",
+    "entity": "windigo",
+    "trigger": "reciprocity_low",
+    "health_range": [
+      0.3,
+      0.6
+    ],
+    "narrative": "A chilling whisper, like ice scraping on bone, snakes through the bitter air, speaking of endless cold and insatiable need, making my very bones ache. I feel a strange urge to consume more, to take all the heat for myself.",
+    "sound_cue": "A dry, rasping whisper, like ice grinding on ice, accompanied by a low, guttural growl that seems to emanate from the ground, inspiring a deep, internal chill.",
+    "gameplay_effect": "Player's 'Cold Resistance' temporarily reduced; consuming warm food/drink provides only half the usual benefit; nearby heat sources temporarily lose efficiency.",
+    "severity": "encounter"
+  },
+  {
+    "id": "frost_event_004",
+    "zone": "Frost",
+    "entity": "pakakosh",
+    "trigger": "moon_transition",
+    "health_range": [
+      0.0,
+      0.2
+    ],
+    "narrative": "The howling wind suddenly dies, replaced by a sharp, brittle clattering, like a thousand frozen bones suddenly shifting, and an unnatural cold bites at my skin, leaving frost in its wake. A tall, gaunt shadow, impossibly thin, appears for a split second against the icy horizon.",
+    "sound_cue": "A rapid, overwhelming chorus of dry, sharp 'clack-clack-clack' sounds, resonating off icy surfaces, accompanied by an abrupt, deep drop in ambient temperature sound, causing audible shivers.",
+    "gameplay_effect": "Player's 'SPD' stat significantly reduced for a short duration; all movement actions have a chance to inflict 'Frostbite' debuff, causing minor continuous damage.",
+    "severity": "crisis"
+  },
+  {
+    "id": "frost_event_005",
+    "zone": "Frost",
+    "entity": "none",
+    "trigger": "night",
+    "health_range": [
+      0.4,
+      0.9
+    ],
+    "narrative": "The vast, frozen night seems to stretch into eternity, and I hear faint, almost melodic creaks and groans from the ancient ice formations. The shadows cast by the moon seem to deepen, taking on unsettling shapes.",
+    "sound_cue": "Slow, deep creaking and groaning sounds, like massive ice structures settling, accompanied by subtle, shifting 'whispers' of wind through icy crevices.",
+    "gameplay_effect": "Minor 'Disorientation' debuff; distant landmarks may appear to shift slightly; increased chance of encountering 'ambush' type entities.",
+    "severity": "whisper"
+  },
+  {
+    "id": "frost_event_006",
+    "zone": "Frost",
+    "entity": "land_spirit",
+    "trigger": "zone_health_low",
+    "health_range": [
+      0.1,
+      0.4
+    ],
+    "narrative": "A deep, mournful wail emanates from the frozen earth, shaking my teeth, and the air grows heavy with the scent of bitter cold and despair. Ancient ice formations seem to sag, as if melting under an unseen weight.",
+    "sound_cue": "A low-frequency, continuous wail that causes physical vibration, punctuated by sharp, cracking sounds, like stressed ice.",
+    "gameplay_effect": "Minor 'Frost Tremor' debuff, occasionally causing player to stumble; harvesting tools take increased durability damage; nearby ice resources yield less.",
+    "severity": "presence"
+  },
+  {
+    "id": "frost_event_007",
+    "zone": "Frost",
+    "entity": "none",
+    "trigger": "random",
+    "health_range": [
+      0.6,
+      1.0
+    ],
+    "narrative": "A strange, crystalline ringing sound echoes off the distant ice formations, too precise and sustained for any natural occurrence. For a moment, the air feels charged, as if struck by ice magic, but the sky is clear.",
+    "sound_cue": "A clear, high-pitched crystalline ringing, resonating and echoing across the frozen landscape, with a subtle, electric 'fizz' in the air.",
+    "gameplay_effect": "Brief 'Stun' effect on player's hearing, making sound cues harder to discern; minor LCK buff for finding rare frost-aligned resources.",
+    "severity": "whisper"
+  },
+  {
+    "id": "frost_event_008",
+    "zone": "Frost",
+    "entity": "windigo",
+    "trigger": "reciprocity_low",
+    "health_range": [
+      0.1,
+      0.3
+    ],
+    "narrative": "The ground itself seems to groan with a deep, guttural hunger, vibrating through my boots, and I hear a chorus of whispers urging me to hoard warmth, to take all I can. A deep, gnawing cold settles in my stomach, refusing to be filled.",
+    "sound_cue": "A pervasive, low-frequency growl that seems to emanate from the ground, interwoven with rapid, insistent whispers of 'warmth, more warmth,' creating a sense of dread and internal cold.",
+    "gameplay_effect": "Player's 'Cold' meter depletes significantly faster; any heat sources activated have a 20% chance to fail, leaving a 'Despair' debuff reducing LCK.",
+    "severity": "crisis"
+  },
+  {
+    "id": "frost_event_009",
+    "zone": "Frost",
+    "entity": "pakakosh",
+    "trigger": "moon_transition",
+    "health_range": [
+      0.3,
+      0.6
+    ],
+    "narrative": "A sudden, bone-chilling draft sweeps through the ice formations, carrying with it a dry, clicking sound, like frozen branches, then something more deliberate, more skeletal. Shadows seem to deepen around me, even in the bright snow.",
+    "sound_cue": "A distinct, rhythmic 'click-clack' sound, like small bones shifting, accompanies the chilling draft, creating a sense of being pursued, echoing off ice.",
+    "gameplay_effect": "Minor 'Dread' debuff, reducing movement speed slightly; player's LCK temporarily reduced for gathering and prospecting.",
+    "severity": "encounter"
+  },
+  {
+    "id": "frost_event_010",
+    "zone": "Frost",
+    "entity": "little_people",
+    "trigger": "spirit_root_active",
+    "health_range": [
+      0.7,
+      1.0
+    ],
+    "narrative": "Near the pulsing Spirit Root, I hear faint, high-pitched skittering sounds, like tiny creatures darting across frozen ground. I glance over, but only see snow drifts, yet a small, carefully placed trapping wire has been impossibly tangled.",
+    "sound_cue": "Quick, light scratching and skittering noises, as if small, fast feet are moving over ice, accompanied by a nearly subliminal, mischievous 'tee-hee'.",
+    "gameplay_effect": "Random small, non-essential inventory items may briefly disappear and reappear in a different slot or nearby on the ground (LCK roll).",
+    "severity": "whisper"
+  },
+  {
+    "id": "frost_event_011",
+    "zone": "Frost",
+    "entity": "land_spirit",
+    "trigger": "night",
+    "health_range": [
+      0.2,
+      0.5
+    ],
+    "narrative": "The profound silence of the frozen waste is broken by a deep, resonant sigh from the very earth beneath me, a sound of ancient, piercing cold. The stars above seem to pulse with a faint, blueish light, mirroring the deep sadness.",
+    "sound_cue": "A deep, sustained, resonating sigh, felt more than heard, emanates from the ground, accompanied by a subtle, ethereal hum that feels like extreme cold.",
+    "gameplay_effect": "Temporary 'Weariness' debuff, slightly increasing stamina consumption and reducing max stamina; Spirit Root network heat output temporarily reduced by 5%.",
+    "severity": "presence"
+  },
+  {
+    "id": "frost_event_012",
+    "zone": "Frost",
+    "entity": "none",
+    "trigger": "random",
+    "health_range": [
+      0.0,
+      0.1
+    ],
+    "narrative": "A sudden, violent blizzard howls, carrying with it not just snow, but the deafening, grinding roar of cracking glaciers. The world disappears in a blinding whiteout, and the very air feels like razor shards.",
+    "sound_cue": "A powerful, chaotic wall of wind and fine ice crystals, punctuated by loud, shattering sounds of cracking ice, with high-frequency whistling, causing physical discomfort and disorientation.",
+    "gameplay_effect": "Brief 'Stagger' effect; vision obscured by blizzard; temporary vulnerability to 'Frostbite' damage; minor health drain; movement speed severely reduced.",
+    "severity": "crisis"
+  },
+  {
+    "id": "frost_event_013",
+    "zone": "Frost",
+    "entity": "pakakosh",
+    "trigger": "moon_transition",
+    "health_range": [
+      0.0,
+      0.1
+    ],
+    "narrative": "The air crackles with an impossible, penetrating cold, and the rapid, dry clatter of countless bones echoes in the silence, surrounding me completely, seeming to come from the very ice. I feel a crushing weight, as if death itself is rising from the frozen ground, and the world seems to dim, turning grey.",
+    "sound_cue": "An intense, rapid, and pervasive clattering of dry bones, growing louder and closer, coupled with a deep, chilling infrasound that causes involuntary muscle spasms and a sense of bone-deep cold, resonating off ice.",
+    "gameplay_effect": "'Bad Omen' status effect applied, drastically reducing all stats by 20% for 60 seconds; player becomes vulnerable to additional damage from all sources; 'Hypothermia' debuff applied.",
+    "severity": "crisis"
+  },
+  {
+    "id": "frost_event_014",
+    "zone": "Frost",
+    "entity": "little_people",
+    "trigger": "spirit_root_active",
+    "health_range": [
+      0.3,
+      0.6
+    ],
+    "narrative": "A mischievous chorus of tiny whispers and faint ice-tinkling emanates from the Spirit Root, and I feel a tug at my pouch. When I look, a vital component has vanished, only to reappear moments later atop a distant, impossibly high, smooth ice pillar.",
+    "sound_cue": "A flurry of high-pitched, darting whispers and quick, soft 'tink' sounds of ice, creating a sense of rapid, unseen movement in all directions, echoing off frozen surfaces.",
+    "gameplay_effect": "A random equipped tool or item is temporarily unequipped and moved a short distance away; minor LCK debuff for crafting attempts.",
+    "severity": "encounter"
+  },
+  {
+    "id": "frost_event_015",
+    "zone": "Frost",
+    "entity": "land_spirit",
+    "trigger": "zone_health_low",
+    "health_range": [
+      0.0,
+      0.2
+    ],
+    "narrative": "The very ground feels brittle and hollow with cold, and a deep, guttural moan reverberates from deep within the frozen earth, shaking the air around me. The ancient ice formations seem to weep frost, crumbling before my eyes.",
+    "sound_cue": "A deep, continuous, growling rumble that reverberates through the ground, accompanied by sharp, high-pitched 'fracture' sounds of breaking ice, creating a sense of imminent collapse.",
+    "gameplay_effect": "Player receives continuous minor 'Frostbite' damage over time; 'Exhaustion' debuff applied, severely limiting stamina regeneration; all ice resource nodes in a small radius become 'barren'.",
+    "severity": "crisis"
+  },
+  {
+    "id": "frost_event_016",
+    "zone": "Frost",
+    "entity": "none",
+    "trigger": "night",
+    "health_range": [
+      0.7,
+      1.0
+    ],
+    "narrative": "The night sky seems to glow faintly with an inner light, illuminating the ancient ice formations with an ethereal sheen. I hear a faint, almost melodic whispering, like the wind telling old, forgotten stories through the ice and snow.",
+    "sound_cue": "A very low-frequency, almost sub-audible hum that resonates within the chest cavity, accompanied by a subtle high-frequency whisper that seems to carry faint, unintelligible words, echoing off ice.",
+    "gameplay_effect": "Minor 'Insight' buff, granting a small chance to find rare resources when prospecting in snow/ice; minor increase in INT for 30 seconds.",
+    "severity": "whisper"
+  },
+  {
+    "id": "frost_event_017",
+    "zone": "Frost",
+    "entity": "land_spirit",
+    "trigger": "random",
+    "health_range": [
+      0.4,
+      0.7
+    ],
+    "narrative": "A sudden, inexplicable wave of pressure washes over me, making my ears pop, and I hear a faint, grinding sound, as if massive ice sheets are slowly shifting beneath the surface. Small ice crystals around me vibrate.",
+    "sound_cue": "A low, sustained grinding sound, like slow-moving glaciers, accompanied by a sudden, sharp 'pop' sound that mimics ear pressure changes.",
+    "gameplay_effect": "Player receives a temporary 'Pressure' debuff, reducing movement speed and increasing stamina consumption.",
+    "severity": "presence"
+  },
+  {
+    "id": "frost_event_018",
+    "zone": "Frost",
+    "entity": "windigo",
+    "trigger": "reciprocity_low",
+    "health_range": [
+      0.5,
+      0.8
+    ],
+    "narrative": "A cold dread settles in, despite the bitter cold, as I hear a low, scraping sound from the ice, as if something immense is dragging itself across the frozen surface, drawing sustenance. I feel a sudden, intense craving for warmth, an urge to strip the land bare of any heat.",
+    "sound_cue": "A deep, resonant 'scrape' and 'grind' sound, accompanied by a faint, high-pitched whine, seems to come from directly beneath me, intensifying the urge for warmth.",
+    "gameplay_effect": "Player's 'Gathering' efficiency for heat-generating resources temporarily increased by 15%, but any resources gathered have a 25% chance to attract additional hostile entities (not Windigo directly).",
+    "severity": "encounter"
+  },
+  {
+    "id": "frost_event_019",
+    "zone": "Frost",
+    "entity": "none",
+    "trigger": "zone_health_low",
+    "health_range": [
+      0.1,
+      0.4
+    ],
+    "narrative": "The air thickens with a palpable despair, and the ancient ice formations seem to sag, groaning under an unseen weight. I hear a faint, distant, hollow knocking sound, too regular to be natural, echoing from deep within the ice.",
+    "sound_cue": "A deep, rhythmic, hollow knocking sound, resonating from beneath the ice, accompanied by a low, mournful groan of straining ice.",
+    "gameplay_effect": "Temporary 'Disquiet' debuff, reducing damage output and critical hit chance; player's LCK stat slightly reduced for gathering ice/snow.",
+    "severity": "presence"
+  },
+  {
+    "id": "frost_event_020",
+    "zone": "Frost",
+    "entity": "little_people",
+    "trigger": "spirit_root_active",
+    "health_range": [
+      0.0,
+      0.2
+    ],
+    "narrative": "A chorus of maniacal ice-clinking giggling erupts around the Spirit Root, too close, too many, and small, impossibly fast shadows flit through the icy crevices. My shovel feels suddenly heavy, then impossibly light, as if its properties are being toyed with.",
+    "sound_cue": "A swirling, multi-directional cacophony of high-pitched, rapid giggles and quick, sharp 'tink-clink' sounds, designed to disorient and overwhelm, resonating off nearby ice.",
+    "gameplay_effect": "Equipped harvesting tools have a chance to temporarily gain 'fragile' or 'heavy' properties, affecting swing speed and durability; harvesting success chance significantly reduced.",
+    "severity": "crisis"
+  },
+  {
+    "id": "frost_event_021",
+    "zone": "Frost",
+    "entity": "none",
+    "trigger": "night",
+    "health_range": [
+      0.0,
+      0.1
+    ],
+    "narrative": "The darkness itself feels like a crushing weight of cold, as a deep, resonant tremor echoes from the unseen depths of the prairie, shaking the very bones in my body. I feel an irrational urge to find shelter, a primal fear seizing my heart as the shadows in the ice seem to coalesce into grasping forms.",
+    "sound_cue": "A low-frequency, guttural growl that seems to emanate from the ground itself, accompanied by a sudden, intense seismic rumble and the sound of large ice blocks grinding together.",
+    "gameplay_effect": "Temporary 'Terror' status effect, causing player to occasionally lose control and move erratically; stamina regeneration halted; player takes minor, continuous 'Frostbite' damage.",
+    "severity": "crisis"
+  },
+  {
+    "id": "frost_event_022",
+    "zone": "Frost",
+    "entity": "land_spirit",
+    "trigger": "random",
+    "health_range": [
+      0.8,
+      1.0
+    ],
+    "narrative": "A steady, deep pulse emanates from the frozen earth, a soothing vibration that seems to calm my nerves. The ancient ice formations around me seem to glow with a faint, inner blue light, a sense of enduring strength.",
+    "sound_cue": "A deep, slow, rhythmic pulse, like a vast heartbeat, resonating through the ground, accompanied by a subtle, low-frequency hum that evokes stability and cold comfort.",
+    "gameplay_effect": "Small, temporary boost to DEF; minor increase in gathering yield for frost-aligned resources.",
+    "severity": "whisper"
+  },
+  {
+    "id": "frost_event_023",
+    "zone": "Frost",
+    "entity": "none",
+    "trigger": "zone_health_low",
+    "health_range": [
+      0.5,
+      0.8
+    ],
+    "narrative": "The air crackles with an unseen tension, and I hear a faint, high-pitched whine that seems to emanate from the cracks in the ice, almost like straining metal. Distant sounds of ice fracturing echo unnaturally.",
+    "sound_cue": "A high-frequency, metallic whine, punctuated by faint, sharp 'snap' and 'crack' sounds of straining ice, creating an unsettling atmospheric tension.",
+    "gameplay_effect": "Temporary 'Stress' debuff, causing minor periodic damage to player's tools; minor reduction in structural integrity of nearby ice buildings.",
+    "severity": "presence"
+  },
+  {
+    "id": "frost_event_024",
+    "zone": "Frost",
+    "entity": "pakakosh",
+    "trigger": "moon_transition",
+    "health_range": [
+      0.5,
+      0.8
+    ],
+    "narrative": "A sudden, dry breeze brings with it a sound like countless tiny ice crystals skittering across hard, frozen ground, then a distinct, hollow clack. The air grows noticeably colder, and my breath mists, even under the prairie sun, as a gaunt shadow passes over a nearby ice pillar.",
+    "sound_cue": "A rapid, dry 'shush-clack' sound, like small bones shifting, accompanied by a sudden, localized drop in temperature sound, echoing off ice.",
+    "gameplay_effect": "Brief 'Chilled' debuff, slightly increasing stamina consumption; minor reduction in LCK for 30 seconds for all actions.",
+    "severity": "presence"
+  },
+  {
+    "id": "frost_event_025",
+    "zone": "Frost",
+    "entity": "windigo",
+    "trigger": "reciprocity_low",
+    "health_range": [
+      0.0,
+      0.1
+    ],
+    "narrative": "A sickening crunching sound rises from the frozen earth, and I feel an oppressive weight of insatiable hunger pressing down on me, as if the entire prairie is trying to consume me, warmth and all. My own hunger pangs become unbearable, and shadows seem to coalesce into grasping forms among the ice.",
+    "sound_cue": "A deep, wet, crunching sound, like ice being gnawed, combined with a low, oppressive hum that seems to fill the entire soundscape and induce physical hunger for warmth.",
+    "gameplay_effect": "Player's hunger and thirst meters rapidly deplete; all resource nodes within a significant radius temporarily become 'barren', yielding nothing and applying 'Despair' debuff; 'Hypothermia' becomes severe.",
+    "severity": "crisis"
+  },
+  {
+    "id": "frost_event_026",
+    "zone": "Frost",
+    "entity": "little_people",
+    "trigger": "spirit_root_active",
+    "health_range": [
+      0.1,
+      0.4
+    ],
+    "narrative": "A chorus of maniacal, echoing giggling erupts from around the Spirit Root, too close, too many, and small, sharp ice shards pelt me from unseen sources. My focus shatters, and I feel an intense urge to leave this place immediately, as if the ice itself is laughing.",
+    "sound_cue": "A rapid, multi-directional burst of high-pitched, taunting laughter, interwoven with distinct 'pinging' sounds of small ice shards hitting nearby surfaces, echoing unnaturally.",
+    "gameplay_effect": "Player receives minor 'Distraction' debuff, reducing combat accuracy and crafting speed; brief visual distortion affecting peripheral vision.",
+    "severity": "encounter"
+  },
+  {
+    "id": "frost_event_027",
+    "zone": "Frost",
+    "entity": "none",
+    "trigger": "night",
+    "health_range": [
+      0.1,
+      0.4
+    ],
+    "narrative": "The vast frozen plains at night feel impossibly empty, yet I hear a faint, rhythmic scraping sound, like a massive, unseen creature slowly dragging itself across ice. The air feels charged, heavy with an ancient, patient presence.",
+    "sound_cue": "A deep, slow, rhythmic scraping, like a giant ice block being dragged, resonates through the ground, accompanied by a faint, high-frequency 'shhh' of snow.",
+    "gameplay_effect": "Temporary 'Vibration Sickness' debuff, causing minor visual tremors; reduced 'Perception' stat for detecting entities in darkness.",
+    "severity": "presence"
+  },
+  {
+    "id": "frost_event_028",
+    "zone": "Frost",
+    "entity": "land_spirit",
+    "trigger": "random",
+    "health_range": [
+      0.1,
+      0.4
+    ],
+    "narrative": "A wave of stifling, oppressive cold washes over me, carrying the distinct scent of ozone and something frozen, though no source is visible. I hear a faint, grinding groan that seems to emanate from the very ice, as if it is in ancient agony.",
+    "sound_cue": "A low, guttural grinding and groaning sound, like massive glaciers shifting, accompanied by a sharp, high-frequency 'static' charge sound.",
+    "gameplay_effect": "Minor 'Fatigue' debuff, increasing stamina consumption; tools' durability temporarily decreases faster when used on ice.",
+    "severity": "presence"
+  },
+  {
+    "id": "frost_event_029",
+    "zone": "Frost",
+    "entity": "none",
+    "trigger": "zone_health_low",
+    "health_range": [
+      0.0,
+      0.1
+    ],
+    "narrative": "The sky above turns a sickly, oppressive grey, and a sudden, unnatural fog rolls in, carrying with it not just mist, but the faint, desperate cries of unseen creatures trapped within the cold. The very air feels choked with despair.",
+    "sound_cue": "A roaring, chaotic wall of wind and dense fog, punctuated by high-pitched, desperate cries and low, mournful wails, creating an overwhelming sensory assault, with the added sound of ice cracking.",
+    "gameplay_effect": "Severe 'Fog Blight' status effect, drastically reducing vision, movement speed, and causing persistent health drain; all resource nodes are temporarily inaccessible; minor structural integrity damage to nearby buildings.",
+    "severity": "crisis"
+  },
+  {
+    "id": "frost_event_030",
+    "zone": "Frost",
+    "entity": "pakakosh",
+    "trigger": "moon_transition",
+    "health_range": [
+      0.1,
+      0.4
+    ],
+    "narrative": "The air grows heavy with a sudden, unnatural stillness, then a sharp, dry clatter echoes, too precise for the wind, off the ice formations. A fleeting, skeletal shadow darts across the ground, impossibly fast, leaving a trail of profound cold that chills the very snow.",
+    "sound_cue": "A single, sharp, dry 'clack' followed by a rapid, rustling whisper that seems to pass directly behind the player, inducing a deep chill in the resonant ice environment.",
+    "gameplay_effect": "Temporary 'Shivers' debuff, slightly reducing attack speed and increasing vulnerability to 'Frostbite' damage from combat.",
+    "severity": "encounter"
+  },
+  {
+    "id": "frost_event_031",
+    "zone": "Frost",
+    "entity": "windigo",
+    "trigger": "reciprocity_low",
+    "health_range": [
+      0.2,
+      0.5
+    ],
+    "narrative": "A low, persistent growl reverberates from the frozen ground, and I feel a sudden, intense craving for raw, warm flesh, a primal hunger that feels alien. The distant ice formations seem to waver, and I feel a distinct sense of being watched, from within the cold.",
+    "sound_cue": "A deep, guttural growl that seems to resonate from the earth, accompanied by a subtle, high-frequency 'shimmer' that mimics visual distortion in the ice formations, intensifying hunger.",
+    "gameplay_effect": "Player's 'Meat' hunger rate significantly increased; raw meat consumption provides double satiation but also a 'Windigo's Kiss' debuff, slightly reducing sanity over time and increasing cold vulnerability.",
+    "severity": "encounter"
+  },
+  {
+    "id": "frost_event_032",
+    "zone": "Frost",
+    "entity": "little_people",
+    "trigger": "spirit_root_active",
+    "health_range": [
+      0.5,
+      0.8
+    ],
+    "narrative": "Faint, high-pitched whistles dance around the Spirit Root node, like children playing a game of hide-and-seek among the ice sculptures, just out of sight. I turn, but only see shadows playing tricks, yet a small pile of harvested ice has been perfectly rearranged into a tiny, intricate carving.",
+    "sound_cue": "A series of quick, high-pitched whistles that seem to come from multiple, shifting directions, creating a playful yet unsettling atmosphere, echoing off ice.",
+    "gameplay_effect": "Minor 'Distraction' debuff, briefly causing player's inventory to open/close randomly; small chance for crafted ice items to appear with slightly different stats (LCK roll).",
+    "severity": "presence"
+  },
+  {
+    "id": "frost_event_033",
+    "zone": "Frost",
+    "entity": "land_spirit",
+    "trigger": "night",
+    "health_range": [
+      0.5,
+      0.8
+    ],
+    "narrative": "The ancient ice formations seem to glow faintly under the moonlight, casting flickering shadows that dance unnaturally. I hear a faint, almost melodic hum, like a lullaby sung by the vast, silent prairie itself, through the ice and snow.",
+    "sound_cue": "A low, sustained, almost melodic hum, intertwined with faint, sporadic 'tick' sounds of unseen water droplets freezing, creating a sense of ancient, watchful presence.",
+    "gameplay_effect": "Temporary 'Calming' buff, slightly increasing stamina regeneration; minor increase in 'Perception' stat for detecting passive resources.",
+    "severity": "whisper"
+  },
+  {
+    "id": "frost_event_034",
+    "zone": "Frost",
+    "entity": "none",
+    "trigger": "random",
+    "health_range": [
+      0.3,
+      0.6
+    ],
+    "narrative": "A sudden gust of wind carries with it the faint, metallic scent of frozen iron and something damp, and I hear a deep, rasping sigh that seems to come from all directions at once. The air feels heavy, stifling, as if deep underground in an ice cavern.",
+    "sound_cue": "A deep, drawn-out, raspy sigh, accompanied by a subtle, low-frequency 'pressure drop' sound, creating a feeling of suffocation and dampness, echoing from subterranean ice.",
+    "gameplay_effect": "Player receives a temporary 'Nausea' debuff, slightly reducing movement speed and preventing food/water consumption for a short duration.",
+    "severity": "presence"
+  },
+  {
+    "id": "frost_event_035",
+    "zone": "Frost",
+    "entity": "land_spirit",
+    "trigger": "zone_health_low",
+    "health_range": [
+      0.3,
+      0.6
+    ],
+    "narrative": "The ground beneath my feet feels strangely loose and unstable, and I hear a faint, unsettling groan, as if the frozen earth is shifting restlessly in its ancient sleep. Small cracks appear in the ice and frozen soil around me.",
+    "sound_cue": "A low, rumbling groan that seems to emanate from beneath the ground, accompanied by subtle 'creaking' and 'shifting' sounds of ice and cracking frozen earth.",
+    "gameplay_effect": "Small chance for temporary 'uneven ground' debuffs, occasionally causing player to stumble; minor structural integrity reduction for nearby player-built ice structures.",
+    "severity": "encounter"
+  },
+  {
+    "id": "frost_event_036",
+    "zone": "Frost",
+    "entity": "none",
+    "trigger": "moon_transition",
+    "health_range": [
+      0.7,
+      1.0
+    ],
+    "narrative": "As the moon shifts, the wind suddenly dies, leaving an oppressive silence, broken only by a faint, high-pitched chime that seems to come from the ancient ice formations themselves. The sky appears impossibly vast and uncaring, mirroring the stoic, frozen landscape.",
+    "sound_cue": "An abrupt cessation of all ambient sounds, replaced by a single, sustained, high-frequency chime that seems to resonate from the ice, emanating from above.",
+    "gameplay_effect": "Brief 'Silence' debuff, hindering detection of auditory cues; slight increase in 'Anxiety' stat.",
+    "severity": "whisper"
+  },
+  {
+    "id": "frost_event_037",
+    "zone": "Frost",
+    "entity": "windigo",
+    "trigger": "reciprocity_low",
+    "health_range": [
+      0.7,
+      1.0
+    ],
+    "narrative": "A faint, sweet scent, like thawing snow, drifts on the cold air, accompanied by a subtle, almost imperceptible whisper that hints at hidden caches of warmth. I feel a slight, unsettling urge to seek out and claim more.",
+    "sound_cue": "A very low-frequency, almost subliminal whisper that suggests 'warmth, more warmth,' accompanied by a subtle, echoing 'thrum' in the air.",
+    "gameplay_effect": "Minor 'Temptation' buff, slightly increasing gathering speed for heat-generating resources but also subtly increasing resource consumption rates for 30 seconds.",
+    "severity": "whisper"
+  },
+  {
+    "id": "frost_event_038",
+    "zone": "Frost",
+    "entity": "little_people",
+    "trigger": "spirit_root_active",
+    "health_range": [
+      0.7,
+      1.0
+    ],
+    "narrative": "Around the Spirit Root, I hear faint, musical clinking sounds, like tiny ice shards dancing in the breeze, though no such movement is visible. A small, familiar pebble from my pocket feels warm, then cold, then returns to normal, as if played with by unseen hands.",
+    "sound_cue": "Delicate, high-pitched clinking sounds, like very small ice particles tapping together, seemingly emanating from the air around the Spirit Root node.",
+    "gameplay_effect": "Small chance for minor cold resistance potions to become slightly more effective; minor LCK buff for 30 seconds.",
+    "severity": "whisper"
+  },
+  {
+    "id": "frost_event_039",
+    "zone": "Frost",
+    "entity": "land_spirit",
+    "trigger": "night",
+    "health_range": [
+      0.0,
+      0.1
+    ],
+    "narrative": "The night air grows impossibly colder, and a low, mournful howl echoes across the plains, seeming to come from every snowdrift at once. My vision blurs, and I feel a profound sense of isolation and dread, as if the frozen earth is trying to swallow me whole.",
+    "sound_cue": "A sustained, multi-directional, low-frequency howl, carrying a distinct 'roughness' modulation, causing involuntary shivers and auditory disorientation, resonating from the ice and snow.",
+    "gameplay_effect": "Severe 'Hypothermia' debuff, causing continuous health drain and significantly reducing movement speed; player's INT stat temporarily halved.",
+    "severity": "crisis"
+  },
+  {
+    "id": "frost_event_040",
+    "zone": "Frost",
+    "entity": "none",
+    "trigger": "random",
+    "health_range": [
+      0.0,
+      0.1
+    ],
+    "narrative": "The ground beneath me trembles violently, and a deafening, crushing roar erupts from deep within the earth, as if a colossal glacier is tearing itself apart. Deep fissures briefly open in the ice, emitting plumes of freezing vapor and a choking, mineral scent.",
+    "sound_cue": "A sudden, overwhelming, multi-layered soundscape of violent seismic rumbling, explosive ice cracks, and high-pressure steam hissing, creating auditory overload and a sense of impending collapse.",
+    "gameplay_effect": "Player receives severe 'Stagger' and 'Frostbite' damage; all nearby structures take significant durability damage; temporary impassable terrain created by ice fissures.",
+    "severity": "crisis"
+  },
+  {
+    "id": "tide_event_001",
+    "zone": "Tide",
+    "entity": "land_spirit",
+    "trigger": "random",
+    "health_range": [
+      0.7,
+      1.0
+    ],
+    "narrative": "A soft, rhythmic lapping sound whispers from the water's edge, too regular for the gentle current. I feel a cool, refreshing mist on my skin, and the air seems to hum with a subtle, life-giving energy.",
+    "sound_cue": "A gentle, rhythmic lapping sound, like unseen water caressing the shore, accompanied by a subtle, high-frequency shimmer that evokes a sense of peace.",
+    "gameplay_effect": "Minor 'Rejuvenation' buff, slightly increasing stamina and health regeneration for a short duration.",
+    "severity": "whisper"
+  },
+  {
+    "id": "tide_event_002",
+    "zone": "Tide",
+    "entity": "little_people",
+    "trigger": "spirit_root_active",
+    "health_range": [
+      0.5,
+      0.8
+    ],
+    "narrative": "From the nearby Spirit Root node, I hear faint, splashing giggles, like tiny droplets dancing on lily pads. A small, familiar fishing lure, which I know I left here, now floats impossibly high on a distant, fast-moving current.",
+    "sound_cue": "Faint, rapid splashing sounds, like tiny water droplets, interwoven with quick, high-pitched giggling that seems to swirl around the Spirit Root.",
+    "gameplay_effect": "Minor items in inventory may shuffle or become temporarily unequipped; small fishing nodes nearby have a chance to yield slightly less (LCK debuff).",
+    "severity": "presence"
+  },
+  {
+    "id": "tide_event_003",
+    "zone": "Tide",
+    "entity": "windigo",
+    "trigger": "reciprocity_low",
+    "health_range": [
+      0.3,
+      0.6
+    ],
+    "narrative": "A chilling gurgle, like water sucking down a drain, snakes through the damp air, speaking of endless thirst and insatiable need, making my throat feel suddenly parched. I feel a strange urge to consume all the water, to take everything for myself.",
+    "sound_cue": "A wet, gurgling sound, like water being desperately swallowed, accompanied by a low, guttural growl that seems to emanate from the water, inspiring profound thirst.",
+    "gameplay_effect": "Player's thirst rate significantly increased; consuming water provides only half the usual hydration; nearby water sources temporarily become 'tainted', causing sickness if consumed directly.",
+    "severity": "encounter"
+  },
+  {
+    "id": "tide_event_004",
+    "zone": "Tide",
+    "entity": "pakakosh",
+    "trigger": "moon_transition",
+    "health_range": [
+      0.0,
+      0.2
+    ],
+    "narrative": "The gentle lapping of water suddenly ceases, replaced by a sharp, wet rattling, like a thousand waterlogged bones suddenly shifting, and an unnatural cold permeates the damp air. A tall, gaunt shadow, impossibly thin, appears for a split second against the misty horizon, shimmering like a reflection.",
+    "sound_cue": "A rapid, overwhelming chorus of wet, sharp 'clack-clack-clack' sounds, resonating off water surfaces, accompanied by an abrupt, deep drop in ambient temperature sound, causing audible shivers.",
+    "gameplay_effect": "Player's 'LCK' stat significantly reduced for a short duration; all fishing attempts have a chance to yield nothing or even damage the fishing rod.",
+    "severity": "crisis"
+  },
+  {
+    "id": "tide_event_005",
+    "zone": "Tide",
+    "entity": "none",
+    "trigger": "night",
+    "health_range": [
+      0.4,
+      0.9
+    ],
+    "narrative": "The vast, dark water seems to stretch into eternity, and I hear faint, almost melodic gurgles and splashes from unseen depths. The shadows cast by the moon seem to deepen, taking on unsettling, fluid shapes.",
+    "sound_cue": "Slow, deep gurgling and splashing sounds, like massive unseen creatures moving in the water, accompanied by subtle, shifting 'whispers' of wind through reeds.",
+    "gameplay_effect": "Minor 'Disorientation' debuff; distant landmarks may appear to shift slightly; increased chance of encountering 'ambush' type entities near water.",
+    "severity": "whisper"
+  },
+  {
+    "id": "tide_event_006",
+    "zone": "Tide",
+    "entity": "land_spirit",
+    "trigger": "zone_health_low",
+    "health_range": [
+      0.1,
+      0.4
+    ],
+    "narrative": "A deep, mournful sigh emanates from the murky water, shaking my teeth, and the air grows heavy with the scent of stagnant water and decay. Ancient reeds seem to sag, as if collapsing under an unseen weight.",
+    "sound_cue": "A low-frequency, continuous sigh that causes physical vibration, punctuated by sharp, cracking sounds, like stressed reeds and snapping branches.",
+    "gameplay_effect": "Minor 'Water Tremor' debuff, occasionally causing player to stumble; harvesting tools take increased durability damage; nearby water resources yield less.",
+    "severity": "presence"
+  },
+  {
+    "id": "tide_event_007",
+    "zone": "Tide",
+    "entity": "none",
+    "trigger": "random",
+    "health_range": [
+      0.6,
+      1.0
+    ],
+    "narrative": "A strange, deep humming sound echoes from beneath the water's surface, too resonant and sustained for any natural occurrence. For a moment, the air feels charged, as if struck by unseen energy, but the sky is clear.",
+    "sound_cue": "A clear, deep, resonating hum, emanating from beneath the water, with a subtle, electric 'fizz' in the air.",
+    "gameplay_effect": "Brief 'Stun' effect on player's hearing, making sound cues harder to discern; minor LCK buff for finding rare aquatic resources.",
+    "severity": "whisper"
+  },
+  {
+    "id": "tide_event_008",
+    "zone": "Tide",
+    "entity": "windigo",
+    "trigger": "reciprocity_low",
+    "health_range": [
+      0.1,
+      0.3
+    ],
+    "narrative": "The water itself seems to gurgle with a deep, guttural hunger, vibrating through my boots, and I hear a chorus of whispers urging me to hoard, to take all the water I can. A deep, gnawing emptiness settles in my stomach, refusing to be filled.",
+    "sound_cue": "A pervasive, low-frequency gurgle that seems to emanate from the water, interwoven with rapid, insistent whispers of 'drink, more drink,' creating a sense of dread and internal thirst.",
+    "gameplay_effect": "Player's 'Thirst' meter depletes significantly faster; any water collected has a 20% chance to disappear immediately, leaving a 'Guilt' debuff reducing LCK.",
+    "severity": "crisis"
+  },
+  {
+    "id": "tide_event_009",
+    "zone": "Tide",
+    "entity": "pakakosh",
+    "trigger": "moon_transition",
+    "health_range": [
+      0.3,
+      0.6
+    ],
+    "narrative": "A sudden, bone-chilling draft sweeps across the water, carrying with it a dry, clicking sound, like waterlogged branches, then something more deliberate, more skeletal. Shadows seem to deepen around me, even in the dappled sunlight, reflecting unnaturally in the water.",
+    "sound_cue": "A distinct, rhythmic 'click-clack' sound, like small bones shifting, accompanies the chilling draft, creating a sense of being pursued, echoing off water.",
+    "gameplay_effect": "Minor 'Dread' debuff, reducing movement speed slightly; player's LCK temporarily reduced for fishing and gathering aquatic resources.",
+    "severity": "encounter"
+  },
+  {
+    "id": "tide_event_010",
+    "zone": "Tide",
+    "entity": "little_people",
+    "trigger": "spirit_root_active",
+    "health_range": [
+      0.7,
+      1.0
+    ],
+    "narrative": "Near the pulsing Spirit Root, I hear faint, high-pitched rustling sounds, like tiny creatures darting through the reeds and water plants. I glance over, but only see ripples, yet a small, carefully placed fishing net has been impossibly untangled and re-knotted.",
+    "sound_cue": "Quick, light rustling and splashing noises, as if small, fast feet are moving through wet foliage, accompanied by a nearly subliminal, mischievous 'giggle'.",
+    "gameplay_effect": "Random small, non-essential inventory items may briefly disappear and reappear in a different slot or nearby on the ground (LCK roll).",
+    "severity": "whisper"
+  },
+  {
+    "id": "tide_event_011",
+    "zone": "Tide",
+    "entity": "land_spirit",
+    "trigger": "night",
+    "health_range": [
+      0.2,
+      0.5
+    ],
+    "narrative": "The profound silence of the water's edge is broken by a deep, resonant sigh from the very water beneath me, a sound of ancient weariness. The stars above seem to pulse with a faint, blueish light, mirroring the deep sadness.",
+    "sound_cue": "A deep, sustained, resonating sigh, felt more than heard, emanates from the water, accompanied by a subtle, ethereal hum that feels like vast depths.",
+    "gameplay_effect": "Temporary 'Weariness' debuff, slightly increasing stamina consumption and reducing max stamina; Spirit Root network fluid output temporarily reduced by 5%.",
+    "severity": "presence"
+  },
+  {
+    "id": "tide_event_012",
+    "zone": "Tide",
+    "entity": "none",
+    "trigger": "random",
+    "health_range": [
+      0.0,
+      0.1
+    ],
+    "narrative": "A sudden, violent storm howls, carrying with it not just rain, but the deafening, churning roar of colossal waves. The world disappears in a blinding deluge, and the very air feels like it's trying to drown me.",
+    "sound_cue": "A powerful, chaotic wall of wind and heavy rain, punctuated by loud, crashing sounds of massive waves, with high-frequency whistling, causing physical discomfort and disorientation.",
+    "gameplay_effect": "Brief 'Stagger' effect; vision obscured by storm; temporary vulnerability to 'Drowning' damage; minor health drain; movement speed severely reduced.",
+    "severity": "crisis"
+  },
+  {
+    "id": "tide_event_013",
+    "zone": "Tide",
+    "entity": "pakakosh",
+    "trigger": "moon_transition",
+    "health_range": [
+      0.0,
+      0.1
+    ],
+    "narrative": "The air crackles with an impossible, chilling cold, and the rapid, wet clatter of countless bones echoes in the silence, surrounding me completely, seeming to rise from the water itself. I feel a crushing weight, as if death itself is rising from the depths, and the world seems to dim, turning murky.",
+    "sound_cue": "An intense, rapid, and pervasive clattering of wet bones, growing louder and closer, coupled with a deep, chilling infrasound that causes involuntary muscle spasms and a sense of bone-deep cold, resonating off water.",
+    "gameplay_effect": "'Bad Omen' status effect applied, drastically reducing all stats by 20% for 60 seconds; player becomes vulnerable to additional damage from all sources; 'Hypothermia' debuff applied.",
+    "severity": "crisis"
+  },
+  {
+    "id": "tide_event_014",
+    "zone": "Tide",
+    "entity": "little_people",
+    "trigger": "spirit_root_active",
+    "health_range": [
+      0.3,
+      0.6
+    ],
+    "narrative": "A mischievous chorus of tiny whispers and faint water-tinkling emanates from the Spirit Root, and I feel a tug at my pouch. When I look, a vital component has vanished, only to reappear moments later atop a distant, impossibly high, smooth rock, slick with dew.",
+    "sound_cue": "A flurry of high-pitched, darting whispers and quick, soft 'plink' sounds of water, creating a sense of rapid, unseen movement in all directions, echoing off damp surfaces.",
+    "gameplay_effect": "A random equipped tool or item is temporarily unequipped and moved a short distance away; minor LCK debuff for crafting attempts.",
+    "severity": "encounter"
+  },
+  {
+    "id": "tide_event_015",
+    "zone": "Tide",
+    "entity": "land_spirit",
+    "trigger": "zone_health_low",
+    "health_range": [
+      0.0,
+      0.2
+    ],
+    "narrative": "The very water feels stagnant and heavy with decay, and a deep, guttural moan reverberates from deep within the murky depths, shaking the air around me. The ancient reeds seem to weep, rotting before my eyes.",
+    "sound_cue": "A deep, continuous, growling rumble that reverberates through the water, accompanied by sharp, gurgling and 'slurp' sounds, creating a sense of imminent corruption.",
+    "gameplay_effect": "Player receives continuous minor 'Poison' damage over time; 'Exhaustion' debuff applied, severely limiting stamina regeneration; all water resource nodes in a small radius become 'tainted'.",
+    "severity": "crisis"
+  },
+  {
+    "id": "tide_event_016",
+    "zone": "Tide",
+    "entity": "none",
+    "trigger": "night",
+    "health_range": [
+      0.7,
+      1.0
+    ],
+    "narrative": "The night sky seems to glow faintly with an inner light, illuminating the ancient water with an ethereal sheen. I hear a faint, almost melodic whispering, like the water telling old, forgotten stories through the reeds and mist.",
+    "sound_cue": "A very low-frequency, almost sub-audible hum that resonates within the chest cavity, accompanied by a subtle high-frequency whisper that seems to carry faint, unintelligible words, echoing off water.",
+    "gameplay_effect": "Minor 'Insight' buff, granting a small chance to find rare resources when prospecting in water; minor increase in INT for 30 seconds.",
+    "severity": "whisper"
+  },
+  {
+    "id": "tide_event_017",
+    "zone": "Tide",
+    "entity": "land_spirit",
+    "trigger": "random",
+    "health_range": [
+      0.4,
+      0.7
+    ],
+    "narrative": "A sudden, inexplicable wave of pressure washes over me, making my ears pop, and I hear a faint, churning sound, as if massive currents are slowly shifting beneath the surface. Small ripples around me appear without cause.",
+    "sound_cue": "A low, sustained churning sound, like slow-moving underwater currents, accompanied by a sudden, sharp 'pop' sound that mimics ear pressure changes.",
+    "gameplay_effect": "Player receives a temporary 'Pressure' debuff, reducing movement speed and increasing stamina consumption while swimming.",
+    "severity": "presence"
+  },
+  {
+    "id": "tide_event_018",
+    "zone": "Tide",
+    "entity": "windigo",
+    "trigger": "reciprocity_low",
+    "health_range": [
+      0.5,
+      0.8
+    ],
+    "narrative": "A cold dread settles in, despite the damp air, as I hear a low, sucking sound from the water, as if something immense is drawing itself across the surface, drawing sustenance. I feel a sudden, intense craving for abundant catches, an urge to strip the waters bare.",
+    "sound_cue": "A deep, resonant 'slurp' and 'suck' sound, accompanied by a faint, high-pitched whine, seems to come from directly beneath me, intensifying the urge for more.",
+    "gameplay_effect": "Player's 'Fishing' efficiency temporarily increased by 15%, but any resources gathered have a 25% chance to attract additional hostile entities (not Windigo directly).",
+    "severity": "encounter"
+  },
+  {
+    "id": "tide_event_019",
+    "zone": "Tide",
+    "entity": "none",
+    "trigger": "zone_health_low",
+    "health_range": [
+      0.1,
+      0.4
+    ],
+    "narrative": "The air thickens with a palpable despair, and the ancient reeds seem to sag, groaning under an unseen weight. I hear a faint, distant, hollow gurgling sound, too regular to be natural, echoing from deep within the water.",
+    "sound_cue": "A deep, rhythmic, hollow gurgling sound, resonating from beneath the water, accompanied by a low, mournful groan of straining reeds.",
+    "gameplay_effect": "Temporary 'Disquiet' debuff, reducing damage output and critical hit chance; player's LCK stat slightly reduced for fishing.",
+    "severity": "presence"
+  },
+  {
+    "id": "tide_event_020",
+    "zone": "Tide",
+    "entity": "little_people",
+    "trigger": "spirit_root_active",
+    "health_range": [
+      0.0,
+      0.2
+    ],
+    "narrative": "A chorus of maniacal water-splashing giggling erupts around the Spirit Root, too close, too many, and small, impossibly fast ripples flit through the water. My paddle feels suddenly heavy, then impossibly light, as if its properties are being toyed with.",
+    "sound_cue": "A swirling, multi-directional cacophony of high-pitched, rapid giggles and quick, sharp 'splash-plink' sounds, designed to disorient and overwhelm, resonating off nearby water.",
+    "gameplay_effect": "Equipped water tools have a chance to temporarily gain 'fragile' or 'heavy' properties, affecting swing speed and durability; fishing success chance significantly reduced.",
+    "severity": "crisis"
+  },
+  {
+    "id": "tide_event_021",
+    "zone": "Tide",
+    "entity": "none",
+    "trigger": "night",
+    "health_range": [
+      0.0,
+      0.1
+    ],
+    "narrative": "The darkness itself feels like a crushing weight of water, as a deep, resonant churning echoes from the unseen depths of the prairie, shaking the very bones in my body. I feel an irrational urge to run, a primal fear seizing my heart as the shadows in the water seem to coalesce into grasping forms.",
+    "sound_cue": "A low-frequency, guttural growl that seems to emanate from the water itself, accompanied by a sudden, intense churning rumble and the sound of massive underwater creatures moving.",
+    "gameplay_effect": "Temporary 'Terror' status effect, causing player to occasionally lose control and move erratically; stamina regeneration halted; player takes minor, continuous 'Drowning' damage.",
+    "severity": "crisis"
+  },
+  {
+    "id": "tide_event_022",
+    "zone": "Tide",
+    "entity": "land_spirit",
+    "trigger": "random",
+    "health_range": [
+      0.8,
+      1.0
+    ],
+    "narrative": "A steady, deep pulse emanates from the water, a soothing vibration that seems to calm my nerves. The ancient reeds around me seem to glow with a faint, inner green light, a sense of enduring strength and life.",
+    "sound_cue": "A deep, slow, rhythmic pulse, like a vast heartbeat, resonating through the water, accompanied by a subtle, low-frequency hum that evokes stability and growth.",
+    "gameplay_effect": "Small, temporary boost to VIT; minor increase in gathering yield for water-aligned resources.",
+    "severity": "whisper"
+  },
+  {
+    "id": "tide_event_023",
+    "zone": "Tide",
+    "entity": "none",
+    "trigger": "zone_health_low",
+    "health_range": [
+      0.5,
+      0.8
+    ],
+    "narrative": "The air crackles with an unseen tension, and I hear a faint, high-pitched whine that seems to emanate from the water, almost like straining metal. Distant sounds of water churning unnaturally echo.",
+    "sound_cue": "A high-frequency, metallic whine, punctuated by faint, sharp 'snap' and 'crack' sounds of straining water, creating an unsettling atmospheric tension.",
+    "gameplay_effect": "Temporary 'Stress' debuff, causing minor periodic damage to player's tools; minor reduction in structural integrity of nearby water-based structures.",
+    "severity": "presence"
+  },
+  {
+    "id": "tide_event_024",
+    "zone": "Tide",
+    "entity": "pakakosh",
+    "trigger": "moon_transition",
+    "health_range": [
+      0.5,
+      0.8
+    ],
+    "narrative": "A sudden, dry breeze brings with it a sound like countless tiny pebbles skittering across hard, damp ground, then a distinct, hollow clack. The air grows noticeably cooler, and my breath mists, even under the prairie sun, as a gaunt shadow passes over a nearby pool.",
+    "sound_cue": "A rapid, dry 'shush-clack' sound, like small bones shifting, accompanied by a sudden, localized drop in temperature sound, echoing off water.",
+    "gameplay_effect": "Brief 'Chilled' debuff, slightly increasing stamina consumption; minor reduction in LCK for 30 seconds for all actions.",
+    "severity": "presence"
+  },
+  {
+    "id": "tide_event_025",
+    "zone": "Tide",
+    "entity": "windigo",
+    "trigger": "reciprocity_low",
+    "health_range": [
+      0.0,
+      0.1
+    ],
+    "narrative": "A sickening gurgling sound rises from the stagnant water, and I feel an oppressive weight of insatiable hunger pressing down on me, as if the entire prairie is trying to consume me, body and soul. My own hunger pangs become unbearable, and shadows seem to coalesce into grasping forms among the reeds.",
+    "sound_cue": "A deep, wet, gurgling and sucking sound, like water being desperately consumed, combined with a low, oppressive hum that seems to fill the entire soundscape and induce physical hunger.",
+    "gameplay_effect": "Player's hunger and thirst meters rapidly deplete; all resource nodes within a significant radius temporarily become 'tainted', yielding nothing and applying 'Despair' debuff; 'Sickness' becomes severe.",
+    "severity": "crisis"
+  },
+  {
+    "id": "tide_event_026",
+    "zone": "Tide",
+    "entity": "little_people",
+    "trigger": "spirit_root_active",
+    "health_range": [
+      0.1,
+      0.4
+    ],
+    "narrative": "A chorus of maniacal, echoing giggling erupts from around the Spirit Root, too close, too many, and small, sharp splashes pelt me from unseen sources. My focus shatters, and I feel an intense urge to leave this place immediately, as if the water itself is laughing.",
+    "sound_cue": "A rapid, multi-directional burst of high-pitched, taunting laughter, interwoven with distinct 'pinging' sounds of small water droplets hitting nearby surfaces, echoing unnaturally.",
+    "gameplay_effect": "Player receives minor 'Distraction' debuff, reducing combat accuracy and crafting speed; brief visual distortion affecting peripheral vision.",
+    "severity": "encounter"
+  },
+  {
+    "id": "tide_event_027",
+    "zone": "Tide",
+    "entity": "none",
+    "trigger": "night",
+    "health_range": [
+      0.1,
+      0.4
+    ],
+    "narrative": "The vast water at night feels impossibly empty, yet I hear a faint, rhythmic sloshing sound, like a massive, unseen creature slowly moving beneath the surface. The air feels charged, heavy with an ancient, patient presence.",
+    "sound_cue": "A deep, slow, rhythmic sloshing, like a giant body moving in water, resonates through the water, accompanied by a faint, high-frequency 'shhh' of mist.",
+    "gameplay_effect": "Temporary 'Vibration Sickness' debuff, causing minor visual tremors; reduced 'Perception' stat for detecting entities in darkness.",
+    "severity": "presence"
+  },
+  {
+    "id": "tide_event_028",
+    "zone": "Tide",
+    "entity": "land_spirit",
+    "trigger": "random",
+    "health_range": [
+      0.1,
+      0.4
+    ],
+    "narrative": "A wave of stifling, oppressive dampness washes over me, carrying the distinct scent of decaying plants and something metallic, though no source is visible. I hear a faint, gurgling groan that seems to emanate from the very water, as if it is in ancient agony.",
+    "sound_cue": "A low, guttural gurgling and groaning sound, like massive underwater entities shifting, accompanied by a sharp, high-frequency 'static' charge sound.",
+    "gameplay_effect": "Minor 'Fatigue' debuff, increasing stamina consumption; tools' durability temporarily decreases faster when used in water.",
+    "severity": "presence"
+  },
+  {
+    "id": "tide_event_029",
+    "zone": "Tide",
+    "entity": "none",
+    "trigger": "zone_health_low",
+    "health_range": [
+      0.0,
+      0.1
+    ],
+    "narrative": "The sky above turns a sickly, oppressive grey, and a sudden, unnatural fog rolls in, carrying with it not just mist, but the faint, desperate cries of unseen creatures trapped within the murky depths. The very air feels choked with despair.",
+    "sound_cue": "A roaring, chaotic wall of wind and dense fog, punctuated by high-pitched, desperate cries and low, mournful wails, creating an overwhelming sensory assault, with the added sound of water churning.",
+    "gameplay_effect": "Severe 'Fog Blight' status effect, drastically reducing vision, movement speed, and causing persistent health drain; all resource nodes are temporarily inaccessible; minor structural integrity damage to nearby buildings.",
+    "severity": "crisis"
+  },
+  {
+    "id": "tide_event_030",
+    "zone": "Tide",
+    "entity": "pakakosh",
+    "trigger": "moon_transition",
+    "health_range": [
+      0.1,
+      0.4
+    ],
+    "narrative": "The air grows heavy with a sudden, unnatural stillness, then a sharp, wet clatter echoes, too precise for the wind, off the water surface. A fleeting, skeletal shadow darts across the ground, impossibly fast, leaving a trail of profound cold that chills the very reeds.",
+    "sound_cue": "A single, sharp, wet 'clack' followed by a rapid, rustling whisper that seems to pass directly behind the player, inducing a deep chill in the resonant water environment.",
+    "gameplay_effect": "Temporary 'Shivers' debuff, slightly reducing attack speed and increasing vulnerability to 'Drowning' damage from combat.",
+    "severity": "encounter"
+  },
+  {
+    "id": "tide_event_031",
+    "zone": "Tide",
+    "entity": "windigo",
+    "trigger": "reciprocity_low",
+    "health_range": [
+      0.2,
+      0.5
+    ],
+    "narrative": "A low, persistent gurgle reverberates from the murky water, and I feel a sudden, intense craving for raw, aquatic flesh, a primal hunger that feels alien. The distant reeds seem to waver, and I feel a distinct sense of being watched, from within the water.",
+    "sound_cue": "A deep, guttural gurgle that seems to resonate from the water, accompanied by a subtle, high-frequency 'shimmer' that mimics visual distortion in the water plants, intensifying hunger.",
+    "gameplay_effect": "Player's 'Fish' hunger rate significantly increased; raw fish consumption provides double satiation but also a 'Windigo's Kiss' debuff, slightly reducing sanity over time and increasing sickness vulnerability.",
+    "severity": "encounter"
+  },
+  {
+    "id": "tide_event_032",
+    "zone": "Tide",
+    "entity": "little_people",
+    "trigger": "spirit_root_active",
+    "health_range": [
+      0.5,
+      0.8
+    ],
+    "narrative": "Faint, high-pitched whistles dance around the Spirit Root node, like children playing a game of hide-and-seek among the lily pads, just out of sight. I turn, but only see shadows playing tricks, yet a small pile of harvested reeds has been perfectly rearranged into a tiny, intricate nest.",
+    "sound_cue": "A series of quick, high-pitched whistles that seem to come from multiple, shifting directions, creating a playful yet unsettling atmosphere, echoing off water.",
+    "gameplay_effect": "Minor 'Distraction' debuff, briefly causing player's inventory to open/close randomly; small chance for crafted water-based items to appear with slightly different stats (LCK roll).",
+    "severity": "presence"
+  },
+  {
+    "id": "tide_event_033",
+    "zone": "Tide",
+    "entity": "land_spirit",
+    "trigger": "night",
+    "health_range": [
+      0.5,
+      0.8
+    ],
+    "narrative": "The ancient reeds seem to glow faintly under the moonlight, casting flickering shadows that dance unnaturally. I hear a faint, almost melodic hum, like a lullaby sung by the vast, silent prairie itself, through the water and plants.",
+    "sound_cue": "A low, sustained, almost melodic hum, intertwined with faint, sporadic 'tick' sounds of unseen water droplets, creating a sense of ancient, watchful presence.",
+    "gameplay_effect": "Temporary 'Calming' buff, slightly increasing stamina regeneration; minor increase in 'Perception' stat for detecting passive resources.",
+    "severity": "whisper"
+  },
+  {
+    "id": "tide_event_034",
+    "zone": "Tide",
+    "entity": "none",
+    "trigger": "random",
+    "health_range": [
+      0.3,
+      0.6
+    ],
+    "narrative": "A sudden gust of wind carries with it the faint, swampy scent of methane and something damp, and I hear a deep, rasping sigh that seems to come from all directions at once. The air feels heavy, stifling, as if deep underwater.",
+    "sound_cue": "A deep, drawn-out, raspy sigh, accompanied by a subtle, low-frequency 'pressure drop' sound, creating a feeling of suffocation and dampness, echoing from subterranean water.",
+    "gameplay_effect": "Player receives a temporary 'Nausea' debuff, slightly reducing movement speed and preventing food/water consumption for a short duration.",
+    "severity": "presence"
+  },
+  {
+    "id": "tide_event_035",
+    "zone": "Tide",
+    "entity": "land_spirit",
+    "trigger": "zone_health_low",
+    "health_range": [
+      0.3,
+      0.6
+    ],
+    "narrative": "The ground beneath my feet feels strangely loose and unstable, and I hear a faint, unsettling groan, as if the water-soaked earth is shifting restlessly in its ancient sleep. Small cracks appear in the muddy soil and water around me.",
+    "sound_cue": "A low, rumbling groan that seems to emanate from beneath the ground, accompanied by subtle 'creaking' and 'shifting' sounds of mud and flowing water.",
+    "gameplay_effect": "Small chance for temporary 'uneven ground' debuffs, occasionally causing player to stumble; minor structural integrity reduction for nearby player-built water structures.",
+    "severity": "encounter"
+  },
+  {
+    "id": "tide_event_036",
+    "zone": "Tide",
+    "entity": "none",
+    "trigger": "moon_transition",
+    "health_range": [
+      0.7,
+      1.0
+    ],
+    "narrative": "As the moon shifts, the wind suddenly dies, leaving an oppressive silence, broken only by a faint, high-pitched chime that seems to come from the ancient water itself. The sky appears impossibly vast and uncaring, mirroring the stoic, watery landscape.",
+    "sound_cue": "An abrupt cessation of all ambient sounds, replaced by a single, sustained, high-frequency chime that seems to resonate from the water, emanating from above.",
+    "gameplay_effect": "Brief 'Silence' debuff, hindering detection of auditory cues; slight increase in 'Anxiety' stat.",
+    "severity": "whisper"
+  },
+  {
+    "id": "tide_event_037",
+    "zone": "Tide",
+    "entity": "windigo",
+    "trigger": "reciprocity_low",
+    "health_range": [
+      0.7,
+      1.0
+    ],
+    "narrative": "A faint, sweet scent, like fresh water, drifts on the damp air, accompanied by a subtle, almost imperceptible whisper that hints at hidden springs. I feel a slight, unsettling urge to seek out and claim more.",
+    "sound_cue": "A very low-frequency, almost subliminal whisper that suggests 'drink, more drink,' accompanied by a subtle, echoing 'thrum' in the air.",
+    "gameplay_effect": "Minor 'Temptation' buff, slightly increasing gathering speed for water resources but also subtly increasing resource consumption rates for 30 seconds.",
+    "severity": "whisper"
+  },
+  {
+    "id": "tide_event_038",
+    "zone": "Tide",
+    "entity": "little_people",
+    "trigger": "spirit_root_active",
+    "health_range": [
+      0.7,
+      1.0
+    ],
+    "narrative": "Around the Spirit Root, I hear faint, musical gurgling sounds, like tiny bubbles dancing in the current, though no such movement is visible. A small, familiar pebble from my pocket feels warm, then cold, then returns to normal, as if played with by unseen hands.",
+    "sound_cue": "Delicate, high-pitched gurgling sounds, like very small bubbles popping, seemingly emanating from the water around the Spirit Root node.",
+    "gameplay_effect": "Small chance for minor healing potions to become slightly more effective; minor LCK buff for 30 seconds.",
+    "severity": "whisper"
+  },
+  {
+    "id": "tide_event_039",
+    "zone": "Tide",
+    "entity": "land_spirit",
+    "trigger": "night",
+    "health_range": [
+      0.0,
+      0.1
+    ],
+    "narrative": "The night air grows impossibly cold, and a low, mournful howl echoes across the plains, seeming to come from every patch of water at once. My vision blurs, and I feel a profound sense of isolation and dread, as if the water is trying to drown me.",
+    "sound_cue": "A sustained, multi-directional, low-frequency howl, carrying a distinct 'roughness' modulation, causing involuntary shivers and auditory disorientation, resonating from the water and reeds.",
+    "gameplay_effect": "Severe 'Drowning' debuff, causing continuous health drain and significantly reducing movement speed; player's INT stat temporarily halved.",
+    "severity": "crisis"
+  },
+  {
+    "id": "tide_event_040",
+    "zone": "Tide",
+    "entity": "none",
+    "trigger": "random",
+    "health_range": [
+      0.0,
+      0.1
+    ],
+    "narrative": "The ground beneath me trembles violently, and a deafening, crushing roar erupts from deep within the earth, as if a colossal wave is tearing through the prairie. Deep fissures briefly open in the water, emitting plumes of freezing vapor and a choking, muddy scent.",
+    "sound_cue": "A sudden, overwhelming, multi-layered soundscape of violent seismic rumbling, explosive water geysers, and high-pressure steam hissing, creating auditory overload and a sense of impending deluge.",
+    "gameplay_effect": "Player receives severe 'Stagger' and 'Drowning' damage; all nearby structures take significant durability damage; temporary impassable terrain created by water fissures.",
+    "severity": "crisis"
+  },
+  {
+    "id": "homestead_event_001",
+    "zone": "Homestead",
+    "entity": "land_spirit",
+    "trigger": "random",
+    "health_range": [
+      0.7,
+      1.0
+    ],
+    "narrative": "A soft, rhythmic creaking whispers through the walls of my home, too regular for settling wood. I feel a gentle warmth, and the air seems to hum with a subtle, comforting energy, a sense of belonging.",
+    "sound_cue": "A gentle, rhythmic creaking sound, like an old house breathing, accompanied by a subtle, high-frequency shimmer that evokes a sense of peace and home.",
+    "gameplay_effect": "Minor 'Comfort' buff, slightly increasing stamina and health regeneration for a short duration when inside a structure.",
+    "severity": "whisper"
+  },
+  {
+    "id": "homestead_event_002",
+    "zone": "Homestead",
+    "entity": "little_people",
+    "trigger": "spirit_root_active",
+    "health_range": [
+      0.5,
+      0.8
+    ],
+    "narrative": "From the nearby Spirit Root node, I hear faint, mischievous giggles, like tiny bells tinkling from within the walls. A small, familiar tool, which I know I left on the workbench, now sits impossibly high on a shelf, just out of reach.",
+    "sound_cue": "Faint, rapid tinkling sounds, like tiny bells or chimes, interwoven with quick, high-pitched giggling that seems to emanate from within the walls or floorboards.",
+    "gameplay_effect": "Minor items in inventory may shuffle or become temporarily unequipped; small crafting resources nearby have a chance to yield slightly less (LCK debuff).",
+    "severity": "presence"
+  },
+  {
+    "id": "homestead_event_003",
+    "zone": "Homestead",
+    "entity": "windigo",
+    "trigger": "reciprocity_low",
+    "health_range": [
+      0.3,
+      0.6
+    ],
+    "narrative": "A chilling whisper, like wind through a drafty window, snakes through the air, speaking of barrenness and insatiable need, making my own possessions feel suddenly insufficient. I feel a strange urge to acquire more, to take every last thing.",
+    "sound_cue": "A dry, hissing whisper, like an unseen draft, accompanied by a low, guttural growl that seems to emanate from the shadows, inspiring profound avarice.",
+    "gameplay_effect": "Player's 'Resource' acquisition rate temporarily reduced; consuming stored food/water provides only half the usual benefit; nearby storage containers temporarily 'hide' a portion of their contents.",
+    "severity": "encounter"
+  },
+  {
+    "id": "homestead_event_004",
+    "zone": "Homestead",
+    "entity": "pakakosh",
+    "trigger": "moon_transition",
+    "health_range": [
+      0.0,
+      0.2
+    ],
+    "narrative": "The familiar sounds of my homestead suddenly cease, replaced by a sharp, brittle rattling, like a thousand dry bones suddenly shifting, and an unnatural cold permeates the air, even by the fire. A tall, gaunt shadow, impossibly thin, appears for a split second in the doorway, shimmering like a mirage.",
+    "sound_cue": "A rapid, overwhelming chorus of dry, sharp 'clack-clack-clack' sounds, resonating off wooden surfaces, accompanied by an abrupt, deep drop in ambient temperature sound, causing audible shivers.",
+    "gameplay_effect": "Player's 'VIT' stat significantly reduced for a short duration; all crafted items have an increased chance of failure or reduced durability; 'Bad Omen' debuff applied.",
+    "severity": "crisis"
+  },
+  {
+    "id": "homestead_event_005",
+    "zone": "Homestead",
+    "entity": "none",
+    "trigger": "night",
+    "health_range": [
+      0.4,
+      0.9
+    ],
+    "narrative": "The familiar darkness of my home seems to deepen, and I hear faint, almost melodic creaks and groans from the very structure itself. The shadows cast by the lamplight seem to stretch and crawl, taking on unsettling shapes.",
+    "sound_cue": "Slow, deep creaking and groaning sounds, like massive wooden beams settling, accompanied by subtle, shifting 'whispers' of wind through unseen cracks.",
+    "gameplay_effect": "Minor 'Disorientation' debuff when inside; familiar objects may appear to shift slightly; increased chance of encountering 'ambush' type entities near the homestead perimeter.",
+    "severity": "whisper"
+  },
+  {
+    "id": "homestead_event_006",
+    "zone": "Homestead",
+    "entity": "land_spirit",
+    "trigger": "zone_health_low",
+    "health_range": [
+      0.1,
+      0.4
+    ],
+    "narrative": "A deep, mournful sigh emanates from the very foundation of my home, shaking my teeth, and the air grows heavy with the scent of dust and decay. The walls seem to sag, as if collapsing under an unseen weight.",
+    "sound_cue": "A low-frequency, continuous sigh that causes physical vibration, punctuated by sharp, cracking sounds, like stressed timbers.",
+    "gameplay_effect": "Minor 'Structural Stress' debuff, occasionally causing player to stumble; crafting benches take increased durability damage; nearby harvested resources yield less.",
+    "severity": "presence"
+  },
+  {
+    "id": "homestead_event_007",
+    "zone": "Homestead",
+    "entity": "none",
+    "trigger": "random",
+    "health_range": [
+      0.6,
+      1.0
+    ],
+    "narrative": "A strange, rhythmic hum seems to emanate from the very air within my home, too resonant and sustained for any natural occurrence. For a moment, the air feels charged, as if struck by an unseen hand, but nothing is visible.",
+    "sound_cue": "A clear, deep, resonating hum, emanating from within the structure, with a subtle, electric 'fizz' in the air.",
+    "gameplay_effect": "Brief 'Stun' effect on player's hearing, making sound cues harder to discern; minor LCK buff for finding rare crafting components.",
+    "severity": "whisper"
+  },
+  {
+    "id": "homestead_event_008",
+    "zone": "Homestead",
+    "entity": "windigo",
+    "trigger": "reciprocity_low",
+    "health_range": [
+      0.1,
+      0.3
+    ],
+    "narrative": "The very walls seem to groan with a deep, guttural hunger, vibrating through my boots, and I hear a chorus of whispers urging me to hoard, to take all I can, to never share. A deep, gnawing emptiness settles in my stomach, refusing to be filled, even with food.",
+    "sound_cue": "A pervasive, low-frequency growl that seems to emanate from the walls, interwoven with rapid, insistent whispers of 'mine, all mine,' creating a sense of dread and internal emptiness.",
+    "gameplay_effect": "Player's inventory capacity temporarily reduced by 10%; any resources placed in storage have a 20% chance to disappear immediately, leaving a 'Guilt' debuff reducing LCK.",
+    "severity": "crisis"
+  },
+  {
+    "id": "homestead_event_009",
+    "zone": "Homestead",
+    "entity": "pakakosh",
+    "trigger": "moon_transition",
+    "health_range": [
+      0.3,
+      0.6
+    ],
+    "narrative": "A sudden, bone-chilling draft sweeps through the homestead, carrying with it a dry, clicking sound, like old bones, then something more deliberate, more skeletal. Shadows seem to deepen around me, even in the lamplight, appearing impossibly long and gaunt.",
+    "sound_cue": "A distinct, rhythmic 'click-clack' sound, like small bones shifting, accompanies the chilling draft, creating a sense of being pursued, echoing within the confined space.",
+    "gameplay_effect": "Minor 'Dread' debuff, reducing movement speed slightly; player's LCK temporarily reduced for crafting and inventory management.",
+    "severity": "encounter"
+  },
+  {
+    "id": "homestead_event_010",
+    "zone": "Homestead",
+    "entity": "little_people",
+    "trigger": "spirit_root_active",
+    "health_range": [
+      0.7,
+      1.0
+    ],
+    "narrative": "Near the pulsing Spirit Root (if built), I hear faint, high-pitched scuttling sounds, like tiny creatures darting through the floorboards. I glance over, but only see dust motes, yet a small, carefully placed tool has been neatly reversed on its hook.",
+    "sound_cue": "Quick, light scratching and scuttling noises, as if small, fast feet are moving behind walls, accompanied by a nearly subliminal, mischievous 'tee-hee'.",
+    "gameplay_effect": "Random small, non-essential inventory items may briefly disappear and reappear in a different slot or nearby on the floor (LCK roll).",
+    "severity": "whisper"
+  },
+  {
+    "id": "homestead_event_011",
+    "zone": "Homestead",
+    "entity": "land_spirit",
+    "trigger": "night",
+    "health_range": [
+      0.2,
+      0.5
+    ],
+    "narrative": "The profound silence of my home is broken by a deep, resonant sigh from the very structure beneath me, a sound of ancient weariness. The shadows above seem to pulse with a faint, blueish light, mirroring the deep sadness.",
+    "sound_cue": "A deep, sustained, resonating sigh, felt more than heard, emanates from the foundation, accompanied by a subtle, ethereal hum that feels like vast age.",
+    "gameplay_effect": "Temporary 'Weariness' debuff, slightly increasing stamina consumption and reducing max stamina when inside; Spirit Root network efficiency within the homestead temporarily reduced by 5%.",
+    "severity": "presence"
+  },
+  {
+    "id": "homestead_event_012",
+    "zone": "Homestead",
+    "entity": "none",
+    "trigger": "random",
+    "health_range": [
+      0.0,
+      0.1
+    ],
+    "narrative": "A sudden, violent tremor shakes the very foundations of my home, and a deafening, grinding roar erupts from deep within the earth, as if the prairie itself is tearing apart beneath me. Cracks appear in the walls, emitting plumes of dust.",
+    "sound_cue": "A powerful, focused burst of seismic rumbling, like grinding tectonic plates, with high-frequency shattering sounds, causing physical discomfort, as walls creak ominously.",
+    "gameplay_effect": "Brief 'Stagger' effect; vision obscured by dust; temporary vulnerability to 'Crush' damage; minor health drain; minor structural integrity damage to homestead.",
+    "severity": "crisis"
+  },
+  {
+    "id": "homestead_event_013",
+    "zone": "Homestead",
+    "entity": "pakakosh",
+    "trigger": "moon_transition",
+    "health_range": [
+      0.0,
+      0.1
+    ],
+    "narrative": "The air crackles with an impossible cold, and the rapid, dry clatter of countless bones echoes in the silence, surrounding me completely, seeming to come from the very walls. I feel a crushing weight, as if death itself is rising from the ground, through the floorboards, and the world seems to dim, turning grey.",
+    "sound_cue": "An intense, rapid, and pervasive clattering of dry bones, growing louder and closer, coupled with a deep, chilling infrasound that causes involuntary muscle spasms and a sense of bone-deep cold, resonating through the structure.",
+    "gameplay_effect": "'Bad Omen' status effect applied, drastically reducing all stats by 20% for 60 seconds; player becomes vulnerable to additional damage from all sources; minor structural integrity damage to homestead.",
+    "severity": "crisis"
+  },
+  {
+    "id": "homestead_event_014",
+    "zone": "Homestead",
+    "entity": "little_people",
+    "trigger": "spirit_root_active",
+    "health_range": [
+      0.3,
+      0.6
+    ],
+    "narrative": "A mischievous chorus of tiny whispers and faint wood-tapping emanates from within the walls, and I feel a tug at my pouch. When I look, a vital component has vanished, only to reappear moments later atop a distant, impossibly high rafter.",
+    "sound_cue": "A flurry of high-pitched, darting whispers and quick, soft 'tap' sounds of wood, creating a sense of rapid, unseen movement in all directions, echoing within the home.",
+    "gameplay_effect": "A random equipped tool or item is temporarily unequipped and moved a short distance away; minor LCK debuff for crafting attempts.",
+    "severity": "encounter"
+  },
+  {
+    "id": "homestead_event_015",
+    "zone": "Homestead",
+    "entity": "land_spirit",
+    "trigger": "zone_health_low",
+    "health_range": [
+      0.0,
+      0.2
+    ],
+    "narrative": "The very structure feels brittle and hollow, and a deep, guttural moan reverberates from deep within the foundations, shaking the air around me. The ancient timbers seem to weep dust, crumbling before my eyes.",
+    "sound_cue": "A deep, continuous, growling rumble that reverberates through the structure, accompanied by sharp, high-pitched 'fracture' sounds of breaking wood, creating a sense of imminent collapse.",
+    "gameplay_effect": "Player receives continuous minor 'Crush' damage over time when inside; 'Exhaustion' debuff applied, severely limiting stamina regeneration; all crafting benches temporarily become 'barren'.",
+    "severity": "crisis"
+  },
+  {
+    "id": "homestead_event_016",
+    "zone": "Homestead",
+    "entity": "none",
+    "trigger": "night",
+    "health_range": [
+      0.7,
+      1.0
+    ],
+    "narrative": "The night sky seems to glow faintly with an inner light, illuminating the familiar structures with an ethereal sheen. I hear a faint, almost melodic whispering, like the old house telling forgotten stories through its walls.",
+    "sound_cue": "A very low-frequency, almost sub-audible hum that resonates within the chest cavity, accompanied by a subtle high-frequency whisper that seems to carry faint, unintelligible words, echoing gently.",
+    "gameplay_effect": "Minor 'Insight' buff, granting a small chance to find rare resources when inspecting homestead structures; minor increase in INT for 30 seconds.",
+    "severity": "whisper"
+  },
+  {
+    "id": "homestead_event_017",
+    "zone": "Homestead",
+    "entity": "land_spirit",
+    "trigger": "random",
+    "health_range": [
+      0.4,
+      0.7
+    ],
+    "narrative": "A sudden, inexplicable wave of pressure washes over me, making my ears pop, and I hear a faint, grinding sound, as if massive timbers are slowly shifting beneath the surface. Small objects on shelves vibrate.",
+    "sound_cue": "A low, sustained grinding sound, like slow-moving structural components, accompanied by a sudden, sharp 'pop' sound that mimics ear pressure changes.",
+    "gameplay_effect": "Player receives a temporary 'Pressure' debuff, reducing movement speed and increasing stamina consumption when inside.",
+    "severity": "presence"
+  },
+  {
+    "id": "homestead_event_018",
+    "zone": "Homestead",
+    "entity": "windigo",
+    "trigger": "reciprocity_low",
+    "health_range": [
+      0.5,
+      0.8
+    ],
+    "narrative": "A cold dread settles in, despite the warmth of my home, as I hear a low, scraping sound from the floorboards, as if something immense is dragging itself across, drawing sustenance. I feel a sudden, intense craving for every last possession, an urge to strip my home bare.",
+    "sound_cue": "A deep, resonant 'scrape' and 'grind' sound, accompanied by a faint, high-pitched whine, seems to come from directly beneath me, intensifying the urge to acquire.",
+    "gameplay_effect": "Player's 'Crafting' efficiency temporarily increased by 15%, but any items crafted have a 25% chance to attract additional hostile entities (not Windigo directly).",
+    "severity": "encounter"
+  },
+  {
+    "id": "homestead_event_019",
+    "zone": "Homestead",
+    "entity": "none",
+    "trigger": "zone_health_low",
+    "health_range": [
+      0.1,
+      0.4
+    ],
+    "narrative": "The air thickens with a palpable despair, and the ancient timbers of my home seem to sag, groaning under an unseen weight. I hear a faint, distant, hollow knocking sound, too regular to be natural, echoing from deep within the walls.",
+    "sound_cue": "A deep, rhythmic, hollow knocking sound, resonating from within the walls, accompanied by a low, mournful groan of straining timber.",
+    "gameplay_effect": "Temporary 'Disquiet' debuff, reducing damage output and critical hit chance; player's LCK stat slightly reduced for crafting.",
+    "severity": "presence"
+  },
+  {
+    "id": "homestead_event_020",
+    "zone": "Homestead",
+    "entity": "little_people",
+    "trigger": "spirit_root_active",
+    "health_range": [
+      0.0,
+      0.2
+    ],
+    "narrative": "A chorus of maniacal wood-tapping giggling erupts around the Spirit Root (if built), too close, too many, and small, impossibly fast shadows flit through the corners of my vision. My hammer feels suddenly heavy, then impossibly light, as if its properties are being toyed with.",
+    "sound_cue": "A swirling, multi-directional cacophony of high-pitched, rapid giggles and quick, sharp 'tap-clink' sounds, designed to disorient and overwhelm, resonating off nearby furniture.",
+    "gameplay_effect": "Equipped crafting tools have a chance to temporarily gain 'fragile' or 'heavy' properties, affecting swing speed and durability; crafting success chance significantly reduced.",
+    "severity": "crisis"
+  },
+  {
+    "id": "homestead_event_021",
+    "zone": "Homestead",
+    "entity": "none",
+    "trigger": "night",
+    "health_range": [
+      0.0,
+      0.1
+    ],
+    "narrative": "The darkness itself feels like a crushing weight, as a deep, resonant tremor echoes from the unseen depths of the prairie, shaking the very foundations of my home. I feel an irrational urge to run, a primal fear seizing my heart as the shadows seem to coalesce into grasping forms within my own home.",
+    "sound_cue": "A low-frequency, guttural growl that seems to emanate from the ground itself, accompanied by a sudden, intense seismic rumble and the sound of large timbers groaning and splitting.",
+    "gameplay_effect": "Temporary 'Terror' status effect, causing player to occasionally lose control and move erratically; stamina regeneration halted; player takes minor, continuous 'Crush' damage when inside.",
+    "severity": "crisis"
+  },
+  {
+    "id": "homestead_event_022",
+    "zone": "Homestead",
+    "entity": "land_spirit",
+    "trigger": "random",
+    "health_range": [
+      0.8,
+      1.0
+    ],
+    "narrative": "A steady, deep pulse emanates from the foundations of my home, a soothing vibration that seems to calm my nerves. The familiar structures around me seem to glow with a faint, inner warmth, a sense of enduring strength.",
+    "sound_cue": "A deep, slow, rhythmic pulse, like a vast heartbeat, resonating through the structure, accompanied by a subtle, low-frequency hum that evokes stability and warmth.",
+    "gameplay_effect": "Small, temporary boost to DEF; minor increase in crafting speed.",
+    "severity": "whisper"
+  },
+  {
+    "id": "homestead_event_023",
+    "zone": "Homestead",
+    "entity": "none",
+    "trigger": "zone_health_low",
+    "health_range": [
+      0.5,
+      0.8
+    ],
+    "narrative": "The air crackles with an unseen tension, and I hear a faint, high-pitched whine that seems to emanate from the very timbers, almost like straining metal. Distant sounds of wood fracturing echo unnaturally within my home.",
+    "sound_cue": "A high-frequency, metallic whine, punctuated by faint, sharp 'snap' and 'crack' sounds of straining wood, creating an unsettling atmospheric tension.",
+    "gameplay_effect": "Temporary 'Stress' debuff, causing minor periodic damage to player's tools; minor reduction in structural integrity of nearby homestead buildings.",
+    "severity": "presence"
+  },
+  {
+    "id": "homestead_event_024",
+    "zone": "Homestead",
+    "entity": "pakakosh",
+    "trigger": "moon_transition",
+    "health_range": [
+      0.5,
+      0.8
+    ],
+    "narrative": "A sudden, dry breeze brings with it a sound like countless tiny pebbles skittering across hard, wooden floorboards, then a distinct, hollow clack. The air grows noticeably cooler, and my breath mists, even by the hearth, as a gaunt shadow passes over a familiar object.",
+    "sound_cue": "A rapid, dry 'shush-clack' sound, like small bones shifting, accompanied by a sudden, localized drop in temperature sound, echoing within the home.",
+    "gameplay_effect": "Brief 'Chilled' debuff, slightly increasing stamina consumption; minor reduction in LCK for 30 seconds for all actions.",
+    "severity": "presence"
+  },
+  {
+    "id": "homestead_event_025",
+    "zone": "Homestead",
+    "entity": "windigo",
+    "trigger": "reciprocity_low",
+    "health_range": [
+      0.0,
+      0.1
+    ],
+    "narrative": "A sickening crunching sound rises from the floorboards, and I feel an oppressive weight of insatiable hunger pressing down on me, as if the entire prairie is trying to consume me, warmth and all. My own hunger pangs become unbearable, and shadows seem to coalesce into grasping forms among my possessions.",
+    "sound_cue": "A deep, wet, crunching sound, like bone being gnawed, combined with a low, oppressive hum that seems to fill the entire soundscape and induce physical hunger for warmth.",
+    "gameplay_effect": "Player's hunger and thirst meters rapidly deplete; all stored food/water within a significant radius temporarily become 'tainted', yielding nothing and applying 'Despair' debuff; 'Sickness' becomes severe.",
+    "severity": "crisis"
+  },
+  {
+    "id": "homestead_event_026",
+    "zone": "Homestead",
+    "entity": "little_people",
+    "trigger": "spirit_root_active",
+    "health_range": [
+      0.1,
+      0.4
+    ],
+    "narrative": "A chorus of maniacal, echoing giggling erupts from around the Spirit Root (if built), too close, too many, and small, sharp objects pelt me from unseen sources. My focus shatters, and I feel an intense urge to leave my home immediately, as if the very walls are laughing at me.",
+    "sound_cue": "A rapid, multi-directional burst of high-pitched, taunting laughter, interwoven with distinct 'pinging' sounds of small objects hitting nearby surfaces, echoing unnaturally within the home.",
+    "gameplay_effect": "Player receives minor 'Distraction' debuff, reducing combat accuracy and crafting speed; brief visual distortion affecting peripheral vision.",
+    "severity": "encounter"
+  },
+  {
+    "id": "homestead_event_027",
+    "zone": "Homestead",
+    "entity": "none",
+    "trigger": "night",
+    "health_range": [
+      0.1,
+      0.4
+    ],
+    "narrative": "The vast prairie at night feels impossibly empty outside, yet I hear a faint, rhythmic scraping sound, like a massive, unseen creature slowly dragging itself across the wooden floorboards, from room to room. The air feels charged, heavy with an ancient, patient presence.",
+    "sound_cue": "A deep, slow, rhythmic scraping, like a giant body being dragged, resonates through the floor, accompanied by a faint, high-frequency 'shhh' of disturbed dust.",
+    "gameplay_effect": "Temporary 'Vibration Sickness' debuff, causing minor visual tremors; reduced 'Perception' stat for detecting entities in darkness inside the home.",
+    "severity": "presence"
+  },
+  {
+    "id": "homestead_event_028",
+    "zone": "Homestead",
+    "entity": "land_spirit",
+    "trigger": "random",
+    "health_range": [
+      0.1,
+      0.4
+    ],
+    "narrative": "A wave of stifling, oppressive pressure washes over me, carrying the distinct scent of old wood and something metallic, though no source is visible. I hear a faint, grinding groan that seems to emanate from the very timbers of my home, as if they are in ancient agony.",
+    "sound_cue": "A low, guttural grinding and groaning sound, like massive wooden beams shifting, accompanied by a sharp, high-frequency 'static' charge sound.",
+    "gameplay_effect": "Minor 'Fatigue' debuff, increasing stamina consumption; tools' durability temporarily decreases faster when used on homestead structures.",
+    "severity": "presence"
+  },
+  {
+    "id": "homestead_event_029",
+    "zone": "Homestead",
+    "entity": "none",
+    "trigger": "zone_health_low",
+    "health_range": [
+      0.0,
+      0.1
+    ],
+    "narrative": "The sky above turns a sickly, oppressive grey, and a sudden, unnatural fog rolls in around the homestead, carrying with it not just mist, but the faint, desperate cries of unseen creatures trapped within the walls. The very air feels choked with despair.",
+    "sound_cue": "A roaring, chaotic wall of wind and dense fog, punctuated by high-pitched, desperate cries and low, mournful wails, creating an overwhelming sensory assault, with the added sound of timbers groaning and splitting.",
+    "gameplay_effect": "Severe 'Fog Blight' status effect, drastically reducing vision, movement speed, and causing persistent health drain; all resource nodes are temporarily inaccessible; minor structural integrity damage to homestead buildings.",
+    "severity": "crisis"
+  },
+  {
+    "id": "homestead_event_030",
+    "zone": "Homestead",
+    "entity": "pakakosh",
+    "trigger": "moon_transition",
+    "health_range": [
+      0.1,
+      0.4
+    ],
+    "narrative": "The air grows heavy with a sudden, unnatural stillness, then a sharp, dry clatter echoes, too precise for the wind, off the homestead structures. A fleeting, skeletal shadow darts across the floor, impossibly fast, leaving a trail of profound cold that chills the very hearth.",
+    "sound_cue": "A single, sharp, dry 'clack' followed by a rapid, rustling whisper that seems to pass directly behind the player, inducing a deep chill within the resonant home environment.",
+    "gameplay_effect": "Temporary 'Shivers' debuff, slightly reducing attack speed and increasing vulnerability to 'Frailty' damage from combat.",
+    "severity": "encounter"
+  },
+  {
+    "id": "homestead_event_031",
+    "zone": "Homestead",
+    "entity": "windigo",
+    "trigger": "reciprocity_low",
+    "health_range": [
+      0.2,
+      0.5
+    ],
+    "narrative": "A low, persistent growl reverberates from the foundations of my home, and I feel a sudden, intense craving for raw, basic resources, a primal hunger that feels alien. The distant walls seem to waver, and I feel a distinct sense of being watched, from within the very structure.",
+    "sound_cue": "A deep, guttural growl that seems to resonate from the foundations, accompanied by a subtle, high-frequency 'shimmer' that mimics visual distortion in the homestead, intensifying hunger for raw resources.",
+    "gameplay_effect": "Player's 'Raw Resource' hunger rate significantly increased; consuming raw materials provides double satiation but also a 'Windigo's Kiss' debuff, slightly reducing sanity over time and increasing sickness vulnerability.",
+    "severity": "encounter"
+  },
+  {
+    "id": "homestead_event_032",
+    "zone": "Homestead",
+    "entity": "little_people",
+    "trigger": "spirit_root_active",
+    "health_range": [
+      0.5,
+      0.8
+    ],
+    "narrative": "Faint, high-pitched whistles dance around the Spirit Root (if built), like children playing a game of hide-and-seek among the furniture, just out of sight. I turn, but only see shadows playing tricks, yet a small pile of harvested wood has been perfectly rearranged into a tiny, intricate structure.",
+    "sound_cue": "A series of quick, high-pitched whistles that seem to come from multiple, shifting directions, creating a playful yet unsettling atmosphere, echoing off walls.",
+    "gameplay_effect": "Minor 'Distraction' debuff, briefly causing player's inventory to open/close randomly; small chance for crafted items to appear with slightly different stats (LCK roll).",
+    "severity": "presence"
+  },
+  {
+    "id": "homestead_event_033",
+    "zone": "Homestead",
+    "entity": "land_spirit",
+    "trigger": "night",
+    "health_range": [
+      0.5,
+      0.8
+    ],
+    "narrative": "The ancient timbers of my home seem to glow faintly under the moonlight, casting flickering shadows that dance unnaturally. I hear a faint, almost melodic hum, like a lullaby sung by the vast, silent prairie itself, through the walls and roof.",
+    "sound_cue": "A low, sustained, almost melodic hum, intertwined with faint, sporadic 'tick' sounds of unseen water droplets, creating a sense of ancient, watchful presence.",
+    "gameplay_effect": "Temporary 'Calming' buff, slightly increasing stamina regeneration; minor increase in 'Perception' stat for detecting passive resources.",
+    "severity": "whisper"
+  },
+  {
+    "id": "homestead_event_034",
+    "zone": "Homestead",
+    "entity": "none",
+    "trigger": "random",
+    "health_range": [
+      0.3,
+      0.6
+    ],
+    "narrative": "A sudden gust of wind carries with it the faint, musty scent of old wood and something damp, and I hear a deep, rasping sigh that seems to come from all directions at once. The air feels heavy, stifling, as if deep within a forgotten cellar.",
+    "sound_cue": "A deep, drawn-out, raspy sigh, accompanied by a subtle, low-frequency 'pressure drop' sound, creating a feeling of suffocation and dampness, echoing from confined spaces.",
+    "gameplay_effect": "Player receives a temporary 'Nausea' debuff, slightly reducing movement speed and preventing food/water consumption for a short duration.",
+    "severity": "presence"
+  },
+  {
+    "id": "homestead_event_035",
+    "zone": "Homestead",
+    "entity": "land_spirit",
+    "trigger": "zone_health_low",
+    "health_range": [
+      0.3,
+      0.6
+    ],
+    "narrative": "The ground beneath my feet feels strangely loose and unstable, and I hear a faint, unsettling groan, as if the earth beneath my home is shifting restlessly in its ancient sleep. Small cracks appear in the wooden floorboards and plaster around me.",
+    "sound_cue": "A low, rumbling groan that seems to emanate from beneath the ground, accompanied by subtle 'creaking' and 'shifting' sounds of wood and cracking plaster.",
+    "gameplay_effect": "Small chance for temporary 'uneven ground' debuffs, occasionally causing player to stumble; minor structural integrity reduction for nearby player-built homestead structures.",
+    "severity": "encounter"
+  },
+  {
+    "id": "homestead_event_036",
+    "zone": "Homestead",
+    "entity": "none",
+    "trigger": "moon_transition",
+    "health_range": [
+      0.7,
+      1.0
+    ],
+    "narrative": "As the moon shifts, the wind suddenly dies, leaving an oppressive silence, broken only by a faint, high-pitched chime that seems to come from the ancient structures themselves. The sky appears impossibly vast and uncaring, mirroring the stoic, timeless prairie.",
+    "sound_cue": "An abrupt cessation of all ambient sounds, replaced by a single, sustained, high-frequency chime that seems to resonate from the homestead, emanating from above.",
+    "gameplay_effect": "Brief 'Silence' debuff, hindering detection of auditory cues; slight increase in 'Anxiety' stat.",
+    "severity": "whisper"
+  },
+  {
+    "id": "homestead_event_037",
+    "zone": "Homestead",
+    "entity": "windigo",
+    "trigger": "reciprocity_low",
+    "health_range": [
+      0.7,
+      1.0
+    ],
+    "narrative": "A faint, sweet scent, like fresh baked bread, drifts on the warm air, accompanied by a subtle, almost imperceptible whisper that hints at hidden stores. I feel a slight, unsettling urge to seek out and claim more, even when I have enough.",
+    "sound_cue": "A very low-frequency, almost subliminal whisper that suggests 'eat, more eat,' accompanied by a subtle, echoing 'thrum' in the air.",
+    "gameplay_effect": "Minor 'Temptation' buff, slightly increasing gathering speed for food resources but also subtly increasing resource consumption rates for 30 seconds.",
+    "severity": "whisper"
+  },
+  {
+    "id": "homestead_event_038",
+    "zone": "Homestead",
+    "entity": "little_people",
+    "trigger": "spirit_root_active",
+    "health_range": [
+      0.7,
+      1.0
+    ],
+    "narrative": "Around the Spirit Root (if built), I hear faint, musical clinking sounds, like tiny bells dancing in the breeze, though no such movement is visible. A small, familiar pebble from my pocket feels warm, then cold, then returns to normal, as if played with by unseen hands.",
+    "sound_cue": "Delicate, high-pitched clinking sounds, like very small metal objects tapping together, seemingly emanating from the air around the Spirit Root node.",
+    "gameplay_effect": "Small chance for minor healing potions to become slightly more effective; minor LCK buff for 30 seconds.",
+    "severity": "whisper"
+  },
+  {
+    "id": "homestead_event_039",
+    "zone": "Homestead",
+    "entity": "land_spirit",
+    "trigger": "night",
+    "health_range": [
+      0.0,
+      0.1
+    ],
+    "narrative": "The night air grows impossibly cold, and a low, mournful howl echoes across the plains, seeming to come from every wall of my home at once. My vision blurs, and I feel a profound sense of isolation and dread, as if the very structure is trying to swallow me.",
+    "sound_cue": "A sustained, multi-directional, low-frequency howl, carrying a distinct 'roughness' modulation, causing involuntary shivers and auditory disorientation, resonating from the walls and floor.",
+    "gameplay_effect": "Severe 'Hypothermia' debuff, causing continuous health drain and significantly reducing movement speed; player's INT stat temporarily halved.",
+    "severity": "crisis"
+  },
+  {
+    "id": "homestead_event_040",
+    "zone": "Homestead",
+    "entity": "none",
+    "trigger": "random",
+    "health_range": [
+      0.0,
+      0.1
+    ],
+    "narrative": "The ground beneath me trembles violently, and a deafening, crushing roar erupts from deep within the earth, as if a colossal beast is tearing through the prairie beneath my home. Deep fissures briefly open in the floor, emitting plumes of dust and a choking, earthy scent.",
+    "sound_cue": "A sudden, overwhelming, multi-layered soundscape of violent seismic rumbling, explosive ground cracks, and high-pressure dust hissing, creating auditory overload and a sense of impending collapse.",
+    "gameplay_effect": "Player receives severe 'Stagger' and 'Crush' damage; all nearby structures take significant durability damage; temporary impassable terrain created by fissures within the home.",
+    "severity": "crisis"
+  }
+]

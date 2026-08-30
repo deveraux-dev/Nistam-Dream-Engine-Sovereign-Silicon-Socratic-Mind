@@ -1,0 +1,8 @@
+//! Deterministic photometric terrain waveform bridge.
+#![allow(dead_code)]
+#[derive(Debug,Clone,Copy,Default,PartialEq,Eq)] pub struct Rgba8{pub r:u8,pub g:u8,pub b:u8,pub a:u8}
+#[derive(Debug,Clone,Copy,Default,PartialEq,Eq)] pub struct WaveformSample{pub height_mm:i32,pub normal_x_q:i16,pub normal_y_q:i16,pub normal_z_q:i16,pub material_id:u16,pub resonance_hz:i16}
+#[derive(Debug,Clone,Copy)] pub struct PhotometricInput{pub diffuse:Rgba8,pub light_north:u8,pub light_east:u8,pub light_south:u8,pub light_west:u8,pub material_hint:u16}
+pub fn luminance_u8(c:Rgba8)->u8{((c.r as u32*77+c.g as u32*150+c.b as u32*29)>>8)as u8}
+pub fn derive_waveform(input:PhotometricInput,scale_mm:i32)->WaveformSample{let lum=luminance_u8(input.diffuse)as i32;let dx=input.light_east as i32-input.light_west as i32;let dy=input.light_north as i32-input.light_south as i32;let resonance=match input.material_hint{0=>40,1=>432,2=>408,3=>800,_=>120};WaveformSample{height_mm:(lum*scale_mm)/255,normal_x_q:(dx.clamp(-255,255)as i16)*39,normal_y_q:(dy.clamp(-255,255)as i16)*39,normal_z_q:10000,material_id:input.material_hint,resonance_hz:resonance}}
+pub fn merge_decks(a:WaveformSample,b:WaveformSample,blend_q:i32)->WaveformSample{let t=blend_q.clamp(0,10000);let inv=10000-t;WaveformSample{height_mm:(a.height_mm*inv+b.height_mm*t)/10000,normal_x_q:((a.normal_x_q as i32*inv+b.normal_x_q as i32*t)/10000)as i16,normal_y_q:((a.normal_y_q as i32*inv+b.normal_y_q as i32*t)/10000)as i16,normal_z_q:10000,material_id:if t>=5000{b.material_id}else{a.material_id},resonance_hz:((a.resonance_hz as i32*inv+b.resonance_hz as i32*t)/10000)as i16}}

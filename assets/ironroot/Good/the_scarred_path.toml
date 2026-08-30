@@ -1,0 +1,15 @@
+[quest]
+id = "the_scarred_path"
+name = "The Scarred Path"
+description = "Defeat the Iron Golem. Your scars tell the story."
+zone = "iron_caverns"
+
+[[objectives]]
+type = "kill"
+target = "Iron Golem"
+count = 1
+description = "Defeat the Iron Golem"
+
+[reward]
+xp = 500
+item = "iron_heart"

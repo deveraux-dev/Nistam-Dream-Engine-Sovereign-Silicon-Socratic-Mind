@@ -25,6 +25,9 @@ forge-river-v3 = { path = "../forge-river-v3" }
 # links it too) — no new transitive surface class.
 forge-vcs-v3 = { path = "../forge-vcs-v3" }
 forge-core-v3 = { path = "../forge-core-v3" }
+# proc_lane.rs: NiprGateStatus/NiprPackedWord now live at forge-hal-clockspine::nipr
+# (moved 2026-08-29 off gemma-s13, its shared floor with gemma-s13's own use).
+forge-hal-clockspine = { path = "../forge-hal-clockspine" }
 # hook_* door verbs (door.rs): the compiled `foreman hook <event>` handlers,
 # called straight, so one long-lived daemon holds this logic instead of
 # `foreman.exe` being re-spawned fresh per Claude Code tool call (replaces
@@ -40,6 +43,7 @@ forge-ast-v3 = { path = "../forge-ast-v3" }
 forge-vix-lsp-v3 = { path = "../forge-vix-lsp-v3" }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
+image = "0.25"
 # codegen.rs (2026-08-22, two-lane door-verb doctrine): parses `src/verbs/*.ron`
 # specs — the SAME crate+version already vetted in forge-mud-v3/
 # forge-massops-wire-v3/forge-cart-v3, no new dependency class.

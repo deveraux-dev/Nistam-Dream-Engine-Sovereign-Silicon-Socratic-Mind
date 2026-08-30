@@ -18,7 +18,9 @@ use forge_zones_v3::{
 
 mod door;
 mod door_spawn;
+mod giveaway;
 mod term;
+mod fleet_hub;
 
 /// The one live ConPTY session (None until the dock first opens).
 type TermState = Arc<std::sync::Mutex<Option<term::TermSession>>>;
@@ -676,6 +678,30 @@ fn designation_at(bytes: &[u8], idx: usize) -> Option<String> {
 fn star_voice(idx: usize) -> u32 {
     static HYG: &[u8] = include_bytes!("../../../shell/assets/hyg_baked.bin");
     voice_at(HYG, idx).unwrap_or(0)
+}
+
+/// The star's MIDI note, same bake order as [`voice_at`] — the byte hardware
+/// wants, before any crossing into frequency. The tuning reference is NOT
+/// applied here; it belongs at the audio edge (`cents_floor::Cents`), not as
+/// integer arithmetic on a frequency.
+fn note_at(bytes: &[u8], idx: usize) -> Option<u8> {
+    if bytes.len() < 16 || &bytes[0..4] != b"HYGC" {
+        return None;
+    }
+    let star_count = u32::from_le_bytes(bytes[8..12].try_into().ok()?) as usize;
+    if idx >= star_count {
+        return None;
+    }
+    let o = 16 + 256 * 4 + idx * 17;
+    let mag_pmy = i32::from_le_bytes(bytes.get(o + 8..o + 12)?.try_into().ok()?);
+    let dist = u16::from_le_bytes(bytes.get(o + 12..o + 14)?.try_into().ok()?);
+    let teff_idx = *bytes.get(o + 14)?;
+    Some(forge_harmonics::scale_voice::star_note_on(
+        forge_harmonics::theory::SCALES[forge_harmonics::theory::MAJOR_PENTATONIC].degrees,
+        bucket_kelvin(teff_idx as usize) as i32,
+        mag_pmy,
+        dist,
+    ))
 }
 
 fn voice_at(bytes: &[u8], idx: usize) -> Option<u32> {
@@ -2251,6 +2277,16 @@ fn door_infer(prompt: String) -> Result<String, String> {
 }
 
 fn main() {
+    let argv: Vec<String> = std::env::args().collect();
+    if let Some(i) = argv.iter().position(|a| a == "--emit-giveaway") {
+        let out = argv.get(i + 1).map(PathBuf::from).unwrap_or_else(|| PathBuf::from("giveaway.html"));
+        if let Err(e) = giveaway::emit(&out) {
+            eprintln!("giveaway: {e}");
+            std::process::exit(1);
+        }
+        return;
+    }
+
     let root = repo_root();
     let forge_dir = root.join(".forge");
 
@@ -2348,7 +2384,9 @@ fn main() {
             fleet_hub::get_fleet_vram_oracle,
             fleet_hub::step_dm_dialogue,
             fleet_hub::run_world_orchestration,
-            fleet_hub::get_5d_projection_hud
+            fleet_hub::get_5d_projection_hud,
+            fleet_hub::observe_celestial_star_hop,
+            fleet_hub::generate_celestial_dialogue
         ])
         .manage(TheoryStore::default())
         .manage(TermState::default())

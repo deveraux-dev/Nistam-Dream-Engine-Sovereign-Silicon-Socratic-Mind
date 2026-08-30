@@ -1,0 +1,28 @@
+{
+  "deviceName": "example-generic-hrtf-profile",
+  "_note": "Synthetic placeholder coefficients ONLY — identity/trivial values, no vendor data. Real coefficients are MATH-GENERATED at load time (see spatial_hrtf::design). This file just exercises the source-agnostic loader schema.",
+  "crosstalkV9": {
+    "attenuationdB": -3.5,
+    "delaySeconds": 0.0002262,
+    "filter1": {
+      "coeffsPerBiQuad": [
+        [1.0, 0.0, 0.0, 1.0, 0.0, 0.0],
+        [0.5, 0.0, 0.0, 1.0, 0.0, 0.0]
+      ]
+    },
+    "filter2": {
+      "coeffsPerBiQuad": [
+        [1.0, 0.0, 0.0, 1.0, 0.0, 0.0]
+      ]
+    },
+    "fs": 48000
+  },
+  "HeadphonePath": {
+    "FastEqualizer": {
+      "FASTEQ_MATRIX": [
+        [1.0, 0.0, 0.0],
+        [0.0, 1.0, 0.0]
+      ]
+    }
+  }
+}

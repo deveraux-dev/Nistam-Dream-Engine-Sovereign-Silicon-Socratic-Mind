@@ -1,0 +1,17 @@
+{
+  "package_name": "dirge_ironroot_resonance_compiler",
+  "version": "0.1",
+  "description": "Combined Theory-to-Engine, brand, music, topology, raga-inspired mode, rhythm-combat, and glyph-script compiler bundle for Dirge of Ironroot.",
+  "folders": {
+    "docs": "Human-readable doctrine and design notes",
+    "rules": "KG_RULE entries in Markdown and JSONL",
+    "schemas": "JSON schemas for compiler artifacts",
+    "examples": "Example data rows and runtime objects",
+    "tables": "CSV lookup tables",
+    "reports": "Friction, quality, and cultural safety reports",
+    "sources": "Source ledger and provenance notes",
+    "manifests": "Package metadata"
+  },
+  "core_doctrine": "Theory proposes. Registry decides. Validators gate. Music carries. Brand rewrites. Topology remembers. Player performs.",
+  "status": "draft_compiler_doctrine"
+}

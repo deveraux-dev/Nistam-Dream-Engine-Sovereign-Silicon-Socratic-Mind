@@ -1,0 +1,35 @@
+# T8 of the forge-vision drain (plan-2-welds.md tranche table + ARCH000
+# material-canvas directive, 2026-08-11): the forgeatom material_id line
+# re-founded onto an 8-byte word with a 25-trit ternary craft plane (5
+# trits/byte, base-3, refusing 243..=255). Discrete material identity and
+# crafting live HERE; the continuous energy gradient (albedo/roughness)
+# lives in forge-photometric-v3's NormalAlbedo8 — composed at shade time,
+# never merged into one home.
+[package]
+name = "forge-material-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+
+# TRANCHE A (2026-08-11): the tier ladder composes across three T-words, so this
+# crate gains its first dependencies. The T8 doctrine above still holds — the
+# discrete material identity and the continuous energy gradient keep separate
+# HOMES; `MaterialShade16` is their COMPOSITION, which is a third thing and is
+# why it needs both. forge-core-v3 is Crate Zero and imports nothing, so no
+# cycle is possible.
+[dependencies]
+forge-photometric-v3 = { path = "../forge-photometric-v3" }
+forge-core-v3 = { path = "../forge-core-v3" }
+
+# The HUD face mounts this crate's FILES via `#[path]` (xtask is zero-dependency
+# by its own law, xtask/Cargo.toml:12). Under the mount the files resolve their
+# imports through the mounting crate's root instead of through cargo, and their
+# tests compile in their ONE home here only — the sky.rs precedent, identical to
+# forge-engine-v3's tick/state/spine mounts.
+[features]
+sky-mount = []
+
+[lints]
+workspace = true

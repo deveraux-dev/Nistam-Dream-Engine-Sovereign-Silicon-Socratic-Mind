@@ -1,0 +1,41 @@
+/* 100 Gifts for Brit — responsive, neurodivergent-friendly interface */
+body { font-family: system-ui, sans-serif; margin: 0; padding: 1rem; }
+.wrap { max-width: 90ch; margin: 0 auto; }
+.eyebrow { font-size: 0.875rem; color: #666; margin: 0; text-transform: uppercase; letter-spacing: 0.05em; }
+h1 { margin: 0.5rem 0; font-size: 2rem; font-weight: 700; }
+.lede { font-size: 1.125rem; margin: 1rem 0 2rem; color: #333; }
+details { border-left: 4px solid #ddd; padding-left: 1rem; margin: 1rem 0; }
+details[open] { border-left-color: #0066cc; }
+summary { cursor: pointer; font-weight: 600; margin: 0.5rem 0; user-select: none; }
+summary:hover { text-decoration: underline; }
+.room { margin: 2rem 0; }
+.room-head { display: flex; gap: 1rem; align-items: baseline; font-size: 1.25rem; }
+.room-no { font-weight: 700; color: #0066cc; min-width: 5rem; }
+.room-name { flex: 1; }
+.room-mark { color: #999; }
+details[open] > summary .room-mark::before { content: "−"; }
+details:not([open]) > summary .room-mark::before { content: "+"; }
+.room-body { margin: 1rem 0; }
+.room-gap { font-style: italic; margin: 0.5rem 0 1rem; color: #555; }
+.shelf { margin: 1rem 0 0 1rem; }
+.gifts { list-style: none; padding: 0; margin: 0.5rem 0 0 1rem; }
+.gifts li { margin: 0.25rem 0; font-size: 0.95rem; line-height: 1.4; }
+.gifts b { color: #0066cc; font-weight: 600; }
+.sources { margin: 1rem 0 0 2rem; }
+.sources ul { list-style: none; padding: 0; margin: 0.5rem 0 0 0; }
+.sources a { color: #0066cc; text-decoration: none; }
+.sources a:hover { text-decoration: underline; }
+@media (prefers-color-scheme: dark) {
+  body { background: #1a1a1a; color: #eee; }
+  .eyebrow { color: #999; }
+  h1 { color: #fff; }
+  .lede { color: #ccc; }
+  details { border-left-color: #444; }
+  details[open] { border-left-color: #4da6ff; }
+  summary { color: #eee; }
+  summary:hover { color: #fff; }
+  .room-no { color: #4da6ff; }
+  .room-gap { color: #aaa; }
+  .gifts b { color: #4da6ff; }
+  .sources a { color: #4da6ff; }
+}

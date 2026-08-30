@@ -16,6 +16,15 @@ musicxml = ["dep:roxmltree"]
 bytemuck = { version = "1", features = ["derive"] }
 roxmltree = { version = "0.20", optional = true }
 serde = { version = "1", features = ["derive"] }
+# The shaderbind/scc port lands HERE, not in those crates: forge-shaderbind
+# carries zero dependencies by law and must keep carrying zero.
+forge-shaderbind = { path = "../forge-shaderbind" }
+forge-scc-v3 = { path = "../forge-scc-v3" }
+
+# Dev-only: the independent oracle for emitted WGSL. naga never enters the
+# `cargo check` gate because dev-deps are not checked without --all-targets.
+[dev-dependencies]
+forge-shader-build-v3 = { path = "../forge-shader-build-v3" }
 
 [lints]
 workspace = true

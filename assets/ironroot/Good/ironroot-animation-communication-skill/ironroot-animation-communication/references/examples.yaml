@@ -1,0 +1,110 @@
+{
+  "examples": [
+    {
+      "animation_event_id": "root_pruner_mercy_feint",
+      "scene_kind": "combat",
+      "actor_kind": "shadow_echo",
+      "communication_goal": "show_shadow_habit",
+      "combat_aspect": "knife",
+      "identity_integrity": "contextual",
+      "disclosure_level": 4,
+      "active_pressure": "shadow_learning",
+      "motion_phrase": {
+        "start_pose": "mirrors player common parry stance",
+        "anticipation": "blade lowers as if sparing",
+        "action": "sudden cut from mercy angle",
+        "impact_or_turn": "hit-stop freezes on familiar player silhouette",
+        "recovery": "shadow repeats player old retreat step",
+        "hold_or_afterimage": "afterimage lags one route behind"
+      },
+      "timing_contract": {
+        "anticipation_ticks": 18,
+        "active_ticks": 6,
+        "recovery_ticks": 24,
+        "cancel_window_ticks": 8,
+        "input_locked": false,
+        "readable_at_camera_distance": true
+      },
+      "communication_priors": [
+        {
+          "prior": "shadow mirrors repeated mercy pattern",
+          "weight": 0.95
+        }
+      ],
+      "worldstate_effects": [
+        {
+          "effect": "shadow_habit_revealed",
+          "condition": "player_has_repeated_mercy_pattern"
+        }
+      ],
+      "friction_points": [
+        "shadow_generic_enemy_motion",
+        "active_frame_lie"
+      ],
+      "validation_gates": [
+        "requires repeated_input_hash",
+        "active frames align with blade contact"
+      ]
+    },
+    {
+      "animation_event_id": "river_fae_refusal_scene",
+      "scene_kind": "scripted_scene",
+      "actor_kind": "fae",
+      "communication_goal": "show_fae_obligation",
+      "combat_aspect": "none",
+      "identity_integrity": "whole",
+      "disclosure_level": 2,
+      "active_pressure": "fae_obligation",
+      "dialogue_sync": {
+        "line_id": "river_fae_001",
+        "bardic_response_id": "hold_silence",
+        "speech_act": "hold_silence"
+      },
+      "motion_phrase": {
+        "start_pose": "fae circles river stone without touching it",
+        "anticipation": "hand rises as if accepting bargain",
+        "action": "bard remains still and fae hand stops short",
+        "impact_or_turn": "water continues moving while all bodies hold",
+        "recovery": "fae steps back, granting respect",
+        "hold_or_afterimage": "ripples continue in the shape of an unsung word"
+      },
+      "timing_contract": {
+        "anticipation_ticks": 60,
+        "active_ticks": 0,
+        "recovery_ticks": 90,
+        "cancel_window_ticks": 0,
+        "input_locked": true,
+        "readable_at_camera_distance": true
+      },
+      "communication_priors": [
+        {
+          "prior": "silence is active refusal",
+          "weight": 0.9
+        },
+        {
+          "prior": "fae respects boundary when bargain is not completed",
+          "weight": 0.75
+        }
+      ],
+      "sound_sync": {
+        "sound_primitive": "silence_over_water",
+        "beat_aligned": false,
+        "critical_feedback_bypasses_beat_grid": true
+      },
+      "worldstate_effects": [
+        {
+          "effect": "vowless_respect_flag",
+          "condition": "player_holds_silence"
+        }
+      ],
+      "friction_points": [
+        "refusal_idle_confusion",
+        "fae_random_whimsy"
+      ],
+      "validation_gates": [
+        "stillness framed by pressure",
+        "scene does not explain full fae obligation system"
+      ]
+    }
+  ]
+}

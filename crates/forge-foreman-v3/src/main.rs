@@ -241,14 +241,27 @@ fn chat(root: &PathBuf) -> Result<(), String> {
 /// named in `HANDOFF-2026-08-12-GEMMA-SIDECAR-FIX.md` Step 5: `up` launches
 /// the sidecar in a visible console and writes a PID beacon, `down` stops
 /// the beaconed process, `status` reports the beacon plus a live probe.
+///
+/// Fire-and-forget amortize triggers on UP (start) and DOWN (stop).
 fn sidecar_verb(root: &PathBuf, args: &[String]) -> Result<(), String> {
+    use forge_foreman_v3::amortize_trigger;
+
     let sub = args.get(1).map(String::as_str);
     if sub == Some("down") {
+        // Trigger amortize at operator STOP (fire-and-forget).
+        let session_end = root.join(".forge/grind-log/operator-stop.md");
+        let _ = amortize_trigger::trigger_amortize(root, &session_end);
+        let _ = amortize_trigger::trigger_ttl_sweep(root);
         return forge_foreman_v3::sidecar_launch::down(root);
     }
     let d = directives::load(root)?;
     match sub {
-        Some("up") => forge_foreman_v3::sidecar_launch::up(root, &d),
+        Some("up") => {
+            // Trigger amortize at operator START (fire-and-forget).
+            let session_start = root.join(".forge/grind-log/operator-start.md");
+            let _ = amortize_trigger::trigger_amortize(root, &session_start);
+            forge_foreman_v3::sidecar_launch::up(root, &d)
+        }
         Some("status") => forge_foreman_v3::sidecar_launch::status(root, &d),
         _ => Err("usage: foreman sidecar <up|down|status> --root <workspace>".into()),
     }
@@ -258,14 +271,27 @@ fn sidecar_verb(root: &PathBuf, args: &[String]) -> Result<(), String> {
 /// leg (BACKLOG STEP 3): `up` launches the nde-sidecar hidden and writes a
 /// PID beacon, `down` stops the beaconed process, `status` reports the beacon
 /// plus a live probe.
+///
+/// Fire-and-forget amortize triggers on UP (start) and DOWN (stop).
 fn nde_verb(root: &PathBuf, args: &[String]) -> Result<(), String> {
+    use forge_foreman_v3::amortize_trigger;
+
     let sub = args.get(1).map(String::as_str);
     if sub == Some("down") {
+        // Trigger amortize at NDE operator STOP (fire-and-forget).
+        let session_end = root.join(".forge/grind-log/nde-stop.md");
+        let _ = amortize_trigger::trigger_amortize(root, &session_end);
+        let _ = amortize_trigger::trigger_ttl_sweep(root);
         return forge_foreman_v3::sidecar_launch::nde_down(root);
     }
     let d = directives::load(root)?;
     match sub {
-        Some("up") => forge_foreman_v3::sidecar_launch::nde_up(root, &d),
+        Some("up") => {
+            // Trigger amortize at NDE operator START (fire-and-forget).
+            let session_start = root.join(".forge/grind-log/nde-start.md");
+            let _ = amortize_trigger::trigger_amortize(root, &session_start);
+            forge_foreman_v3::sidecar_launch::nde_up(root, &d)
+        }
         Some("status") => forge_foreman_v3::sidecar_launch::nde_status(root, &d),
         _ => Err("usage: foreman nde <up|down|status> --root <workspace>".into()),
     }

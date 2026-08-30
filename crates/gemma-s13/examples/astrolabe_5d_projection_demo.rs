@@ -1,5 +1,5 @@
 // Copyright (c) 2026 Sean Morin, Edmonton River Valley, Alberta. All rights reserved.
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: MIT OR Apache-2.0
 
 //! # 5D-to-2D Celestial Projection & Hyper-Parallax Demo
 //!

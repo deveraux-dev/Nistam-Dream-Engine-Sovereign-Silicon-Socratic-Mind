@@ -1,0 +1,19 @@
+[package]
+name = "forge-astro-harvest-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Harvest Astro game engine 2D concepts and seed forge-atlas-v3 with terrain/role data."
+
+[[bin]]
+name = "astro-harvest"
+path = "src/main.rs"
+
+[dependencies]
+serde_json = "1"
+forge-atlas-v3 = { path = "../forge-atlas-v3" }
+forge-poll5d-v3 = { path = "../forge-poll5d-v3" }
+forge-material-v3 = { path = "../forge-material-v3" }
+
+[lints]
+workspace = true

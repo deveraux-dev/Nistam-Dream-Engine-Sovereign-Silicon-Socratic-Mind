@@ -1,0 +1,10 @@
+[package]
+name = "forge-ump"
+version = "0.1.0-alpha"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+description = "Zero-alloc MIDI 2.0 UMP byte-stream parser and typed message bridge for 13Forge/Ironroot."
+
+[dependencies]
+bytemuck = { version = "1.15", features = ["derive"] }
+forge-core = { path = "../forge-core" }

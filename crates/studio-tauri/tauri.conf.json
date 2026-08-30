@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "Forge V3 Demo Shell",
+  "productName": "Nistam Dream Engine",
   "version": "0.3.0",
   "identifier": "com.forge.studio-tauri",
   "build": {
@@ -19,7 +19,7 @@
     "windows": [
       {
         "label": "main",
-        "title": "Forge V3 Demo Shell",
+        "title": "Nistam Dream Engine",
         "width": 1400,
         "height": 900,
         "minWidth": 900,

@@ -1,0 +1,19 @@
+# Invention #86 (F:\docs\CORP-2748684-ALBERTA-LTD\legal\inventions\
+# 086-spatial-memory-palace-communication.md): spatial memory-palace comms.
+# Ephemeral-transport client (NOSTR relay I/O) is deferred behind an ARCH000
+# dependency decision, same precedent as forge-wasibox-v3's WASI lane — this
+# crate ships only the wire types + trait, zero network deps.
+[package]
+name = "forge-comm-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "Invention #86 — spatial memory-palace communication. Contact/conversation layout is derived fresh from behavioral-gravity inputs every call, never persisted (F:\\docs\\CORP-2748684-ALBERTA-LTD\\legal\\inventions\\086-spatial-memory-palace-communication.md)."
+
+[dependencies]
+forge-geo-v3 = { path = "../forge-geo-v3" }
+glam = "0.29"
+
+[lints]
+workspace = true

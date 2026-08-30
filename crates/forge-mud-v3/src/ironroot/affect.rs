@@ -77,7 +77,7 @@ impl AffectMemory {
     /// `None` if any leak is refused by [`LeakyPermyriad::new`] — a channel
     /// that never fades has no equilibrium and would accumulate without bound.
     pub fn new(leaks: [u16; CHANNELS]) -> Option<Self> {
-        let mut channels = [LeakyPermyriad { value: 0, leak: 1 }; CHANNELS];
+        let mut channels = [LeakyPermyriad { value: 0, leak: 1, channel_rates: [0; 32] }; CHANNELS];
         let mut i = 0;
         while i < CHANNELS {
             match LeakyPermyriad::new(0, leaks[i]) {

@@ -1,0 +1,39 @@
+# The reel rig, v3 (aspire.rs youtube-forge row). Ported from v2's
+# `F:\NewRepo\crates\forge-gui\src\reel\` (17 modules) module by module,
+# not verbatim — v2's `ReelClock` was a standalone bpm_x100/fps knob with
+# no scrub/replay; v3's is built directly on `forge-engine-v3::EngineTick8`,
+# whose `RUN_STATE_REPLAY` trit and pure `encode(frame, ..)` already give
+# O(1) scrub for free (Sean 2026-08-16: "its on the tape we have and tick
+# we have now, it needs to be scrubbable").
+[package]
+name = "forge-reel-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+
+[dependencies]
+forge-engine-v3 = { path = "../forge-engine-v3" }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+# `gif` (Sean 2026-08-26, direct approval for the reel lane): the GIF encoder's
+# one home. OPTIONAL and off by default — same doctrine as forge-cart-v3's
+# `texbake`, so no runtime crate links an encoder unless it asks for one.
+gif = { version = "0.13", optional = true }
+
+[features]
+default = []
+# The scrubbable GIF window. Frame delay derives from `ReelClock`'s dwell, never
+# a literal, so the Drop Law floors survive the encode.
+gif-window = ["dep:gif"]
+
+[lints]
+workspace = true
+
+# The example imports `gif_window`, which only exists behind its feature. Without
+# this, a default `cargo test --workspace` fails to compile the example — the
+# feature gate has to be declared on both sides or it only holds on one.
+[[example]]
+name = "gif_window_proof"
+required-features = ["gif-window"]

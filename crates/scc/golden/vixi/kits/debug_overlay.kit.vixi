@@ -1,0 +1,16 @@
+#vixi:kit v1
+surface: debug_overlay
+profile: forge_primeflow
+classification: visual_debugging
+
+slot debug.root kind=region role=overlay alpha=permyriad(8500)
+slot debug.frame_budget kind=widget role=bar source=telemetry.frame_budget_q
+slot debug.fps kind=text role=data source=telemetry.fps font=mono
+slot debug.latency kind=text role=data source=telemetry.latency_ms font=mono
+slot debug.audio kind=region role=section collapsible=true
+slot debug.render kind=region role=section collapsible=true
+slot debug.vision kind=region role=section collapsible=true
+slot debug.sparklines kind=widget role=sparkline source=telemetry.history
+
+gate overlay_obscure_limit = permyriad(3500)
+gate severity_color_shape_label = required

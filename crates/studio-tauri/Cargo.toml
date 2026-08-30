@@ -33,6 +33,10 @@ forge-envelope = { path = "../forge-envelope" }
 forge-ml-bqrouter = { path = "../forge-ml-bqrouter" }
 gemma-s13 = { path = "../gemma-s13" }
 portable-pty = "0.9"
+# Single-file giveaway emit only (giveaway.rs) — both already resolved in this
+# crate's lock via tauri, so neither adds new vendored source.
+flate2 = "1"
+base64 = "0.22"
 
 [features]
 default = ["musicxml"]

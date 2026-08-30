@@ -1,0 +1,40 @@
+# World Consequence Engine (WCE) upper tier — ported from
+# F:\NewRepo\crates\forge-consequence\src\{moe,quest,rule,dispatch}.rs.
+# A sibling of forge-core-v3, not folded into it — forge-core-v3 is Crate Zero
+# (zero deps by law, F:\v3\Cargo.toml:5-6) and these modules need serde
+# (quest.rs, rule.rs) and forge-hal-clockspine's MoeRouter (moe.rs). budget.rs
+# and curves.rs turned out to need no external deps (query+tags only) and
+# landed directly in forge-core-v3::consequence instead (2026-08-17) — see
+# that crate's consequence/mod.rs. query.rs, tags.rs, budget.rs, curves.rs
+# all stay in forge-core-v3::consequence; this crate depends on it for those.
+#
+# dispatch.rs (2026-08-17): the named forge_physics::types blocker is
+# resolved — forge-physics-v3 gained a scoped types.rs port covering exactly
+# {MaterialId, MilliUnit, PhysicsEffect, PlumeSource, SoundSource} (see that
+# crate's types.rs doc comment for scope). One real wrinkle crossing the
+# boundary: forge-core-v3's PendingInteraction.position uses this crate's
+# OWN fixed_point::MilliUnit (a deliberate Crate Zero decision, see
+# consequence/query.rs), while forge-physics-v3's PhysicsEffect uses
+# pp-math-v3's MilliUnit — two distinct same-shape i64 newtypes. dispatch.rs
+# converts at the one boundary point (`to_phys_pos`), not by unifying the
+# types themselves.
+[package]
+name = "forge-consequence-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+description = "World Consequence Engine upper tier — dispatch/moe/quest/rule, ported from F:\\NewRepo\\crates\\forge-consequence."
+
+[dependencies]
+# Link hash for AssemblyEvidenceChain receipts. FNV-1a was here first and is
+# not tamper-evident — a forgeable link is not a receipt.
+blake3 = "1.8.5"
+serde = { version = "1", features = ["derive"] }
+forge-core-v3 = { path = "../forge-core-v3", features = ["serde"] }
+forge-hal-clockspine = { path = "../forge-hal-clockspine" }
+forge-physics-v3 = { path = "../forge-physics-v3" }
+
+[lints]
+workspace = true

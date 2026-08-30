@@ -15,6 +15,8 @@ use std::sync::atomic::Ordering;
 use crate::gemma_client;
 use crate::protocol::{DaemonMsg, DaemonReply};
 use crate::wire::{self, FrameHeader};
+use forge_core_v3::zones::sparse_grid::SparseChunkGrid;
+use forge_core_v3::zones::ledger::MutationLedger;
 
 /// Live subscriber streams, keyed by the channel each subscriber asked for —
 /// pushed to by [`broadcast`] whenever anything worth knowing happens. A
@@ -104,6 +106,31 @@ fn river_lock() -> &'static Mutex<()> {
 
 fn river_index() -> forge_river_v3::RiverIndex {
     forge_river_v3::RiverIndex::new(&crate::platform::sot_root().join(".forge"))
+}
+
+/// Persistent mesh state: deviation-cache (SparseChunkGrid) + MutationLedger.
+/// Lives for the daemon process lifetime, enabling mesh_chunk_query and
+/// terraform_crater to persist state across calls.
+struct PersistentMeshState {
+    grid: SparseChunkGrid,
+    ledger: MutationLedger,
+}
+
+impl PersistentMeshState {
+    fn carve_crater(&mut self, chunk_x: i32, chunk_y: i32, chunk_z: i32, w: i8, center_x: usize, center_y: usize, center_z: usize, radius: usize) -> u32 {
+        let chunk = self.grid.get_or_create_mut((chunk_x, chunk_y, chunk_z, w));
+        forge_core_v3::zones::project3d::carve_sphere(chunk, &mut self.ledger, 1, (center_x, center_y, center_z), radius)
+    }
+}
+
+fn mesh_state() -> &'static Mutex<PersistentMeshState> {
+    static MESH: OnceLock<Mutex<PersistentMeshState>> = OnceLock::new();
+    MESH.get_or_init(|| {
+        Mutex::new(PersistentMeshState {
+            grid: SparseChunkGrid::new(32),
+            ledger: MutationLedger::new(),
+        })
+    })
 }
 
 /// Commit the whole `river.idx` file into `.forge/vcs`'s tape (plan step 6,
@@ -276,24 +303,26 @@ fn handle_hook_snapshot(root: &std::path::Path, stdin_json: &str) -> DaemonReply
 
 /// `hook_drift` — the seventh and last hook event moved off a `foreman.exe`
 /// subprocess: the non-blocking hook-wiring audit
-/// (`forge_foreman_v3::drift::run_report`), broadcast on `"hooks"` the same
-/// way the six gate verdicts already are (a FAIL is now a signed, visible
+/// (`forge_foreman_v3::drift::run_report_full`), broadcast on `"hooks"` the
+/// same way the six gate verdicts already are (a FAIL is now a signed, visible
 /// event, not just a `UserPromptSubmit` stdout line nobody re-reads).
+/// Silent on a green turn since 2026-08-28 — the broadcast is unconditional,
+/// the per-turn stdout is not.
 fn handle_hook_drift(root: &std::path::Path) -> DaemonReply {
-    let mut report = forge_foreman_v3::drift::run_report(root);
+    let report = forge_foreman_v3::drift::run_report_full(root);
 
-    if let Some(staleness_msg) = crate::staleness::check(root) {
-        if let Some(verdict_pos) = report.find("DRIFT verdict:") {
-            report.insert_str(verdict_pos, &format!("{staleness_msg}\n"));
-            if report[verdict_pos..].starts_with("DRIFT verdict:PASS") {
-                report.replace_range(verdict_pos..verdict_pos + "DRIFT verdict:PASS".len(), "DRIFT verdict:FAIL");
-            }
-        }
+    // The RECORD is unconditional: every turn still signs the same report onto
+    // the "hooks" channel and the beacon relay. Only the DISPLAY is gated —
+    // on a green turn the reply carries no `data`, which `door_hook.rs` already
+    // defines as the silent path. Four lines of "nothing is wrong" were being
+    // charged to every agent's context, every prompt.
+    broadcast("hooks", &report.text);
+    crate::beacon_valve::relay("hooks", &report.text);
+    if report.green {
+        DaemonReply::ok()
+    } else {
+        DaemonReply::with_data(report.text)
     }
-
-    broadcast("hooks", &report);
-    crate::beacon_valve::relay("hooks", &report);
-    DaemonReply::with_data(report)
 }
 
 /// `ast_parse` — VixiScript's hand-rolled AST parser
@@ -613,12 +642,6 @@ impl Whitelist {
         "mma_verify",
         "mma_dot",
         "mma_status",
-        // Autonomous fan-out decision gate (2026-08-29): queries the BqRouter
-        // specialist router (integer XOR + POPCNT, no I/O) and optionally escalates
-        // to TRIAD consensus. Router is read-only until trained (no persistent
-        // state mutation); escalation path is same class as infer (optional sidecar
-        // call, no fs write).
-        "fanout_decide",
         // shutdown (2026-08-23, the sanctioned bounce): loopback-only door,
         // graceful tape flush, reply-then-exit(0) — door_hook::spawn_daemon
         // resurrects from the freshly deployed .forge/bin exe on the next
@@ -704,6 +727,50 @@ pub fn serve_frames(mut reader: impl BufRead, mut writer: TcpStream) -> std::io:
         logout(&session_id);
     }
     Ok(())
+}
+
+/// Handle P7 WITNESS readback: load PNG, read pixel RGBA at marker coordinates.
+/// Returns list of (x, y, r, g, b, a) tuples as JSON: `[{"x":100,"y":200,"r":255,"g":0,"b":0,"a":255}]`
+fn handle_readback_pixels(png_path: &str, markers_json: &str) -> DaemonReply {
+    use std::fs;
+    use image::GenericImageView;
+
+    let bytes = match fs::read(png_path) {
+        Ok(b) => b,
+        Err(e) => return DaemonReply::err(format!("failed to read PNG {}: {}", png_path, e)),
+    };
+
+    let img = match image::load_from_memory(&bytes) {
+        Ok(img) => img,
+        Err(e) => return DaemonReply::err(format!("failed to load PNG {}: {}", png_path, e)),
+    };
+
+    let rgba = img.to_rgba8();
+    let (w, h) = img.dimensions();
+
+    let markers: Vec<(u32, u32)> = match serde_json::from_str::<Vec<Vec<u32>>>(markers_json) {
+        Ok(coords) => coords.iter().filter_map(|c| {
+            if c.len() >= 2 { Some((c[0], c[1])) } else { None }
+        }).collect(),
+        Err(e) => return DaemonReply::err(format!("invalid markers JSON: {}", e)),
+    };
+
+    let mut result = Vec::new();
+    for (x, y) in markers {
+        if x >= w || y >= h {
+            return DaemonReply::err(format!("marker ({}, {}) out of bounds ({}, {})", x, y, w, h));
+        }
+        let idx = ((y * w + x) * 4) as usize;
+        if idx + 3 < rgba.as_raw().len() {
+            let r = rgba.as_raw()[idx];
+            let g = rgba.as_raw()[idx + 1];
+            let b = rgba.as_raw()[idx + 2];
+            let a = rgba.as_raw()[idx + 3];
+            result.push(format!(r#"{{"x":{},"y":{},"r":{},"g":{},"b":{},"a":{}}}"#, x, y, r, g, b, a));
+        }
+    }
+
+    DaemonReply::with_data(format!("[{}]", result.join(",")))
 }
 
 /// Dispatch one frame: lookup op, check whitelist, decode message, invoke handler.
@@ -820,56 +887,6 @@ fn handle_whitelisted_msg(msg: DaemonMsg, conn: &TcpStream) -> DaemonReply {
                 }
             }
         }
-        DaemonMsg::FanoutDecide { task, k, budget_ms } => {
-            use forge_ml_bqrouter::{embed_prompt, BqRouter, margin_trit};
-            use std::path::PathBuf;
-
-            let query = embed_prompt(&task);
-            let router = match BqRouter::load(&PathBuf::from(".forge/distill/router.bqr"), 512) {
-                Ok(r) => r,
-                Err(_) => BqRouter::new(512),
-            };
-            let ranked = router.route_topk(&query, k);
-            let top_verdict = margin_trit(ranked.first().map(|r| (r.id, r.margin_to_next)));
-
-            if top_verdict == 1 || ranked.is_empty() {
-                let mut reply_str = String::new();
-                reply_str.push_str(&format!("verdict:{}\n", top_verdict));
-                reply_str.push_str(&format!("ranked:{}\n", ranked.len()));
-                for r in &ranked {
-                    reply_str.push_str(&format!("  id:{} dist:{} margin:{} records:{}\n",
-                        r.id, r.dist, r.margin_to_next, r.record_count));
-                }
-                if !ranked.is_empty() {
-                    reply_str.push_str(&format!("accepted_id:{}\n", ranked[0].id));
-                }
-                DaemonReply::with_data(reply_str)
-            } else {
-                match gemma_client::triad(&task, 256, budget_ms) {
-                    Ok(triad_receipt) => {
-                        let mut reply_str = String::new();
-                        reply_str.push_str(&format!("verdict:{}\n", top_verdict));
-                        reply_str.push_str("escalated_to_triad:yes\n");
-                        reply_str.push_str(&format!("consensus_hash:{}\n", triad_receipt.consensus_hash));
-                        reply_str.push_str(&format!("latency_ms:{}\n", triad_receipt.latency_ms));
-                        reply_str.push_str("[DIRECT]\n");
-                        reply_str.push_str(&triad_receipt.direct_output);
-                        reply_str.push_str("\n[MIRROR]\n");
-                        reply_str.push_str(&triad_receipt.mirror_output);
-                        reply_str.push_str("\n[CODEC]\n");
-                        reply_str.push_str(&triad_receipt.codec_output);
-                        reply_str.push_str("\n");
-                        DaemonReply::with_data(reply_str)
-                    }
-                    Err(gemma_client::GemmaClientError::Unreachable(reason)) => {
-                        DaemonReply::err(format!("triad escalation unreachable: {reason}"))
-                    }
-                    Err(gemma_client::GemmaClientError::Refused(reason)) => {
-                        DaemonReply::err(format!("triad escalation refused: {reason}"))
-                    }
-                }
-            }
-        }
         DaemonMsg::Log { repo, tag, msg: m } => {
             DaemonReply::with_data(format!("repo:{}\ntag:{}\nmsg:{}", repo, tag, m))
         }
@@ -944,25 +961,26 @@ fn handle_whitelisted_msg(msg: DaemonMsg, conn: &TcpStream) -> DaemonReply {
             handle_river_set_aperture(&session_id, &aperture)
         }
         DaemonMsg::MeshChunkQuery { x, y, z, w } => {
-            let grid = forge_core_v3::zones::sparse_grid::SparseChunkGrid::new(32);
-            let chunk_exists = grid.chunks.contains_key(&(x, y, z, w));
-            let total_chunks = grid.allocated_chunk_count();
-            let footprint = grid.byte_footprint();
+            let mesh = mesh_state().lock().unwrap_or_else(|p| p.into_inner());
+            let chunk_exists = mesh.grid.chunks.contains_key(&(x, y, z, w));
+            let total_chunks = mesh.grid.allocated_chunk_count();
+            let footprint = mesh.grid.byte_footprint();
             DaemonReply::with_data(format!(
                 "chunk_exists:{}\ntotal_chunks:{}\nfootprint_bytes:{}\nstatus:ok",
                 chunk_exists as u8, total_chunks, footprint
             ))
         }
         DaemonMsg::TerraformCrater { x, y, z, w, radius } => {
-            let mut grid = forge_core_v3::zones::sparse_grid::SparseChunkGrid::new(32);
-            let mut ledger = forge_core_v3::zones::ledger::MutationLedger::new();
-            let chunk = grid.get_or_create_mut(((x / 32) as i32, (y / 32) as i32, (z / 32) as i32, w));
-            let changed = forge_core_v3::zones::project3d::carve_sphere(chunk, &mut ledger, 1, (x % 32, y % 32, z % 32), radius as usize);
-            let ledger_len = ledger.len();
-            let seal_hex = if let Some(last) = ledger.rows().last() {
-                format!("{:02x}{:02x}{:02x}{:02x}", last.seal[0], last.seal[1], last.seal[2], last.seal[3])
-            } else {
-                "none".to_string()
+            let (changed, ledger_len, seal_hex) = {
+                let mut mesh = mesh_state().lock().unwrap_or_else(|p| p.into_inner());
+                let changed = mesh.carve_crater((x / 32) as i32, (y / 32) as i32, (z / 32) as i32, w, x % 32, y % 32, z % 32, radius as usize);
+                let ledger_len = mesh.ledger.len();
+                let seal_hex = if let Some(last) = mesh.ledger.rows().last() {
+                    format!("{:02x}{:02x}{:02x}{:02x}", last.seal[0], last.seal[1], last.seal[2], last.seal[3])
+                } else {
+                    "none".to_string()
+                };
+                (changed, ledger_len, seal_hex)
             };
             let audit_line = format!("crater:({x},{y},{z},w={w}) r={radius} changed={changed} seal={seal_hex}");
             broadcast("door_00", &audit_line);
@@ -982,6 +1000,9 @@ fn handle_whitelisted_msg(msg: DaemonMsg, conn: &TcpStream) -> DaemonReply {
                 "bounce:accepted\ntape_flushed:{flushed}\npid:{}",
                 std::process::id()
             ))
+        }
+        DaemonMsg::ReadbackPixels { png_path, markers_json } => {
+            handle_readback_pixels(&png_path, &markers_json)
         }
         DaemonMsg::Unimplemented { op } => {
             DaemonReply::err(format!("unimplemented op: {}", op))
@@ -1747,13 +1768,25 @@ mod tests {
         std::env::remove_var("FORGE_FLOOR");
     }
 
+    /// The report is still built and broadcast every turn; only its DISPLAY is
+    /// gated. So the verdict is asserted on the report, and the reply's `data`
+    /// must appear exactly when the turn is NOT green (2026-08-28).
     #[test]
-    fn hook_drift_dispatch_returns_a_real_verdict() {
+    fn hook_drift_speaks_only_when_something_is_red() {
+        let _fg = crate::platform::forge_floor_test_lock().lock().unwrap();
         let hdr = FrameHeader { ver: 1, kind: wire::KIND_CALL, tool_id: 49, len: 0 };
         let reply = dispatch_frame(&hdr, b"", &test_conn(), &mut None).unwrap();
         assert!(reply.ok, "{reply:?}");
-        let data = reply.data.expect("hook_drift must always carry a report");
-        assert!(data.contains("DRIFT verdict:"), "{data}");
+
+        let report = forge_foreman_v3::drift::run_report_full(&crate::platform::sot_root());
+        assert!(report.text.contains("DRIFT verdict:"), "{}", report.text);
+        assert_eq!(
+            reply.data.is_some(),
+            !report.green,
+            "data must be carried exactly when NOT green; green={} data={:?}",
+            report.green,
+            reply.data
+        );
     }
 
     #[test]

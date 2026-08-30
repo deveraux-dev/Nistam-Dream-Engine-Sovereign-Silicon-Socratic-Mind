@@ -1,0 +1,20 @@
+#vixi:shaderbind v1
+surface: audio_vis
+profile: forge_primeflow
+
+signal rms source=audio.rms range=0..10000
+signal beat_phase source=audio.beat_phase range=0..10000
+signal spectral_centroid source=audio.spectral_centroid range=0..10000
+signal crossfader source=audio.crossfader range=0..10000
+signal pressure source=input.pen_pressure range=0..10000
+
+vibematrix.channel[0] <- rms
+vibematrix.channel[1] <- beat_phase
+vibematrix.channel[2] <- spectral_centroid
+vibematrix.channel[3] <- crossfader
+vibematrix.channel[4] <- pressure
+
+gate audio_not_identity = required
+gate mix_clarity = required
+gate shader_compile_hotpath = forbidden
+gate visual_only_mutates_authority = forbidden

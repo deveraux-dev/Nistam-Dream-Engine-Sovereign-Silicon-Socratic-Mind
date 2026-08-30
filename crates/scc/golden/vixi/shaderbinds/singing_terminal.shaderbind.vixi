@@ -1,0 +1,23 @@
+#vixi:shaderbind v1
+surface: singing_terminal
+profile: singing_terminal
+
+# THE TERMINAL SINGS — telemetry bands fold into the vibe matrix. Audio-inert law:
+# audio_* uniforms are dead in WGSL; pixels move ONLY through vibe channels.
+
+signal rms source=audio.rms range=0..10000
+signal sub_bass source=audio.sub_bass range=0..10000
+signal spectrum_high source=audio.spectrum_high range=0..10000
+signal beat_phase source=audio.beat_phase range=0..10000
+
+# channel[0] vibe_glow — the pane warms. channel[1] vibe_shake — the sand stirs.
+# channel[2] vibe_chromatic — the rim splits spectral. channel[3] vibe_pulse — heartbeat.
+vibematrix.channel[0] <- rms
+vibematrix.channel[1] <- sub_bass
+vibematrix.channel[2] <- spectrum_high
+vibematrix.channel[3] <- beat_phase
+
+gate audio_not_identity = required
+gate mix_clarity = required
+gate shader_compile_hotpath = forbidden
+gate visual_only_mutates_authority = required

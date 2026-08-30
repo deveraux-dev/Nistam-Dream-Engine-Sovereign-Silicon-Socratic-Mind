@@ -1,0 +1,22 @@
+# Officina — the pixel-paint "engraver" studio tab. Fold-to-prim of v2
+# `forge-studio/src/officina.rs` (1836 lines, 29 tests, proven complete):
+# 30-pigment palette, 7 tools, integer matter sim, undo, `.magic` save/load.
+# This first slice: paint/fill/pick/undo core + `.magic` load/save. Matter-sim
+# tool wiring reuses forge-mud-v3::field::canvas_bridge rather than re-porting
+# v2's matter code a second time (Sean 2026-08-17 fold-to-prim plan, Step 2).
+[package]
+name = "forge-officina-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+
+[dependencies]
+forge-core-v3 = { path = "../forge-core-v3" }
+forge-mud-v3 = { path = "../forge-mud-v3" }
+serde = { version = "1.0", features = ["derive"] }
+bincode = "1.3"
+
+[lints]
+workspace = true

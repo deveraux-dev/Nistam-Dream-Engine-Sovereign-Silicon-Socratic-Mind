@@ -1,0 +1,752 @@
+[
+  {
+    "patch_set": "01_core_lore_patch",
+    "filename": "README.md",
+    "bundle_path": "01_core_lore_patch/README.md",
+    "size_bytes": 1477
+  },
+  {
+    "patch_set": "01_core_lore_patch",
+    "filename": "ability_system.rs",
+    "bundle_path": "01_core_lore_patch/ability_system.rs",
+    "size_bytes": 19839
+  },
+  {
+    "patch_set": "01_core_lore_patch",
+    "filename": "affix_system.rs",
+    "bundle_path": "01_core_lore_patch/affix_system.rs",
+    "size_bytes": 15694
+  },
+  {
+    "patch_set": "01_core_lore_patch",
+    "filename": "akgame_core.rs",
+    "bundle_path": "01_core_lore_patch/akgame_core.rs",
+    "size_bytes": 29028
+  },
+  {
+    "patch_set": "01_core_lore_patch",
+    "filename": "asp_constraints.rs",
+    "bundle_path": "01_core_lore_patch/asp_constraints.rs",
+    "size_bytes": 19919
+  },
+  {
+    "patch_set": "01_core_lore_patch",
+    "filename": "combat_math.rs",
+    "bundle_path": "01_core_lore_patch/combat_math.rs",
+    "size_bytes": 28342
+  },
+  {
+    "patch_set": "01_core_lore_patch",
+    "filename": "crafting.rs",
+    "bundle_path": "01_core_lore_patch/crafting.rs",
+    "size_bytes": 17771
+  },
+  {
+    "patch_set": "01_core_lore_patch",
+    "filename": "factions.rs",
+    "bundle_path": "01_core_lore_patch/factions.rs",
+    "size_bytes": 18366
+  },
+  {
+    "patch_set": "01_core_lore_patch",
+    "filename": "inventory.rs",
+    "bundle_path": "01_core_lore_patch/inventory.rs",
+    "size_bytes": 18055
+  },
+  {
+    "patch_set": "01_core_lore_patch",
+    "filename": "quests.rs",
+    "bundle_path": "01_core_lore_patch/quests.rs",
+    "size_bytes": 24182
+  },
+  {
+    "patch_set": "01_core_lore_patch",
+    "filename": "zone_graph.rs",
+    "bundle_path": "01_core_lore_patch/zone_graph.rs",
+    "size_bytes": 18034
+  },
+  {
+    "patch_set": "02_lore_patch_set_2",
+    "filename": "README.md",
+    "bundle_path": "02_lore_patch_set_2/README.md",
+    "size_bytes": 2047
+  },
+  {
+    "patch_set": "02_lore_patch_set_2",
+    "filename": "ability_extended.rs",
+    "bundle_path": "02_lore_patch_set_2/ability_extended.rs",
+    "size_bytes": 12486
+  },
+  {
+    "patch_set": "02_lore_patch_set_2",
+    "filename": "ability_roles.rs",
+    "bundle_path": "02_lore_patch_set_2/ability_roles.rs",
+    "size_bytes": 12276
+  },
+  {
+    "patch_set": "02_lore_patch_set_2",
+    "filename": "death_replay.rs",
+    "bundle_path": "02_lore_patch_set_2/death_replay.rs",
+    "size_bytes": 12704
+  },
+  {
+    "patch_set": "02_lore_patch_set_2",
+    "filename": "entity_store.rs",
+    "bundle_path": "02_lore_patch_set_2/entity_store.rs",
+    "size_bytes": 13501
+  },
+  {
+    "patch_set": "02_lore_patch_set_2",
+    "filename": "gm_mode.rs",
+    "bundle_path": "02_lore_patch_set_2/gm_mode.rs",
+    "size_bytes": 14628
+  },
+  {
+    "patch_set": "02_lore_patch_set_2",
+    "filename": "iron_maw.rs",
+    "bundle_path": "02_lore_patch_set_2/iron_maw.rs",
+    "size_bytes": 18039
+  },
+  {
+    "patch_set": "02_lore_patch_set_2",
+    "filename": "mob_ai.rs",
+    "bundle_path": "02_lore_patch_set_2/mob_ai.rs",
+    "size_bytes": 16606
+  },
+  {
+    "patch_set": "02_lore_patch_set_2",
+    "filename": "mob_stats.rs",
+    "bundle_path": "02_lore_patch_set_2/mob_stats.rs",
+    "size_bytes": 11696
+  },
+  {
+    "patch_set": "02_lore_patch_set_2",
+    "filename": "spawn.rs",
+    "bundle_path": "02_lore_patch_set_2/spawn.rs",
+    "size_bytes": 12697
+  },
+  {
+    "patch_set": "02_lore_patch_set_2",
+    "filename": "weather.rs",
+    "bundle_path": "02_lore_patch_set_2/weather.rs",
+    "size_bytes": 12871
+  },
+  {
+    "patch_set": "03_lore_patch_set_3",
+    "filename": "README.md",
+    "bundle_path": "03_lore_patch_set_3/README.md",
+    "size_bytes": 1674
+  },
+  {
+    "patch_set": "03_lore_patch_set_3",
+    "filename": "crime.rs",
+    "bundle_path": "03_lore_patch_set_3/crime.rs",
+    "size_bytes": 8610
+  },
+  {
+    "patch_set": "03_lore_patch_set_3",
+    "filename": "engine_formulas.rs",
+    "bundle_path": "03_lore_patch_set_3/engine_formulas.rs",
+    "size_bytes": 11167
+  },
+  {
+    "patch_set": "03_lore_patch_set_3",
+    "filename": "fishing.rs",
+    "bundle_path": "03_lore_patch_set_3/fishing.rs",
+    "size_bytes": 7962
+  },
+  {
+    "patch_set": "03_lore_patch_set_3",
+    "filename": "loadout.rs",
+    "bundle_path": "03_lore_patch_set_3/loadout.rs",
+    "size_bytes": 8995
+  },
+  {
+    "patch_set": "03_lore_patch_set_3",
+    "filename": "loot_tables.rs",
+    "bundle_path": "03_lore_patch_set_3/loot_tables.rs",
+    "size_bytes": 7886
+  },
+  {
+    "patch_set": "03_lore_patch_set_3",
+    "filename": "pets.rs",
+    "bundle_path": "03_lore_patch_set_3/pets.rs",
+    "size_bytes": 7851
+  },
+  {
+    "patch_set": "03_lore_patch_set_3",
+    "filename": "skills.rs",
+    "bundle_path": "03_lore_patch_set_3/skills.rs",
+    "size_bytes": 12073
+  },
+  {
+    "patch_set": "03_lore_patch_set_3",
+    "filename": "starting_kits.rs",
+    "bundle_path": "03_lore_patch_set_3/starting_kits.rs",
+    "size_bytes": 10233
+  },
+  {
+    "patch_set": "03_lore_patch_set_3",
+    "filename": "status_effects.rs",
+    "bundle_path": "03_lore_patch_set_3/status_effects.rs",
+    "size_bytes": 10767
+  },
+  {
+    "patch_set": "03_lore_patch_set_3",
+    "filename": "zone_interactions.rs",
+    "bundle_path": "03_lore_patch_set_3/zone_interactions.rs",
+    "size_bytes": 12770
+  },
+  {
+    "patch_set": "04_lore_patch_set_4",
+    "filename": "README.md",
+    "bundle_path": "04_lore_patch_set_4/README.md",
+    "size_bytes": 1829
+  },
+  {
+    "patch_set": "04_lore_patch_set_4",
+    "filename": "celestial.rs",
+    "bundle_path": "04_lore_patch_set_4/celestial.rs",
+    "size_bytes": 9057
+  },
+  {
+    "patch_set": "04_lore_patch_set_4",
+    "filename": "event_ledger.rs",
+    "bundle_path": "04_lore_patch_set_4/event_ledger.rs",
+    "size_bytes": 6843
+  },
+  {
+    "patch_set": "04_lore_patch_set_4",
+    "filename": "guard.rs",
+    "bundle_path": "04_lore_patch_set_4/guard.rs",
+    "size_bytes": 6682
+  },
+  {
+    "patch_set": "04_lore_patch_set_4",
+    "filename": "persist.rs",
+    "bundle_path": "04_lore_patch_set_4/persist.rs",
+    "size_bytes": 4740
+  },
+  {
+    "patch_set": "04_lore_patch_set_4",
+    "filename": "rollback.rs",
+    "bundle_path": "04_lore_patch_set_4/rollback.rs",
+    "size_bytes": 6432
+  },
+  {
+    "patch_set": "04_lore_patch_set_4",
+    "filename": "spatial_grid.rs",
+    "bundle_path": "04_lore_patch_set_4/spatial_grid.rs",
+    "size_bytes": 5058
+  },
+  {
+    "patch_set": "04_lore_patch_set_4",
+    "filename": "terrain.rs",
+    "bundle_path": "04_lore_patch_set_4/terrain.rs",
+    "size_bytes": 6985
+  },
+  {
+    "patch_set": "04_lore_patch_set_4",
+    "filename": "threat_table.rs",
+    "bundle_path": "04_lore_patch_set_4/threat_table.rs",
+    "size_bytes": 4690
+  },
+  {
+    "patch_set": "04_lore_patch_set_4",
+    "filename": "trig_table.rs",
+    "bundle_path": "04_lore_patch_set_4/trig_table.rs",
+    "size_bytes": 7290
+  },
+  {
+    "patch_set": "04_lore_patch_set_4",
+    "filename": "visual_state.rs",
+    "bundle_path": "04_lore_patch_set_4/visual_state.rs",
+    "size_bytes": 6549
+  },
+  {
+    "patch_set": "05_lore_patch_set_5",
+    "filename": "README.md",
+    "bundle_path": "05_lore_patch_set_5/README.md",
+    "size_bytes": 1712
+  },
+  {
+    "patch_set": "05_lore_patch_set_5",
+    "filename": "audio_seed.rs",
+    "bundle_path": "05_lore_patch_set_5/audio_seed.rs",
+    "size_bytes": 3320
+  },
+  {
+    "patch_set": "05_lore_patch_set_5",
+    "filename": "cooldown_manager.rs",
+    "bundle_path": "05_lore_patch_set_5/cooldown_manager.rs",
+    "size_bytes": 3927
+  },
+  {
+    "patch_set": "05_lore_patch_set_5",
+    "filename": "game_flow.rs",
+    "bundle_path": "05_lore_patch_set_5/game_flow.rs",
+    "size_bytes": 4570
+  },
+  {
+    "patch_set": "05_lore_patch_set_5",
+    "filename": "lib.rs",
+    "bundle_path": "05_lore_patch_set_5/lib.rs",
+    "size_bytes": 3015
+  },
+  {
+    "patch_set": "05_lore_patch_set_5",
+    "filename": "respawn.rs",
+    "bundle_path": "05_lore_patch_set_5/respawn.rs",
+    "size_bytes": 4423
+  },
+  {
+    "patch_set": "05_lore_patch_set_5",
+    "filename": "role.rs",
+    "bundle_path": "05_lore_patch_set_5/role.rs",
+    "size_bytes": 3169
+  },
+  {
+    "patch_set": "05_lore_patch_set_5",
+    "filename": "scoreboard.rs",
+    "bundle_path": "05_lore_patch_set_5/scoreboard.rs",
+    "size_bytes": 5778
+  },
+  {
+    "patch_set": "05_lore_patch_set_5",
+    "filename": "session.rs",
+    "bundle_path": "05_lore_patch_set_5/session.rs",
+    "size_bytes": 1858
+  },
+  {
+    "patch_set": "05_lore_patch_set_5",
+    "filename": "vendor.rs",
+    "bundle_path": "05_lore_patch_set_5/vendor.rs",
+    "size_bytes": 6968
+  },
+  {
+    "patch_set": "05_lore_patch_set_5",
+    "filename": "zones.rs",
+    "bundle_path": "05_lore_patch_set_5/zones.rs",
+    "size_bytes": 3912
+  },
+  {
+    "patch_set": "06_lore_patch_set_6",
+    "filename": "README.md",
+    "bundle_path": "06_lore_patch_set_6/README.md",
+    "size_bytes": 1507
+  },
+  {
+    "patch_set": "06_lore_patch_set_6",
+    "filename": "character_sheet.rs",
+    "bundle_path": "06_lore_patch_set_6/character_sheet.rs",
+    "size_bytes": 8070
+  },
+  {
+    "patch_set": "06_lore_patch_set_6",
+    "filename": "combat_hud.rs",
+    "bundle_path": "06_lore_patch_set_6/combat_hud.rs",
+    "size_bytes": 4694
+  },
+  {
+    "patch_set": "06_lore_patch_set_6",
+    "filename": "lore.rs",
+    "bundle_path": "06_lore_patch_set_6/lore.rs",
+    "size_bytes": 6177
+  },
+  {
+    "patch_set": "06_lore_patch_set_6",
+    "filename": "menus.rs",
+    "bundle_path": "06_lore_patch_set_6/menus.rs",
+    "size_bytes": 4403
+  },
+  {
+    "patch_set": "06_lore_patch_set_6",
+    "filename": "mod.rs",
+    "bundle_path": "06_lore_patch_set_6/mod.rs",
+    "size_bytes": 857
+  },
+  {
+    "patch_set": "06_lore_patch_set_6",
+    "filename": "physics_snapshot.rs",
+    "bundle_path": "06_lore_patch_set_6/physics_snapshot.rs",
+    "size_bytes": 2089
+  },
+  {
+    "patch_set": "06_lore_patch_set_6",
+    "filename": "player_state.rs",
+    "bundle_path": "06_lore_patch_set_6/player_state.rs",
+    "size_bytes": 2225
+  },
+  {
+    "patch_set": "06_lore_patch_set_6",
+    "filename": "quest_state.rs",
+    "bundle_path": "06_lore_patch_set_6/quest_state.rs",
+    "size_bytes": 6240
+  },
+  {
+    "patch_set": "06_lore_patch_set_6",
+    "filename": "range_projection.rs",
+    "bundle_path": "06_lore_patch_set_6/range_projection.rs",
+    "size_bytes": 4185
+  },
+  {
+    "patch_set": "07_lore_patch_set_7",
+    "filename": "README.md",
+    "bundle_path": "07_lore_patch_set_7/README.md",
+    "size_bytes": 1499
+  },
+  {
+    "patch_set": "07_lore_patch_set_7",
+    "filename": "action_profile.rs",
+    "bundle_path": "07_lore_patch_set_7/action_profile.rs",
+    "size_bytes": 5909
+  },
+  {
+    "patch_set": "07_lore_patch_set_7",
+    "filename": "artifact_law.rs",
+    "bundle_path": "07_lore_patch_set_7/artifact_law.rs",
+    "size_bytes": 4931
+  },
+  {
+    "patch_set": "07_lore_patch_set_7",
+    "filename": "combat_commit.rs",
+    "bundle_path": "07_lore_patch_set_7/combat_commit.rs",
+    "size_bytes": 3003
+  },
+  {
+    "patch_set": "07_lore_patch_set_7",
+    "filename": "deed.rs",
+    "bundle_path": "07_lore_patch_set_7/deed.rs",
+    "size_bytes": 2577
+  },
+  {
+    "patch_set": "07_lore_patch_set_7",
+    "filename": "ledger.rs",
+    "bundle_path": "07_lore_patch_set_7/ledger.rs",
+    "size_bytes": 5594
+  },
+  {
+    "patch_set": "07_lore_patch_set_7",
+    "filename": "loot_policy.rs",
+    "bundle_path": "07_lore_patch_set_7/loot_policy.rs",
+    "size_bytes": 2794
+  },
+  {
+    "patch_set": "07_lore_patch_set_7",
+    "filename": "manager.rs",
+    "bundle_path": "07_lore_patch_set_7/manager.rs",
+    "size_bytes": 8203
+  },
+  {
+    "patch_set": "07_lore_patch_set_7",
+    "filename": "mod.rs",
+    "bundle_path": "07_lore_patch_set_7/mod.rs",
+    "size_bytes": 845
+  },
+  {
+    "patch_set": "07_lore_patch_set_7",
+    "filename": "state.rs",
+    "bundle_path": "07_lore_patch_set_7/state.rs",
+    "size_bytes": 5607
+  },
+  {
+    "patch_set": "08_lore_patch_set_8",
+    "filename": "README.md",
+    "bundle_path": "08_lore_patch_set_8/README.md",
+    "size_bytes": 1463
+  },
+  {
+    "patch_set": "08_lore_patch_set_8",
+    "filename": "actor.rs",
+    "bundle_path": "08_lore_patch_set_8/actor.rs",
+    "size_bytes": 8302
+  },
+  {
+    "patch_set": "08_lore_patch_set_8",
+    "filename": "agent.rs",
+    "bundle_path": "08_lore_patch_set_8/agent.rs",
+    "size_bytes": 4756
+  },
+  {
+    "patch_set": "08_lore_patch_set_8",
+    "filename": "archetype.rs",
+    "bundle_path": "08_lore_patch_set_8/archetype.rs",
+    "size_bytes": 4040
+  },
+  {
+    "patch_set": "08_lore_patch_set_8",
+    "filename": "beehave.rs",
+    "bundle_path": "08_lore_patch_set_8/beehave.rs",
+    "size_bytes": 3797
+  },
+  {
+    "patch_set": "08_lore_patch_set_8",
+    "filename": "config.rs",
+    "bundle_path": "08_lore_patch_set_8/config.rs",
+    "size_bytes": 4339
+  },
+  {
+    "patch_set": "08_lore_patch_set_8",
+    "filename": "lock_on.rs",
+    "bundle_path": "08_lore_patch_set_8/lock_on.rs",
+    "size_bytes": 7365
+  },
+  {
+    "patch_set": "08_lore_patch_set_8",
+    "filename": "mod.rs",
+    "bundle_path": "08_lore_patch_set_8/mod.rs",
+    "size_bytes": 2657
+  },
+  {
+    "patch_set": "08_lore_patch_set_8",
+    "filename": "roster.rs",
+    "bundle_path": "08_lore_patch_set_8/roster.rs",
+    "size_bytes": 3902
+  },
+  {
+    "patch_set": "08_lore_patch_set_8",
+    "filename": "world_flux.rs",
+    "bundle_path": "08_lore_patch_set_8/world_flux.rs",
+    "size_bytes": 2696
+  },
+  {
+    "patch_set": "09_lore_patch_set_9",
+    "filename": "README.md",
+    "bundle_path": "09_lore_patch_set_9/README.md",
+    "size_bytes": 1889
+  },
+  {
+    "patch_set": "09_lore_patch_set_9",
+    "filename": "engine.rs",
+    "bundle_path": "09_lore_patch_set_9/engine.rs",
+    "size_bytes": 5572
+  },
+  {
+    "patch_set": "09_lore_patch_set_9",
+    "filename": "health.rs",
+    "bundle_path": "09_lore_patch_set_9/health.rs",
+    "size_bytes": 3727
+  },
+  {
+    "patch_set": "09_lore_patch_set_9",
+    "filename": "lockstep.rs",
+    "bundle_path": "09_lore_patch_set_9/lockstep.rs",
+    "size_bytes": 4890
+  },
+  {
+    "patch_set": "09_lore_patch_set_9",
+    "filename": "mod.rs",
+    "bundle_path": "09_lore_patch_set_9/mod.rs",
+    "size_bytes": 971
+  },
+  {
+    "patch_set": "09_lore_patch_set_9",
+    "filename": "psyche.rs",
+    "bundle_path": "09_lore_patch_set_9/psyche.rs",
+    "size_bytes": 4415
+  },
+  {
+    "patch_set": "09_lore_patch_set_9",
+    "filename": "registers.rs",
+    "bundle_path": "09_lore_patch_set_9/registers.rs",
+    "size_bytes": 11223
+  },
+  {
+    "patch_set": "09_lore_patch_set_9",
+    "filename": "replay.rs",
+    "bundle_path": "09_lore_patch_set_9/replay.rs",
+    "size_bytes": 4761
+  },
+  {
+    "patch_set": "09_lore_patch_set_9",
+    "filename": "reveal.rs",
+    "bundle_path": "09_lore_patch_set_9/reveal.rs",
+    "size_bytes": 4227
+  },
+  {
+    "patch_set": "09_lore_patch_set_9",
+    "filename": "rng.rs",
+    "bundle_path": "09_lore_patch_set_9/rng.rs",
+    "size_bytes": 3028
+  },
+  {
+    "patch_set": "09_lore_patch_set_9",
+    "filename": "sentinel.rs",
+    "bundle_path": "09_lore_patch_set_9/sentinel.rs",
+    "size_bytes": 7137
+  },
+  {
+    "patch_set": "09_lore_patch_set_9",
+    "filename": "shadow.rs",
+    "bundle_path": "09_lore_patch_set_9/shadow.rs",
+    "size_bytes": 5313
+  },
+  {
+    "patch_set": "09_lore_patch_set_9",
+    "filename": "trail.rs",
+    "bundle_path": "09_lore_patch_set_9/trail.rs",
+    "size_bytes": 6791
+  },
+  {
+    "patch_set": "09_lore_patch_set_9",
+    "filename": "tree.rs",
+    "bundle_path": "09_lore_patch_set_9/tree.rs",
+    "size_bytes": 3315
+  },
+  {
+    "patch_set": "10_lore_patch_set_10",
+    "filename": "README.md",
+    "bundle_path": "10_lore_patch_set_10/README.md",
+    "size_bytes": 2201
+  },
+  {
+    "patch_set": "10_lore_patch_set_10",
+    "filename": "boss.rs",
+    "bundle_path": "10_lore_patch_set_10/boss.rs",
+    "size_bytes": 5316
+  },
+  {
+    "patch_set": "10_lore_patch_set_10",
+    "filename": "combo.rs",
+    "bundle_path": "10_lore_patch_set_10/combo.rs",
+    "size_bytes": 5354
+  },
+  {
+    "patch_set": "10_lore_patch_set_10",
+    "filename": "commit.rs",
+    "bundle_path": "10_lore_patch_set_10/commit.rs",
+    "size_bytes": 7959
+  },
+  {
+    "patch_set": "10_lore_patch_set_10",
+    "filename": "controller.rs",
+    "bundle_path": "10_lore_patch_set_10/controller.rs",
+    "size_bytes": 6656
+  },
+  {
+    "patch_set": "10_lore_patch_set_10",
+    "filename": "hitbox.rs",
+    "bundle_path": "10_lore_patch_set_10/hitbox.rs",
+    "size_bytes": 8471
+  },
+  {
+    "patch_set": "10_lore_patch_set_10",
+    "filename": "mod.rs",
+    "bundle_path": "10_lore_patch_set_10/mod.rs",
+    "size_bytes": 1277
+  },
+  {
+    "patch_set": "10_lore_patch_set_10",
+    "filename": "procgen.rs",
+    "bundle_path": "10_lore_patch_set_10/procgen.rs",
+    "size_bytes": 3671
+  },
+  {
+    "patch_set": "10_lore_patch_set_10",
+    "filename": "procs.rs",
+    "bundle_path": "10_lore_patch_set_10/procs.rs",
+    "size_bytes": 5122
+  },
+  {
+    "patch_set": "10_lore_patch_set_10",
+    "filename": "projectile.rs",
+    "bundle_path": "10_lore_patch_set_10/projectile.rs",
+    "size_bytes": 5394
+  },
+  {
+    "patch_set": "10_lore_patch_set_10",
+    "filename": "resurrection.rs",
+    "bundle_path": "10_lore_patch_set_10/resurrection.rs",
+    "size_bytes": 3096
+  },
+  {
+    "patch_set": "10_lore_patch_set_10",
+    "filename": "simulation.rs",
+    "bundle_path": "10_lore_patch_set_10/simulation.rs",
+    "size_bytes": 14530
+  },
+  {
+    "patch_set": "10_lore_patch_set_10",
+    "filename": "state.rs",
+    "bundle_path": "10_lore_patch_set_10/state.rs",
+    "size_bytes": 13585
+  },
+  {
+    "patch_set": "10_lore_patch_set_10",
+    "filename": "stats.rs",
+    "bundle_path": "10_lore_patch_set_10/stats.rs",
+    "size_bytes": 5666
+  },
+  {
+    "patch_set": "10_lore_patch_set_10",
+    "filename": "tinctures.rs",
+    "bundle_path": "10_lore_patch_set_10/tinctures.rs",
+    "size_bytes": 9870
+  },
+  {
+    "patch_set": "11_sieves_asymmetric_patch",
+    "filename": "README.md",
+    "bundle_path": "11_sieves_asymmetric_patch/README.md",
+    "size_bytes": 1621
+  },
+  {
+    "patch_set": "11_sieves_asymmetric_patch",
+    "filename": "checksum.rs",
+    "bundle_path": "11_sieves_asymmetric_patch/checksum.rs",
+    "size_bytes": 2354
+  },
+  {
+    "patch_set": "11_sieves_asymmetric_patch",
+    "filename": "combat.rs",
+    "bundle_path": "11_sieves_asymmetric_patch/combat.rs",
+    "size_bytes": 16666
+  },
+  {
+    "patch_set": "11_sieves_asymmetric_patch",
+    "filename": "config.rs",
+    "bundle_path": "11_sieves_asymmetric_patch/config.rs",
+    "size_bytes": 2164
+  },
+  {
+    "patch_set": "11_sieves_asymmetric_patch",
+    "filename": "derivation.rs",
+    "bundle_path": "11_sieves_asymmetric_patch/derivation.rs",
+    "size_bytes": 9252
+  },
+  {
+    "patch_set": "11_sieves_asymmetric_patch",
+    "filename": "half_hanged.rs",
+    "bundle_path": "11_sieves_asymmetric_patch/half_hanged.rs",
+    "size_bytes": 4008
+  },
+  {
+    "patch_set": "11_sieves_asymmetric_patch",
+    "filename": "inventory.rs",
+    "bundle_path": "11_sieves_asymmetric_patch/inventory.rs",
+    "size_bytes": 4161
+  },
+  {
+    "patch_set": "11_sieves_asymmetric_patch",
+    "filename": "item_loader.rs",
+    "bundle_path": "11_sieves_asymmetric_patch/item_loader.rs",
+    "size_bytes": 12745
+  },
+  {
+    "patch_set": "11_sieves_asymmetric_patch",
+    "filename": "mod.rs",
+    "bundle_path": "11_sieves_asymmetric_patch/mod.rs",
+    "size_bytes": 1368
+  },
+  {
+    "patch_set": "11_sieves_asymmetric_patch",
+    "filename": "sieve.rs",
+    "bundle_path": "11_sieves_asymmetric_patch/sieve.rs",
+    "size_bytes": 9148
+  },
+  {
+    "patch_set": "11_sieves_asymmetric_patch",
+    "filename": "types.rs",
+    "bundle_path": "11_sieves_asymmetric_patch/types.rs",
+    "size_bytes": 4226
+  }
+]

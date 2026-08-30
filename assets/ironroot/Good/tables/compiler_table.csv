@@ -1,0 +1,13 @@
+source_logic,engine_prior,validator,authority
+Albers facture,material candidate,normal/roughness/facture check,material_id
+Gestalt proximity,grouping candidate,material/socket/semantic check,mesh registry
+Laban Weight,perceived impact,animation/physics conflict check,material mass registry
+GTTM meter,telegraph timing,physics causality check,event scheduler
+Brand symbol,control candidate,carrier/resistance check,brand registry
+Faction music,behavior motif,faction doctrine check,faction registry
+Resonance tone,topology mutation candidate,SDF/topology threshold,ResonanceTarget registry
+Folk chorus,community cohesion candidate,zone/population check,zone state
+Church hymn,allegiance pressure candidate,brand/carrier/resistance check,faction relation table
+Undead drone,memory/decay pressure candidate,corpse/soul/material check,entity state
+Raga-like mode,phrase legality candidate,mode/cultural/target validation,mode registry
+Forge glyph,glyph clause candidate,parser/validator result,glyph operator registry

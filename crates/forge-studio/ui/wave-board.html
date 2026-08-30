@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>forge-vision port plan</title>
+<style>
+  :root{--bg:#0b0e12;--panel:#12161d;--ink:#d8dee6;--dim:#7a8494;--gold:#e8b04b;
+    --green:#7fc97f;--red:#e06c5a;--blue:#6fa8dc;--violet:#b48ead;--line:#232a34}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font:12.5px/1.45 Consolas,monospace;padding:16px}
+  h1{font-size:18px;color:var(--gold);letter-spacing:1px}
+  .sub{color:var(--dim);margin:2px 0 12px;font-size:11.5px}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:10px}
+  .panel h2{font-size:13px;margin-bottom:6px;color:var(--gold)}
+  .panel.green h2{color:var(--green)} .panel.red h2{color:var(--red)} .panel.blue h2{color:var(--blue)}
+  table{width:100%;border-collapse:collapse;font-size:11px}
+  td,th{padding:2px 6px 2px 0;text-align:left;vertical-align:top;border-top:1px solid var(--line)}
+  th{color:var(--dim);border-top:none;font-weight:normal}
+  .c{color:var(--blue);white-space:nowrap} .t{color:var(--gold);white-space:nowrap}
+  .blocked{color:var(--red)} .ok{color:var(--green)}
+  ul{list-style:none} li{padding-left:10px;position:relative;color:var(--dim);font-size:11.5px}
+  li::before{content:"·";position:absolute;left:0;color:var(--gold)}
+  .foot{margin-top:10px;color:var(--dim);font-size:10.5px}
+</style>
+</head>
+<body>
+<h1>FORGE-VISION → V3 PORT PLAN <span style="color:var(--red)">· FULL 5D CONVERSION, NOT A PORT</span></h1>
+<div class="sub">wave: forge-vision-port-plan · 2026-08-11 · 13 haiku full-read agents (all ~100 crate files) + 3 sonnet planners · bicameral frame: forgevision=eyes, forgewright=hands+driver · every weld = trit home + L07 bijection FIRST, quarried algorithm SECOND · reports: .forge/recon/forge-vision/</div>
+
+<div class="row">
+<div class="panel blue"><h2>NEW CRATES (7) — floor: forge-core-v3 (OklchColor 8B already lives there)</h2>
+<table>
+<tr><th>crate</th><th>charter</th></tr>
+<tr><td class="c">forge-eyes-v3</td><td>capture (DXGI/GDI), tile-hash delta, phash, frame analysis</td></tr>
+<tr><td class="c">forge-colour-v3</td><td>harmony/palette64/ThemeBridge over core's 8B OklchColor; sodium-split recipe doctrine</td></tr>
+<tr><td class="c">forge-scan-v3</td><td>photo→voxel: Horn/PBR photometrics, SDF/MC, sprite+atlas gen, materials</td></tr>
+<tr><td class="c">forge-wright-v3</td><td>hands+driver: window_driver, CDP, fvd, InputFrame8 wire, macro compiler</td></tr>
+<tr><td class="c">forge-poll5d-v3</td><td>5D Morton poll core re-slotted to trit grammar (pure rewrite, zero ext deps)</td></tr>
+<tr><td class="c">forge-spectral-v3</td><td>STFT/PCM soundwave ecology (reframed from weld-defect NDT)</td></tr>
+<tr><td class="c">forge-composition-v3</td><td>OMR sheet-music→NoteEvent — books/lore audio bind (build LAST, L13)</td></tr>
+</table></div>
+<div class="panel green"><h2>DEPS RULING (per planner, L19 nods flagged)</h2>
+<ul>
+<li>KEEP: windows (DXGI/GDI — L19 nod), rustfft (saliency+spectral, L19 nod), tungstenite (CDP, [ASSUMED] low-transitive — cargo tree pending)</li>
+<li>DROP: glam (→ core fixed-point vecs), serde-by-default (→ tape/fixed-layout; debug-json feature only), image except golden-test gate</li>
+<li>DEFER: xcap (native path preferred), hound (PCM buffers suffice)</li>
+<li>Feature-flags die → crate boundaries (L05); sidecar DROPPED (foreman loopback replaces it)</li>
+<li>Build order: core → colour → poll5d → eyes → scan → wright ∥ spectral → composition</li>
+</ul></div>
+</div>
+
+<div class="panel"><h2>WELD TRANCHES — trit home + bijection gate BEFORE quarry</h2>
+<table>
+<tr><th>#</th><th>scope</th><th>trit home(s)</th><th>visible face (named pre-spawn)</th><th>deps</th><th>effort</th></tr>
+<tr><td>T1</td><td>forge-colour + surface_ledger</td><td class="t">ColourTrit8 (8B) hue/value/chroma pmy</td><td>HUD swatch strip: ColourTrit8→sRGB roundtrip</td><td>floor</td><td>S</td></tr>
+<tr><td>T2</td><td>photometrics (Horn/PBR/saliency/tone)</td><td class="t">NormalAlbedo8 (8B) oct-normal + albedo/roughness pmy</td><td>normal-map preview tile (oct-decoded arrows)</td><td>T1</td><td>M</td></tr>
+<tr><td>T3</td><td>render_gate + dxgi (the photon lens)</td><td class="t">RenderGate64 (64B) 5-gate verdict · FrameHeader8 (8B)</td><td>photon lens panel: live capture → verdict readout</td><td>T1,T2</td><td>M</td></tr>
+<tr><td>T4</td><td>poll5d re-slot</td><td class="t">Octal64 (64B, 20×3b) · Morton8 (8B, 5-axis)</td><td>adaptive-poll heat strip</td><td>T3</td><td>L</td></tr>
+<tr><td>T5</td><td>geometry (contour/extrude/SDF/fusion)</td><td class="t">ContourTrit8 (8B); SdfCell8 deferred (Quadric f64 = own sub-weld)</td><td>wiremesh contour overlay on scan fixture</td><td>T2</td><td>M+L</td></tr>
+<tr><td>T6</td><td>fvd drive (forgewright online)</td><td class="t">InputFrame8 (8B, breaks 32B AgentInputFrame wire — deliberate)</td><td>input-drive console: round-trip readout</td><td>T3</td><td>M</td></tr>
+<tr><td>T7</td><td>spectral/PCM → soundwave ecology</td><td class="t">EcologyPCM8 (8B) altitude/slope/events pmy</td><td>waveform ecology strip (altitude sonification)</td><td>T2</td><td>M</td></tr>
+<tr><td>T8</td><td>atlas/sprites/materials</td><td class="t">MaterialTrit8 (8B, refound of u16 4+12b pack)</td><td>atlas batch grid + verify pass/fail overlay</td><td>T2,T6</td><td>M</td></tr>
+<tr><td>T9</td><td class="blocked">Ulam spirals + technicolour lore bind</td><td class="t">UlamCell8 — spec TBD</td><td>lore sky: technicolour séance card + spiral render</td><td>T7</td><td class="blocked">BLOCKED: ARCH000 spec</td></tr>
+<tr><td>T10</td><td class="blocked">Broski DM/daemon/roadie</td><td>none — no source anywhere [observed absence]</td><td>—</td><td>T6,T9</td><td class="blocked">BLOCKED: ARCH000 scoping</td></tr>
+</table></div>
+
+<div class="row">
+<div class="panel red"><h2>ARCH000 DECISIONS NEEDED (flagged, not decided)</h2>
+<ul>
+<li>T3: raw RGBA pixel bulk rides FrameHeader8 un-trit-packed — L08 exemption or per-pixel re-encode?</li>
+<li>T6: breaking the 32B AgentInputFrame wire contract — confirm no live consumer first (destructive, L17)</li>
+<li>L19 nods: windows 0.58, rustfft, tungstenite</li>
+<li>T9 UlamCell8 spec + T10 Broski scope — honest blocks, not estimates (L15)</li>
+<li>S6 heavy tail (sidecar+CUDA ~50MB) stays out of tranche one</li>
+</ul></div>
+<div class="panel green"><h2>UTILIZATION — MORE THAN MACHINE EYES</h2>
+<ul>
+<li>Wave 1 <b>forge-vision-photon-lens</b>: DXGI→RenderGate64 five-tuple + surface_ledger SIGNAL/BLIND/DEGRADED — face: HUD verdict panel</li>
+<li>Wave 2 <b>forge-colour-notch-matte</b>: palette64 + sodium-split (589nm didymium doctrine, tape obj 137cfcec3828b951 — the rare glass, 3 ever made) — face: swatch + matte-preview panel</li>
+<li>Wave 3 <b>forgewright-ecology-seed</b>: authored Ulam spiral over 81×81 trit lattice + PCM soundwave biome variety, Broski-DM narrated — face: minimap spawn-trace panel</li>
+<li>Also mapped: OMR→procedural soundtrack (DM picks per mood), diff-scan collision, sprite QA roadie gate, defect-detect reframed as biome-edge events</li>
+</ul></div>
+</div>
+
+<div class="foot">receipts: 13 recon reports + 3 plans in .forge/recon/forge-vision/ · floor 4/4 GREEN this session · truth-gated: Ulam spirals & Broski = observed ABSENT, blocked not guessed · photon: forge-vision-port-plan.png</div>
+</body>
+</html>

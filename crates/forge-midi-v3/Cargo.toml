@@ -1,0 +1,16 @@
+# MIDI 2.0 / UMP note model, ported from F:\NewRepo\crates\forge-book\src\midi.rs
+# (2026-08-15, source-compiler ladder Owner: forge_book::midi). `to_chapter()` and
+# its `forge_book::{atlas,chapter}` dependency are scoped out — forge-book does not
+# exist in v3 (see src/lib.rs module doc for the receipt).
+[package]
+name = "forge-midi-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+
+[lints]
+workspace = true

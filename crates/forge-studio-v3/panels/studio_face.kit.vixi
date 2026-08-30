@@ -1,0 +1,83 @@
+#vixi:kit v2
+surface: studio_face
+profile: molten
+classification: overlay_surface
+
+slot root kind=region layout=stack_v gap=mu(0) padding=mu(0) material=bone
+
+# ── Top Bar ────────────────────────────────────────────────────────────────────
+slot root.topbar kind=chrome layout=stack_h gap=mu(12) size=mu(50) padding=mu(8) material=iron
+slot root.topbar.title kind=text ramp=type.ramp[1] color=palette.fg_text source=window_title
+slot root.topbar.spacer kind=region layout=stack_h flex=1
+slot root.topbar.badge kind=text ramp=type.ramp[0] color=palette.accent_secondary source=daemon_status
+
+# ── Hero Row ───────────────────────────────────────────────────────────────────
+slot root.hero kind=region layout=stack_h gap=mu(16) padding=mu(14) material=bone
+slot root.hero.mark kind=text ramp=type.ramp[2] color=palette.fg_text source=hero_title
+slot root.hero.tag kind=text ramp=type.ramp[0] color=palette.fg_muted source=hero_tag
+slot root.hero.spacer kind=region layout=stack_h flex=1
+slot root.hero.theme kind=widget name=button size=mu(100) material=bone color=palette.accent_secondary on_click=edict:theme_toggle
+slot root.hero.wake kind=widget name=button size=mu(120) material=bronze on_click=edict:wake_triad
+slot root.hero.wake.label kind=text ramp=type.ramp[1] color=palette.fg_text
+
+# ── Main Content (left chat + right panels) ─────────────────────────────────────
+slot root.main kind=region layout=stack_h gap=mu(8) padding=mu(8) flex=1
+
+# ── TRIAD CHAT (left, 60%) ─────────────────────────────────────────────────────
+slot root.main.chat kind=region layout=stack_v gap=mu(8) padding=mu(0) color=palette.bg_near flex=600
+slot root.main.chat.head kind=chrome layout=stack_h gap=mu(8) size=mu(40) padding=mu(8) material=iron
+slot root.main.chat.head.info kind=text ramp=type.ramp[0] color=palette.fg_muted source=chat_info
+slot root.main.chat.log kind=region layout=stack_v gap=mu(6) padding=mu(10) flex=1 color=palette.bg_near
+slot root.main.chat.log.messages kind=text ramp=type.ramp[0] color=palette.fg_text source=message_log
+slot root.main.chat.input kind=region layout=stack_h gap=mu(8) size=mu(44) padding=mu(8) color=palette.bg_near
+slot root.main.chat.input.field kind=widget name=button size=mu(360) material=bone color=palette.fg_text source=prompt_input
+slot root.main.chat.input.send kind=widget name=button size=mu(60) material=bronze on_click=edict:send_prompt
+slot root.main.chat.input.send.label kind=text ramp=type.ramp[1] color=palette.fg_text
+
+# ── Sidebar Panels (right, 40%) ────────────────────────────────────────────────
+slot root.main.side kind=region layout=stack_v gap=mu(8) padding=mu(0) flex=400
+
+slot root.main.side.celestial kind=region layout=stack_v gap=mu(6) padding=mu(10) color=palette.bg_far
+slot root.main.side.celestial.title kind=text ramp=type.ramp[1] color=palette.fg_text source=celestial_title size=mu(30)
+slot root.main.side.celestial.body kind=text ramp=type.ramp[0] color=palette.fg_muted source=celestial_body
+
+slot root.main.side.mud kind=region layout=stack_v gap=mu(6) padding=mu(10) color=palette.bg_far flex=1
+slot root.main.side.mud.title kind=text ramp=type.ramp[1] color=palette.fg_text source=mud_title size=mu(30)
+slot root.main.side.mud.body kind=text ramp=type.ramp[0] color=palette.fg_muted source=mud_body
+
+slot root.main.side.builder kind=region layout=stack_v gap=mu(6) padding=mu(10) color=palette.bg_far
+slot root.main.side.builder.title kind=text ramp=type.ramp[1] color=palette.fg_text source=builder_title size=mu(30)
+slot root.main.side.builder.body kind=text ramp=type.ramp[0] color=palette.fg_muted source=builder_body
+
+# ── Seat Cards (below chat) ────────────────────────────────────────────────────
+slot root.seats kind=region layout=stack_h gap=mu(8) padding=mu(8) size=mu(80) color=palette.bg_near
+slot root.seats.baby kind=region layout=stack_h gap=mu(6) padding=mu(10) color=palette.bg_far
+slot root.seats.baby.dot kind=text ramp=type.ramp[0] color=palette.accent_primary source=baby_status size=mu(12)
+slot root.seats.baby.label kind=text ramp=type.ramp[0] color=palette.fg_text source=baby_label
+slot root.seats.baby.stats kind=text ramp=type.ramp[0] color=palette.fg_muted source=baby_stats
+
+slot root.seats.mama kind=region layout=stack_h gap=mu(6) padding=mu(10) color=palette.bg_far
+slot root.seats.mama.dot kind=text ramp=type.ramp[0] color=palette.accent_primary source=mama_status size=mu(12)
+slot root.seats.mama.label kind=text ramp=type.ramp[0] color=palette.fg_text source=mama_label
+slot root.seats.mama.stats kind=text ramp=type.ramp[0] color=palette.fg_muted source=mama_stats
+
+slot root.seats.papa kind=region layout=stack_h gap=mu(6) padding=mu(10) color=palette.bg_far
+slot root.seats.papa.dot kind=text ramp=type.ramp[0] color=palette.accent_primary source=papa_status size=mu(12)
+slot root.seats.papa.label kind=text ramp=type.ramp[0] color=palette.fg_text source=papa_label
+slot root.seats.papa.stats kind=text ramp=type.ramp[0] color=palette.fg_muted source=papa_stats
+
+# ── HEARTH Placeholder (bottom) ────────────────────────────────────────────────
+slot root.hearth kind=region layout=stack_v gap=mu(6) size=mu(100) padding=mu(10) color=palette.bg_far
+slot root.hearth.title kind=text ramp=type.ramp[1] color=palette.fg_text source=hearth_title size=mu(30)
+slot root.hearth.body kind=text ramp=type.ramp[0] color=palette.fg_muted source=hearth_body text="HEARTH [FORGE][BOOT][LIVE] — 3 ConPTY tabs, phase C"
+
+# ── Footer ─────────────────────────────────────────────────────────────────────
+slot root.footer kind=chrome layout=stack_h gap=mu(12) size=mu(40) padding=mu(8) material=iron
+slot root.footer.status kind=text ramp=type.ramp[0] color=palette.fg_muted source=footer_status
+slot root.footer.version kind=text ramp=type.ramp[0] color=palette.fg_muted source=footer_version
+
+gate contrast_min = 4.5
+gate hit_target_min = mu(44)
+gate runtime_parse = forbidden
+gate alloc_steady = forbidden
+gate float_in_ir = forbidden

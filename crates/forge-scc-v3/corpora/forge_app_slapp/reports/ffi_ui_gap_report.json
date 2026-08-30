@@ -1,0 +1,43 @@
+{
+  "gaps": [
+    {
+      "id": "type.ramp[acoustic_risk]",
+      "next_action": "open design ticket",
+      "reason": "No named acoustic_risk severity ramp in Synthesia. 4 states map to existing CIDs (Low=CID_STATUS, Medium=CID_ACCENT, High=CID_VIOLET, Critical=CID_DANGER) but the named token group is absent. Spec type.ramp[acoustic_risk] in forge-colour — zero new colours, named binding only.",
+      "source": "forge_app_slapp.CuiRisk"
+    },
+    {
+      "id": "surface.pipe_network_map",
+      "next_action": "open design ticket",
+      "reason": "No pipe-network spatial map widget in forge. Needs: surface.pipe_network_map — vixel canvas that reads &[Segment] + &[CuiRisk] and emits coloured node circles + edge lines via DrawCmd. All MilliUnit coords; no float geometry. Edge colour via CID_* acoustic_risk ramp.",
+      "source": "forge_app_slapp.MapPanel"
+    },
+    {
+      "id": "creature_engine::acoustic_inspection",
+      "next_action": "open design ticket",
+      "reason": "No AcousticInspectionProfile type in forge_core. Q-factor threshold table (Metal Q=12, Cloth Q=0.5, CalSil Q=4, PU Foam Q=0.15) and CUI deviation formula (q_deviation = actual_q - expected_q) are domain knowledge not captured anywhere in forge. Invention #59 formal spec item. Needs: AcousticInspectionProfile with integer lookup table + Permyriad q_deviation + CuiRisk output.",
+      "source": "forge_app_slapp.CuiAssessment"
+    },
+    {
+      "id": "scc::lp_compile_stage",
+      "next_action": "Model after spirv-builder-driver: isolated nested invocation, not a workspace dep. Clingo binary is a build tool, not a runtime crate. The .lp rules file sits alongside the level .vixi source and is compiled by the furnace pass.",
+      "reason": "SCC has no .lp compile stage. Needs: Clingo binary invoked as an offline build step in scc/forge-furnace (same pattern as spirv-builder-driver nested workspace for shaders). Input: .lp rules source asset. Output: baked integer LevelGraph (NodeId + Vec2Milli + LevelState nodes; NodeId + TransitionType edges) serialized into the cartridge. LayoutMode::Baked(AssetId) on the widget — zero runtime Clingo dep. Three layout modes all produce the same integer LevelGraph: Derived (RANSAC coords), Authored (canvas drag snap to MilliUnit grid), Baked (Clingo solve).",
+      "source": "forge_app_slapp.AspClingoLevelBake"
+    }
+  ],
+  "report": "ffi_ui_gap_report",
+  "summary": {
+    "engine_overlay": 1,
+    "native_existing": 5,
+    "native_existing_with_bounds": 1,
+    "native_existing_with_conversion": 1,
+    "native_missing_token": 2,
+    "native_missing_widget": 1,
+    "reject": 1,
+    "render_harvest": 3,
+    "reserve": 0,
+    "spike_only": 0,
+    "study_only": 0
+  },
+  "version": "0.1.0"
+}

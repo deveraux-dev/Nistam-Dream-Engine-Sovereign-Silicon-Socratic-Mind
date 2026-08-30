@@ -18,7 +18,7 @@ To protect your remaining development runway and satisfy the strict 0-byte hot-p
 
 
 
-This specification acts as an executable roadmap for your local offline Gemini 2.5 Flash Lite agent. It provides:
+This specification acts as an executable roadmap for your local offline Gemini 3.7 Flash Lite agent. It provides:
 
 
 

@@ -1,0 +1,27 @@
+{
+  "asset_id": "wolf_church_branded_001",
+  "target_kind": "creature",
+  "source_priors": {
+    "visual_priors": { "brand_visible": true, "brand_shape": "sun_crown_seal", "color_hint": "gold_white" },
+    "music_priors": { "carrier": "bell_hymn", "motif": "church_low_bronze_hymn" },
+    "brand_priors": { "brand_type": "allegiance", "imprint_strength": 0.72, "host_resistance": 0.31 }
+  },
+  "authority": { "faction_id": "church", "brand_id": "church_choir_sun_obedience", "material_id": "wolf_flesh_fur" },
+  "validators": {
+    "material_validated": true,
+    "physics_validated": true,
+    "brand_validated": true,
+    "rhythm_validated": true,
+    "topology_validated": false,
+    "cultural_review_required": false
+  },
+  "runtime_effects": {
+    "ai_modifiers": ["church_allied", "patrol_shrine", "prioritize_heretics"],
+    "animation_modifiers": ["kneel_on_hymn", "head_turn_to_bell"],
+    "audio_motifs": ["wolf_howl_harmonic_interval"],
+    "material_overlays": ["gold_white_brand_glow"],
+    "topology_operations": []
+  },
+  "friction_points": ["<friction_brand_symbol_control>", "<friction_music_identity>"],
+  "quality_gates": ["brand_carrier_present", "host_resistance_resolved", "counterplay_available"]
+}

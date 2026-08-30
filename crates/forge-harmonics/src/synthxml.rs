@@ -1,5 +1,6 @@
 //! SynthXML semantic score types — engine-side only, no I/O.
-//! Synced 2026-08-27 from F:\v3\crates\forge-harmonics\src\synthxml.rs (source of truth).
+//! Ported 2026-08-27 verbatim-in-behaviour from
+//! F:\NewRepo\crates\forge-harmonics\src\synthxml.rs (deps inlined, docs added).
 
 /// Which account a thread or event is charged against.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Default)]

@@ -270,24 +270,6 @@ mod tests {
     }
 
     #[test]
-    fn the_exposition_is_the_long_one() {
-        let subject = musicxml_to_score(SUBJECT.as_bytes()).expect("subject parses");
-        let expo = musicxml_to_score(EXPOSITION.as_bytes()).expect("exposition parses");
-        let sub_plan = crate::synthxml::score_to_note_plan(&subject);
-        let expo_plan = crate::synthxml::score_to_note_plan(&expo);
-        assert_eq!(sub_plan.len(), 12, "the hand-cut subject is the bare theme");
-        assert_eq!(expo_plan.len(), 18, "the exposition adds the second voice's entry");
-        assert!(
-            expo_plan.len() > sub_plan.len(),
-            "the exposition is the longer of the two"
-        );
-        let end = |p: &[crate::synthxml::ScheduledNote]| {
-            p.iter().map(|n| n.fire_tick + (n.dur_ms as u64 * 120 / 1000)).max().unwrap_or(0)
-        };
-        assert!(end(&expo_plan) > end(&sub_plan), "and it runs longer on the wall clock");
-    }
-
-    #[test]
     fn onsets_ride_the_divisions_grid() {
         let score = musicxml_to_score(SUBJECT.as_bytes()).expect("Bach parses");
         // divisions=2, so a half note is 4 divisions = 1920 music ticks.

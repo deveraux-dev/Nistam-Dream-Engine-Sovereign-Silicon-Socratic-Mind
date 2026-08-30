@@ -1,0 +1,54 @@
+{
+  "friction_points": {
+    "anticipation_latency": {
+      "why_it_matters": "too much anticipation makes input feel laggy",
+      "engine_risk": "combat feels unresponsive",
+      "resolution_rule": "separate cosmetic anticipation from input-critical response"
+    },
+    "active_frame_lie": {
+      "why_it_matters": "animation and hitbox disagree",
+      "engine_risk": "player loses trust",
+      "resolution_rule": "hitbox active frames must match readable impact frames"
+    },
+    "scripted_scene_state_lie": {
+      "why_it_matters": "cutscene shows one reality while simulation records another",
+      "engine_risk": "deterministic ledger breaks",
+      "resolution_rule": "every scripted consequence writes state at an anchor tick"
+    },
+    "gesture_overexposition": {
+      "why_it_matters": "body language can reveal too much too early",
+      "engine_risk": "disclosure ladder collapses",
+      "resolution_rule": "gate gesture clarity by disclosure level and speaker knowledge"
+    },
+    "motion_mass_shortcut": {
+      "why_it_matters": "fast or slow motion does not prove mass",
+      "engine_risk": "wrong physics, collision, or tuning",
+      "resolution_rule": "mass requires geometry, material, or physics evidence"
+    },
+    "juice_noise": {
+      "why_it_matters": "too much vfx, camera, or audio obscures communication hierarchy",
+      "engine_risk": "player cannot parse threat, success, damage, or dialogue beat",
+      "resolution_rule": "rank event importance and cap simultaneous feedback"
+    },
+    "generic_cinematic_language": {
+      "why_it_matters": "scenes feel like generic fantasy cutscenes",
+      "engine_risk": "ironroot identity is lost",
+      "resolution_rule": "tie motion to identity, faction, bardic action, refusal, or ledger state"
+    },
+    "shadow_generic_enemy_motion": {
+      "why_it_matters": "shadow should be player habit made visible",
+      "engine_risk": "shadow loses deterministic haunting function",
+      "resolution_rule": "source shadow motion from recorded player patterns"
+    },
+    "bard_performance_cosmetic": {
+      "why_it_matters": "bard fantasy becomes ornamental",
+      "engine_risk": "music/communication mechanic feels fake",
+      "resolution_rule": "performance animation maps to action phase and state effect"
+    },
+    "refusal_idle_confusion": {
+      "why_it_matters": "stillness can be misread as no animation",
+      "engine_risk": "vowless/refusal path becomes invisible",
+      "resolution_rule": "frame stillness with pressure, pose, breath, camera, or sound absence"
+    }
+  }
+}

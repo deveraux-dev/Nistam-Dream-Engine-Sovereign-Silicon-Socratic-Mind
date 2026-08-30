@@ -536,6 +536,88 @@ pub fn ternary_matmul_vector_scalar(
     Ok(scaled as i32)
 }
 
+/// Integer square root via binary search / Newton-Raphson.
+#[inline(always)]
+pub fn isqrt_u64(val: u64) -> u64 {
+    if val <= 1 {
+        return val;
+    }
+    let mut x0 = val / 2;
+    let mut x1 = (x0 + val / x0) / 2;
+    while x1 < x0 {
+        x0 = x1;
+        x1 = (x0 + val / x0) / 2;
+    }
+    x0
+}
+
+/// Fixed-point RMSNorm calculation for 32-bit integer activations.
+///
+/// Computes $y_i = \frac{x_i \cdot w_i}{\text{rms}}$ where $\text{rms} = \sqrt{\frac{1}{N}\sum x_k^2}$.
+/// If `scale` is None, unit scale (10,000 permyriad = 1.0) is applied.
+pub fn s13_rms_norm_i32(input: &[i32], scale: Option<&[i16]>, output: &mut [i32]) {
+    let n = input.len();
+    if n == 0 || output.len() < n {
+        return;
+    }
+    if let Some(s) = scale {
+        if s.len() < n {
+            return;
+        }
+    }
+
+    let mut sum_sq: u64 = 0;
+    for &x in input {
+        let val = x as i64;
+        sum_sq += (val * val) as u64;
+    }
+
+    let mean_sq = (sum_sq / n as u64).max(1);
+    let rms = isqrt_u64(mean_sq).max(1) as i64;
+
+    for i in 0..n {
+        let x = input[i] as i64;
+        let w = match scale {
+            Some(s) => s[i] as i64,
+            None => 10_000i64,
+        };
+        let normalized = (x * w) / rms;
+        output[i] = normalized as i32;
+    }
+}
+
+/// Fixed-point RMSNorm calculation for 16-bit integer activations.
+pub fn s13_rms_norm_i16(input: &[i16], scale: Option<&[i16]>, output: &mut [i16]) {
+    let n = input.len();
+    if n == 0 || output.len() < n {
+        return;
+    }
+    if let Some(s) = scale {
+        if s.len() < n {
+            return;
+        }
+    }
+
+    let mut sum_sq: u64 = 0;
+    for &x in input {
+        let val = x as i64;
+        sum_sq += (val * val) as u64;
+    }
+
+    let mean_sq = (sum_sq / n as u64).max(1);
+    let rms = isqrt_u64(mean_sq).max(1) as i64;
+
+    for i in 0..n {
+        let x = input[i] as i64;
+        let w = match scale {
+            Some(s) => s[i] as i64,
+            None => 10_000i64,
+        };
+        let normalized = (x * w) / rms;
+        output[i] = normalized.clamp(i16::MIN as i64, i16::MAX as i64) as i16;
+    }
+}
+
 /// Merkle-Morin 64-byte Header Magic Identifier (`b"S13M"`).
 pub const S13_MERKLE_MAGIC: [u8; 4] = *b"S13M";
 
@@ -698,6 +780,40 @@ mod tests {
             let repacked = pack_5_trits(trits).expect("Valid ternary repacking");
             assert_eq!(b, repacked);
         }
+    }
+
+    #[test]
+    fn test_isqrt_u64() {
+        assert_eq!(isqrt_u64(0), 0);
+        assert_eq!(isqrt_u64(1), 1);
+        assert_eq!(isqrt_u64(4), 2);
+        assert_eq!(isqrt_u64(9), 3);
+        assert_eq!(isqrt_u64(15), 3);
+        assert_eq!(isqrt_u64(16), 4);
+        assert_eq!(isqrt_u64(1_000_000), 1000);
+        assert_eq!(isqrt_u64(1_000_000_000_000), 1_000_000);
+    }
+
+    #[test]
+    fn test_s13_rms_norm_i32_and_i16() {
+        let input_32 = [1000i32, -2000, 3000, -4000];
+        let scale = [10_000i16, 5_000, 10_000, 20_000];
+        let mut out_32 = [0i32; 4];
+        s13_rms_norm_i32(&input_32, Some(&scale), &mut out_32);
+        assert!(out_32[0] > 0);
+        assert!(out_32[1] < 0);
+        assert!(out_32[2] > 0);
+        assert!(out_32[3] < 0);
+
+        let mut out_unit_32 = [0i32; 4];
+        s13_rms_norm_i32(&input_32, None, &mut out_unit_32);
+        assert_eq!(out_unit_32[0], (1000i64 * 10000 / isqrt_u64((1000*1000 + 2000*2000 + 3000*3000 + 4000*4000)/4) as i64) as i32);
+
+        let input_16 = [100i16, -200, 300, -400];
+        let mut out_16 = [0i16; 4];
+        s13_rms_norm_i16(&input_16, Some(&scale), &mut out_16);
+        assert!(out_16[0] > 0);
+        assert!(out_16[1] < 0);
     }
 
     #[test]

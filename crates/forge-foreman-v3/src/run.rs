@@ -11,6 +11,7 @@ use std::path::Path;
 use forge_vcs_v3::spine::{Lane, ReceiptKind, SourceKind};
 use forge_vcs_v3::{Stamp, VcsRoot};
 
+use crate::amortize_trigger;
 use crate::census::{Census, Row, Status};
 use crate::client::Sidecar;
 use crate::directives::Directives;
@@ -158,13 +159,29 @@ pub fn run_once(root: &Path, d: &Directives) -> Result<Outcome, String> {
 
 /// Repeat [`run_once`] until the census drains. Returns every outcome in
 /// order, so the caller can report the run as rows, not as a feeling.
+///
+/// Fire-and-forget amortize triggers at START and END (non-blocking subprocess).
+/// Returns immediately; amortize runs offline in the background.
 pub fn run_all(root: &Path, d: &Directives) -> Result<Vec<Outcome>, String> {
+    // Trigger amortize at loop START (fire-and-forget, non-blocking).
+    // This captures any work done before the loop in the background.
+    let session_start = root.join(".forge/grind-log/session-start.md");
+    let _ = amortize_trigger::trigger_amortize(root, &session_start);
+
     let mut outcomes = Vec::new();
     loop {
         let o = run_once(root, d)?;
         let done = o == Outcome::Drained;
         outcomes.push(o);
         if done {
+            // Trigger amortize at loop END (fire-and-forget, non-blocking).
+            // This captures all work done in this run cycle.
+            let session_end = root.join(".forge/grind-log/session-end.md");
+            let _ = amortize_trigger::trigger_amortize(root, &session_end);
+
+            // Also trigger TTL zeroization sweep (decay + compact).
+            let _ = amortize_trigger::trigger_ttl_sweep(root);
+
             return Ok(outcomes);
         }
     }

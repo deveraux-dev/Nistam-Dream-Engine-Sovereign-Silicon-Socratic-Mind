@@ -1,0 +1,17 @@
+# Genesis crate for the CADENCE lane's aspire.rs:317 "cadence-law-module" row
+# (v2 quarry: F:\NewRepo\crates\forge-book, module session_cadence — the
+# Chapter/AtlasSection bridge that module also carried is NOT ported, same
+# scoping forge-midi-v3/forge-mp3-v3 already applied to forge-book's other
+# modules). Named forge-cadence-v3, not forge-book, matching the repo's own
+# established drain pattern: forge-book's content lands as topic-named v3
+# crates (forge-midi-v3, forge-mp3-v3), never a resurrected monolith (L05).
+# Zero deps by construction, matching sibling leaf crates (forge-export-v3).
+[package]
+name = "forge-cadence-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+
+[lints]
+workspace = true

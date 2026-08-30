@@ -1,0 +1,25 @@
+#vixi:brush v1
+surface: spring_pen
+
+# The R tool — the Spring Pen.
+#
+# Base left-click is the Apprentice baseline (flat Z=0 composition); the deeper
+# tiers drive an integer-spring motion path rather than a static stroke:
+#   Shift+Drag  -> Journeyperson (extrude the spring path into a Z ribbon)
+#   Right-Click -> Master        (raw integer-spring constants — the motion law)
+#
+# The Apprentice drop here is `shadow` — a soft, low material distinct from the
+# Q stone / W bone / E iron tools in the MusicSieve acoustic columns.
+
+brush spring_pen
+  tool     = SpringPen          # the R hotkey
+  tier     = Apprentice         # base click: flat 2D composition
+  material = shadow             # CE material group dropped per stroke
+  plane    = z0                 # Apprentice locks the Front (Z=0) plane
+  feeds    = mass ring attack   # the AcousticRegistry columns this stroke drives
+  receives = bus_in             # audio snapshot modulates acoustic contribution
+
+gate float_in_ir  = forbidden
+gate alloc_steady = forbidden
+gate vibe_rms > 500             # suppress stroke when audio energy < 5% of max
+end

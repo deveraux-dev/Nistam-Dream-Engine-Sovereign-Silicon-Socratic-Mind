@@ -1,0 +1,22 @@
+#vixi:kit v1
+surface: ritual_typography
+profile: forge_primeflow
+classification: voxel_font_sigil_accessible_ui
+
+slot ritual.root kind=region layout=stack_v bind=density.comfy
+slot ritual.canvas kind=region role=sigil_tracer primary=true
+slot ritual.palette kind=region role=rune_palette_controls
+slot ritual.font_inventory kind=region role=font_coverage_status
+slot ritual.glyph_layers kind=slot_list of=region max=8 role=material_layers
+slot ritual.accessibility kind=region role=semantic_labels
+slot ritual.vibematrix kind=region role=modulation_bindings
+
+rule colour_alone = forbidden_for_meaning
+rule glyph_materials = layered_material_id
+rule ucas_coverage = required_for_cree_dene_syllabics
+rule asl_mode = gesture_notation_not_font_only
+
+gate contrast_min = 4.5
+gate hit_target_min = mu(44)
+gate motion_reduction_fallback = required
+gate readable_name_required = required

@@ -1,0 +1,68 @@
+{
+  "id": "forest_depths",
+  "name": "The Deep Forest",
+  "biome": "Forest",
+  "width_m": 250,
+  "height_m": 60,
+  "spawn_point": [5.0, 0.0, 0.0],
+  "ground_segments": [
+    {"x": 0, "y": 0}, {"x": 30, "y": 3}, {"x": 60, "y": 5},
+    {"x": 90, "y": 8}, {"x": 120, "y": 6}, {"x": 150, "y": 10},
+    {"x": 180, "y": 7}, {"x": 210, "y": 4}, {"x": 250, "y": 0}
+  ],
+  "npcs": [
+    {
+      "id": 10, "name": "Shadow Stalker",
+      "behavior": "Hostile",
+      "position": [70.0, 5.0, 0.0],
+      "material": "Shadow",
+      "health": 8000,
+      "detection_radius_m": 15.0
+    },
+    {
+      "id": 11, "name": "Iron Bark Treant",
+      "behavior": "Territorial",
+      "position": [150.0, 10.0, 0.0],
+      "material": "Iron",
+      "health": 20000,
+      "detection_radius_m": 10.0
+    },
+    {
+      "id": 12, "name": "Forest Spirit",
+      "behavior": "Passive",
+      "position": [100.0, 6.0, 0.0],
+      "material": "Ash",
+      "health": 5000,
+      "detection_radius_m": 6.0,
+      "quest_id": "iron_descent"
+    }
+  ],
+  "portals": [
+    {
+      "id": 10,
+      "position": [0.0, 0.0, 0.0],
+      "size": [5.0, 10.0, 5.0],
+      "target_zone": "prairie_start",
+      "spawn_pos": [190.0, 0.0, 0.0],
+      "label": "← The Grasslands"
+    },
+    {
+      "id": 11,
+      "position": [245.0, 0.0, 0.0],
+      "size": [5.0, 10.0, 5.0],
+      "target_zone": "iron_caverns",
+      "spawn_pos": [5.0, 0.0, 0.0],
+      "label": "→ Iron Caverns"
+    }
+  ],
+  "fires": [],
+  "ambient": "Forest",
+  "quest_triggers": [
+    {
+      "quest_id": "iron_descent",
+      "position": [100.0, 6.0, 0.0],
+      "radius_m": 4.0,
+      "trigger_type": "interact"
+    }
+  ]
+}

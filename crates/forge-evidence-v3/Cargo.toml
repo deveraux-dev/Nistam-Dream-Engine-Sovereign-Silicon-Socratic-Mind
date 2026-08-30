@@ -1,0 +1,19 @@
+[package]
+name = "forge-evidence-v3"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Append-only chained JSONL evidence ledger with SHA-256 chain binding (v2 forge-evidence, ported verbatim 2026-08-15)"
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+serde_jcs = "0.1"
+sha2 = "0.10"
+chrono = { version = "0.4", features = ["serde"] }
+ed25519-dalek = "2"
+hex = "0.4"
+rand = "0.8"
+
+[lints]
+workspace = true

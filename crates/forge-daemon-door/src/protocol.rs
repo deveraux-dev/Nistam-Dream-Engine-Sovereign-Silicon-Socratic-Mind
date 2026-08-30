@@ -84,15 +84,6 @@ pub enum DaemonMsg {
         /// Budget in milliseconds.
         budget_ms: u32,
     },
-    /// Autonomous fan-out decision: BqRouter specialist ranking + optional TRIAD escalation.
-    FanoutDecide {
-        /// Task description for embedding and routing.
-        task: String,
-        /// Top-k specialists to rank (clamped to NUM_SPECIALISTS=7).
-        k: usize,
-        /// Budget in milliseconds for escalation path only.
-        budget_ms: u32,
-    },
     /// Log a work entry (repo, tag, message).
     Log {
         /// Repository name.
@@ -280,6 +271,14 @@ pub enum DaemonMsg {
     },
     /// Merkle-Morin Architecture (MMA) Status — Returns cryptographic gate, packing, and ADR-0026 state.
     MmaStatus,
+    /// P7 WITNESS readback — read pixel RGBA values at marker coordinates from a PNG.
+    /// Returns list of (x, y, r, g, b, a) tuples for colour verification.
+    ReadbackPixels {
+        /// Path to PNG file (from forge-wright capture).
+        png_path: String,
+        /// JSON array of [x, y] coordinate pairs: `[[100, 200], [300, 400]]`.
+        markers_json: String,
+    },
     /// Placeholder for unrecognized/unimplemented ops (rejected by whitelist).
     Unimplemented {
         /// Operation name or identifier.
@@ -357,10 +356,6 @@ impl DaemonMsg {
                 s
             }
 
-            DaemonMsg::FanoutDecide { task, k, budget_ms } => {
-                format!("task:{task}\nk:{k}\nbudget_ms:{budget_ms}")
-            }
-
             DaemonMsg::Log { repo, tag, msg } => {
                 format!("repo:{repo}\ntag:{tag}\nmsg:{msg}")
             }
@@ -409,6 +404,10 @@ impl DaemonMsg {
 
             DaemonMsg::AspSolve { domain, sieve_upper_bound, params } => {
                 format!("domain:{domain}\nsieve_upper_bound:{sieve_upper_bound}\nparams:{params}")
+            }
+
+            DaemonMsg::ReadbackPixels { png_path, markers_json } => {
+                format!("png_path:{png_path}\nmarkers_json:{markers_json}")
             }
 
             DaemonMsg::Unimplemented { op } => {
@@ -631,23 +630,6 @@ impl DaemonMsg {
                 DaemonMsg::Infer { query, domain_hint, budget_ms }
             }
 
-            "fanout_decide" => {
-                let mut task = String::new();
-                let mut k = 7usize;
-                let mut budget_ms = 100u32;
-                for line in text.lines() {
-                    if let Some((kk, v)) = line.split_once(':') {
-                        match kk {
-                            "task" => task = v.to_string(),
-                            "k" => k = v.parse().unwrap_or(7),
-                            "budget_ms" => budget_ms = v.parse().unwrap_or(100),
-                            _ => {}
-                        }
-                    }
-                }
-                DaemonMsg::FanoutDecide { task, k, budget_ms }
-            }
-
             "log" => {
                 let mut repo = String::new();
                 let mut tag = String::new();
@@ -732,6 +714,21 @@ impl DaemonMsg {
                     }
                 }
                 DaemonMsg::AspSolve { domain, sieve_upper_bound, params }
+            }
+
+            "readback_pixels" => {
+                let mut png_path = String::new();
+                let mut markers_json = String::new();
+                for line in text.lines() {
+                    if let Some((k, v)) = line.split_once(':') {
+                        match k {
+                            "png_path" => png_path = v.to_string(),
+                            "markers_json" => markers_json = v.to_string(),
+                            _ => {}
+                        }
+                    }
+                }
+                DaemonMsg::ReadbackPixels { png_path, markers_json }
             }
 
             _ => DaemonMsg::Unimplemented { op: op.to_string() },
@@ -1071,18 +1068,13 @@ mod tests {
     }
 
     #[test]
-    fn daemon_addr_unset_returns_default() {
-        std::env::remove_var("FORGE_DOOR_ADDR");
-        let addr = daemon_addr();
-        assert_eq!(addr, DAEMON_ADDR);
-    }
-
-    #[test]
-    fn daemon_addr_set_returns_override() {
+    fn daemon_addr_resolution_precedence() {
         std::env::set_var("FORGE_DOOR_ADDR", "127.0.0.1:13014");
-        let addr = daemon_addr();
-        assert_eq!(addr, "127.0.0.1:13014");
+        let overridden = daemon_addr();
         std::env::remove_var("FORGE_DOOR_ADDR");
+        let default_addr = daemon_addr();
+        assert_eq!(overridden, "127.0.0.1:13014");
+        assert_eq!(default_addr, DAEMON_ADDR);
     }
 
     #[test]

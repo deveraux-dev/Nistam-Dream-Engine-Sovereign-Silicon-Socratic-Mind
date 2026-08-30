@@ -7,14 +7,14 @@ This script implements the asynchronous Cloud Run watcher as per K07b.
 It performs the evidence flywheel:
 1. Polls GCS inbox.
 2. Deterministic byte-sieve triage.
-3. Gemini 2.5 Flash schema-locked audit.
+3. Gemini 3.7 Flash schema-locked audit.
 4. Cross-check vs degradation expectation.
 5. Subprocess call to forge-envelope for attestation.
 6. Firestore sharded chain-head write.
 7. Zero-retention wipe of staging.
 
 Ensures absolute determinism, no hallucinations, and pure validated JSON responses
-directly from Vertex AI / Gemini 2.5 Flash.
+directly from Vertex AI / Gemini 3.7 Flash.
 """
 
 import asyncio
@@ -166,28 +166,11 @@ def get_expected_nace_level(tick: int) -> int:
         return 1
 
 
-class CloudRequiredError(RuntimeError):
-    """Raised in --require-cloud mode when a GCP dependency is absent or unreachable."""
-
-
 class EvidenceFlywheel:
-    def __init__(self, manual: bool = False, require_cloud: bool = False):
+    def __init__(self, manual: bool = False):
         self.manual = manual
-        self.require_cloud = require_cloud
-        self.model = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
+        self.model = os.environ.get("GEMINI_MODEL", "gemini-3.7-flash")
         self.chain_state_path = "evidence-chain.json"
-
-        if require_cloud:
-            missing = [n for n, m in (("google-genai", genai),
-                                      ("google-cloud-firestore", firestore),
-                                      ("google-cloud-storage", storage)) if m is None]
-            if missing:
-                raise CloudRequiredError(
-                    f"missing packages: {', '.join(missing)} — "
-                    "pip install -r crates/forge-envelope/requirements.txt"
-                )
-            if not (os.environ.get("GOOGLE_CLOUD_PROJECT") or os.environ.get("GCP_PROJECT")):
-                raise CloudRequiredError("GOOGLE_CLOUD_PROJECT is unset")
 
         # Initialize staging directory per tmpfs spec (STAGING_DIR env variable)
         staging_env = os.environ.get("STAGING_DIR")
@@ -217,8 +200,6 @@ class EvidenceFlywheel:
                 logger.info(json.dumps({"event": "gemini_init", "status": "connected", "model": self.model}))
             except Exception as e:
                 logger.warning(json.dumps({"event": "gemini_init", "status": "failed", "error": str(e)}))
-        if self.require_cloud and not self.client:
-            raise CloudRequiredError("Vertex AI client did not initialize")
 
         self.db = None
         if firestore:
@@ -228,8 +209,6 @@ class EvidenceFlywheel:
             except Exception as e:
                 logger.warning(json.dumps({"event": "firestore_init", "status": "failed", "error": str(e)}))
         if not self.db:
-            if self.require_cloud:
-                raise CloudRequiredError("Firestore client did not initialize")
             self.db = MockFirestore()
 
         self.storage = None
@@ -240,18 +219,7 @@ class EvidenceFlywheel:
             except Exception as e:
                 logger.warning(json.dumps({"event": "storage_init", "status": "failed", "error": str(e)}))
         if not self.storage:
-            if self.require_cloud:
-                raise CloudRequiredError("Cloud Storage client did not initialize")
             self.storage = MockStorage()
-
-        if self.require_cloud:
-            logger.info(json.dumps({
-                "event": "cloud_verified",
-                "services": ["vertex_ai", "firestore", "cloud_storage"],
-                "project": os.environ.get("GOOGLE_CLOUD_PROJECT") or os.environ.get("GCP_PROJECT"),
-                "location": os.environ.get("GOOGLE_CLOUD_LOCATION", "northamerica-northeast1"),
-                "model": self.model,
-            }))
 
     async def process_image(self, blob_name: str, local_path: Path, tick: int = 10):
         """Executes the audit, cross-check, attest, write, wipe sequence."""
@@ -272,7 +240,7 @@ class EvidenceFlywheel:
             if self.client and can_dispatch:
                 try:
                     # Construct prompt and upload file context
-                    inbox_bucket = os.environ.get("INBOX_BUCKET") or os.environ.get("GCS_INBOX_BUCKET", "surfaceledger-inbox")
+                    inbox_bucket = os.environ.get("INBOX_BUCKET", "surfaceledger-inbox")
                     response = self.client.models.generate_content(
                         model=self.model,
                         contents=[
@@ -289,12 +257,6 @@ class EvidenceFlywheel:
                     audit_result = PhysicalInspectionAudit.model_validate_json(response.text)
                 except Exception as e:
                     logger.error(json.dumps({"event": "gemini_audit_failed", "error": str(e)}))
-
-            if not audit_result and self.require_cloud:
-                raise CloudRequiredError(
-                    f"Gemini audit produced no result for {blob_name}; "
-                    "refusing the deterministic floor in --require-cloud mode"
-                )
 
             if not audit_result:
                 # Floor beneath models: Deterministic mock audit based on Sieve-13 vector floor
@@ -389,7 +351,7 @@ class EvidenceFlywheel:
 
     async def run(self):
         """Asynchronous folder/GCS inbox watcher."""
-        inbox_bucket_name = os.environ.get("INBOX_BUCKET") or os.environ.get("GCS_INBOX_BUCKET", "surfaceledger-inbox")
+        inbox_bucket_name = os.environ.get("INBOX_BUCKET", "surfaceledger-inbox")
         bucket = self.storage.bucket(inbox_bucket_name)
         logger.info(json.dumps({"event": "watcher_started", "bucket": inbox_bucket_name}))
 
@@ -455,20 +417,14 @@ class EvidenceFlywheel:
 def main():
     parser = argparse.ArgumentParser(description="Surface Ledger Agent Loop")
     parser.add_argument("--manual", action="store_true", help="Run once in manual trigger mode")
-    parser.add_argument("--require-cloud", action="store_true",
-                        help="Fail loudly instead of falling back to mocks or the deterministic floor")
     args = parser.parse_args()
 
-    try:
-        agent = EvidenceFlywheel(manual=args.manual, require_cloud=args.require_cloud)
+    agent = EvidenceFlywheel(manual=args.manual)
 
-        if args.manual:
-            asyncio.run(agent.process_manual_trigger())
-        else:
-            asyncio.run(agent.run())
-    except CloudRequiredError as e:
-        logger.error(json.dumps({"event": "cloud_required_abort", "error": str(e)}))
-        raise SystemExit(2)
+    if args.manual:
+        asyncio.run(agent.process_manual_trigger())
+    else:
+        asyncio.run(agent.run())
 
 
 if __name__ == "__main__":

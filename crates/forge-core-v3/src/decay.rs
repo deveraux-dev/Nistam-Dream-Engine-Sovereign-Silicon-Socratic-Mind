@@ -27,6 +27,8 @@ pub struct LeakyPermyriad {
     pub value: u64,
     /// Parts-per-myriad lost per tick. `1..=PMY`.
     pub leak: u16,
+    /// Per-channel leak rates for 32-lane decay. One per sense channel.
+    pub channel_rates: [u16; 32],
 }
 
 impl LeakyPermyriad {
@@ -37,7 +39,7 @@ impl LeakyPermyriad {
         if leak == 0 || leak as u64 > PMY {
             return None;
         }
-        Some(Self { value, leak })
+        Some(Self { value, leak, channel_rates: [0; 32] })
     }
 
     /// One tick: `value = value * keep / PMY`, the flooring leak on that line.
@@ -62,9 +64,59 @@ impl LeakyPermyriad {
     pub const fn equilibrium(rate: u64, leak: u16) -> u64 {
         rate * PMY / leak as u64
     }
+
+    /// Per-channel parallel decay: apply each of the 32 channel leak rates
+    /// to the field channels, integrating the decayed sum into `value`.
+    /// Each channel decays by `keep = PMY - channel_rates[i]`, then the
+    /// per-channel results are summed and added to the accumulator.
+    pub fn tick_32lane(&mut self, field: &crate::pentaract_field::PentaractField) {
+        let channels = field.channels();
+        let mut field_sum: i64 = 0;
+
+        for i in 0..32 {
+            let keep = PMY - self.channel_rates[i] as u64;
+            let decayed = (channels[i] as i64 * keep as i64) / PMY as i64;
+            field_sum = field_sum.saturating_add(decayed);
+        }
+
+        if field_sum >= 0 {
+            self.value = self.value.saturating_add(field_sum as u64);
+        } else {
+            self.value = self.value.saturating_sub((-field_sum) as u64);
+        }
+    }
 }
 
-const _: () = assert!(core::mem::size_of::<LeakyPermyriad>() == 16);
+const _: () = assert!(core::mem::size_of::<LeakyPermyriad>() == 80); // u64 + u16 + [u16; 32] + padding
+
+/// Per-channel parallel decay over a field: field[i] = floor(field[i] * (PMY - decay_rates[i]) / PMY).
+/// Each channel decays by its corresponding rate, in place.
+#[inline]
+pub fn tick_32lane(field: &mut crate::pentaract_field::PentaractField, decay_rates: &[u16; 32]) {
+    use crate::pentaract_field::SenseChannel;
+    for i in 0..32 {
+        let channel = SenseChannel::ALL[i];
+        let keep = PMY - decay_rates[i] as u64;
+        let decayed = ((field[channel] as i64 * keep as i64) / PMY as i64) as i32;
+        field[channel] = decayed;
+    }
+}
+
+/// Per-channel parallel impulse injection: field[i] += impulses[i] (saturating).
+/// Each channel receives its corresponding impulse, saturating on overflow.
+#[inline]
+pub fn inject_32lane(field: &mut crate::pentaract_field::PentaractField, impulses: &[u64; 32]) {
+    use crate::pentaract_field::SenseChannel;
+    for i in 0..32 {
+        let channel = SenseChannel::ALL[i];
+        let impulse = if impulses[i] > i32::MAX as u64 {
+            i32::MAX
+        } else {
+            impulses[i] as i32
+        };
+        field[channel] = field[channel].saturating_add(impulse);
+    }
+}
 
 #[cfg(test)]
 mod tests {
@@ -223,5 +275,41 @@ mod tests {
         s.tick();
         let expect = (u64::MAX as u128 * (PMY - 1) as u128 / PMY as u128) as u64;
         assert_eq!(s.value, expect);
+    }
+
+    // 32-lane determinism: run 200 ticks on a perceptual field, verify
+    // the curve is bit-reproducible across runs. No RNG, no f32/f64,
+    // pure integer decay on all 32 sense channels.
+    #[test]
+    fn test_decay_32lane_determinism() {
+        use crate::pentaract_field::{PentaractField, SenseChannel};
+        use crate::pentaract::Pentaract;
+
+        fn run_32lane(ticks: usize) -> Vec<u64> {
+            let point = Pentaract::new(0x42, 1000, 2000, 3000, 4000, 0xDEADBEEF, 0);
+            let mut s = LeakyPermyriad::new(100_000, 100).unwrap();
+            let mut s_rates = s.channel_rates;
+            for i in 0..32 {
+                s_rates[i] = (50 + i as u16) % 200;
+            }
+            s.channel_rates = s_rates;
+
+            let mut field = PentaractField::quiet_at(point);
+            field[SenseChannel::HeatGradient] = 5_000;
+            field[SenseChannel::VitalityLux] = 3_000;
+            field[SenseChannel::WeaveFlux] = -2_000;
+
+            let mut out = vec![s.value];
+            for _ in 0..ticks {
+                s.tick_32lane(&field);
+                out.push(s.value);
+            }
+            out
+        }
+
+        let curve_a = run_32lane(200);
+        let curve_b = run_32lane(200);
+        assert_eq!(curve_a, curve_b, "32-lane curves must be bit-identical");
+        assert_eq!(curve_a.len(), 201, "should have initial + 200 ticks");
     }
 }

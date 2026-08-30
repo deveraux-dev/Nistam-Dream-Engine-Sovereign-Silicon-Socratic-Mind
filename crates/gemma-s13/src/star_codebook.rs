@@ -84,6 +84,16 @@ pub struct StarCodebookView<'a> {
 }
 
 impl<'a> StarCodebookView<'a> {
+    /// Create a new view from bytes, parsing the header.
+    pub fn new(bytes: &'a [u8]) -> Self {
+        Self::parse(bytes).unwrap_or(Self {
+            raw_bytes: bytes,
+            star_count: 0,
+            anomaly_count: 0,
+            stars_offset: 0,
+        })
+    }
+
     /// Parse and validate a baked HYG catalog header from a byte slice.
     pub fn parse(bytes: &'a [u8]) -> Result<Self, &'static str> {
         if bytes.len() < HEADER_LEN + TEFF_LUT_LEN {

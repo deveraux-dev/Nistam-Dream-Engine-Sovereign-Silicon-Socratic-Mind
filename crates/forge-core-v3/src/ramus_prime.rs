@@ -357,6 +357,77 @@ const _: () = assert!(core::mem::offset_of!(RamusPrimeNode, edge_target) == 16);
 const _: () = assert!(core::mem::offset_of!(RamusPrimeNode, hypersphere) == 24);
 const _: () = assert!(AXIS_BITS as usize * AXES == 60);
 
+/// Manhattan distance over the five integer axes (X, Y, Z, T, S) — ranking only,
+/// used for candidate selection in hypersphere blending. Not a field metric.
+#[inline]
+pub const fn axes_distance(a: MortonKey5D, b: MortonKey5D) -> u32 {
+    let a_axes = a.axes();
+    let b_axes = b.axes();
+    let mut sum = 0u32;
+    let mut i = 0;
+    while i < AXES {
+        let diff = (a_axes[i] as i32) - (b_axes[i] as i32);
+        sum += diff.abs() as u32;
+        i += 1;
+    }
+    sum
+}
+
+/// Exact field-arithmetic weighted sum of hypersphere vectors.
+/// Takes integer weights and a slice of points, computes the weighted sum
+/// as an exact `F_M61` operation (no rounding, no interpolation — just scaled
+/// addition in the field). The output is a point on the sphere iff all input
+/// points and weights conserve the radius: this is a lossy many-to-one reduction,
+/// not a reversible transformation.
+#[inline]
+pub fn mersenne_weighted_sum(weights: &[i32], points: &[HypersphereVector5D]) -> HypersphereVector5D {
+    debug_assert_eq!(weights.len(), points.len(), "weights and points must have equal length");
+    let mut result = [MersenneScalar::ZERO; AXES];
+
+    for (w, p) in weights.iter().zip(points.iter()) {
+        let w_reduced = reduce_m61(*w as u64);
+        for i in 0..AXES {
+            let term = (p.components[i].0 as u128) * (w_reduced as u128);
+            let sum = (result[i].0 as u128) + term;
+            result[i] = MersenneScalar(reduce_m61_u128(sum));
+        }
+    }
+
+    HypersphereVector5D { components: result }
+}
+
+/// Blend a caller-owned slice of candidate nodes into a single hypersphere point.
+/// Selects the k nearest candidates (by Manhattan distance over integer axes) and
+/// returns their weighted average in the `F_M61` field. The caller must supply
+/// the candidate slice — this function does not search a store.
+///
+/// `k` is clamped to `candidates.len()`. Returns `ZERO` if the slice is empty.
+/// Limited to `k <= 32` to avoid unbounded stack allocation. Caller selects which
+/// candidates to pass; this function is selection-free.
+pub fn sample_blend(candidates: &[RamusPrimeNode], query: MortonKey5D, k: usize) -> HypersphereVector5D {
+    if candidates.is_empty() {
+        return HypersphereVector5D::ZERO;
+    }
+
+    let k = k.min(candidates.len()).min(32);
+    let num_candidates = candidates.len().min(32);
+
+    let mut scratch = [(0usize, 0u32); 32];
+    for (i, candidate) in candidates.iter().enumerate().take(32) {
+        scratch[i] = (i, axes_distance(candidate.morton_key, query));
+    }
+
+    scratch[..num_candidates].sort_by_key(|(_, d)| *d);
+
+    let weights = [1i32; 32];
+    let mut points = [HypersphereVector5D::ZERO; 32];
+    for (i, (idx, _)) in scratch[..k].iter().enumerate() {
+        points[i] = candidates[*idx].hypersphere;
+    }
+
+    mersenne_weighted_sum(&weights[..k], &points[..k])
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -587,6 +658,136 @@ mod tests {
         assert_eq!(n.follow([1, -1, 0, 1, 0]), Some(fwd), "full agreement");
         assert_eq!(n.follow([-1, 0, 0, 0, 0]), None, "conflict on x refuses");
         assert_eq!(n.follow([0, 0, 1, 0, 0]), None, "constraining the verb's zero axis refuses");
+    }
+
+    // ---- Hypersphere blending (Part 2) ------------------------------------------------
+
+    #[test]
+    fn axes_distance_computes_manhattan_metric() {
+        let a = MortonKey5D::encode([0, 0, 0, 0, 0]);
+        let b = MortonKey5D::encode([3, 4, 0, 0, 0]);
+        assert_eq!(axes_distance(a, b), 7);
+
+        let c = MortonKey5D::encode([0, 0, 0, 5, 5]);
+        assert_eq!(axes_distance(a, c), 10);
+    }
+
+    #[test]
+    fn axes_distance_is_symmetric() {
+        let a = MortonKey5D::encode([1, 2, 3, 4, 5]);
+        let b = MortonKey5D::encode([6, 7, 8, 9, 10]);
+        assert_eq!(axes_distance(a, b), axes_distance(b, a));
+    }
+
+    #[test]
+    fn mersenne_weighted_sum_sums_linearly() {
+        let v1 = vec_of([1, 2, 3, 4, 5]);
+        let v2 = vec_of([5, 4, 3, 2, 1]);
+        let weights = [1i32, 2i32];
+        let points = [v1, v2];
+
+        let result = mersenne_weighted_sum(&weights, &points);
+        let oracle_sum: u128 = (1u128 * 1 + 2u128 * 5) % (M61 as u128);
+        assert_eq!(result.components[0].0 as u128 % M61 as u128, oracle_sum);
+    }
+
+    #[test]
+    fn mersenne_weighted_sum_of_empty_is_zero() {
+        let weights = [];
+        let points = [];
+        let result = mersenne_weighted_sum(&weights, &points);
+        assert_eq!(result, HypersphereVector5D::ZERO);
+    }
+
+    #[test]
+    fn sample_blend_on_empty_slice_returns_zero() {
+        let query = MortonKey5D::encode([5, 5, 5, 5, 5]);
+        let result = sample_blend(&[], query, 3);
+        assert_eq!(result, HypersphereVector5D::ZERO);
+    }
+
+    #[test]
+    fn sample_blend_clamps_k_to_slice_length() {
+        let nodes = [
+            RamusPrimeNode {
+                morton_key: MortonKey5D::encode([0, 0, 0, 0, 0]),
+                pexil: Pexil {
+                    lattice: TritCell5D::ORIGIN,
+                    validity: crate::atom::ValidityMask::ALL_KNOWN,
+                    ordinal: crate::atom::CellOrdinal(0),
+                    payload: [0; 4],
+                },
+                edge_target: MortonKey5D(0),
+                hypersphere: vec_of([1, 0, 0, 0, 0]),
+            },
+            RamusPrimeNode {
+                morton_key: MortonKey5D::encode([1, 0, 0, 0, 0]),
+                pexil: Pexil {
+                    lattice: TritCell5D::ORIGIN,
+                    validity: crate::atom::ValidityMask::ALL_KNOWN,
+                    ordinal: crate::atom::CellOrdinal(0),
+                    payload: [0; 4],
+                },
+                edge_target: MortonKey5D(0),
+                hypersphere: vec_of([0, 1, 0, 0, 0]),
+            },
+        ];
+
+        let query = MortonKey5D::encode([0, 0, 0, 0, 0]);
+        let result_k3 = sample_blend(&nodes, query, 3);
+        let result_k2 = sample_blend(&nodes, query, 2);
+        assert_eq!(result_k3, result_k2, "k=3 on 2-node slice should match k=2");
+    }
+
+    #[test]
+    fn sample_blend_selects_k_nearest_not_first_k() {
+        // Test that with k < candidates.len(), we get the k *nearest*, not first k
+        let nodes = [
+            RamusPrimeNode {
+                morton_key: MortonKey5D::encode([100, 0, 0, 0, 0]),  // far
+                pexil: Pexil {
+                    lattice: TritCell5D::ORIGIN,
+                    validity: crate::atom::ValidityMask::ALL_KNOWN,
+                    ordinal: crate::atom::CellOrdinal(0),
+                    payload: [0; 4],
+                },
+                edge_target: MortonKey5D(0),
+                hypersphere: vec_of([1, 0, 0, 0, 0]),
+            },
+            RamusPrimeNode {
+                morton_key: MortonKey5D::encode([1, 0, 0, 0, 0]),  // very close
+                pexil: Pexil {
+                    lattice: TritCell5D::ORIGIN,
+                    validity: crate::atom::ValidityMask::ALL_KNOWN,
+                    ordinal: crate::atom::CellOrdinal(0),
+                    payload: [0; 4],
+                },
+                edge_target: MortonKey5D(0),
+                hypersphere: vec_of([2, 0, 0, 0, 0]),
+            },
+            RamusPrimeNode {
+                morton_key: MortonKey5D::encode([50, 0, 0, 0, 0]),  // medium
+                pexil: Pexil {
+                    lattice: TritCell5D::ORIGIN,
+                    validity: crate::atom::ValidityMask::ALL_KNOWN,
+                    ordinal: crate::atom::CellOrdinal(0),
+                    payload: [0; 4],
+                },
+                edge_target: MortonKey5D(0),
+                hypersphere: vec_of([3, 0, 0, 0, 0]),
+            },
+        ];
+
+        let query = MortonKey5D::encode([0, 0, 0, 0, 0]);
+
+        // k=1: should select closest (index 1, distance 1)
+        let result_k1 = sample_blend(&nodes, query, 1);
+        assert_eq!(result_k1, nodes[1].hypersphere, "k=1 should select nearest neighbor");
+
+        // k=2: should select two nearest (indices 1,2 with distances 1,50)
+        let result_k2 = sample_blend(&nodes, query, 2);
+        // Since both nodes have positive components, their average should have positive components
+        assert!(result_k2.components[0].0 > 0, "blend of positive vectors should be positive");
     }
 
     // ---- The glass bridge (L07) ---------------------------------------------------
