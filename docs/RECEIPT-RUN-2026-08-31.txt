@@ -74,3 +74,12 @@ Financial Ledger Receipt:
   Real Measured Discount: 74.22%
   Governor Budget Ceiling: $0.010000 | Used: 8.01% of ceiling
 -------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------
+N. FULL RUST TEST SWEEP (2026-08-31)
+Command: cargo test --workspace ; cargo test --manifest-path crates/studio-tauri/Cargo.toml
+-------------------------------------------------------------------------------
+  Workspace (37 crates, 59 suites) : 5,046 passed / 0 failed / 6 ignored
+  studio-tauri (firewalled gate)   : 22 passed / 0 failed / 0 ignored
+  TOTAL                            : 5,068 passed / 0 failed / 6 ignored
+-------------------------------------------------------------------------------

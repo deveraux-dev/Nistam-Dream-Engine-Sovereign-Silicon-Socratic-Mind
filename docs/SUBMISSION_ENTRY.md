@@ -3,7 +3,7 @@
 **Project:** 1.58-bit balanced-ternary Gemma inference — a 9B backbone in 1.72 GB, 2.0 Gweights/s per CPU core, and a GPU GEMV decode kernel measured at 51.3 passes/s (427.4 Gweights/s) on an RTX 3070 (bit-identical to the CPU reference) — with a 3-tier quantized memory architecture (~3.0 GB on-disk layout), a 7-centroid BQ MetaRouter MoE, a Google Cloud Vertex AI gemini-2.5-flash cloud governor, and a playable **Tauri v2 demo shell**: a full-window 5D star sky (119,625-star HYG catalog, WebGL2 bloom + godrays), a birth-rite / CYOA narrative arc that completes at the Toll Gate and persists to disk, an M5 worldbuilder canvas, and a ConPTY glass terminal.
 
 **Author:** Sean Morin, Edmonton, Alberta.
-**License:** MIT OR Apache-2.0. **Research DOI:** [10.5281/zenodo.22176968](https://doi.org/10.5281/zenodo.22176968) — *Pararity: the fixed-point residue of an involution, and why we need it* (Zenodo, 2026).
+**License:** MIT OR Apache-2.0. **Research DOI:** [10.5281/zenodo.22176968](https://doi.org/10.5281/zenodo.22176968) — *Little Nistam and The Lattice of Harmony* (Zenodo, 2026). Mathematical foundations: [10.5281/zenodo.22020676](https://doi.org/10.5281/zenodo.22020676) — *Pararity: the fixed-point residue of an involution, and why we need it* (Zenodo, 2026).
 
 ## What it is: The Three-Legged Sovereign Architecture
 

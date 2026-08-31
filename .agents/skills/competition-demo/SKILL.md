@@ -80,7 +80,7 @@ This skill guides the automated execution, receipt validation, and screen-record
    powershell -ExecutionPolicy Bypass -File scripts/run_competition_tests_3min.ps1
    ```
 2. **Action**: Display the green passing receipts across all 5,213 Rust tests, BIP-340 Schnorr signatures, and sub-45ns Merkle roots.
-3. **Narrative**: *"No mocks. No smoke and mirrors. 5,213 compiled Rust tests pass clean — 0 failed, 11 ignored — with measured hardware receipts: 568.28 ns BQ router decisions (1.76 M/s), 37.06 Gtrits per second AVX2 sign inversion, and 59.62 GB per second memory swap."*
+3. **Narrative**: *"No mocks. No smoke and mirrors. 5,068 compiled Rust tests pass clean — 0 failed, 6 ignored — with measured hardware receipts: 568.28 ns BQ router decisions (1.76 M/s), 37.06 Gtrits per second AVX2 sign inversion, and 59.62 GB per second memory swap."*
 
    Receipts backing that narrative:
    `docs/RECEIPT-cargo-test-workspace-2026-08-29.txt` (test count, host + scope stamped)

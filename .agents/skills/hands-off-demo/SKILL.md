@@ -55,7 +55,7 @@ python scripts/hands_off_demo_driver.py
  │   ACT V [2:20 - 3:00]: LIVE GPU PANIC TEST & HARDWARE RECEIPTS              │
  │   • Stress Trigger: β -> 0.99999 spikes N x IPR metric to singularity       │
  │   • Self-Healing: Dynamic Tikhonov Clamp (ε = 1e-4) locks 120 FPS           │
- │   • 5,213 Rust tests passed clean (0 failed, 11 ignored)                    │
+ │   • 5,068 Rust tests passed clean (0 failed, 6 ignored)                    │
  └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
