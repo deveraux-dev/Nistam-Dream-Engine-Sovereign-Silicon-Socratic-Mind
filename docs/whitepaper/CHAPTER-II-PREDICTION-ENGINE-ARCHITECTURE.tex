@@ -1,5 +1,13 @@
 \documentclass[11pt,oneside]{article}
 \usepackage[utf8]{inputenc}
+\DeclareUnicodeCharacter{00B0}{\ensuremath{^\circ}}
+\DeclareUnicodeCharacter{00D7}{\ensuremath{\times}}
+\DeclareUnicodeCharacter{2190}{\ensuremath{\leftarrow}}
+\DeclareUnicodeCharacter{2192}{\ensuremath{\rightarrow}}
+\DeclareUnicodeCharacter{2193}{\ensuremath{\downarrow}}
+\DeclareUnicodeCharacter{2212}{\ensuremath{-}}
+\DeclareUnicodeCharacter{2248}{\ensuremath{\approx}}
+\DeclareUnicodeCharacter{226B}{\ensuremath{\gg}}
 \usepackage[margin=1in]{geometry}
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -52,7 +60,7 @@ This chapter formalizes the prediction-engine architecture underlying forge-core
 
   \item \textbf{Tikhonov Clamping}: Dynamic regularization $\epsilon = \max(1-\beta, 10^{-4})$ prevents divergence ($N \times \text{IPR} < 1.0$) and convergence spikes ($N \times \text{IPR} > 200.0$) by introducing dissipative feedback.
 
-  \item \textbf{Five-Domain Isomorphism}: Quantum (spin purity), Economics (HHI), Neurobiology (GABAergic inhibition), Linguistics (FST morpheme concentration), and Hardware (L1 cache efficiency) all instantiate the same regularization operator.
+  \item \textbf{Six-Domain Isomorphism}: Quantum (spin purity), Condensed Matter (Anderson localization), Economics (HHI), Neurobiology (GABAergic inhibition/saliency), Linguistics (FST morpheme concentration), and Hardware (L1 cache efficiency) all instantiate the same regularization operator.
 \end{enumerate}
 
 \section{Theory, Flux, Residue: The D=T+F+R Decomposition}
@@ -205,10 +213,10 @@ N \times \text{IPR} = 2^{-H_2(P)} \times N
 Thus $N \times \text{IPR}$ is the exponentiated (de-logarithmized) collision entropy, scaled by $N$.
 \end{lemma}
 
-\subsection{Five-Domain Universal Collapse}
+\subsection{Six-Domain Universal Collapse}
 
 \begin{theorem}[Isomorphic IPR Across Domains]
-The algebraic primitive $\sum_i p_i^2$ appears identically in five independent fields:
+The algebraic primitive $\sum_i p_i^2$ appears identically in six independent fields:
 
 \end{theorem}
 
@@ -305,9 +313,10 @@ N \times \text{IPR}_{\text{s13 lattice}} = 243 \times \sum_{i=1}^{243} p_i^2
 where the 243 states represent all valid 5D ternary coordinates ($3^5 = 243$).
 
 \begin{itemize}
-  \item High purity ($N \times \text{IPR} > 200$): Model weights concentrate on a small subset of the 243-state lattice; L1 cache hits dominate; inference latency ≈ 1.17 ns/token.
+  \item High purity ($N \times \text{IPR} > 200$): Model weights concentrate on a small subset of the 243-state lattice; L1 cache hits dominate; direct L1 table lookup measured at 1.17 ns (lookup latency, not token generation; dual-run receipt: mtok\_bench\_receipt.txt).
   \item Low purity ($N \times \text{IPR} < 10$): Weights scattered uniformly; cache misses; latency increases (thermal spreading).
   \item Watchdog threshold: $N \times \text{IPR} > 200$ triggers "convergence spike refusal" (runaway gain prevention).
+  \item Implementation: the resolvent $(I - \lambda K)f = g$ is landed at \texttt{forge\_core\_v3::resolvent} (\texttt{Field5D}, \texttt{macaulay\_pow}); its L2 conjugate-triad grid lane measured 2.70 Gtrits/s (400$\times$400, 2026-08-31 run).
 \end{itemize}
 
 \subsection{Proof of Universal Isomorphism}

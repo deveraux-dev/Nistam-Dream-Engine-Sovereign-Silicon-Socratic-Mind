@@ -94,7 +94,7 @@ def main():
 
     print_banner("NISTAM DREAM ENGINE & THE FORGE ENGINE", C_CYAN)
     print(f"{C_BOLD}  TARGET:      Devpost 'All Things Agentic' Hackathon{C_RESET}")
-    print(f"{C_BOLD}  STACK:       Gemini 2.5 Flash + Antigravity + 3-Model Resident Gemma Fleet (2.71 GB VRAM){C_RESET}")
+    print(f"{C_BOLD}  STACK:       Gemini 2.5 Flash + Sovereign Agent + 3-Model Resident Gemma Fleet (2.71 GB VRAM){C_RESET}")
     print(f"{C_BOLD}  MODE:        Hands-Off Automated 180s Live Competition Showcase{C_RESET}")
     print(f"{C_BOLD}  HARDWARE:    Local NVIDIA RTX 3070 (8 GB) + Google Cloud (Project: nde1-493505){C_RESET}")
     time.sleep(2.0)

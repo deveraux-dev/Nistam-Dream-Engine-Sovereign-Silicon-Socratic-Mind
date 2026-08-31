@@ -288,9 +288,10 @@ N \times \text{IPR}_{\text{s13 lattice}} = 243 \times \sum_{i=1}^{243} p_i^2
 where the 243 states represent all valid 5D ternary coordinates ($3^5 = 243$).
 
 \begin{itemize}
-  \item High purity ($N \times \text{IPR} > 200$): Model weights concentrate on a small subset of the 243-state lattice; L1 cache hits dominate; inference latency \ensuremath{\approx} 1.17 ns/token.
+  \item High purity ($N \times \text{IPR} > 200$): Model weights concentrate on a small subset of the 243-state lattice; L1 cache hits dominate; direct L1 table lookup measured at 1.17 ns (lookup latency, not token generation; dual-run receipt: mtok\_bench\_receipt.txt).
   \item Low purity ($N \times \text{IPR} < 10$): Weights scattered uniformly; cache misses; latency increases (thermal spreading).
   \item Watchdog threshold: $N \times \text{IPR} > 200$ triggers "convergence spike refusal" (runaway gain prevention).
+  \item Implementation: the resolvent $(I - \lambda K)f = g$ is landed at \texttt{forge\_core\_v3::resolvent} (\texttt{Field5D}, \texttt{macaulay\_pow}); its L2 conjugate-triad grid lane measured 2.70 Gtrits/s (400$\times$400, 2026-08-31 run).
 \end{itemize}
 
 \subsection{Proof of Universal Isomorphism}

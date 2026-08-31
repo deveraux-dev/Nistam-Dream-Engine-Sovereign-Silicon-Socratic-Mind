@@ -104,7 +104,7 @@ Architecture Stack:
   Layer 1: FST (Finite-State Transducer) — valid morpheme paths only
   Layer 2: GBNF Crucible Masking — clamp logits to legal transitions
   Layer 3: ASP/Clingo Solver — enforce Algonquian rules (animacy, obviation, direction)
-  Layer 4: S13 Ternary Quantization — model weights fit L1 cache (1.17 ns/token)
+  Layer 4: S13 Ternary Quantization — model weights fit L1 cache (1.17 ns L1 lookup, measured)
 ```
 
 **Key property**: Once a morpheme path is selected (via FST + GBNF), the next token is **constrained to valid continuations**. No statistical chaos; only grammatically legal options remain.
@@ -114,7 +114,7 @@ Architecture Stack:
 Model weights are compressed 95% using 5-trits-per-byte base-243 encoding (3⁵ = 243 ≤ 256):
 
 - **Weight compression**: 12.2 GB → 612 MB (VRAM envelope: 1,678 MB)
-- **Inference latency**: 1.17 ns per token (theoretical peak: 6.42 Gtok/s)
+- **Tile-geometry planning (CPU, measured 2026-08-31)**: 358.29 Mplans/s, 2.79 ns/plan, Ampere 32x32 contract (the earlier 6.42 Gtok/s theoretical-peak figure is WRONG-SUPERSEDED)
 - **Hardware execution**: TRIT LUT (243 entries) fits in single 256-byte L1 cache line
 - **Arithmetic**: Floating-point multiplication → register integer add/subtract (FMA, no stalls)
 

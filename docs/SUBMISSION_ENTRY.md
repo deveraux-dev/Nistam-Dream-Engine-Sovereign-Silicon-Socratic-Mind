@@ -18,6 +18,7 @@
 3. **Transport & Autonomous Agent**:
    - `crates/forge-envelope/scripts/agent_loop.py` — an autonomous watcher, not a chat interface: polls a Cloud Storage inbox, runs deterministic ByteSieve triage, requests a schema-locked audit from gemini-2.5-flash on Vertex AI at temperature 0.0, cross-checks against a degradation model, writes the evidence-chain head to Firestore, and wipes local staging only after acknowledgement. No human in the loop.
    - Cloud Governor: serverless Vertex AI context cache (`gemini-2.5-flash`, temperature 0.0, 75% input discount at $0.01875/1M cached tokens).
+   - Agent framework: **Antigravity** — Gemini 2.5 Flash drives the Forge Engine (daemon :13013, inference = verb 9). Google Cloud project: `nde1-493505`.
    - Demo shell (`crates/studio-tauri`): 5D star sky, CYOA arc, M5 canvas, and ConPTY glass terminal. Builds with plain `cargo build --release` (no Node).
 
 ## Measured receipts

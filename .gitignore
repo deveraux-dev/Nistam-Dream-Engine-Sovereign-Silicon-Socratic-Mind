@@ -131,3 +131,9 @@ desktop.ini
 *~
 .system_generated/
 **/.system_generated/
+*.aux
+*.out
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+
