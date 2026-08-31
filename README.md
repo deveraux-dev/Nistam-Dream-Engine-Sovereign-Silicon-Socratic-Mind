@@ -4,13 +4,15 @@
 [![License: MIT OR Apache-2.0](https://img.shields.io/badge/License-MIT%20OR%20Apache--2.0-blue.svg)](LICENSE)
 [![Google Gemini Competition](https://img.shields.io/badge/Google%20Gemini-Developer%20Competition-orange.svg)](docs/SUBMISSION_ENTRY.md)
 
-> ### 🪶 Author's Note & Heritage Preface
+> ### 🪶 Author's Note & Sovereign Preface
 > 
 > *Built by Sean Morin — half Cree, half Welsh, from the Edmonton River Valley, Alberta.*  
 > 
-> After 13 years in industrial refineries and 23 years in the trade, I taught myself software engineering, mathematics, and balanced ternary architecture from the ground up over the last 9 months. This engine is the culmination of that journey.
+> After 13 years in industrial refineries and 23 years in the trade, I taught myself software engineering, geometry, and balanced ternary architecture from the ground up. This is my engine. It just so happened Google was building the same agentic tooling in parallel, creating a natural convergence point between on-device sovereign silicon and cloud governance.
 > 
-> Like its author, it is real, direct, and human. It is not a sterile corporate mockup; it runs on physical host silicon, it has raw edges, and it does not pretend to be infallible. But across 9 months of sovereign building, it has done everything I set out to make it do—from 5D relativistic coordinate manifolds and balanced ternary involutions to zero-retention cultural airgaps and live context caching.
+> I didn't want a system that checks after the fact; I built one that *cannot do it wrong* by construction. When you pack 5 ternary trits into a single byte ($3^5 = 243$ states), you are left with 13 unrepresentable states out of 256. Those 13 states became hardware-level alarms: a malformed byte or invalid state cannot enter the pipeline.
+> 
+> In a pitch, a measurement too easily becomes a claim. So this writeup relies on commands, not claims. Built by one person in a room on physical silicon. Clone it, run it, and trust only what your own machine prints.
 > 
 > I built this with my own hands. I did my best.
 
