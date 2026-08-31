@@ -321,7 +321,7 @@ Output: (count_zpsr, IPR_zpsr, validity_zpsr = 100%)
 
 ## 8. References
 
-- Morin, S. (2026). Sovereign Edge-Native Language Processing: ZPSR Whitepaper v4. Zenodo. DOI: [10.5281/zenodo.22176968](https://doi.org/10.5281/zenodo.22176968).
+- Morin, S. (2026). Sovereign Edge-Native Language Processing: ZPSR Whitepaper v4. Zenodo. DOI: [10.5281/zenodo.22020676](https://doi.org/10.5281/zenodo.22020676).
 - Morin, S. (2026). Little Nistam and The Lattice of Harmony. Technical whitepaper (standalone).
 - Giellatekno. (2024). Plains Cree Finite-State Transducer. https://github.com/giellalt/lang-crk
 - Baker, M. C. (2001). *The Atoms of Language*. Oxford University Press.

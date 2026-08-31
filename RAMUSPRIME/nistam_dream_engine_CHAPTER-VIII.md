@@ -262,7 +262,7 @@ Hardware acceleration opportunities:
 
 ## REFERENCES
 
-- Morin, S. (2026). Sovereign Edge-Native Language Processing: Resolving Polysynthetic Morphosyntactic Bottlenecks via GBNF Crucible Masking and L1 Cache-Localized Balanced Ternary Quantization. *Zenodo*. DOI: [10.5281/zenodo.22176968](https://doi.org/10.5281/zenodo.22176968).
+- Morin, S. (2026). Sovereign Edge-Native Language Processing: Resolving Polysynthetic Morphosyntactic Bottlenecks via GBNF Crucible Masking and L1 Cache-Localized Balanced Ternary Quantization. *Zenodo*. DOI: [10.5281/zenodo.22020676](https://doi.org/10.5281/zenodo.22020676).
 - Morin, S. (2026). Little Nistam and The Lattice of Harmony: Unifying Balanced Ternary Compression, Polysynthetic Morphosyntactic Constraints, and Edge-Native Language Preservation via Anti-Shannon Purity Measurement. Technical whitepaper.
 - Giellatekno. (2024). Plains Cree Finite-State Transducer (crk-fst). GitHub repository. https://github.com/giellalt/lang-crk
 - Baker, M. C. (2001). *The Atoms of Language: The Mind's Hidden Rules of Grammar*. Oxford University Press.

@@ -626,7 +626,7 @@ $$N \times e^{-H_2(P)} = N \sum_{i=1}^{N} p_i^2 = \text{N×IPR}$$
 - Giellatekno Plains Cree FST (crk-fst): https://github.com/giellalt/lang-crk
 - Baker, M. (2001). *The Atoms of Language*. Oxford University Press.
 - Cover, T., & Thomas, J. (1991). *Elements of Information Theory*. Wiley.
-- Morin, S. (2026). *Sovereign Edge-Native Language Processing: ZPSR Whitepaper v4*. Zenodo. DOI: [10.5281/zenodo.22176968](https://doi.org/10.5281/zenodo.22176968).
+- Morin, S. (2026). *Sovereign Edge-Native Language Processing: ZPSR Whitepaper v4*. Zenodo. DOI: [10.5281/zenodo.22020676](https://doi.org/10.5281/zenodo.22020676).
 
 ---
 
