@@ -1,0 +1,76 @@
+===============================================================================
+NISTAM DREAM ENGINE — HARDWARE EXECUTION RECEIPTS (2026-08-31)
+Host: AMD/Intel x86_64, NVIDIA GeForce RTX 3070 8 GB, Windows 11
+===============================================================================
+
+-------------------------------------------------------------------------------
+1. GEMMA 9B S13 TERNARY GEMV TIMING (gpu_decode_timed.rs)
+Command: cargo run --release --example gpu_decode_timed -p gemma-s13
+-------------------------------------------------------------------------------
+===============================================================================
+   S13 TERNARY GEMV — MEASURED GPU DECODE TIMING (not a projection)
+===============================================================================
+  Subgroups: adapter SUPPORTS SUBGROUP (min..max size 32..32)
+  Adapter: NVIDIA GeForce RTX 3070
+  Kernel: s13_gemv_1d
+  [1] Kernel parity on device : BIT-IDENTICAL (64 rows vs host simulator)
+  [2] Weights resident in VRAM : 42 layers, 1.670 GB uploaded in 3.4s
+  [3] MEASURED decode timing  : 10 tokens, 0.19s wall
+      • 19.48 ms/token  =>  51.3 tokens/sec
+      • 427.4 Gweights/s effective (168 GEMV dispatches/token)
+      SCOPE: all 294 per-token GEMVs on-device, weights VRAM-resident,
+      synthetic weights/activations chained on-GPU; host norm/attention
+      softmax excluded. This is the GEMV-dominant decode cost, measured.
+===============================================================================
+
+-------------------------------------------------------------------------------
+2. GEMMA 2B S13 TERNARY GEMV ON REAL WEIGHTS (gpu_decode_real.rs)
+Command: $env:S13_GEMMA_DIR = "s13_gemma_2b_m3"; cargo run --release --example gpu_decode_real -p gemma-s13
+-------------------------------------------------------------------------------
+===============================================================================
+   S13 TERNARY GEMV — MEASURED GPU DECODE, REAL QUANTIZED GEMMA WEIGHTS
+===============================================================================
+  Adapter: NVIDIA GeForce RTX 3070
+  Geometry (S13M headers)      : 26 layers, d_model 2304, q 2048, kv 1024, d_ff 9216
+  [1] REAL weights resident    : 26 layers, 404.9 MB packed on disk, 2.5s load+upload
+      sentinel bytes (>=243)   : 0 (must be 0); per-tensor scale range 0.025150..0.249335
+  [2] Parity on REAL rows      : BIT-IDENTICAL (64 rows of blk_0 qkv vs host simulator)
+  [3] MEASURED GEMV-pass timing : 10 passes, 0.11s wall
+      • 10.52 ms/GEMV-pass  =>  95.0 GEMV passes/sec
+      • 192.4 Gweights/s effective (104 GEMV dispatches/pass)
+      SCOPE — read this before quoting the number above:
+      This is NOT tokens/sec. One 'pass' is every per-token GEMV on-device over
+      the REAL quantized weights, VRAM-resident, activations chained on-GPU.
+      EXCLUDED: host norm/attention softmax, per-tensor scale application.
+      A full-pipeline engine (vLLM, llama.cpp) measures strictly more work,
+      so comparing this figure against theirs overstates this engine.
+      MEASUREMENT VALIDITY: lock clocks before quoting —
+        nvidia-smi -pm 1 -lgc 2100 -lmc 7001   (restore: -rgc -rmc)
+      An unlocked card idles in P8 (~10% core, ~6% mem) through a burst this
+      short and the driver never ramps; run-to-run spread of 2x is then pure
+      power-state hysteresis, not throughput. Record pstate/clocks WITH the run.
+      BANDWIDTH ROOFLINE (404.9 MB/pass at 448 GB/s = 1107/s) IS NOT THE BINDING
+      CONSTRAINT — measured 2026-08-27: locking memory 405->7001 MHz (17x) moved
+      throughput DOWN, so this kernel is launch/reduction-bound, not bandwidth-
+      bound. The tail at s13_gemv_1d is a serial 128-step reduce on one thread.
+===============================================================================
+
+-------------------------------------------------------------------------------
+3. VERTEX AI CONTEXT CACHE STRICT AUDIT RECEIPT (test_vertex_cache_strict.py)
+Command: python scripts/test_vertex_cache_strict.py --live
+-------------------------------------------------------------------------------
+Creating context cache handle on Vertex AI (us-central1)...
+Created cache handle: projects/362227725307/locations/us-central1/cachedContents/5075222270813667328
+[PASS] Cache created successfully.
+Sending prompt query against cache handle...
+Usage Metadata:
+  Prompt Token Count: 41019
+  Cached Content Token Count: 41002 (100.0% Cache Hit)
+  Candidates Token Count: 142
+  Total Token Count: 41161
+Financial Ledger Receipt:
+  Uncached Estimated Cost: $0.003107
+  Billed Cost (with 75% cached discount): $0.000801
+  Real Measured Discount: 74.22%
+  Governor Budget Ceiling: $0.010000 | Used: 8.01% of ceiling
+-------------------------------------------------------------------------------

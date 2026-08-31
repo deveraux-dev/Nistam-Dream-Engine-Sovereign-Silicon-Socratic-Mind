@@ -21,7 +21,7 @@
 
 Three things, wired together in one Rust workspace:
 
-1. **Gemma at 1.58 bits (S13).** Balanced-ternary quantization, 5 trits per byte (3⁵ = 243 ≤ 256). Gemma 2B and 9B are quantized from real weights. The 9B decodes end-to-end on CPU through all 42 layers, and its GEMV kernel is measured on an RTX 3070 with bit-identical parity to the scalar reference.
+1. **Gemma at 1.58 bits (S13).** Balanced-ternary quantization: weights are −1 / 0 / +1, five to a byte (3⁵ = 243 states). A byte holds 256, so 13 values can never be a weight — those are the alarms. A malformed byte has no state to decode into; nothing gets in. Gemma 2B and 9B are quantized from real weights. The 9B decodes end-to-end on CPU through all 42 layers; the 9B and 2B GEMV kernels are timed on an RTX 3070 with parity against the host reference.
 2. **Plains Cree tokenized by grammar, not frequency.** The Zero-Shot Polysynthetic State Resolver (ZPSR): a Giellatekno/ALTLab FST for valid morpheme paths, GBNF logit masking so the decoder can only sample legal continuations, and an ASP/Clingo layer for animacy, obviation and direction-hierarchy agreement. Measured on the 1,587 corpus words the strict analyser covers: **2,545 FST segments vs 8,363 GPT-2 BPE tokens (−69.6%)**.
 3. **Gemini 2.5 Flash as governor.** Vertex AI, temperature 0.0, context caching over a 41,002-token cached prefix, **74.2% measured input-token savings**. It audits scrubbed state envelopes and writes verdicts to Firestore. It never receives Cree text.
 
@@ -62,34 +62,33 @@ Read this before the benchmarks.
 
 | Claim | Status |
 |---|---|
-| Gemma 9B S13 GEMV on GPU (RTX 3070) | **Kernel measured.** 51.3 passes/s (19.48 ms/token, 427.4 Gweights/s) across all 42 layers (1.67 GB in VRAM, 168 GEMV dispatches/token chained on-GPU). Bit-identical to host simulator. |
-| Gemma 2B S13 GEMV on GPU (RTX 3070) | **Measured on real weights.** 95.0 passes/s (10.52 ms/pass, 192.4 Gweights/s) across 26 layers of real quantized weights (`s13_gemma_2b_m3`, 404.9 MB). |
-| Gemma 9B S13 CPU Decode (Fallback) | **Measured baseline.** 0.48 tok/s (AVX2 + Rayon); 0.03 tok/s scalar reference on CPU. |
-| Gemma 2B S13 (404.9 MB) | Quantized from real weights and verified. Wired as the configuration stub for dual-stream involution checks. |
+| Gemma 9B S13 end-to-end decode, CPU, 42 layers | **Measured.** 0.48 tok/s (AVX2 + Rayon); 0.03 tok/s scalar reference. Slow. Correct. |
+| Gemma 9B S13 GEMV on GPU (RTX 3070) | **Kernel measured.** 51.3 passes/s (19.48 ms) through all 42 layers — 168 chained GEMV dispatches per pass, 1.67 GB streamed, parity with the host reference. A pass is the layer GEMVs; nothing else is timed here, so no GPU tokens/sec figure is claimed. |
+| Gemma 2B S13 (404.9 MB) | Quantized from real weights and verified. GPU GEMV timed on the real file: 95.0 passes/s (10.52 ms), 104 dispatches per pass. Wired as the configuration stub for dual-stream involution checks. |
 | "Mama Bear" 27B (580 MB) | **Stub.** Router head / embedding projection only. A full 27B at 1.58 bits would be ~5.3 GB and is not here. |
 | Model count | Three files on disk, 2.71 GB total, not all resident at once. The router has 7 domain centroids; there are not 7 models. |
-| ZPSR −69.6% tokens vs BPE | **Measured**, on the 65% of a 2,443-word GiellaLT test file the strict analyser accepts. Corpus is not speaker-verified. |
+| ZPSR −69.6% tokens vs BPE | **Measured on Plains Cree** — GiellaLT `lang-crk` public texts, 2,443 words — over the 65% the strict analyser accepts. Speaker check of morpheme boundaries pending (ALTLab replication). |
 | ZPSR "purity" (N·IPR) beats BPE | **Reversed by the data.** v1 figures were constants in a script, not measurements — withdrawn in the v2 erratum. FST segments came out with a *larger* effective vocabulary (89.0) than BPE (39.9 / 52.2). The metric stands; the story didn't. |
 | Vertex context caching, 74.2% savings | **Measured.** `docs/RECEIPT-RUN-2026-08-27.txt`; printed live by `vertex_flash_cache.py`. |
 | 3-wave airgap + zeroize | Red/green test in repo. The sub-45 ns figure is a timing microbenchmark. |
 | Cree example glosses | **Unverified.** Every gloss in the whitepaper is flagged "verify with a speaker." ALTLab replication pending. |
 
-## Measured numbers
+## Numbers my machine printed
 
-x86-64 host, NVIDIA RTX 3070. Receipts: `docs/RECEIPT-RUN-2026-08-27.txt`, `gpu_decode_timed.rs`, `gpu_decode_real.rs`, and live `full_inference` runs.
+Every one of these was true on one x86-64 host with an RTX 3070 on 2026-08-27 and 2026-08-31 (`docs/RECEIPT-RUN-2026-08-27.txt`, `docs/RECEIPT-RUN-2026-08-31.txt`, live `full_inference` runs). A number in a pitch is a claim, not a measurement. Don't trust these — run the suite and trust what yours prints.
 
 | Layer | Result | Mechanism |
 |---|---|---|
-| Gemma 9B GEMV, GPU (RTX 3070) | 51.3 passes/s (19.48 ms/tok), 427.4 Gweights/s | 42 layers, 1.67 GB in VRAM, 168 GEMVs/tok, `gpu_decode_timed.rs` |
-| Gemma 2B GEMV, GPU (RTX 3070) | 95.0 passes/s (10.52 ms/pass), 192.4 Gweights/s | 26 layers, 404.9 MB real weights, `gpu_decode_real.rs` |
 | 512-bit BQ MetaRouter | 1.76–2.8 M decisions/s, single core (568 ns/decision) | XOR + POPCNT Hamming distance against 7 centroids |
 | 5D star projection | 44.45 M stars/s | SO(5) double-plane rotation + Lorentz boost, 119,625 stars |
 | 400×400 conjugate grid inversion, scalar | 2.57 Gtrits/s (62.26 µs/pass) | 160 KB, L2-resident |
 | 400×400 conjugate grid inversion, AVX2 | 37.06 Gtrits/s (4.32 µs/pass) | `PSHUFB` |
 | Double-buffered host staging | 59.62 GB/s, 57.99 M swaps/s (17.25 ns/swap) | 2 × 64 KB ping-pong |
 | Tile geometry planning | 358.17 M plans/s (2.79 ns/plan) | Integer ceiling division |
-| Gemma 9B CPU Decode (AVX2 + Rayon) | 0.48 tok/s (2.08 s/tok), 17.4× over scalar | `TRIT_LUT_243` + `_mm256_madd_epi16`, `full_inference.rs` |
-| Gemma 9B CPU Decode (Scalar Reference) | 0.03 tok/s (36.3 s/tok) | Single-core reference baseline, no SIMD |
+| Gemma 9B GEMV pass, GPU (42 layers, 168 dispatches) | 51.3 passes/s (19.48 ms/pass), 427.4 Gweights/s | `gpu_decode_timed.rs`, 1.67 GB streamed per pass |
+| Gemma 2B GEMV pass, GPU (104 dispatches) | 95.0 passes/s (10.52 ms/pass), 192.4 Gweights/s | `gpu_decode_real.rs`, real 404.9 MB weights from disk |
+| Gemma 9B end-to-end, CPU AVX2 + Rayon | 0.48 tok/s (2.08 s/tok), 17.4× over scalar | `TRIT_LUT_243` + `_mm256_madd_epi16`, `full_inference.rs` |
+| Gemma 9B end-to-end, CPU scalar | 0.03 tok/s (36.3 s/tok) | Single-core reference, no SIMD |
 
 ## Architecture
 
@@ -107,8 +106,8 @@ x86-64 host, NVIDIA RTX 3070. Receipts: `docs/RECEIPT-RUN-2026-08-27.txt`, `gpu_
                     │
                     ▼
   S13 model files  (1.58 bit/param, 2.71 GB on disk, not all resident at once)
-    Baby Bear   Gemma 2B          404.9 MB   verified weights; involution-check stub
-    Papa Bear   Gemma 9B          1.72 GB    decodes end-to-end (measured)
+    Baby Bear   Gemma 2B          404.9 MB   verified weights; GPU GEMV timed; involution-check stub
+    Papa Bear   Gemma 9B          1.72 GB    decodes end-to-end on CPU; GPU GEMV timed
     Mama Bear   27B router head   580 MB     head only — stub
                     │
                     ▼
@@ -179,6 +178,7 @@ python scripts/test_vertex_cache_strict.py
 │   ├── SUBMISSION_ENTRY.md             # Entry form and disclosures
 │   ├── JUDGE-BUILD.md                  # Build and verification instructions for judges
 │   ├── RECEIPT-RUN-2026-08-27.txt      # Measured benchmark receipts
+│   ├── RECEIPT-RUN-2026-08-31.txt      # GPU GEMV run, raw stdout
 │   ├── whitepaper/                     # Little Nistam and The Lattice of Harmony (.tex, .pdf)
 │   └── patex_fullstack.png             # PaTeX drafting sheet
 └── scripts/
