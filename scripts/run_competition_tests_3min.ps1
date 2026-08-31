@@ -1,5 +1,5 @@
 # run_competition_tests_3min.ps1 - 3-Minute Comprehensive Competition Test Suite & Live Demo Runner
-# Aligned with docs/VIDEO_3MIN_SCRIPT_CONCISE.md & .agents/skills/competition-demo/SKILL.md
+# Aligned with docs/VIDEO-SCRIPT-3MIN.md
 # Exactly 180s structured execution across all sovereign engine organs.
 
 $ErrorActionPreference = "Stop"
