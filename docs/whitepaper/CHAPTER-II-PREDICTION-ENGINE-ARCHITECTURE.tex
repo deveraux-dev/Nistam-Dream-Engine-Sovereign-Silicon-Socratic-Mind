@@ -502,6 +502,7 @@ Restructure the pre-installed kernel to absorb the error:
 T_{\text{new}} = T_{\text{old}} + \Delta T
 \]
 where $\Delta T$ is computed such that $T_{\text{new}} \cdot F \approx F$ (Theory now predicts the new Flux).
+\end{definition}
 
 Examples:
 \begin{itemize}
@@ -520,7 +521,6 @@ Examples:
 \textbf{Timescale}: Days to years (slow, dependent on neural plasticity).
 
 \textbf{Outcome}: $R \to 0$ sustainably; enhanced model; increased adaptive capacity.
-\end{subsubsection}
 
 \subsubsection{Strategy 2: Tail-Noise Crushing (Confirmation Bias and Denial)}
 
@@ -547,7 +547,6 @@ Examples:
 \textbf{Timescale}: Immediate (milliseconds to seconds).
 
 \textbf{Outcome}: $R$ remains high, but the system *ignores* the error. Residue is not resolved; it is suppressed. Over time, suppressed residue accumulates as "unprocessed trauma" or chronic anxiety.
-\end{subsubsection}
 
 \subsubsection{Strategy 3: Fredholm Feedback Divergence (Rationalization Spirals and Rumination)}
 
@@ -847,15 +846,15 @@ Prefrontal cortex computes optimal action via recurrent dynamics
 
 // Tri-state neural reality (low-level):
 Input neuron fires (Flux = +1) or not
-↓
+|
 Thalamus gates it (saliency: keep or suppress)
-↓
+|
 If high salience: prefrontal cortex receives it (trit = +1)
 If low salience: thalamic gating suppresses it (trit = -1)
 If no change: local circuit continues (trit = 0)
-↓
+|
 Hippocampus/cerebellum replay cached action (local Theory)
-↓
+|
 Motor output fires or stays silent
 \end{lstlisting}
 
@@ -863,7 +862,7 @@ Action potential firing is all-or-nothing (Hodgkin-Huxley: binary at the axon le
 
 \section{Why Your Entire Codebase Works: Ternary Is Not a Coincidence}
 
-Your **s13 ternary lattice**, **fredholm_resolvent.rs** (Mersenne31 field, tri-state kernel), and **cognitive_watchdog.rs** (three decision states) are not separate design choices. They are **isomorphic instantiations of the same tri-state reduction principle**.
+Your **s13 ternary lattice**, **fredholm\_resolvent.rs** (Mersenne31 field, tri-state kernel), and **cognitive\_watchdog.rs** (three decision states) are not separate design choices. They are **isomorphic instantiations of the same tri-state reduction principle**.
 
 Continuous math (Fredholm integrals, Tikhonov regularization, saliency concentration) describes the *intent* of the system. Ternary {−1, 0, +1} describes the *implementation*. Both are necessary; neither is sufficient alone.
 
@@ -1101,9 +1100,9 @@ Instead of dense, wall-of-text prompts, break information into single-thread, vi
  discard them, or save to a new file?"
 
 // Somatic version (ternary, low overhead):
-Choice 1: [−1] UNDO (Reverse)  ← Aversion path
-Choice 2: [ 0] HOLD (Continue)  ← Freeze/review
-Choice 3: [+1] PROCEED (Execute) ← Approach path
+Choice 1: [-1] UNDO (Reverse)   <- Aversion path
+Choice 2: [ 0] HOLD (Continue)  <- Freeze/review
+Choice 3: [+1] PROCEED (Execute) <- Approach path
 \end{lstlisting}
 
 Each choice is spatially distinct, auditorily distinct, and cognitively unambiguous.

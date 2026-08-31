@@ -32,6 +32,8 @@ Every number below is a command you can run yourself; method and raw stdout are 
 | Double-buffered host staging | 59.62–60.30 GB/s |
 | Tile geometry planning (Ampere 32×32) | 358.17–364.56 M plans/s |
 | Model Storage & Fleet Layout | 3,049.6 MB (~3.0 GB) on disk (`s13_gemma_9b_m3` + `s13_gemma_2b_m3` + `s13_gemma_m2`), 5 resident VRAM seats |
+| Gemma Sidecar Live CUDA Generation (RTX 3070) | **25.81 tok/s** decode (38.75 ms/tok all-in), **55.4 tok/s** prefill (Gemma-3 4B Q4_K_M + 70 S13 overrides + 70 LoRA repairs) |
+| SplitShader Determinism Proof (RTX 3070 Vulkan) | Bit-identical CPU == GPU (diff = 0 across native i64 and dual-u32 emu) |
 | Gemma 9B GEMV Kernel (GPU, RTX 3070) | 51.3 passes/s (19.48 ms/pass, 427.4 Gweights/s, 42 layers in VRAM) |
 | Gemma 2B GEMV Kernel (GPU, RTX 3070) | 95.0 passes/s (10.52 ms/pass, 192.4 Gweights/s, 26 layers real weights) |
 | Gemma 9B CPU Decode (Fallback Baseline) | 0.48 tok/s (2.08 s/tok, AVX2 + Rayon) / 0.03 tok/s scalar |

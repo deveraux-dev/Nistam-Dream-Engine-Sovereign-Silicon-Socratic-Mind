@@ -87,6 +87,9 @@ Every one of these was true on one x86-64 host with an RTX 3070 on 2026-08-27 an
 | Tile geometry planning | 358.17 M plans/s (2.79 ns/plan) | Integer ceiling division |
 | Gemma 9B GEMV pass, GPU (42 layers, 168 dispatches) | 51.3 passes/s (19.48 ms/pass), 427.4 Gweights/s | `gpu_decode_timed.rs`, 1.67 GB streamed per pass |
 | Gemma 2B GEMV pass, GPU (104 dispatches) | 95.0 passes/s (10.52 ms/pass), 192.4 Gweights/s | `gpu_decode_real.rs`, real 404.9 MB weights from disk |
+| Gemma Sidecar live decode, GPU CUDA (RTX 3070) | 25.81 tok/s (38.75 ms/tok all-in) | Gemma-3 4B Q4_K_M, 70 S13 ternary overrides + 70 LoRA repairs |
+| Gemma Sidecar prefill, GPU CUDA (RTX 3070) | 55.4 tok/s (0.47 ms/tok logits, 16 µs queue) | Chunked KV prefill, `mmvq` kernel @ 79 GB/s effective |
+| SplitShader determinism proof (RTX 3070 Vulkan) | Bit-identical CPU == GPU (diff = 0) | All 4 semantic claims identical across native i64 & dual-u32 emu |
 | Gemma 9B end-to-end, CPU AVX2 + Rayon | 0.48 tok/s (2.08 s/tok), 17.4× over scalar | `TRIT_LUT_243` + `_mm256_madd_epi16`, `full_inference.rs` |
 | Gemma 9B end-to-end, CPU scalar | 0.03 tok/s (36.3 s/tok) | Single-core reference, no SIMD |
 

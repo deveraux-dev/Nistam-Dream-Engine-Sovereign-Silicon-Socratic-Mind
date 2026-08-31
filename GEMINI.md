@@ -161,6 +161,9 @@
 | **Ampere 32×32 Tile Planning** | **358.17 Million plans/s** (`2.79 ns`/plan) | Integer ceiling division workgroup geometry planner |
 | **Gemma 9B GEMV Kernel (GPU RTX 3070)** | **51.3 passes/s** (`19.48 ms`, **427.4 Gweights/s**) | 42 layers, 1.67 GB VRAM (`gpu_decode_timed.rs`), bit-exact CPU parity |
 | **Gemma 2B GEMV Kernel (GPU RTX 3070)** | **95.0 passes/s** (`10.52 ms`, **192.4 Gweights/s**) | 26 layers real quantized weights (`gpu_decode_real.rs`, 404.9 MB) |
+| **Gemma Sidecar Live Decode (GPU CUDA RTX 3070)** | **25.81 tok/s** (`38.75 ms`/tok all-in, Gemma-3 4B Q4_K_M) | 70 S13 ternary overrides + 70 LoRA-repair adapters, live token generation |
+| **Gemma Sidecar Prefill (GPU CUDA RTX 3070)** | **55.4 tok/s** (`0.47 ms`/tok logits fetch, `16 µs` queue) | Chunked KV prefill, `mmvq` kernel @ 79 GB/s effective (memory-bound) |
+| **SplitShader Bit-Exact Determinism** | **Bit-Identical (diff = 0 across all 4 claims)** | Vulkan `SHADER_INT64: true` native vs dual-u32 emulation CPU == GPU |
 | **Gemma 9B Decode Baseline (CPU AVX2)** | **0.48 tokens/sec** (`2.08 s`/tok, 42 full layers) | `TRIT_LUT_243` + `_mm256_madd_epi16` + Rayon parallelism (CPU fallback) |
 | **Gemma 9B Decode Baseline (CPU Scalar)** | **0.03 tokens/sec** (`36.3 s`/tok) | Single-core scalar fallback baseline |
 | **Three Bears Resident Layout** | **2.71 GB Total VRAM** | 2B (404.9 MB) + 9B (1.72 GB) + 27B Head (580 MB) |
