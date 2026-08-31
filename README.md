@@ -4,6 +4,18 @@
 [![License: MIT OR Apache-2.0](https://img.shields.io/badge/License-MIT%20OR%20Apache--2.0-blue.svg)](LICENSE)
 [![Google Gemini Competition](https://img.shields.io/badge/Google%20Gemini-Developer%20Competition-orange.svg)](docs/SUBMISSION_ENTRY.md)
 
+> ### 🪶 Author's Note & Heritage Preface
+> 
+> *Built by Sean Morin — half Cree, half Welsh, from the Edmonton River Valley, Alberta.*  
+> 
+> After 13 years working in industrial refineries and trades, I taught myself software engineering, mathematics, and balanced ternary architecture from the ground up over the last 9 months. This engine is the culmination of that journey.
+> 
+> Like its author, it is real, direct, and human. It is not a sterile corporate mockup; it runs on physical host silicon, it has raw edges, and it does not pretend to be infallible. But across 9 months of sovereign building, it has done everything I set out to make it do—from 5D relativistic coordinate manifolds and balanced ternary involutions to zero-retention cultural airgaps and live context caching.
+> 
+> I built this with my own hands. I did my best.
+
+---
+
 **2.57 Gtrits/s Scalar / 37.06 Gtrits/s AVX2 Single-Core Compute | 1.58-bit Ternary S13 Quantization | 119k 5D Galaxy Projection at 44.45 Million Stars/sec.**
 
 Nistam Dream Engine couples **1.58-bit balanced-ternary inference (S13)** with **5D Relativistic Celestial Astrolabe Math** and **Vertex AI Gemini 2.5 Flash Cloud Context Caching**. It demonstrates three Gemma models (2B, 9B, 27B head) under S13 quantization on consumer GPUs (< 8 GB VRAM) with measured inference kernels and authentic hardware verification.
