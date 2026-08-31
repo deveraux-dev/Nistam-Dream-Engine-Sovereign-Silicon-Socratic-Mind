@@ -62,8 +62,9 @@ Read this before the benchmarks.
 
 | Claim | Status |
 |---|---|
-| Gemma 9B S13 end-to-end decode, CPU, 42 layers | **Measured.** 0.48 tok/s (AVX2 + Rayon); 0.03 tok/s scalar reference. Slow. Correct. |
-| Gemma 9B S13 GEMV on GPU (RTX 3070) | **Kernel measured.** 49.2 passes/s over 1,664.7 MB of real weights, bit-identical to CPU. No GPU tokens/sec figure is claimed. |
+| Gemma 9B S13 GEMV on GPU (RTX 3070) | **Kernel measured.** 51.3 passes/s (19.48 ms/token, 427.4 Gweights/s) across all 42 layers (1.67 GB in VRAM, 168 GEMV dispatches/token chained on-GPU). Bit-identical to host simulator. |
+| Gemma 2B S13 GEMV on GPU (RTX 3070) | **Measured on real weights.** 95.0 passes/s (10.52 ms/pass, 192.4 Gweights/s) across 26 layers of real quantized weights (`s13_gemma_2b_m3`, 404.9 MB). |
+| Gemma 9B S13 CPU Decode (Fallback) | **Measured baseline.** 0.48 tok/s (AVX2 + Rayon); 0.03 tok/s scalar reference on CPU. |
 | Gemma 2B S13 (404.9 MB) | Quantized from real weights and verified. Wired as the configuration stub for dual-stream involution checks. |
 | "Mama Bear" 27B (580 MB) | **Stub.** Router head / embedding projection only. A full 27B at 1.58 bits would be ~5.3 GB and is not here. |
 | Model count | Three files on disk, 2.71 GB total, not all resident at once. The router has 7 domain centroids; there are not 7 models. |
@@ -75,19 +76,20 @@ Read this before the benchmarks.
 
 ## Measured numbers
 
-x86-64 host, NVIDIA RTX 3070. Receipts: `docs/RECEIPT-RUN-2026-08-27.txt` and live `full_inference` runs.
+x86-64 host, NVIDIA RTX 3070. Receipts: `docs/RECEIPT-RUN-2026-08-27.txt`, `gpu_decode_timed.rs`, `gpu_decode_real.rs`, and live `full_inference` runs.
 
 | Layer | Result | Mechanism |
 |---|---|---|
+| Gemma 9B GEMV, GPU (RTX 3070) | 51.3 passes/s (19.48 ms/tok), 427.4 Gweights/s | 42 layers, 1.67 GB in VRAM, 168 GEMVs/tok, `gpu_decode_timed.rs` |
+| Gemma 2B GEMV, GPU (RTX 3070) | 95.0 passes/s (10.52 ms/pass), 192.4 Gweights/s | 26 layers, 404.9 MB real weights, `gpu_decode_real.rs` |
 | 512-bit BQ MetaRouter | 1.76–2.8 M decisions/s, single core (568 ns/decision) | XOR + POPCNT Hamming distance against 7 centroids |
 | 5D star projection | 44.45 M stars/s | SO(5) double-plane rotation + Lorentz boost, 119,625 stars |
 | 400×400 conjugate grid inversion, scalar | 2.57 Gtrits/s (62.26 µs/pass) | 160 KB, L2-resident |
 | 400×400 conjugate grid inversion, AVX2 | 37.06 Gtrits/s (4.32 µs/pass) | `PSHUFB` |
 | Double-buffered host staging | 59.62 GB/s, 57.99 M swaps/s (17.25 ns/swap) | 2 × 64 KB ping-pong |
 | Tile geometry planning | 358.17 M plans/s (2.79 ns/plan) | Integer ceiling division |
-| Gemma 9B GEMV, GPU | 49.2 passes/s (20.34 ms/pass), 409.3 Gweights/s | `gpu_decode_real.rs`, 1,664.7 MB real weights |
-| Gemma 9B end-to-end, CPU AVX2 + Rayon | 0.48 tok/s (2.08 s/tok), 17.4× over scalar | `TRIT_LUT_243` + `_mm256_madd_epi16`, `full_inference.rs` |
-| Gemma 9B end-to-end, CPU scalar | 0.03 tok/s (36.3 s/tok) | Single-core reference, no SIMD |
+| Gemma 9B CPU Decode (AVX2 + Rayon) | 0.48 tok/s (2.08 s/tok), 17.4× over scalar | `TRIT_LUT_243` + `_mm256_madd_epi16`, `full_inference.rs` |
+| Gemma 9B CPU Decode (Scalar Reference) | 0.03 tok/s (36.3 s/tok) | Single-core reference baseline, no SIMD |
 
 ## Architecture
 
