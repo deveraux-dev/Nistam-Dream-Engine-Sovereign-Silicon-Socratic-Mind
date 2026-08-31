@@ -4,7 +4,7 @@
 quantized Gemma fleet — a 9B backbone, a 2B direct seat with its shared-weight mirror, and an M2
 sentry, five resident execution seats from three on-disk model directories — in deterministic lockstep on one
 consumer GPU, governed in the cloud by Google Cloud Vertex AI gemini-2.5-flash (enforcing
-75% input cost reduction via serverless context caching; agent framework: Sovereign Agent Framework, with
+75% input cost reduction via serverless context caching; built with the **Antigravity** agent SDK, with
 Gemini 2.5 Flash driving the Forge Engine; Google Cloud project `nde1-493505`) — and wearing a playable face: a Tauri
 v2 shell that flies the 119,625-star HYG sky, births a character through the Thirteen
 Tolls, and walks a CYOA arc to the Toll Gate.
