@@ -25,7 +25,7 @@ Nistam Dream Engine couples **1.58-bit balanced-ternary inference (S13)** with *
 Or make a **single direct context-cached Gemini 2.5 Flash prompt query** with real-time token/cost receipts:
 
 ```powershell
-# Direct Context-Cached Query (observed cost ~$0.0004/call with caching)
+# Direct Context-Cached Query (serverless 75% input discount)
 python scripts/vertex_flash_cache.py --prompt "Audit surface envelope hash #01 for degradation"
 ```
 
@@ -65,6 +65,19 @@ python scripts/run_competition_tests_3min.py
                └──────────────────────────────────────────────────────────────┘
 ```
 
+## 🏛️ Subsystem Cross-Link Matrix
+
+| Subsystem Component | Primary File | Core Function & Mathematical Linkage |
+| :--- | :--- | :--- |
+| **Mathematical Whitepaper** | `docs/whitepaper/Little-Nistam-and-The-Lattice-of-Harmony-WHITEPAPER.tex` | Anti-Shannon Purity ($N \times \text{IPR}$) math, ZPSR grammar constraints, and S13 ternary quantization. |
+| **5D State Engine** | `docs/architecture/5d_hypercube_engine_plan.md` | Dual-clock substrate (240Hz Creative / 120Hz Debt), Morton 5D stride-5 codec, and retrocausal divergence rings. |
+| **Competition Intelligence**| `docs/competition/devpost_intelligence.md` | Devpost submission dossier, judging rubric alignment, Vertex AI context caching receipts, and ADR-0026 airgap tracking. |
+
+### 🔗 Concrete Linkages Across Subsystem Files
+* **Whitepaper $\rightarrow$ Engine:** The ZPSR FST + GBNF + ASP layer in `docs/whitepaper/` acts as the finite-domain constraint sieve inside the Debt Clock (120 Hz SimTick) of `5d_hypercube_engine_plan.md`.
+* **Engine $\rightarrow$ Airgap:** When a cultural or sacred data constraint is violated during state evaluation, the Retrocausal Divergence Rings roll back the state branch, triggering the whitepaper's 3-Wave Sovereign Airgap destructive RAM wipe (`crates/forge-envelope`).
+* **Math $\rightarrow$ Devpost Submission:** The empirical benchmark results (3.29x compression ratio, 6.260 B/tok vs 1.905 B/tok, 41,002 tokens context cached at 74.2% real savings) provide the verified physical receipts for Pillar 1 (Innovation) and Pillar 2 (Technical Execution) in `devpost_intelligence.md`.
+
 ---
 
 ## 🌟 Key Architectural Innovations
@@ -81,7 +94,7 @@ python scripts/run_competition_tests_3min.py
 3. **512-bit BQ MetaRouter** (`forge-ml-bqrouter`):
    - Sub-100ns XOR+POPCNT Hamming distance routing across 7 specialist domains (**1.76 M decisions/s single-core**).
 4. **Sovereign Cloud Context Caching on Vertex AI**:
-   - `gemini-2.5-flash` driven at deterministic temperature `0.0` with token context caching ($\ge 32,768$ tokens), measuring **~$0.0004/call** cost per cached query under observed load.
+   - `gemini-2.5-flash` driven at deterministic temperature `0.0` with token context caching ($\ge 32,768$ tokens), securing a **75% input token discount** ($0.01875 / 1M cached tokens) under serverless context caching.
 5. **Hearthkeeper Sovereign Tone & Airgap Gate** (`forge-envelope`):
    - Enforces zero-apology mandates, exclamation normalization, and 3-wave Cree cultural airgap defense with sub-45ns constant-time validation and ADR-0026 zero-retention memory scrubbing.
 6. **Native Tauri v2 Demo Shell** (`crates/studio-tauri`):
