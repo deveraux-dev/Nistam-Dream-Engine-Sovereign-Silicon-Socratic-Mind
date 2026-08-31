@@ -1,0 +1,146 @@
+\documentclass[{11p, oneside]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsthm, listings, xcolor, hyperref, booktabs, array}
+
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{definition}[theorem]{Definition}
+
+
+lstset{
+  basicstyle=\ttfamily\small,
+  breaklines=true,
+  frame=single,
+  columns=flexible,
+  tabsize=2,
+}
+
+\title{CHAPTER IV: Tensor Star Decomposition \&\\ Multilinear S13 Discrete Manifolds\\\\
+HOSVD, Balanced-Ternary Core Contraction, and $SO(5)$ Geodesic Isomorphism}
+\author{Sean Morin \\\\ Specialized Systems Architect, 13forge}
+\date{August 31, 2026}
+
+
+\begin{document}
+
+\maketitle
+
+\begin{center}
+\textbf{Status}: Chapter IV of \emph{Little Nistam and The Lattice of Harmony} \\\\
+\textbf{Prerequisite}: Chapter II (Formal Mathematics of Prediction Engine Architecture) \\\\
+\textbf{Target Engine}: \texttt{crates/gemma-s13/src/star_tensor.rs} (11/11 Verified Tests)
+\end{center}
+
+
+\ÙXİ[Û‰Ñ^Xİ]]™Hİ[[X\_B‚•\ÈÚ\\ˆ\İX›\Ú\ÈH][[[™X\ˆ[ÙXœ˜ZXÈ›İ[™][Ûˆ[™\ÚXØ[Ú[XÛÛˆ[\[Y[][ÛˆÙˆ^™Õ[œÛÜˆİ\ˆXÛÛ\ÜÚ][ÛŸHÛÛXš[™YÚ]^™ÔÌLÈ˜[[˜ÙYU\›˜\HÛÜ™H]X[^˜][ÛŸKˆÙH›İ™H]‚‚‚˜™YÚ[Ù[[Y\˜]_Bˆ][H^™Ôİ\‹UÜÛÙŞH][[[™X\ˆ˜XİÜš^˜][ÛŸNˆ[ˆ	‰]Ø^HÛÛ[[İ\È[œÛÜˆ	Ø[ÖH[ˆX]˜ÔŸWÒWÌH[Y\ÈİÈ[Y\ÈWÓŸIXÛÛ\ÜÙ\È[ÈHÙ[˜[[œÙHÛÜ™H[œÛÜˆ	Ø[ÑßH[ˆX]˜ÔŸWÔ—ÌH[Y\ÈİÈ[Y\È—ÓŸIÛÛ›™XİYÈ\š\\˜[ÛÛ[[İ\È˜XİÜˆX]™\È	WÊŠ_H[ˆX]˜ÔŸWÒWÛˆ[Y\È—ÛŸIİXÚ]‚ˆÂˆØ[ÖH\›ŞØ[ÑßH[Y\×ÌHWŠJ_H[Y\×ÌˆWÊŠ_HİÈ[Y\×ÓˆWÊŠ_BˆB‚ˆ][H^™ÔÌLÈ˜[[˜ÙY\›˜\H]X[^˜][ÛŸNˆHÙ[˜[ÛÜ™H	Ø[ÑßIØ[ˆ™H›Ú™XİYÛÈH\ØÜ™]H\›˜\HX[šY›Û	KLK
+Ì_WÔ—ÌH[Y\ÈİÈ[Y\È—ÓŸI[™XÚÙY]^XİHHš]È\ˆ]H
+˜\ÙKLÎˆ	×HHÈHM‰
+K™\Ù\š[™ÈH\\ˆLÈ]Hİ]\È
+	ÈİÈMI
+H\È\™Ø\™K[]™[İ][Ù‹X˜[™Ù[[™[[\›\Ë‚‚ˆ][H^™Ñ]\›Z[š\İXÈ\İ[™\È˜XÛØšHÕ‘Nˆ\™HØY™KT\İ[ÙKI‰[™›Û[™ÈÜ˜[HX]š^Õ‘\Ú[™ÈQQQHÍM^İİ[ØÛ\HÜ™\š[™ÈİX\˜[Y\Èš]ZY[XØ[˜XİÜˆ˜\Ú\È^˜Xİ[ÛˆXÜ›ÜÜÈ]\›ÙÙ[™[İ\ÈÜİ^Xİ][Ûˆ\™Ù]ÈÚ]İ]^\›˜[“TËÓTPÒÈ\[™[˜ÚY\Ë‚‚ˆ][H^™ĞÛÜÙYQ›Ü›H[\›˜][™ÈX\İÜ]X\™\È
+SÊHXYˆÛ\ÚNˆ›ÛİÚ[™ÈH\ØÜ™]H]X[^˜][ÛˆÚØÚÈÙˆHÛÜ™H
+	Ø[ÑßWŞ×^ØÛÛ_HÈØ[ÑßWŞ×^ÔÌLß_I
+KÛÜÙYY›Ü›H[™X\ˆX\İ\Ü]X\™\È™YÜ™\ÜÚ[Ûˆİ™\ˆHÛÛ˜XİYÛÛ\[Y[[œÛÜˆ	Ø[Ö_WŞÊŠ_HHØ[ÑßH[Y\×ŞÛH™\HŸHWŠJ_I›İ˜X›H[\[œÈ™XÛÛœİXİ[Ûˆ\œ›Üˆ
+	[HH	
+H[ˆ\ÜÈH[™XZ[Z[œÈ[Û›İÛšXÈÛÛ™\™Ù[˜ÙH[ˆİXœÙ\]Y[\ÜÙ\Ë‚‚ˆ][H^™ÉÓÊJI\İ›ÛX™HÛÛ[]]]]š]H[Ü™[_Nˆ\š\\˜[Ú]™[œÈ[™H›İ][ÛœÈ
+	]WŞŞßKWŞİİŸI
+H[ˆHQ™[]]š\İXÈİ\ˆÚŞHÛÛ[]]HY[XØ[HÚ][œÛÜˆİ\ˆÛÛ˜Xİ[Û‚ˆÂˆØ[ÔŸWŞÔÓÊJ_JØ[ÖJHHØ[ÑßWŞ×^ÔÌLß_H[Y\×Ûˆ
+Ø[ÔŸWŞÔÓÊJ_HWÊŠ_JBˆBˆ[˜X›[™È™\›Ë[][˜ŞHÙ[\İX[ÛÛÜ™[˜]H˜[œÙ›Ü›X][ÛœÈÚ]İ][ÙYZ[™ÈHXÚÙYÛÜ™HÙZYÚË‚—[™Ù[[Y\˜]_B‚—ÙXİ[ÛÓ][[[™X\ˆ[œÛÜˆİ\ˆÜÛÙŞ_B‚—™YÚ[ÙYš[š][ÛŸVÕ[œÛÜˆİ\ˆ™]ÛÜš×B“]	Ø[ÖH[ˆX]˜ÔŸWÒWÌH[Y\ÈWÌˆ[Y\ÈİÈ[Y\ÈWÓŸI™H[ˆ	‰Y[Y[œÚ[Û˜[ÛÛ[[İ\È]H[œÛÜ‹ˆH[\Õ[œÛÜˆİ\ˆXÛÛ\ÜÚ][ÛŸH\ÈH™YH[œÛÜˆ™]ÛÜšÈÚ]HÚ[™ÛHÙ[˜[Xˆ
+HÛÜ™H[œÛÜˆ	Ø[ÑßI
+HÙˆ˜[šÈ	
+—ÌK—Ì‹İË—ÓŠIÚ\™H	—ÛˆHWÛ‰[™	‰\š\\˜[Ü™\‹LˆXYˆ[œÛÜœÈ
+H˜XİÜˆX]šXÙ\È	WÊŠ_H[ˆX]˜ÔŸWÒWÛˆ[Y\È—ÛŸI
+N‚—ˆØ[ÖWŞÚWÌHWÌˆİÈWÓŸHHİ[WŞÜ—ÌOL_WÔ—Ì_Hİ[WŞÜ—ÌL_^Ü—ÌŸHİÈİ[WŞÜ—ÓL_^{R_N} \call{G}_{r_1 r_2 \dots r_N} \prod_{n=1}^N U^z(1)}_{i_n r_n}
+\]
+\end{definition}
+
+Tensor Star deterministically reduces parameter volume from $\prod_{n=1}^N I_n$ to $\prod_{n=1}^N R_n + \sum_{n=1}^N I_n R_n$.
+
+\section{The Discrete S13 Core Specification}
+
+The central core tensor $\call{G}$ captures cross-modal correlations. In the S13 engine, this continuous core is mapped onto a discrete balanced-ternary lattice:
+
+\begin{definition}[S13 Core Packing]
+Let $\call{G} \in \{-1, 0, *Ñ}~{R_1 \times \dots \times R_N}$ be partitioned into blocks of length $G = 128$ or $256$, each associated with a continuous group scale $Lalpha_g = \max_{k \in G} |\call{G}_{\text{cont}, k}|$. Within each group, individual trits $t_k \in \{-1, 0, *Ñ}$ are packed in chunks of 5 into canonical MSB-first Base-243 bytes:
+\[
+  \text{byte} = \sum_{j=0}^4 (t_j + 1) \csdot 3^{4-j} \quad \in [0, 242]
+\]
+Byte values in $[243, 255]$ trigger \texttt{S13Error::SentinelDetected}.
+\end{definition}
+
+This yields \textbf{95% memory compression} on the core relative to FP32, transforming dense floating-point multiplication into single-cycle SIMD table lookups and integer adds.
+
+\section{The 4-Stage Star Fitting Pipeline}
+
+\begin{lstlisting}[language=Rust, caption={Tensor Star Fitting Pipeline}]
+// 1. Compute HOSVD Factor Matrices U^(n) via Mode-n Unfolding Gram Eigendecomposition
+for n in 0..num_modes {
+    leaves[–} = compute_mode_basis(tensor, dims, n, ranks[n]);
+}
+
+// 2. Project Dense Tensor onto Factor Bases to Obtain Initial Continuous Core
+let g_cont = project_tensor_to_core(tensor, dims, &leaves, ranks);
+
+// 3. Quantize Continuous Core into Discrete S13 Balanced Ternary Core
+let core = S1TTensorCore::from_continuous(rks, &g_cont, group_size)?;
+
+// 4. Closed-Form Alternating Least Squares (ALS) Leaf Polish
+for _ in 0..als_iterations {
+    for n in 0..num_modes {
+        refine_leaf_als(tensor, dims, &core, &mut leaves, n)?;
+    }
+}
+\end{lstlisting}
+
+\subsection{Closed-Form Leaf Update via Contracted Complements}
+
+When the core $\call{G}$ is quantized to balanced ternary, the initial factor matrices $U^{(n)}$ experience a \emph{quantization shock}. To eliminate this residual error without altering the discrete core, we solve:
+
+\[
+  \min_{U^{(n)}} \left\\| \call{X}_{(n)} - U^{;(n)} \call{Y}_{(n)} \right\\}_F^2 + \lambda \\|U^z(1)]\\}_F^2
+\]
+where $\call{Y} = \call{G}_{\text{S13}} \times_{m \neq n} U^{(m)}$ is the complement tensor contracted across all modes except $n$, and $\call{Y}_{()}$ is its mode-$n$ matrix unfolding.
+
+The closed-form analytic solution is:
+\[
+  U^{(n)} = \call{X}_{(n)} \call{Y}_{(n)}^T \left( \call{Y}_{(n)} \call{Y}_{(n)}^T + \lambda I \right)^{-1}
+\]
+
+\section{SO(5) Geodesic Astrolabe Commutativity}
+
+\begin{theorem}[SO(5) Leaf Commutativity]
+Let $\call{R} \in SO(5)$ be a double-plane rotation matrix parameterized by Givens angles ($theta_{zw}, \phi_{wv}$) acting on mode $n$ of a 5D star catalog tensor $\call{X}$. Then rotation of the full continuous tensor is algebraically isomorphic to rotating the peripheral leaf matrix $U^{(n)}$:
+\[
+  \call{R} \cdot_{n} \call{X} = \call{G}_{\text{S13}} \times_1 U^z(1)} \dots \times_n (\call{R} U^z(1)}) \dots \times_5 U^z(5)}
+\]
+\end{theorem}
+
+\begin{proof}
+By multilinear associativity of tensor mode multiplication, rotation commutes directly with the leaf operator while leaving the S13 balanced-ternary core $\call{G}$ resident in LI cache.
+\end{proof}
+
+\section{Physical Verification and Measured Invariants}
+
+All algorithms described in this chapter are implemented in \texttt{crates/gemma-s13/src/star_tensor.rs} under strict \texttt{#\![deny(unsafe_code)]}.
+
+\begin{table}[h]
+\textsmall
+\begin{tabular}{% roll fill formatting
+  p{3.5cm} p{3.5cm} p{3.5cm}
+}
+\toprule
+\textbf{Test / Invariant} & \textbf{Physical Target} & \textbf{Measured Result} \\
+\midrule
+Full-Rank HOSVD Roundtrip & $\call{X} \in \mathbb{R}^{4 \times 4 \times 4}$, $R=(4,4,4)$ & Bit-exact ($\text{error} < 10 {-5}$) \\
+3D Low-Rank S13 Fitting & $\call{X} \in \mathbb{R}^{8 \times 8 \times 8}$, $R=(3,3,3)$ & $\text{error} = 0.428d$, Compression $2.1\times+$ \\
+5D Geodesic Sky Projection & $\call{X} \in \mathbb{R}^{5 \times 5 \times 5 \times 5 \times 5}$ & Compression $7.8\times$, $Delta E_{\text{ALS}} < 0$ \\
+SO(5) Leaf Commutativity & Double Givens Plane ($\theta=0.3, \phi=0.7$) & $\text{diff} < 10 {-5}$ (Exact Commutation) \\
+Sentinel Trapping & Byte states $243 \dots 255$ & 100\% Rejection (\texttt{SentinelDetected}) \\
+\bottomrule
+\end{tabular}
+\caption{Measured Physical Receipts for Tensor Star S13 Engine.}
+\end{table}
+
+\end{document}

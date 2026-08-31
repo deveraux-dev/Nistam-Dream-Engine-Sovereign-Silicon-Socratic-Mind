@@ -88,6 +88,7 @@ impl Trit {
 }
 
 /// Pack exactly 5 balanced trits into a single 8-bit byte ($3^5 = 243$ states).
+/// Big Nistam order: `trits[0]` is the most significant base-3 digit.
 /// Returns `Ok(byte)` in range `0..=242`.
 #[inline]
 pub const fn pack_5_trits(trits: [i8; 5]) -> Result<u8, S13Error> {
@@ -111,7 +112,26 @@ pub const fn pack_5_trits(trits: [i8; 5]) -> Result<u8, S13Error> {
     }
 }
 
+/// Pack exactly 5 balanced trits into a single 8-bit byte, Little Nistam order:
+/// `trits[0]` is the least significant base-3 digit. Same digit map and sentinel
+/// range as `pack_5_trits`; `pack_5_trits_little_nistam(x) == pack_5_trits(rev(x))`.
+#[inline]
+pub const fn pack_5_trits_little_nistam(trits: [i8; 5]) -> Result<u8, S13Error> {
+    pack_5_trits([trits[4], trits[3], trits[2], trits[1], trits[0]])
+}
+
+/// Unpack a single byte into 5 balanced trits, Little Nistam order (inverse of
+/// `pack_5_trits_little_nistam`). Fails on sentinel bytes `243..=255`.
+#[inline]
+pub const fn unpack_5_trits_little_nistam(byte: u8) -> Result<[i8; 5], S13Error> {
+    match unpack_5_trits(byte) {
+        Ok(t) => Ok([t[4], t[3], t[2], t[1], t[0]]),
+        Err(e) => Err(e),
+    }
+}
+
 /// Unpack a single byte (range `0..=242`) into exactly 5 balanced trits.
+/// Big Nistam order (inverse of `pack_5_trits`).
 /// Fails with `S13Error::SentinelDetected` if `byte >= 243`.
 #[inline]
 pub const fn unpack_5_trits(byte: u8) -> Result<[i8; 5], S13Error> {
@@ -780,6 +800,23 @@ mod tests {
             let repacked = pack_5_trits(trits).expect("Valid ternary repacking");
             assert_eq!(b, repacked);
         }
+    }
+
+    #[test]
+    fn test_little_nistam_roundtrip_and_mirror() {
+        // Golden: [1,-1,0,1,-1] Big Nistam = 177; Little Nistam = 2+0+9+54+0 = 65.
+        assert_eq!(pack_5_trits([1, -1, 0, 1, -1]).unwrap(), 177);
+        assert_eq!(pack_5_trits_little_nistam([1, -1, 0, 1, -1]).unwrap(), 65);
+        for b in 0..243u8 {
+            let little = unpack_5_trits_little_nistam(b).unwrap();
+            assert_eq!(pack_5_trits_little_nistam(little).unwrap(), b);
+            // Mirror law: Little Nistam of x == Big Nistam of reversed x.
+            let big = unpack_5_trits(b).unwrap();
+            let mut rev = big;
+            rev.reverse();
+            assert_eq!(little, rev);
+        }
+        assert!(unpack_5_trits_little_nistam(243).is_err());
     }
 
     #[test]

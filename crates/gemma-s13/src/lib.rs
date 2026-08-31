@@ -107,6 +107,8 @@ pub mod sentinel;
 #[cfg(feature = "std")]
 pub mod speculative;
 pub mod star_codebook;
+#[cfg(feature = "std")]
+pub mod star_tensor;
 pub mod three_bears;
 pub mod vault;
 pub mod vocab;
@@ -131,6 +133,11 @@ pub use s13::{
 };
 #[cfg(feature = "std")]
 pub use prompt_cache::{load_s13n_norms, S13N_MAGIC};
+#[cfg(feature = "std")]
+pub use star_tensor::{
+    fit_hosvd, fold, frobenius_error, jacobi_svd, mode_multiply, unfold, S13TensorCore,
+    StarTensorConfig, StarTensorDecomposition, StarTensorError,
+};
 
 pub mod mersenne31;
 pub mod cognitive_watchdog;
