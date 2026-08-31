@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 bake_patex_diagram.py — Bakes the updated PaTeX 5D Architectural Blueprint.
-Integrates Weaver/Arbiter, Three Bears (Baby 2B, Blind Mama 9B, Papa 27B),
+Integrates Weaver/Arbiter, Three Bears (Baby 2B, Blind Mama 9B, Papa M2),
 Spectral MoE, 49-Slot MoM DSP Mix Bus, 5D Astrolabe, and Vertex AI Cloud Governor.
 """
 
@@ -92,13 +92,13 @@ def main():
     # Sub-Layer 2: Three Bears Resident Gemma Fleet & 7-Domain Spectral MoE
     y2_0, y2_1 = 290, 490
     draw_rounded_panel(draw, (60, y2_0, 1160, y2_1),
-                       "THREE BEARS RESIDENT GEMMA INFERENCE FLEET (2.71 GB VRAM) & 7-DOMAIN SPECTRAL MoE",
+                       "THREE BEARS GEMMA FLEET (3 DIRS · 3.0 GB S13 · 5 RESIDENT SEATS) & 7-DOMAIN SPECTRAL MoE",
                        border=BOX_CYAN, font=font_header)
 
     fleet_blocks = [
-        ("BABY BEAR (2B)", "M5 Geodesic Codec\nVIXI Shaders (410 MB)\n3^5 = 243 M5 States", (80, 320, 400, 410), BOX_CYAN),
+        ("BABY BEAR (2B)", "M5 Geodesic Codec\nVIXI Shaders (446 MB)\n3^5 = 243 M5 States", (80, 320, 400, 410), BOX_CYAN),
         ("BLIND MAMA BEAR (9B)", "S13 Ternary Dual-Stream Arbiter\nT + T* = 0 Anti-Expert Parity\n3-Wave Airgap Sentry (1.72 GB)", (420, 320, 800, 410), GOLD_COLOR),
-        ("PAPA BEAR (27B HEAD)", "7-Domain BQ MetaRouter\n363ns Centroid Decisions\nN×IPR Entropy Sieve (580 MB)", (820, 320, 1140, 410), GREEN_COLOR),
+        ("PAPA BEAR (M2 SENTRY)", "7-Domain BQ MetaRouter\n363ns Centroid Decisions\nN×IPR Entropy Sieve (765 MB)", (820, 320, 1140, 410), GREEN_COLOR),
     ]
     for title, desc, coords, color in fleet_blocks:
         draw.rectangle(coords, fill=(16, 28, 48, 255), outline=color, width=2)
@@ -179,7 +179,7 @@ def main():
         ("Sovereign Silicon, Socratic Mind & Relativistic 5D Astrolabe", BOX_CYAN, font_header),
         ("--------------------------------------------------------------------------------", BOX_MUTED, font_small),
         ("• WEAVER / ARBITER: Declarative RON DSL Cartridge Compiler & Stage-4 Judge", TEXT_WHITE, font_body),
-        ("• 3-MODEL FLEET (2.71 GB VRAM): Baby 2B + Blind Mama 9B (T+T*=0) + Papa 27B", TEXT_WHITE, font_body),
+        ("• 3-DIR / 5-SEAT FLEET (3.0 GB S13): Baby 2B + Blind Mama 9B (T+T*=0) + Papa M2", TEXT_WHITE, font_body),
         ("• 7-DOMAIN MoE & 49-SLOT MoM BUS: 120Hz Schaeffer DSP, 16B UmpWord Ring Buffer", TEXT_WHITE, font_body),
         ("• 5D ASTROLABE: 119,625 HYG Stars, SO(5) Givens, Relativistic Lorentz Aberration", TEXT_WHITE, font_body),
         ("• SOVEREIGN AIRGAP: 3-Wave Cree Defense, BIP-340 Schnorr, ADR-0026 Zero-Retention", GREEN_COLOR, font_body),

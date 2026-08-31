@@ -130,7 +130,7 @@ def main():
     print_act_header("III", "Three Bears Memory Architecture Spec (2.71 GB Target Layout)", "1:10 - 1:45", start_time)
     print(f"{C_BOLD}  [1] Baby Bear (Gemma 2B - 410 MB Target):{C_RESET} M5 Geodesic Manifold & VIXI Shaders")
     print(f"{C_BOLD}  [2] Mama Bear (Gemma 9B - 1.72 GB Target):{C_RESET} S13 Balanced Ternary Parity Gate & Real GEMV Kernel")
-    print(f"{C_BOLD}  [3] Papa Bear Head (Gemma 27B - 580 MB Slice):{C_RESET} 7-Domain BQ MetaRouter Centroid Routing")
+    print(f"{C_BOLD}  [3] Papa Bear Sentry (Gemma M2 - 765 MB):{C_RESET} 7-Domain BQ MetaRouter Centroid Routing")
     print(f"{C_CYAN}  --> Total Target Footprint: 2,710 MB packed VRAM (Designed for 8 GB RTX 3070){C_RESET}\n")
 
     # Run the 500,000 passes Parity Gate Benchmark

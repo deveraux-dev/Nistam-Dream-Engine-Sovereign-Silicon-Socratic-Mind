@@ -35,9 +35,9 @@ This skill guides the automated execution, receipt validation, and screen-record
                                         ▼
  ┌─────────────────────────────────────────────────────────────────────────────┐
  │               3. RESIDENT SOVEREIGN SILICON (RTX 3070 / 2.71 GB VRAM)       │
- │  • 🐻 Baby Bear (Gemma 2B - 410 MB):   M5 Geodesic Shader Coordinates       │
+ │  • 🐻 Baby Bear (Gemma 2B - 446 MB):   M5 Geodesic Shader Coordinates       │
  │  • 🐻 Mama Bear (Gemma 9B - 1.72 GB):  S13 Balanced Ternary Vector Kernel   │
- │  • 🐻 Papa Bear (Gemma 27B - 580 MB):  7-Domain BQ MetaRouter (363 ns)      │
+ │  • 🐻 Papa Bear (Gemma M2 - 765 MB):   7-Domain BQ MetaRouter (363 ns)      │
  │  • 🌌 5D Astrolabe Galaxy Engine:      119,625 HYG Stars @ 44.45M stars/sec │
  │  • 📜 Weaver/Arbiter RON Engine:       Deterministic 7-Principle Judge      │
  └─────────────────────────────────────────────────────────────────────────────┘
@@ -61,7 +61,7 @@ This skill guides the automated execution, receipt validation, and screen-record
 ### Act III: The Three Bears Gemma Fleet & 7-Domain BQ MetaRouter `[1:10 - 1:45]`
 1. **Visual**: Click **`🐻 FLEET TRIAD`** in the top navigation bar to open the telemetry glass dossier.
 2. **Action**:
-   - Inspect the **2,710 MB resident VRAM** hardware breakdown (Baby 2B, Mama 9B, Papa 27B Head on the RTX 3070).
+   - Inspect the **2,710 MB resident VRAM** hardware breakdown (Baby 2B, Mama 9B, Papa M2 Sentry on the RTX 3070).
    - Enter *"Synthesize radiant plasma thruster"* and click **`ROUTE`**: shows instant **363 ns** centroid dispatch with $3\sigma$ signal isolation.
    - Click **`TRIAD STEP`**: executes the genuine S13 balanced ternary kernel and displays live N×IPR attention sieve metrics (`762 ns/eval`).
 3. **Narrative**: *"All three Gemma models remain resident in just 2.71 GB of consumer VRAM. Papa Bear routes prompts across 7 engineering domains in under 400 nanoseconds, while Mama Bear computes bit-exact balanced ternary dot products."*

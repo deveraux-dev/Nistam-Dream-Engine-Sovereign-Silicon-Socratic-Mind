@@ -163,7 +163,7 @@ python scripts/test_vertex_cache_strict.py
 ├── README.md
 ├── carts/                              # Authored RON cartridges (ironroot, base, weaver_arbiter)
 ├── crates/
-│   ├── gemma-s13/                      # S13 ternary engine, 5D astrolabe, Three Bears (2B / 9B / 27B head)
+│   ├── gemma-s13/                      # S13 ternary engine, 5D astrolabe, fleet budget (9B / 2B / M2 sentry)
 │   ├── forge-envelope/                 # Sovereign vault, Hearthkeeper, 3-wave filter, ADR-0026 zeroize
 │   ├── forge-ml-bqrouter/              # 512-bit BQ centroid router
 │   ├── forge-core-v3/                  # UmpWord, triad arithmetic, trit LUT, celestial types

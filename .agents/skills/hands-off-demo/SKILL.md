@@ -42,9 +42,9 @@ python scripts/hands_off_demo_driver.py
  │   • PostMessageW input injection with ZERO OS foreground focus              │
  ├─────────────────────────────────────────────────────────────────────────────┤
  │   ACT III [1:10 - 1:45]: RESIDENT 3-MODEL GEMMA FLEET IN TERMINAL           │
- │   • Baby Bear (2B - 410 MB):   M5 Geodesic Manifold & VIXI Shaders          │
+ │   • Baby Bear (2B - 446 MB):   M5 Geodesic Manifold & VIXI Shaders          │
  │   • Blind Mama Bear (9B - 1.72 GB): S13 Dual-Stream Arbiter (500k passes)   │
- │   • Papa Bear (27B - 580 MB):  7-Domain BQ MetaRouter (363 ns)              │
+ │   • Papa Bear (M2 sentry - 765 MB): 7-Domain BQ MetaRouter (363 ns)         │
  │   • Total Resident VRAM: 2,710 MB (Fits in 8 GB consumer GPU)               │
  ├─────────────────────────────────────────────────────────────────────────────┤
  │   ACT IV [1:45 - 2:20]: GOOGLE CLOUD VERTEX AI & GEMINI 2.5 FLASH           │

@@ -1,7 +1,8 @@
 # Nistam Dream Engine — Devpost
 
 **One-liner:** A sovereign 1.58-bit balanced-ternary inference engine that runs a
-three-seat quantized Gemma fleet (Baby Bear 2B / Papa Bear 9B / Mama Bear 27B router head) in deterministic lockstep on one
+quantized Gemma fleet — a 9B backbone, a 2B direct seat with its shared-weight mirror, and an M2
+sentry, five resident execution seats from three on-disk model directories — in deterministic lockstep on one
 consumer GPU, governed in the cloud by Google Cloud Vertex AI gemini-2.5-flash (enforcing
 75% input cost reduction via serverless context caching) — and wearing a playable face: a Tauri
 v2 shell that flies the 119,625-star HYG sky, births a character through the Thirteen
@@ -72,6 +73,6 @@ stale on the next run and becomes a claim instead of a measurement.
 
 ## Built with
 
-Rust (38-crate workspace; the M5 geodesic core module is `#![no_std]`, zero-heap),
+Rust (37-crate workspace plus the firewalled Tauri demo shell; the M5 geodesic core module is `#![no_std]`, zero-heap),
 Tauri v2 + WebGL2, WebGPU WGSL, Python, Google Cloud (Vertex AI, Cloud Run,
 Firestore, Cloud Storage).
