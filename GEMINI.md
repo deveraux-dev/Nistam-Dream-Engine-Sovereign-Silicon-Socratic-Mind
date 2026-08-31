@@ -24,7 +24,7 @@
         a1_zero_heap: "0 dynamic allocations (Vec/String/HashMap) on inference & continuous 5D projection hotpaths",
         a2_memory_safety: "#![deny(unsafe_code)] strictly enforced across all sovereign inference, crypto & PDA crates",
         a3_airgap_zeroize: "ADR-0026 SIMD zeroization on drop, cultural airgap refusal, and receipt acknowledgment",
-        a4_cloud_governor: "Vertex AI gemini-2.5-flash context cache (>=32k tokens, temp 0.0, ~$0.0004/call)",
+        a4_cloud_governor: "Vertex AI gemini-2.5-flash serverless context cache (>=32k tokens, temp 0.0, 75% discount at $0.01875/1M cached tokens)",
         a5_user_interactive_gui: "Agent MUST NEVER launch GUI/Tauri apps in background; all GUI executions reserved strictly for user manual launch",
     ),
 
@@ -140,7 +140,7 @@
                                                                    ▼
                                    ┌──────────────────────────────────────────────────────────────┐
                                    │   GOOGLE VERTEX AI CLOUD GOVERNOR (gemini-2.5-flash @ 0.0)   │
-                                   │   Context Caching (>=32k tokens) | Unit Cost: ~$0.0004/call  │
+                                   │   Context Caching (>=32k tokens) | $0.01875/1M Cached Tokens │
                                    │   3-Wave Cultural Airgap Defense | ADR-0026 SIMD Zeroize     │
                                    └──────────────────────────────────────────────────────────────┘
 ```
@@ -159,12 +159,13 @@
 | **Conjugate Grid Inversion (AVX2)** | **37.06 Gtrits/s** (`4.32 µs` / 400×400 grid) | AVX2 `PSHUFB` byte-LUT parallel sign inversion |
 | **Host Staging Memory Swap** | **59.62 GB/s** (57.99 Million swaps/s) | Double-buffered 64 KB ping-pong staging (`17.25 ns` swap latency) |
 | **Ampere 32×32 Tile Planning** | **358.17 Million plans/s** (`2.79 ns`/plan) | Integer ceiling division workgroup geometry planner |
-| **Gemma 9B GEMV Kernel (GPU RTX 3070)** | **49.2 passes/s** (`20.34 ms`, **409.3 Gweights/s**) | Real 1664.7 MB quantized weights (`gpu_decode_real.rs`), bit-exact CPU parity |
-| **Gemma 9B End-to-End Decode (CPU AVX2)** | **0.48 tokens/sec** (`2.08 s`/tok, 42 full layers) | `TRIT_LUT_243` + `_mm256_madd_epi16` + Rayon parallelism |
-| **Gemma 9B End-to-End Decode (CPU Scalar)** | **0.03 tokens/sec** (`36.3 s`/tok) | Single-core scalar fallback baseline |
+| **Gemma 9B GEMV Kernel (GPU RTX 3070)** | **51.3 passes/s** (`19.48 ms`, **427.4 Gweights/s**) | 42 layers, 1.67 GB VRAM (`gpu_decode_timed.rs`), bit-exact CPU parity |
+| **Gemma 2B GEMV Kernel (GPU RTX 3070)** | **95.0 passes/s** (`10.52 ms`, **192.4 Gweights/s**) | 26 layers real quantized weights (`gpu_decode_real.rs`, 404.9 MB) |
+| **Gemma 9B Decode Baseline (CPU AVX2)** | **0.48 tokens/sec** (`2.08 s`/tok, 42 full layers) | `TRIT_LUT_243` + `_mm256_madd_epi16` + Rayon parallelism (CPU fallback) |
+| **Gemma 9B Decode Baseline (CPU Scalar)** | **0.03 tokens/sec** (`36.3 s`/tok) | Single-core scalar fallback baseline |
 | **Three Bears Resident Layout** | **2.71 GB Total VRAM** | 2B (404.9 MB) + 9B (1.72 GB) + 27B Head (580 MB) |
 | **Airgap Red/Green Defense** | **5 / 5 Red Vectors Blocked (100%)** | 3-Wave Cree diacritic/stem sentinels + ADR-0026 SIMD zeroize |
-| **Vertex AI Context Caching Cost** | **~$0.0004 / call** | Google Vertex AI `gemini-2.5-flash` context caching ($\ge 32\text{k}$ VARS window) |
+| **Vertex AI Context Caching** | **74.2% Measured Discount ($0.000801 billed)** | Google Vertex AI `gemini-2.5-flash` serverless context caching (41,002 cached tokens) |
 
 ---
 

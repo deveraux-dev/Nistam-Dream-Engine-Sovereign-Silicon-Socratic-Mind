@@ -17,7 +17,7 @@
 
 3. **Transport & Autonomous Agent**:
    - `crates/forge-envelope/scripts/agent_loop.py` — an autonomous watcher, not a chat interface: polls a Cloud Storage inbox, runs deterministic ByteSieve triage, requests a schema-locked audit from gemini-2.5-flash on Vertex AI at temperature 0.0, cross-checks against a degradation model, writes the evidence-chain head to Firestore, and wipes local staging only after acknowledgement. No human in the loop.
-   - Cloud Governor: serverless Vertex AI context cache (`gemini-2.5-flash`, temperature 0.0, `$0.0004/call` observability ceiling).
+   - Cloud Governor: serverless Vertex AI context cache (`gemini-2.5-flash`, temperature 0.0, 75% input discount at $0.01875/1M cached tokens).
    - Demo shell (`crates/studio-tauri`): 5D star sky, CYOA arc, M5 canvas, and ConPTY glass terminal. Builds with plain `cargo build --release` (no Node).
 
 ## Measured receipts
@@ -31,11 +31,12 @@ Every number below is a command you can run yourself; method and raw stdout are 
 | Double-buffered host staging | 59.62–60.30 GB/s |
 | Tile geometry planning (Ampere 32×32) | 358.17–364.56 M plans/s |
 | Three Bears target layout VRAM | 2.71 GB total (Baby Bear 2B + Mama Bear 9B + Papa Bear 27B head) |
-| Gemma 2B / 3.2B Decode (GPU, RTX 3070) | 82.5 / 54.7 tok/s |
-| Gemma 9B GEMV Decode (GPU, RTX 3070) | 49.2 GEMV passes/s (409.3 Gweights/s) |
-| Gemma 9B End-to-End Decode (CPU AVX2+Rayon) | 0.48 tok/s (2.08 s/tok, 42 full layers) |
+| Gemma 9B GEMV Kernel (GPU, RTX 3070) | 51.3 passes/s (19.48 ms/token, 427.4 Gweights/s, 42 layers in VRAM) |
+| Gemma 2B GEMV Kernel (GPU, RTX 3070) | 95.0 passes/s (10.52 ms/pass, 192.4 Gweights/s, 26 layers real weights) |
+| Gemma 9B CPU Decode (Fallback Baseline) | 0.48 tok/s (2.08 s/tok, AVX2 + Rayon) / 0.03 tok/s scalar |
 | 5D star sky projection (119,625 HYG stars) | 44.45 M stars/sec, zero heap |
 | Airgap red/green | 5/5 red vectors blocked (`crates/forge-envelope/scripts/test_sovereign_airgap_red_green.py`) |
+| Vertex AI Context Caching | 41,002 tokens cached, 74.2% measured cost reduction ($0.000801 billed) |
 
 ## Demo
 
