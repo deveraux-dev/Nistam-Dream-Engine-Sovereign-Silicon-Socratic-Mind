@@ -8,7 +8,7 @@
 > 
 > *Built by Sean Morin — half Cree, half Welsh, from the Edmonton River Valley, Alberta.*  
 > 
-> After 13 years working in industrial refineries and trades, I taught myself software engineering, mathematics, and balanced ternary architecture from the ground up over the last 9 months. This engine is the culmination of that journey.
+> After 13 years in industrial refineries and 23 years in the trade, I taught myself software engineering, mathematics, and balanced ternary architecture from the ground up over the last 9 months. This engine is the culmination of that journey.
 > 
 > Like its author, it is real, direct, and human. It is not a sterile corporate mockup; it runs on physical host silicon, it has raw edges, and it does not pretend to be infallible. But across 9 months of sovereign building, it has done everything I set out to make it do—from 5D relativistic coordinate manifolds and balanced ternary involutions to zero-retention cultural airgaps and live context caching.
 > 
