@@ -64,9 +64,9 @@ Read this before the benchmarks.
 |---|---|
 | Gemma 9B S13 end-to-end decode, CPU, 42 layers | **Measured.** 0.48 tok/s (AVX2 + Rayon); 0.03 tok/s scalar reference. Slow. Correct. |
 | Gemma 9B S13 GEMV on GPU (RTX 3070) | **Kernel measured.** 51.3 passes/s (19.48 ms) through all 42 layers — 168 chained GEMV dispatches per pass, 1.67 GB streamed, parity with the host reference. A pass is the layer GEMVs; nothing else is timed here, so no GPU tokens/sec figure is claimed. |
-| Gemma 2B S13 (404.9 MB) | Quantized from real weights and verified. GPU GEMV timed on the real file: 95.0 passes/s (10.52 ms), 104 dispatches per pass. Wired as the configuration stub for dual-stream involution checks. |
-| "Mama Bear" 27B (580 MB) | **Stub.** Router head / embedding projection only. A full 27B at 1.58 bits would be ~5.3 GB and is not here. |
-| Model count | Three files on disk, 2.71 GB total, not all resident at once. The router has 7 domain centroids; there are not 7 models. |
+| Gemma 2B S13 (`s13_gemma_2b_m3`, 446.4 MB) | Quantized from real weights and verified. GPU GEMV timed on real file: 95.0 passes/s (10.52 ms), 104 dispatches per pass. Wired for dual-stream involution checks. |
+| Gemma M2 S13 (`s13_gemma_m2`, 765.2 MB) | **Sentry & Routing seat.** 34 layers with layer norms & bundle LoRA; handles protocol guards & sentinel checks. |
+| Model count & storage | Three canonical directories on disk (`s13_gemma_9b_m3`, `s13_gemma_2b_m3`, `s13_gemma_m2`), 3,049.6 MB (~3.0 GB) total, driving 5 concurrent execution seats in VRAM via weight sharing. |
 | ZPSR −69.6% tokens vs BPE | **Measured on Plains Cree** — GiellaLT `lang-crk` public texts, 2,443 words — over the 65% the strict analyser accepts. Speaker check of morpheme boundaries pending (ALTLab replication). |
 | ZPSR "purity" (N·IPR) beats BPE | **Reversed by the data.** v1 figures were constants in a script, not measurements — withdrawn in the v2 erratum. FST segments came out with a *larger* effective vocabulary (89.0) than BPE (39.9 / 52.2). The metric stands; the story didn't. |
 | Vertex context caching, 74.2% savings | **Measured.** `docs/RECEIPT-RUN-2026-08-27.txt`; printed live by `vertex_flash_cache.py`. |
@@ -105,10 +105,10 @@ Every one of these was true on one x86-64 host with an RTX 3070 on 2026-08-27 an
         └──► 512-bit BQ MetaRouter             7 Hamming centroids, 3σ gate, 568 ns/decision
                     │
                     ▼
-  S13 model files  (1.58 bit/param, 2.71 GB on disk, not all resident at once)
-    Baby Bear   Gemma 2B          404.9 MB   verified weights; GPU GEMV timed; involution-check stub
-    Papa Bear   Gemma 9B          1.72 GB    decodes end-to-end on CPU; GPU GEMV timed
-    Mama Bear   27B router head   580 MB     head only — stub
+  S13 model directories  (1.58 bit/param, ~3.0 GB on disk, 5 resident execution seats)
+    s13_gemma_9b_m3   Gemma 9B Backbone   1,838.0 MB  decodes end-to-end on CPU; GPU GEMV timed
+    s13_gemma_2b_m3   Gemma 2B Direct     446.4 MB    verified real weights; GPU GEMV timed; shares weights with mirror
+    s13_gemma_m2      Gemma M2 Sentry     765.2 MB    34 layers + norms + LoRA; sentry & protocol guard seat
                     │
                     ▼
   forge-envelope   3-wave filter ─► Hearthkeeper tone ─► ADR-0026 zeroize

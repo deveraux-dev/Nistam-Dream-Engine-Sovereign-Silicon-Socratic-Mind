@@ -122,6 +122,32 @@ body {
 .btn-chip-xs:hover { background: #ef4444; color: #FFF; }
 .btn-chip-xs.hidden { display: none; }
 
+/* ── FLOATING 3-STEP DEMO PRESENTATION BAR ── */
+.floating-steps-bar {
+  position: fixed; top: 48px; left: 14px; z-index: 10;
+  display: flex; align-items: center; gap: 6px;
+  background: rgba(16, 20, 26, 0.90); border: 1px solid var(--border-glass);
+  border-radius: 14px; padding: 3px 10px; backdrop-filter: blur(10px);
+  font-size: 10.5px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  pointer-events: auto;
+}
+.step-label {
+  font-size: 9.5px; font-weight: bold; color: var(--fg-muted); letter-spacing: 0.8px; margin-right: 2px;
+}
+.btn-step {
+  background: rgba(255, 255, 255, 0.05); color: var(--fg-text);
+  border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 10px;
+  padding: 2px 8px; font-size: 10px; font-weight: 600; cursor: pointer;
+  transition: all 0.15s ease;
+}
+.btn-step:hover {
+  background: rgba(255, 106, 26, 0.2); border-color: var(--accent-cyan); color: #FFF;
+}
+.btn-step.active {
+  background: rgba(255, 106, 26, 0.35); border-color: var(--accent-cyan); color: #FFF;
+  box-shadow: 0 0 8px rgba(255, 106, 26, 0.4);
+}
+
 /* ── FLOATING SKY HUD & CHAIN HINT (Positioned safely at TOP of sky void) ── */
 .floating-sky-hud {
   position: fixed; top: 48px; left: 50%; transform: translateX(-50%); z-index: 10;
@@ -144,6 +170,9 @@ body {
   background: rgba(255, 106, 26, 0.2); color: #FF6A1A;
   border: 1px solid #FF6A1A; border-radius: 3px;
   padding: 1px 5px; font-size: 9.5px; font-weight: bold; letter-spacing: 0.5px;
+}
+.badge-cyan {
+  color: #00E5FF !important; font-weight: bold;
 }
 .unified-narration-box {
   background: rgba(0, 0, 0, 0.45); border: 1px solid rgba(255, 255, 255, 0.08);
@@ -358,6 +387,30 @@ body {
 .star-hud .star-name { color: var(--accent-gold); font-size: 15px; font-weight: bold; }
 .star-hud .row { display: flex; justify-content: space-between; padding: 2px 0; color: var(--fg-muted); }
 .star-hud .row b { color: var(--fg-text); font-weight: normal; }
+
+/* ── CHAIN & SONIFICATION HUD ── */
+.chain-hud {
+  position: fixed; top: 116px; right: 14px; z-index: 10;
+  min-width: 260px; max-width: 340px; padding: 10px 14px;
+  background: rgba(16, 20, 28, 0.92);
+  border: 1px solid var(--accent-gold); border-radius: 6px;
+  backdrop-filter: blur(12px); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  pointer-events: auto;
+}
+.chain-hud.hidden { display: none; }
+.chain-head {
+  display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;
+  border-bottom: 1px dashed rgba(255, 213, 74, 0.3); padding-bottom: 4px;
+}
+.chain-row {
+  display: flex; justify-content: space-between; align-items: center; padding: 3px 0;
+  font-size: 11px; color: var(--fg-muted);
+}
+.chain-row b { color: var(--fg-text); font-weight: 600; }
+.chain-hint {
+  margin-top: 6px; padding-top: 6px; border-top: 1px dashed rgba(255, 255, 255, 0.1);
+  font-size: 9.5px; color: var(--fg-muted); font-style: italic;
+}
 
 /* ── TERMINAL DOCK (glass pane — stars compose behind it) ─── */
 .term-dock {

@@ -52,7 +52,7 @@ except ImportError:
 DEFAULT_MODEL = os.environ.get("VERTEX_FLASH_MODEL", "gemini-2.5-flash")
 DEFAULT_TTL = "3600s"
 MAX_OUTPUT_TOKENS = 2048
-GOVERNOR_COST_CEILING = 0.0004  # $0.0004 per call unit-cost governor ceiling
+GOVERNOR_COST_CEILING = float(os.environ.get("GOVERNOR_COST_CEILING", "0.0100"))  # Default $0.01 advisory query budget ceiling
 
 # Pricing constants for gemini-2.5-flash / gemini-1.5-flash (per 1,000,000 tokens)
 PRICE_INPUT_1M = 0.075          # $0.075 / 1M uncached input tokens

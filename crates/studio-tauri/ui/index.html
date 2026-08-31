@@ -28,6 +28,7 @@
       </div>
       <div class="head-right">
         <button id="btn-nav-sky" class="nav-tab active" title="5D Celestial Star Sky (119,625 HYG Stars)">🌌 5D SKY</button>
+        <button id="btn-morpheme-toggle" class="nav-tab" title="Toggle Generic Polysynthetic Morpheme HUD (L)">✦ MORPHEME HUD</button>
         <button id="btn-nav-term" class="nav-tab" title="Interactive ConPTY Windows PowerShell Terminal">⌨ TERMINAL</button>
         <button id="btn-theory" class="nav-tab" title="Harmonic Star Intervals & Theory">♪ THEORY</button>
         <button id="btn-mute" class="btn on" title="Mute/Unmute Audio Synth (M)">SOUND</button>
@@ -35,6 +36,14 @@
     </header>
 
     <main class="sky-stage">
+      <!-- Floating 3-Step Demo Presentation Ribbon -->
+      <div id="demo-steps-bar" class="floating-steps-bar">
+        <span class="step-label">DEMO FLOW:</span>
+        <button type="button" id="btn-step-thermal" class="btn-step" title="Step 1: Unconstrained BPE (Thermal Chaos)">[1] THERMAL BPE</button>
+        <button type="button" id="btn-step-zpsr" class="btn-step" title="Step 2: Grammar Constraints (ZPSR / FST)">[2] ZPSR CONSTELLATION</button>
+        <button type="button" id="btn-step-sonify" class="btn-step" title="Step 3: Anti-Shannon N x IPR Sonification (1539.47 Hz)">[3] N×IPR SONIFICATION</button>
+      </div>
+
       <!-- Subtle Floating Gemma Celestial Sky HUD -->
       <div id="gemma-sky-hud" class="floating-sky-hud">
         <span class="badge-molten">🧠 GEMMA 9B</span>
@@ -91,14 +100,16 @@
 
     <div id="chain-hud" class="chain-hud hidden">
       <div class="chain-head">
-        <span class="badge-gold">✦ CONSTELLATION ARPEGGIATOR</span>
+        <span class="badge-gold">✦ CONSTELLATION ARPEGGIATOR & SONIFIER</span>
         <button id="btn-chain-hud-clear" class="btn btn-sm">CLEAR</button>
       </div>
       <div class="chain-row"><span>nodes</span><b id="chain-node-count">0</b></div>
       <div class="chain-row"><span>tempo</span><b id="chain-bpm">120 BPM</b></div>
       <div class="chain-row"><span>doppler D(n)</span><b id="chain-doppler" class="badge-cyan">1.00x</b></div>
       <div class="chain-row"><span>mode</span><b id="chain-mode">LINEAR CHAIN</b></div>
-      <div class="chain-hint">Click / Shift-Click stars to link · Loop to origin for resonant drone</div>
+      <div class="chain-row"><span>sonification</span><b id="chain-sonify" class="badge-gold">N×IPR = 195.0 @ 1539.47 Hz</b></div>
+      <div class="chain-row" id="chain-morpheme-row"><span>morpheme path</span><b id="chain-morpheme-path" class="badge-cyan">[ROOT] → [THEME] → [AGR] → [OBJ]</b></div>
+      <div class="chain-hint" id="chain-hint-sub">Acoustic Sonification of High-Dimensional State Vectors · Anti-Shannon Purity</div>
     </div>
 
     <div id="term-dock" class="term-dock collapsed">

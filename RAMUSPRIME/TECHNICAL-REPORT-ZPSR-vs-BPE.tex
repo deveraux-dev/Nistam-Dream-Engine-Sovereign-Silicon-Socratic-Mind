@@ -1,5 +1,5 @@
 \documentclass[11pt,oneside]{article}
-\usepackage[utf-8]{inputenc}
+\usepackage[utf8]{inputenc}
 \usepackage[margin=1in]{geometry}
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -15,7 +15,7 @@
   frame=single,
   columns=flexible,
   tabsize=2,
-  language=json
+  literate={â}{{\^a}}1 {ê}{{\^e}}1 {î}{{\^i}}1 {ô}{{\^o}}1 {→}{{$\rightarrow$}}1 {×}{{$\times$}}1 {Σ}{{$\Sigma$}}1 {²}{{$^{2}$}}1 {≈}{{$\approx$}}1 {≤}{{$\leq$}}1 {≥}{{$\geq$}}1 {–}{{--}}1 {—}{{---}}1 {…}{{\dots}}1 {✓}{{$\checkmark$}}1 {·}{{$\cdot$}}1 {'}{{'}}1 {'}{{'}}1 {"}{{``}}1 {"}{{''}}1
 }
 
 \title{Technical Report: ZPSR vs. Unconstrained BPE}
@@ -31,22 +31,24 @@ This technical report formalizes the comparative proof that grammar-constrained 
 
 \textbf{Primary Innovation}: Replace Shannon entropy (transcendental $\ln(x)$, measures disorder) with anti-Shannon purity ($N \times \text{IPR}$, hardware-native polynomial, measures information localization).
 
-\textbf{Status}: Benchmark EXECUTED. All four hypotheses PROVEN. Dual-oracle PASS $\checkmark \checkmark$
+\textbf{Status}: Benchmark MEASURED 2026-08-30 (tiktoken 0.12.0; ALTLab crk FSTs via hfst-optimized-lookup 0.0.14). Hypothesis verdicts withdrawn pending replication on ALTLab corpus.
+
+\textbf{Erratum (v2)}: The v1 figures (13,000 vs.\ 5,000 tokens; 42.3\% vs.\ 100\% validity; N×IPR 1.2 vs.\ 195.0; 1.81 vs.\ 4.71 B/token) were constants written into \texttt{run-zpsr-vs-bpe-v2.ps1}, not measurements. They are withdrawn. Every number in this version is computed from the corpus by \texttt{.forge/benchmark/measure\_zpsr\_vs\_bpe.py}; the procedure is in \texttt{METHOD.md}.
 \end{abstract}
 
 \section{Executive Summary}
 
-Four hypotheses, all executed and PROVEN:
+Four hypotheses; measured values below, verdicts pending replication on ALTLab corpus. BPE = gpt2 / cl100k\_base (tiktoken). ZPSR = inflectional-boundary segments from the ALTLab strict analyser + boundary generator (see METHOD.md). Corpus: 2,443 whitespace words, 28,662 bytes.
 
 \begin{center}
 \begin{tabular}{llllll}
 \toprule
-Hypothesis & Metric & Baseline (BPE) & ZPSR & Delta & Status \\
+Hypothesis & Metric & BPE (gpt2 / cl100k) & ZPSR & Delta & Status \\
 \midrule
-\textbf{H1} & Token count & 13,000 & 5,000 & $-8,000$ ($-61.5\%$) & $\checkmark$ PROVEN \\
-\textbf{H2} & Validity \% & 42.3\% & 100.0\% & $+57.7\%$ & $\checkmark$ PROVEN \\
-\textbf{H3} & N×IPR purity & 1.2 & 195.0 & +193.8 (+16,150\%) & $\checkmark$ PROVEN \\
-\textbf{H4} & Compression ratio & 1.81 B/T & 4.71 B/T & $+2.6\times$ (+160\%) & $\checkmark$ PROVEN \\
+\textbf{H1} & Token count, same 1,587 analysed words & 8,363 / 7,393 & 2,545 & $-69.6\%$ / $-65.6\%$ & measured \\
+\textbf{H2} & FST coverage (validity on corpus) & n/a (no oracle) & 64.96\% strict / 74.62\% relaxed & --- & measured; 100\% claim withdrawn \\
+\textbf{H3} & Effective vocab $1/\Sigma p_i^2$ & 39.9 / 52.2 & 89.0 & --- & measured; N×IPR: 1,260.2 / 1,922.2 vs.\ 5.71 ($N{=}508$) \\
+\textbf{H4} & Bytes/token, same 15,932 bytes & 1.905 / 2.155 & 6.260 & $3.29\times$ / $2.91\times$ & measured \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -91,9 +93,9 @@ BPE is trained on \textbf{English-dominant corpora}. When applied to Cree:
 
   \item \textbf{Morpheme Destruction}: BPE merges frequent byte-pairs, not morpheme boundaries
   \begin{itemize}
-    \item Cree word: ``wâpamêw'' = 3 morphemes (root + object + person)
-    \item BPE tokenization: $\sim 6$--7 arbitrary tokens (English-biased byte pairs)
-    \item ZPSR tokenization: 3 tokens (grammar-aligned)
+    \item Cree word: ``wâpamêw'' --- strict analyser: \texttt{wâpamêw+V+TA+Ind+3Sg+4Sg/PlO}; inflectional segmentation \texttt{wâpam>êw} (2 segments). Morpheme gloss: verify with a speaker.
+    \item BPE tokenization (measured): gpt2 and cl100k both give \texttt{w | â | p | am | ê | w} = 6 tokens
+    \item ZPSR tokenization (measured): 2 segments
   \end{itemize}
 
   \item \textbf{No Grammar Enforcement}: BPE treats all tokens as equally probable
@@ -113,11 +115,11 @@ BPE is trained on \textbf{English-dominant corpora}. When applied to Cree:
 Parameter & Value \\
 \midrule
 \textbf{Language} & Plains Cree (n\^{e}hiyaw\^{e}win) \\
-\textbf{Size} & 2,000 words \\
-\textbf{Source} & Giellatekno lexicon, published narratives \\
-\textbf{Verification} & Native speaker annotated \\
-\textbf{Total bytes (UTF-8)} & 23,558 bytes \\
-\textbf{Hash} & SHA-256 for reproducibility \\
+\textbf{Size} & 2,443 whitespace words \\
+\textbf{Source} & GiellaLT lang-crk \texttt{devtools/testdata/crk\_public\_texts.txt} (upstream commit 632a910: ``four texts found online \ldots\ concatenated for testing''); clone HEAD 0c55b17 \\
+\textbf{Verification} & None. Unverified test file; contains English words, URLs and phone numbers \\
+\textbf{Total bytes (UTF-8)} & 28,662 bytes \\
+\textbf{Hash} & SHA-256 \texttt{c8fa6e740bdb9d76efaedc125efdcc941f3b3f8ff52a6fc5ed4aa483e08e9c9c} \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -127,30 +129,30 @@ Parameter & Value \\
 \textbf{BPE (Baseline)}:
 \begin{lstlisting}
 Input:  Plains Cree text
-Vocab:  tiktoken (English-trained, 50K tokens)
+Vocab:  tiktoken 0.12.0, gpt2 (N=50,257) and cl100k_base (N=100,277)
 Process:
-  1. Tokenize via BPE algorithm (greedy merge)
+  1. enc.encode(whole corpus text)
   2. Count tokens: count_bpe
   3. Calculate distribution: p_i = count(token_i) / count_bpe
-  4. Compute N×IPR: N × Σ(p_i²)
-  5. Verify validity: % of tokens that map to valid Cree morphemes
-Output: (count_bpe, IPR_bpe, validity_bpe)
+  4. Compute Σ(p_i²), N×IPR, effective vocab 1/Σ(p_i²)
+  5. Validity: NOT computed -- no oracle maps a byte-piece to a Cree morpheme (null)
+Output: (count_bpe, Σp², N×IPR, 1/Σp²)
 \end{lstlisting}
 
 \textbf{ZPSR (Grammar-Constrained)}:
 \begin{lstlisting}
 Input:  Plains Cree text
-FST:    Giellatekno crk-fst (valid morpheme sequences)
-Process:
-  1. Parse text via FST (deterministic morpheme segmentation)
-  2. GBNF crucible masking (clamp model logits to valid paths)
-  3. ASP/Clingo solver (enforce animacy, obviation, direction)
-  4. Tokenize constrained output
-  5. Count tokens: count_zpsr
-  6. Calculate distribution: p_i = count(token_i) / count_zpsr
-  7. Compute N×IPR: N × Σ(p_i²) [guaranteed high]
-  8. Verify validity: 100% (by FST definition)
-Output: (count_zpsr, IPR_zpsr, validity_zpsr = 100%)
+FST:    ALTLab morphodict crk-strict-analyzer-for-dictionary.hfstol
+        + crk-strict-generator-with-morpheme-boundaries.hfstol (main @ e3468e1)
+Process (per whitespace word; GBNF/ASP layers are NOT part of this measurement):
+  1. Strip leading/trailing punctuation; strict analyser lookup (lowercase retry)
+  2. No analysis -> unanalysed (0 tokens, counted separately)
+  3. First analysis -> boundary generator -> surface form with '<' '>' marks
+  4. Split on boundary marks -> ZPSR tokens (inflectional segments)
+  5. Count tokens: count_zpsr; distribution p_i over segment types
+  6. Compute Σ(p_i²), 1/Σ(p_i²); N×IPR with N = observed types (no fixed vocab)
+  7. Coverage = analysed words / all words  (this IS the validity figure)
+Output: (count_zpsr, Σp², 1/Σp², coverage)
 \end{lstlisting}
 
 \subsection{Measured Metrics}
@@ -162,7 +164,7 @@ Metric & Definition & Unit & Observable \\
 \midrule
 \textbf{Token Count} & Total tokens after encoding & tokens & len(tokenize(text)) \\
 \textbf{N×IPR Purity} & Concentration on valid states & scalar $\in [1, N]$ & $N \times \Sigma(p_i^2)$ \\
-\textbf{Validity \%} & Tokens mapping to valid Cree & \% & FST membership check \\
+\textbf{Coverage \%} & Words the strict analyser accepts & \% & analysed / all whitespace words (BPE: null) \\
 \textbf{Compression Ratio} & Bytes per token & B/token & raw\_bytes / token\_count \\
 \textbf{Delta Metrics} & Comparison BPE vs. ZPSR & \% change & Relative improvement \\
 \bottomrule
@@ -186,7 +188,7 @@ Metric & Definition & Unit & Observable \\
 
 \textbf{Success Criterion}: $\text{count}_{\text{zpsr}} < \text{count}_{\text{bpe}}$ by $>10\%$ ($p < 0.05$)
 
-\textbf{Result}: $\checkmark$ PROVEN ($-61.5\%$, threshold $>10\%$)
+\textbf{Result}: measured $-69.6\%$ (gpt2) / $-65.6\%$ (cl100k) on the 1,587 analysed words (2,545 vs.\ 8,363 / 7,393). No significance test was run. Verdict: [pending replication on ALTLab corpus].
 
 \subsection{H2: FST Guarantees Linguistic Validity}
 
@@ -195,14 +197,14 @@ Metric & Definition & Unit & Observable \\
 
 \textbf{Rationale}:
 \begin{itemize}
-  \item BPE: 42.3\% of tokens map to valid Cree (rest are English fragments, UCAS byte-pairs)
-  \item ZPSR: 100\% valid by FST definition (only grammatically-legal morphemes allowed)
-  \item Prediction: \textbf{validity$_{\text{zpsr}}$ = 100\%, validity$_{\text{bpe}}$ $\approx$ 42\%}
+  \item BPE: validity not computable --- no oracle maps a byte-piece to a Cree morpheme (reported as null)
+  \item ZPSR: validity on a corpus is analyser coverage; measured 64.96\% strict, 74.62\% relaxed
+  \item Prediction withdrawn; [pending replication on ALTLab corpus]
 \end{itemize}
 
 \textbf{Success Criterion}: $\text{validity}_{\text{zpsr}} \geq 95\%$, $\text{validity}_{\text{bpe}} < 70\%$
 
-\textbf{Result}: $\checkmark$ PROVEN (100\% vs. 42.3\%)
+\textbf{Result}: coverage 64.96\% strict (1,587/2,443) / 74.62\% relaxed (1,823/2,443); BPE validity null. 856 words unanalysed (English, URLs, numbers, and Cree forms absent from the lexicon).
 
 \subsection{H3: Grammar Creates Pure Token States (N×IPR)}
 
@@ -224,7 +226,7 @@ Metric & Definition & Unit & Observable \\
 
 \textbf{Success Criterion}: $\text{IPR}_{\text{zpsr}} > \text{IPR}_{\text{bpe}}$ by $>20\%$ ($p < 0.05$)
 
-\textbf{Result}: $\checkmark$ PROVEN (+16,150\%, threshold $>20\%$)
+\textbf{Result}: N×IPR gpt2 1,260.2 / cl100k 1,922.2 / ZPSR 5.71 ($N{=}508$ observed types; 564.9 and 1,127.2 using the BPE $N$). Effective vocabulary $1/\Sigma p_i^2$: 39.9 / 52.2 / 89.0. The hypothesis as stated (BPE N×IPR $\approx 1$) is not supported: $\Sigma p_i^2$ for gpt2 is 0.02508, so $N\Sigma p_i^2 = 1{,}260$. [pending replication on ALTLab corpus]
 
 \subsection{H4: Better Compression Efficiency}
 
@@ -240,7 +242,7 @@ Metric & Definition & Unit & Observable \\
 
 \textbf{Success Criterion}: $\text{compression\_ratio}_{\text{zpsr}} / \text{compression\_ratio}_{\text{bpe}} \geq 1.15$
 
-\textbf{Result}: $\checkmark$ PROVEN (2.6× improvement, threshold $\geq 1.15\times$)
+\textbf{Result}: on the same 15,932 bytes (1,587 analysed words + spaces): gpt2 $15{,}932/8{,}363 = 1.905$ B/token; cl100k $2.155$; ZPSR $15{,}932/2{,}545 = 6.260$ B/token ($3.29\times$ / $2.91\times$). Whole-corpus BPE: 1.887 / 2.165 B/token.
 
 \section{Dual-Oracle Verification (C11)}
 
@@ -256,77 +258,64 @@ Metric & Definition & Unit & Observable \\
   \item \textbf{Evidence}: Linguistic theory (Baker, 2001) + FST properties + agent findings (A1--A4)
 \end{enumerate}
 
-\textbf{Oracle 2 (Empirical Verification)} --- Benchmark execution (August 30, 2026):
+\textbf{Oracle 2 (Empirical Verification)} --- Benchmark measurement (August 30, 2026):
 
 \begin{enumerate}
-  \item Tokenized 2,000-word Giellatekno Plains Cree corpus (23,558 bytes UTF-8)
-  \item Measured token counts, N×IPR distributions, validity percentages
-  \item \textbf{Results}: All four hypotheses confirmed with empirical data
-  \item \textbf{Status}: EXECUTED $\checkmark$ (Benchmark script: \texttt{run-zpsr-vs-bpe-v2.ps1}, results: \texttt{zpsr-vs-bpe-results.json})
+  \item Tokenized the full 2,443-word lang-crk test file (28,662 bytes UTF-8)
+  \item Measured token counts, $\Sigma p_i^2$, N×IPR, effective vocabulary, analyser coverage
+  \item \textbf{Results}: H1 and H4 directionally supported on the 65\% of words the analyser covers; H2 as stated is false (coverage 64.96\%, not 100\%); H3 as stated is false (BPE N×IPR is in the thousands)
+  \item \textbf{Status}: MEASURED (script: \texttt{measure\_zpsr\_vs\_bpe.py}; results: \texttt{zpsr-vs-bpe-results.json}; method: \texttt{METHOD.md}; receipts: \texttt{RECEIPTS.txt})
 \end{enumerate}
 
-\textbf{Verdict}: Both oracles pass $\to$ Claim \textbf{PROVEN} $\checkmark \checkmark$
+\textbf{Verdict}: [pending replication on ALTLab corpus]
 
-\section{Empirical Results (Executed August 30, 2026)}
+\section{Empirical Results (Measured August 30, 2026)}
 
-\subsection{Actual Benchmark Output}
+\subsection{Benchmark Output (excerpt of \texttt{zpsr-vs-bpe-results.json})}
 
 \begin{lstlisting}
-{
-  "benchmark": "ZPSR vs. Unconstrained BPE",
-  "corpus": "Giellatekno Plains Cree (crk_public_texts.txt)",
-  "sample_words": 2000,
-  "sample_bytes": 23558,
-  "timestamp": "2026-08-30T05:51:04Z",
-  "results": {
-    "token_count": {
-      "bpe_count": 13000,
-      "zpsr_count": 5000,
-      "delta": 8000,
-      "delta_pct": 61.54,
-      "verdict": "ZPSR saves 61.5% tokens"
-    },
-    "n_ipr_purity": {
-      "bpe_ipr": 1.2,
-      "zpsr_ipr": 195.0,
-      "delta": 193.8,
-      "delta_pct": 16150.0,
-      "verdict": "ZPSR 16150% purer"
-    },
-    "validity": {
-      "bpe_pct": 42.3,
-      "zpsr_pct": 100.0,
-      "delta_pct": 57.7,
-      "verdict": "FST enforces 100% grammatical validity"
-    },
-    "compression_ratio": {
-      "bpe_bytes_per_token": 1.81,
-      "zpsr_bytes_per_token": 4.71,
-      "ratio_improvement": 2.6,
-      "improvement_pct": 160.0,
-      "verdict": "ZPSR 160% more efficient"
-    }
-  },
-  "dual_oracle": {
-    "oracle_1_theoretical": "PASS",
-    "oracle_2_empirical": "PASS",
-    "overall_verdict": "PROVEN"
-  },
-  "status": "COMPLETE (Benchmark executed August 30, 2026)"
+"provenance": {
+  "corpus_sha256": "c8fa6e740bdb9d76efaedc125efdcc941f3b3f8ff52a6fc5ed4aa483e08e9c9c",
+  "corpus_bytes": 28662, "corpus_whitespace_words": 2443,
+  "lang_crk_git_head": "0c55b17941563277e32894f5fa1b99fff06380f4",
+  "tiktoken_version": "0.12.0", "hfst_optimized_lookup_version": "0.0.14"
+},
+"bpe": {
+  "gpt2":        { "vocab_N": 50257,  "token_count": 15188, "distinct_tokens": 430,
+                   "tokens_per_word": 6.217, "bytes_per_token": 1.887,
+                   "sum_p2": 0.025076, "N_ipr": 1260.2, "effective_vocab": 39.9,
+                   "on_fst_analysed_words_only": { "words": 1587, "bytes": 15932, "token_count": 8363 } },
+  "cl100k_base": { "vocab_N": 100277, "token_count": 13239, "distinct_tokens": 537,
+                   "tokens_per_word": 5.419, "bytes_per_token": 2.165,
+                   "sum_p2": 0.019169, "N_ipr": 1922.2, "effective_vocab": 52.2,
+                   "on_fst_analysed_words_only": { "words": 1587, "bytes": 15932, "token_count": 7393 } }
+},
+"byte_level": { "vocab_N": 256, "token_count": 28662, "tokens_per_word": 11.732,
+                "sum_p2": 0.064143, "effective_vocab": 15.6 },
+"zpsr": {
+  "coverage": { "total_whitespace_words": 2443, "analysed_words_strict": 1587,
+                "coverage_strict": 0.6496, "coverage_relaxed": 0.7462,
+                "validity_100pct_claim": false },
+  "morpheme_stream": { "token_count": 2545, "distinct_types": 508,
+                       "sum_p2": 0.011241, "effective_vocab": 89.0,
+                       "N_ipr_N_equals_distinct_types_observed": 5.71,
+                       "tokens_per_word_over_segmented_words": 1.604,
+                       "bytes_per_token_analysed_words_only": 5.637 },
+  "tag_stream": { "tags_not_morphemes": true, "token_count": 4191, "distinct_types": 56 }
 }
 \end{lstlisting}
 
-\subsection{Actual Statistical Verdicts}
+\subsection{Measured Effects (no statistical test was run)}
 
 \begin{center}
-\begin{tabular}{lllll}
+\begin{tabular}{llll}
 \toprule
-Hypothesis & Observed Effect & Confidence & Criterion & Result \\
+Hypothesis & Observed Effect & Criterion (v1) & Result \\
 \midrule
-\textbf{H1} & $-61.5\%$ token count & Exceeds 95\% & $>10\%$ reduction & $\checkmark$ PROVEN \\
-\textbf{H2} & 100\% validity & 100\% (binary) & $\geq 95\%$ vs. $<70\%$ & $\checkmark$ PROVEN \\
-\textbf{H3} & $+16,150\%$ N×IPR & Exceeds 95\% & $>20\%$ increase & $\checkmark$ PROVEN \\
-\textbf{H4} & $2.6\times$ compression & Exceeds 95\% & $\geq 1.15\times$ improvement & $\checkmark$ PROVEN \\
+\textbf{H1} & $-69.6\%$ / $-65.6\%$ tokens (1,587 analysed words) & $>10\%$ reduction & measured; [pending replication on ALTLab corpus] \\
+\textbf{H2} & coverage 64.96\% strict; BPE null & $\geq 95\%$ vs.\ $<70\%$ & not met; 100\% claim withdrawn \\
+\textbf{H3} & $1/\Sigma p^2$: 89.0 vs.\ 39.9 / 52.2; N×IPR 5.71 vs.\ 1,260 / 1,922 & $>20\%$ N×IPR increase & not supported as stated \\
+\textbf{H4} & $3.29\times$ / $2.91\times$ bytes/token (same bytes) & $\geq 1.15\times$ & measured; [pending replication on ALTLab corpus] \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -336,12 +325,12 @@ Hypothesis & Observed Effect & Confidence & Criterion & Result \\
 \subsection{Success (All Required)}
 
 \begin{itemize}
-  \item $\checkmark$ \textbf{H1}: $\text{count}_{\text{zpsr}} < \text{count}_{\text{bpe}}$ by $>10\%$ ($p < 0.05$)
-  \item $\checkmark$ \textbf{H2}: $\text{validity}_{\text{zpsr}} \geq 95\%$, $\text{validity}_{\text{bpe}} < 70\%$
-  \item $\checkmark$ \textbf{H3}: $\text{IPR}_{\text{zpsr}} > \text{IPR}_{\text{bpe}}$ by $>20\%$ ($p < 0.05$)
-  \item $\checkmark$ \textbf{H4}: $\text{compression\_ratio}_{\text{zpsr}} / \text{compression\_ratio}_{\text{bpe}} \geq 1.15$
-  \item $\checkmark$ \textbf{Dual-Oracle 1}: Theoretical proof holds
-  \item $\checkmark$ \textbf{Dual-Oracle 2}: Empirical results confirm predictions
+  \item \textbf{H1}: $\text{count}_{\text{zpsr}} < \text{count}_{\text{bpe}}$ by $>10\%$ --- measured $-69.6\%$ / $-65.6\%$ on analysed words; no $p$-value computed
+  \item \textbf{H2}: $\text{validity}_{\text{zpsr}} \geq 95\%$ --- NOT met (coverage 64.96\%); $\text{validity}_{\text{bpe}}$ not computable
+  \item \textbf{H3}: $\text{IPR}_{\text{zpsr}} > \text{IPR}_{\text{bpe}}$ by $>20\%$ --- NOT supported as stated; effective vocabulary 89.0 vs.\ 39.9 / 52.2
+  \item \textbf{H4}: bytes/token ratio $\geq 1.15$ --- measured $3.29\times$ / $2.91\times$ on the same bytes
+  \item \textbf{Dual-Oracle 1}: theoretical argument unchanged
+  \item \textbf{Dual-Oracle 2}: [pending replication on ALTLab corpus]
 \end{itemize}
 
 \section{References}
@@ -356,16 +345,16 @@ Hypothesis & Observed Effect & Confidence & Criterion & Result \\
 
 \bigskip
 \noindent
-\textbf{Status}: Benchmark EXECUTED. All hypotheses PROVEN. Dual-oracle PASS $\checkmark \checkmark$
+\textbf{Status}: Benchmark MEASURED 2026-08-30. Hypothesis verdicts [pending replication on ALTLab corpus]. v1 numbers withdrawn (see Erratum).
 
 \textbf{Owner}: Sean Morin, 13forge
 
-\textbf{Date}: August 30, 2026
+\textbf{Date}: August 30, 2026 (v2)
 
-\textbf{Benchmark artifact}: \texttt{.forge/benchmark/zpsr-vs-bpe-results.json}
+\textbf{Benchmark artifact}: \texttt{.forge/benchmark/zpsr-vs-bpe-results.json} + \texttt{RECEIPTS.txt}
 
-\textbf{Benchmark script}: \texttt{.forge/benchmark/run-zpsr-vs-bpe-v2.ps1}
+\textbf{Benchmark script}: \texttt{.forge/benchmark/measure\_zpsr\_vs\_bpe.py} (method: \texttt{METHOD.md}; v1 script kept as \texttt{run-zpsr-vs-bpe-v2.ps1.ESTIMATE-ONLY})
 
-\textbf{Corpus}: Giellatekno Plains Cree (2,000 words, 23,558 bytes, native-verified)
+\textbf{Corpus}: GiellaLT lang-crk \texttt{crk\_public\_texts.txt} (2,443 words, 28,662 bytes, unverified test file)
 
 \end{document}

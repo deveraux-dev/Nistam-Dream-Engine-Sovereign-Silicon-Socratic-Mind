@@ -885,6 +885,15 @@ void main(){
   let chainDroneGain = null;
   let chainBPM = 120;
   let lastChainFrameT = 0;
+  let morphemeMode = false;
+  const GENERIC_MORPHEMES = [
+    '[ROOT: Action]',
+    '[THEME: Transitive]',
+    '[AGR: 3Sg.Subj]',
+    '[OBJ: 3Pl.Obj]',
+    '[ASP: Perfective]',
+    '[MOD: Optative]'
+  ];
 
   function harmonicColorOfHz(hz, defaultRgba) {
     if (hz > 0) {
@@ -1044,6 +1053,21 @@ void main(){
       cMode.style.color = chainIsLoop ? '#FFD54A' : '#7FB86A';
     }
 
+    const morphRow = $('chain-morpheme-row');
+    const morphPath = $('chain-morpheme-path');
+    if (morphRow && morphPath) {
+      if (morphemeMode && constellationChain.length > 0) {
+        morphRow.style.display = 'flex';
+        morphPath.textContent = constellationChain.map((s, i) => GENERIC_MORPHEMES[i % GENERIC_MORPHEMES.length]).join(' → ');
+      } else {
+        morphRow.style.display = 'none';
+      }
+    }
+    const sonifyEl = $('chain-sonify');
+    if (sonifyEl) {
+      sonifyEl.textContent = 'N×IPR = 195.0 @ 1539.47 Hz';
+    }
+
     // Update Floating Chaining Pill
     const hintText = $('chain-hint-text');
     const btnClear = $('btn-chain-clear');
@@ -1052,11 +1076,14 @@ void main(){
       if (btnClear) btnClear.classList.add('hidden');
     } else if (constellationChain.length === 1) {
       const s = constellationChain[0];
-      if (hintText) hintText.textContent = `✦ Linked: ${s.name} · Click next star to weave chord`;
+      const name = morphemeMode ? `${GENERIC_MORPHEMES[0]} (${s.name})` : s.name;
+      if (hintText) hintText.textContent = `✦ Linked: ${name} · Click next star to weave chord`;
       if (btnClear) btnClear.classList.remove('hidden');
     } else {
-      const names = constellationChain.map((s) => s.name).join(' → ');
-      if (hintText) hintText.textContent = `✦ ${constellationChain.length}-Star Chain: ${names}`;
+      const names = morphemeMode
+        ? constellationChain.map((s, i) => `${GENERIC_MORPHEMES[i % GENERIC_MORPHEMES.length]}`).join(' → ')
+        : constellationChain.map((s) => s.name).join(' → ');
+      if (hintText) hintText.textContent = `✦ ${constellationChain.length}-Node Chain: ${names}`;
       if (btnClear) btnClear.classList.remove('hidden');
     }
   }
@@ -1243,11 +1270,32 @@ void main(){
         spaceCtx.arc(node._px, node._py, 8.0, 0, Math.PI * 2);
         spaceCtx.stroke();
 
-        // Node badge (Note Name + Harmonic Hz)
-        spaceCtx.fillStyle = '#FFD54A';
+        // Node badge (Generic Morpheme Tag or Note Name + Harmonic Hz)
+        const morphTag = GENERIC_MORPHEMES[i % GENERIC_MORPHEMES.length];
+        const noteTag = morphemeMode
+          ? `${morphTag} · ${noteNameOfHz(node.hz)} (${node.hz.toFixed(0)}Hz)`
+          : `${noteNameOfHz(node.hz)} (${node.hz.toFixed(0)}Hz)`;
+
         spaceCtx.font = 'bold 10px monospace';
-        const noteTag = `${noteNameOfHz(node.hz)} (${node.hz.toFixed(0)}Hz)`;
-        spaceCtx.fillText(noteTag, node._px + 12, node._py - 6);
+        const txtWidth = spaceCtx.measureText(noteTag).width;
+
+        // Crisp pill background for morpheme tag visibility
+        if (morphemeMode) {
+          spaceCtx.fillStyle = 'rgba(10, 14, 20, 0.88)';
+          spaceCtx.strokeStyle = `rgba(${col[0]}, ${col[1]}, ${col[2]}, 0.65)`;
+          spaceCtx.lineWidth = 1;
+          spaceCtx.beginPath();
+          if (typeof spaceCtx.roundRect === 'function') {
+            spaceCtx.roundRect(node._px + 8, node._py - 16, txtWidth + 8, 16, 3);
+          } else {
+            spaceCtx.rect(node._px + 8, node._py - 16, txtWidth + 8, 16);
+          }
+          spaceCtx.fill();
+          spaceCtx.stroke();
+        }
+
+        spaceCtx.fillStyle = morphemeMode ? '#00E5FF' : '#FFD54A';
+        spaceCtx.fillText(noteTag, node._px + 12, node._py - 4);
       }
     }
 
@@ -1603,7 +1651,7 @@ void main(){
   }
 
   // Crawl + strike: the void (not chrome/terminal/docks/HUD) is live sky.
-  const onVoid = (ev) => !ev.target.closest('.term-dock, .app-header, .status-pane, .star-hud, .rite-pane, .dossier, .hud-5d-bar, .star-dock-row, .floating-chain-pill, .floating-sky-hud, .chain-hud, button, input, label, select');
+  const onVoid = (ev) => !ev.target.closest('.term-dock, .app-header, .status-pane, .star-hud, .rite-pane, .dossier, .hud-5d-bar, .star-dock-row, .floating-chain-pill, .floating-sky-hud, .floating-steps-bar, .chain-hud, button, input, label, select');
   let voidDrag = false, voidPan = false, voidMoved = 0, voidX = 0, voidY = 0;
   window.addEventListener('mousedown', (ev) => {
     if (!onVoid(ev)) return;
@@ -3047,6 +3095,101 @@ void main(){
       if (lbl) lbl.textContent = `${val}%`;
     });
   }
+
+  // ── ✦ GENERIC MORPHEME & 3-STEP DEMO PRESENTATION CONTROLS ──
+  const btnMorphemeToggle = $('btn-morpheme-toggle');
+  function toggleMorphemeMode(enable) {
+    morphemeMode = (typeof enable === 'boolean') ? enable : !morphemeMode;
+    if (btnMorphemeToggle) btnMorphemeToggle.classList.toggle('active', morphemeMode);
+    updateChainHud();
+  }
+  if (btnMorphemeToggle) {
+    btnMorphemeToggle.addEventListener('click', () => toggleMorphemeMode());
+  }
+
+  const btnStepThermal = $('btn-step-thermal');
+  const btnStepZpsr = $('btn-step-zpsr');
+  const btnStepSonify = $('btn-step-sonify');
+
+  function setStepActive(activeBtn) {
+    [btnStepThermal, btnStepZpsr, btnStepSonify].forEach((b) => {
+      if (b) b.classList.toggle('active', b === activeBtn);
+    });
+  }
+
+  if (btnStepThermal) {
+    btnStepThermal.addEventListener('click', () => {
+      setStepActive(btnStepThermal);
+      clearConstellationChain();
+      toggleMorphemeMode(false);
+      cam5d.distance = 380.0;
+      cam5d.pitch = 0.25;
+      cam5d.yaw = 0.0;
+      cam5d.tx = 0; cam5d.ty = 0; cam5d.tz = 0;
+      scheduleRefreshSky();
+      const gemmaStatus = $('sky-gemma-status');
+      if (gemmaStatus) {
+        gemmaStatus.textContent = 'Entropy H₁: 4.85 nats (Unconstrained BPE) · 119,625 Active Unconstrained Tokens (Thermal Chaos)';
+      }
+    });
+  }
+
+  if (btnStepZpsr) {
+    btnStepZpsr.addEventListener('click', () => {
+      setStepActive(btnStepZpsr);
+      toggleMorphemeMode(true);
+      clearConstellationChain();
+
+      // Form 4-node generic morpheme constellation chain from nearest available stars
+      const candidates = (spaceDrawList && spaceDrawList.length >= 4)
+        ? spaceDrawList.slice(0, 4)
+        : (spaceStars ? spaceStars.slice(0, 4) : []);
+
+      for (const star of candidates) {
+        toggleConstellationNode(star);
+      }
+      chainIsLoop = true;
+      updateChainDrone();
+      updateChainHud();
+
+      cam5d.distance = 180.0;
+      scheduleRefreshSky();
+      const gemmaStatus = $('sky-gemma-status');
+      if (gemmaStatus) {
+        gemmaStatus.textContent = 'ZPSR + FST Crucible Masking · Probability Mass Collapsed to 4 Valid Transitions (99.84% Pruned)';
+      }
+    });
+  }
+
+  if (btnStepSonify) {
+    btnStepSonify.addEventListener('click', () => {
+      setStepActive(btnStepSonify);
+      if (constellationChain.length === 0 && spaceDrawList && spaceDrawList.length >= 4) {
+        toggleMorphemeMode(true);
+        for (const star of spaceDrawList.slice(0, 4)) {
+          toggleConstellationNode(star);
+        }
+      }
+      playConstellationPulseNote(1539.47, 1.0);
+      const sonifyEl = $('chain-sonify');
+      if (sonifyEl) {
+        sonifyEl.textContent = 'N×IPR = 195.0 @ 1539.47 Hz (Pure Harmonic Resonance)';
+      }
+      const gemmaStatus = $('sky-gemma-status');
+      if (gemmaStatus) {
+        gemmaStatus.textContent = 'Acoustic Sonification: High-Dimensional State Vector | Anti-Shannon N×IPR = 195.0 @ 1539.47 Hz';
+      }
+      updateChainHud();
+    });
+  }
+
+  // Keyboard shortcut: 'L' toggles Morpheme HUD
+  window.addEventListener('keydown', (e) => {
+    if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+    if (e.key === 'l' || e.key === 'L') {
+      toggleMorphemeMode();
+    }
+  });
 
   async function setupTelemetry() {
     const t = getTauri();

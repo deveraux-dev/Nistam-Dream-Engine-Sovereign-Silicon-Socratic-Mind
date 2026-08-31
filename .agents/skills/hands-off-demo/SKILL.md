@@ -48,7 +48,7 @@ python scripts/hands_off_demo_driver.py
  │   • Total Resident VRAM: 2,710 MB (Fits in 8 GB consumer GPU)               │
  ├─────────────────────────────────────────────────────────────────────────────┤
  │   ACT IV [1:45 - 2:20]: GOOGLE CLOUD VERTEX AI & GEMINI 2.5 FLASH           │
- │   • Model: gemini-2.5-flash @ temp 0.0 under $0.0004/call governor ceiling  │
+ │   • Model: gemini-2.5-flash @ temp 0.0 (75% context cache discount)         │
  │   • Context Caching: >= 32,768 tokens VARS knowledge base pre-indexed       │
  │   • 3-Wave Cultural Airgap Sentry: Zero Cree on Cloud (ADR-0026 zeroize)    │
  ├─────────────────────────────────────────────────────────────────────────────┤

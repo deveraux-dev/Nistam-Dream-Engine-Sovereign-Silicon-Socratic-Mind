@@ -12,7 +12,7 @@ if (-not $env:GOOGLE_CLOUD_PROJECT) { throw "GOOGLE_CLOUD_PROJECT unset and gclo
 if (-not $env:GOOGLE_CLOUD_LOCATION) { $env:GOOGLE_CLOUD_LOCATION = "us-central1" }
 if (-not $env:INBOX_BUCKET) { $env:INBOX_BUCKET = "$($env:GOOGLE_CLOUD_PROJECT)-s13-inbox" }
 
-Write-Host "=== Surface Ledger — live cloud agent ===" -ForegroundColor Cyan
+Write-Host "=== Surface Ledger - live cloud agent ===" -ForegroundColor Cyan
 Write-Host "  project  : $($env:GOOGLE_CLOUD_PROJECT)"
 Write-Host "  location : $($env:GOOGLE_CLOUD_LOCATION)"
 Write-Host "  inbox    : gs://$($env:INBOX_BUCKET)"
@@ -23,11 +23,18 @@ Push-Location $Envelope
 try {
     cargo build --release --bin attest --features cli
     if ($LASTEXITCODE -ne 0) { throw "cargo build failed" }
-    $env:FORGE_ENVELOPE_BIN = Join-Path $Envelope "target\release\attest.exe"
-    if (-not (Test-Path $env:FORGE_ENVELOPE_BIN)) {
-        $env:FORGE_ENVELOPE_BIN = Join-Path $Envelope "target\release\attest"
+    $candidates = @(
+        (Join-Path $RepoRoot "target\release\attest.exe"),
+        (Join-Path $RepoRoot "target\release\attest"),
+        (Join-Path $Envelope "target\release\attest.exe"),
+        (Join-Path $Envelope "target\release\attest")
+    )
+    $found = $null
+    foreach ($c in $candidates) {
+        if (Test-Path $c) { $found = $c; break }
     }
-    if (-not (Test-Path $env:FORGE_ENVELOPE_BIN)) { throw "attest binary not found after build" }
+    if (-not $found) { throw "attest binary not found after build" }
+    $env:FORGE_ENVELOPE_BIN = $found
 
     Write-Host "[2/3] Checking Python dependencies..." -ForegroundColor Yellow
     python -c "import google.genai, google.cloud.firestore, google.cloud.storage, pydantic"
@@ -35,7 +42,7 @@ try {
 
     Write-Host "[3/3] Running one live audit pass against Google Cloud...`n" -ForegroundColor Yellow
     python scripts\agent_loop.py --manual --require-cloud
-    if ($LASTEXITCODE -ne 0) { throw "agent aborted (exit $LASTEXITCODE) — see cloud_required_abort above" }
+    if ($LASTEXITCODE -ne 0) { throw "agent aborted (exit $LASTEXITCODE) - see cloud_required_abort above" }
 }
 finally { Pop-Location }
 

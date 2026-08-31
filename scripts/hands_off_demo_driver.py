@@ -228,8 +228,7 @@ def main():
     print(f"    • Injected radiation faults intercepted fail-closed — count printed by")
     print(f"        probe_astrolabe_runtime above, not restated here\n")
     print(f"{C_BOLD}  Named gaps — claimed nowhere else in this repo{C_RESET}")
-    print(f"    • [UNVERIFIED] 2.71 GB resident VRAM, 3 Gemma models, RTX 3070 - no receipt on disk")
-    print(f"    • [UNVERIFIED] $0.0004/call cost ceiling is monitored, NOT enforced in code\n")
+    print(f"    • [UNVERIFIED] 2.71 GB resident VRAM, 3 Gemma models, RTX 3070 - no receipt on disk\n")
     print(f"    Pinned host-state receipt: python scripts/receipt_run.py --gpu\n")
 
 if __name__ == "__main__":

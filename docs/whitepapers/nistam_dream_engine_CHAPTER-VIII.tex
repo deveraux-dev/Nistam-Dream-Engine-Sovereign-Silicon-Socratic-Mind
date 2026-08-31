@@ -1,5 +1,5 @@
 \documentclass[11pt,oneside]{article}
-\usepackage[utf-8]{inputenc}
+\usepackage[utf8]{inputenc}
 \usepackage[margin=1in]{geometry}
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -14,12 +14,12 @@
   breaklines=true,
   frame=single,
   columns=flexible,
-  tabsize=2
+  tabsize=2,
+  literate={â}{{\^a}}1 {ê}{{\^e}}1 {î}{{\^i}}1 {ô}{{\^o}}1 {→}{{$\rightarrow$}}1 {×}{{$\times$}}1 {Σ}{{$\Sigma$}}1 {²}{{$^{2}$}}1 {≈}{{$\approx$}}1 {≤}{{$\leq$}}1 {≥}{{$\geq$}}1 {–}{{--}}1 {—}{{---}}1 {…}{{\dots}}1 {✓}{{$\checkmark$}}1 {·}{{$\cdot$}}1 {'}{{'}}1 {'}{{'}}1 {"}{{``}}1 {"}{{''}}1
 }
 
-\title{Chapter VIII: Comparative Analysis}
+\title{Chapter VIII: Comparative Analysis \\ \large Grammar-Constrained Tokens vs.\ Statistical BPE}
 \author{Sean Morin}
-\subtitle{Grammar-Constrained Tokens vs. Statistical BPE}
 \date{August 30, 2026 \\ \vspace{0.5em} \small DOI: \href{https://doi.org/10.5281/zenodo.22176968}{10.5281/zenodo.22176968}}
 
 \begin{document}
@@ -31,7 +31,9 @@ For integration into: \texttt{nistam\_dream\_engine\_whitepaper\_v4.pdf}
 
 Position: After Chapter VII (Experimental Verification)
 
-Scope: Proves ZPSR token superiority via anti-Shannon purity measurement
+Scope: Measures ZPSR (FST morpheme segmentation) against BPE on Plains Cree text
+
+\textbf{Erratum (v2)}: The v1 results table (13,000 vs.\ 5,000 tokens; 42.3\% vs.\ 100\% validity; N×IPR 1.2 vs.\ 195.0; 1.81 vs.\ 4.71 B/token) came from constants in \texttt{run-zpsr-vs-bpe-v2.ps1}, not from tokenizing anything. Withdrawn. This version reports only values computed by \texttt{.forge/benchmark/measure\_zpsr\_vs\_bpe.py} (\texttt{METHOD.md}).
 \end{abstract}
 
 \section{The Tokenization Bottleneck Revisited}
@@ -100,7 +102,7 @@ mulps xmm0, [rip + N_constant]  ; Multiply by N
 
 \textbf{H2 (Linguistic Validity)}: FST guarantees only valid Cree morphemes
 \begin{itemize}
-  \item Prediction: ZPSR = 100\% valid, BPE $\approx$ 42\% (rest are English fragments + UCAS byte-pairs)
+  \item Prediction withdrawn. Measured: strict-analyser coverage 64.96\% (relaxed 74.62\%); BPE validity not computable (null)
 \end{itemize}
 
 \textbf{H3 (N×IPR Purity)}: FST paths are discrete and finite; BPE merges are continuous and chaotic
@@ -125,27 +127,30 @@ mulps xmm0, [rip + N_constant]  ; Multiply by N
   \item Mathematical consequence: ZPSR token count $<$ BPE token count (algebraic certainty)
 \end{itemize}
 
-\textbf{Oracle 2 (Empirical Benchmark --- EXECUTED August 30, 2026)}:
+\textbf{Oracle 2 (Empirical Benchmark --- MEASURED August 30, 2026)}:
 \begin{itemize}
-  \item Corpus: 2,000 Plains Cree words from Giellatekno (native-verified)
-  \item Measure: tokenized both ways, counted tokens, calculated N×IPR, verified validity
-  \item Status: EXECUTED $\checkmark$ (Results stored in \texttt{.forge/benchmark/zpsr-vs-bpe-results.json})
+  \item Corpus: 2,443 whitespace words, GiellaLT lang-crk \texttt{crk\_public\_texts.txt} (28,662 bytes; unverified test file; SHA-256 \texttt{c8fa6e74\ldots e9c9c})
+  \item Measure: tiktoken (gpt2, cl100k\_base) over the whole text; ALTLab strict analyser + boundary generator per word; counts, $\Sigma p_i^2$, N×IPR, $1/\Sigma p_i^2$, coverage
+  \item Status: MEASURED (\texttt{.forge/benchmark/zpsr-vs-bpe-results.json}, \texttt{METHOD.md}, \texttt{RECEIPTS.txt})
 \end{itemize}
 
-\subsection{Actual Results (Dual-Oracle: BOTH PASS $\checkmark \checkmark$)}
+\subsection{Measured Results (verdicts pending replication on ALTLab corpus)}
 
 \begin{center}
 \begin{tabular}{lllll}
 \toprule
-Metric & BPE Baseline & ZPSR & Delta & Verdict \\
+Metric & BPE (gpt2 / cl100k) & ZPSR & Delta & Status \\
 \midrule
-\textbf{Token count} & 13,000 & 5,000 & $-8,000$ ($-61.5\%$) & \textbf{ZPSR saves 61.5\%} $\checkmark$ \\
-\textbf{Validity \%} & 42.3\% & 100.0\% & $+57.7\%$ & \textbf{FST enforces 100\%} $\checkmark$ \\
-\textbf{N×IPR} & 1.2 & 195.0 & $+193.8$ (+16,150\%) & \textbf{ZPSR 162× purer} $\checkmark$ \\
-\textbf{Bytes/token} & 1.81 & 4.71 & $+2.6\times$ (+160\%) & \textbf{ZPSR 2.6× efficient} $\checkmark$ \\
+\textbf{Token count} (same 1,587 analysed words) & 8,363 / 7,393 & 2,545 & $-69.6\%$ / $-65.6\%$ & measured \\
+\textbf{Coverage} (validity on corpus) & null (no oracle) & 64.96\% strict / 74.62\% relaxed & --- & measured; 100\% withdrawn \\
+\textbf{Effective vocab} $1/\Sigma p_i^2$ & 39.9 / 52.2 & 89.0 & --- & measured (N×IPR: 1,260.2 / 1,922.2 vs.\ 5.71) \\
+\textbf{Bytes/token} (same 15,932 bytes) & 1.905 / 2.155 & 6.260 & $3.29\times$ / $2.91\times$ & measured \\
+\textbf{Byte-level} (gemma-s13 input, $N{=}256$) & \multicolumn{4}{l}{28,662 tokens, 11.73 tokens/word, $1/\Sigma p_i^2 = 15.6$} \\
 \bottomrule
 \end{tabular}
 \end{center}
+
+ZPSR tokens here are \emph{inflectional} segments from the ALTLab boundary generator (\texttt{wâpam>êw}), not minimal morphemes; 35\% of whitespace tokens (English, URLs, numbers, and Cree forms absent from the lexicon) receive no analysis and contribute zero tokens.
 
 \section{Linguistic Reality: Why Standard BPE Fails Polysynthetic Languages}
 
@@ -158,39 +163,33 @@ Word:      he    sees   her
 Morpheme:  [he]  [see] [past] [3sg]
 \end{lstlisting}
 
-\textbf{Cree (polysynthetic)}: ``wâpamêw'' = 1 word, 3 morphemes, encoded in affixes
+\textbf{Cree (polysynthetic)}: ``wâpamêw'' = 1 word; strict analyser \texttt{wâpamêw+V+TA+Ind+3Sg+4Sg/PlO}
 
 \begin{lstlisting}
-Word:     wâpamêw
-Morphemes: [wâp=see] [ame=him] [w=3sg.animate]
-           ^Root     ^Object   ^Agreement
+Word:         wâpamêw
+FST segments: wâpam>êw          (2 inflectional segments; measured)
+Gloss:        [wâp=see][ame=him][w=3sg] -- verify with a speaker (not what the FST gives)
 \end{lstlisting}
 
-BPE's byte-pair merging is linguistically blind:
+BPE's byte-pair merging is linguistically blind (measured, tiktoken 0.12.0):
 
 \begin{lstlisting}
-BPE process on "wâpamêw":
-  1. Bytes: w, â, p, a, m, ê, w
-  2. Scan for frequent pairs (English training data)
-  3. Merge "am" → am_token (English word fragment)
-  4. Merge "wa" → wa_token (English common prefix)
-  5. Result: w_token, â_token, p_token, am_token, ê_token, w_token
-  6. UCAS characters (â, ê) fragment on macron: 2–3 tokens each
-  7. Final: ~6–7 tokens for a 3-morpheme word
+gpt2:        w | â | p | am | ê | w      = 6 tokens
+cl100k_base: w | â | p | am | ê | w      = 6 tokens
+  "am" is an English merge; â and ê stay as single multi-byte pieces here
 \end{lstlisting}
 
-FST-constrained ZPSR:
+FST-constrained ZPSR (measured):
 
 \begin{lstlisting}
-ZPSR process on "wâpamêw":
-  1. Parse morphology: [wâp] [ame] [w]
-  2. FST lookup: valid Cree verb form? Yes
-  3. GBNF mask: logits clamped to valid continuations
-  4. ASP solver: animacy agreement? Yes (animate object -ame, animate ending -w)
-  5. Result: 3 tokens for 3 morphemes
+ZPSR on "wâpamêw":
+  1. Strict analyser: wâpamêw+V+TA+Ind+3Sg+4Sg/PlO
+  2. Boundary generator: wâpam>êw
+  3. Result: 2 tokens
+  (GBNF masking and the ASP solver are not part of this measurement)
 \end{lstlisting}
 
-\textbf{Factor difference}: BPE 7 tokens vs. ZPSR 3 tokens = 2.3× efficiency gap, compounded across a polysynthetic corpus.
+\textbf{Factor difference}: BPE 6 tokens vs.\ ZPSR 2 tokens on this word; across the 1,587 analysed corpus words, 8,363 (gpt2) vs.\ 2,545.
 
 \subsection{Grammar Constraints Are Not Optional}
 
@@ -198,15 +197,15 @@ Cree grammar is \textbf{law, not probability}:
 
 \textbf{Animate/Inanimate agreement} (mandatory):
 \begin{itemize}
-  \item Animate: ``kî-wâpamêw'' (he saw [animate object])
-  \item Inanimate: ``kî-wâpamâtêw'' (he saw [inanimate object])
+  \item Animate: ``kî-wâpamêw'' (he saw [animate object]) --- strict analyser: \texttt{PV/ki+wâpamêw+V+TA+Ind+3Sg+4Sg/PlO}; gloss: verify with a speaker
+  \item Inanimate: ``kî-wâpamâtêw'' (he saw [inanimate object]) --- no analysis (strict or relaxed): \textbf{verify with a speaker}
   \item Violating this = ungrammatical (native speaker will reject)
 \end{itemize}
 
 \textbf{Obviative tracking} (mandatory):
 \begin{itemize}
-  \item Proximate: ``ni-wâpamâw'' (I see him [main narrative focus])
-  \item Obviative: ``ni-wâpamâhkêw'' (I see him [background figure])
+  \item Proximate: ``ni-wâpamâw'' (I see him [main narrative focus]) --- no analysis as written: \textbf{verify with a speaker}
+  \item Obviative: ``ni-wâpamâhkêw'' (I see him [background figure]) --- no analysis: \textbf{verify with a speaker}
   \item Shifting obviative status without morpheme change = confusing
 \end{itemize}
 
@@ -223,24 +222,16 @@ BPE treats these as ``probable next tokens.'' ZPSR enforces them as \textbf{hard
 
 \subsection{Corpus Preparation}
 
-\textbf{Selection}:
+\textbf{Target (not yet met)}:
 \begin{itemize}
-  \item Plains Cree text (Giellatekno lexicon, published narratives, pedagogical materials)
-  \item Minimum 10,000 words
-  \item Native-speaker verified (no machine-generated content)
-  \item Annotated with morpheme boundaries
+  \item Plains Cree running text, minimum 10,000 words, speaker-verified, with gold morpheme boundaries --- [pending replication on ALTLab corpus]
 \end{itemize}
 
-\textbf{Versioning}:
+\textbf{Used in this run}:
 \begin{itemize}
-  \item Stored at \texttt{.forge/benchmark/cree-corpus/corpus-2026-08-30.txt}
-  \item Metadata: \texttt{.forge/benchmark/cree-corpus/metadata.ron}
-  \begin{itemize}
-    \item Source attribution
-    \item Verification date
-    \item Morpheme annotation schema
-    \item Hash (SHA-256 for reproducibility)
-  \end{itemize}
+  \item \texttt{lang-crk/devtools/testdata/crk\_public\_texts.txt}: 2,443 whitespace words, 28,662 bytes, SHA-256 \texttt{c8fa6e740bdb9d76efaedc125efdcc941f3b3f8ff52a6fc5ed4aa483e08e9c9c}
+  \item GiellaLT test file (upstream commit 632a910); unverified; no morpheme annotation
+  \item Provenance block in \texttt{zpsr-vs-bpe-results.json}; hashes of every artifact in \texttt{RECEIPTS.txt}
 \end{itemize}
 
 \subsection{Tokenization Procedure}
@@ -251,22 +242,23 @@ tokenize_bpe(text, vocab=tiktoken_english):
   → token_ids = […]
   → count = len(token_ids)
   → distribution p_i = count(i) / count
-  → N×IPR = N × Σ(p_i²)
-  → validity = count(tokens mapping to valid Cree) / count
+  → N×IPR = N × Σ(p_i²); effective vocab = 1/Σ(p_i²)
+  → validity = null (no oracle maps byte-pieces to morphemes)
 \end{lstlisting}
 
 \textbf{ZPSR (constrained)}:
 \begin{lstlisting}
-tokenize_zpsr(text, fst=cree_fst, gbnf=cree_gbnf, asp=clingo_solver):
-  → parse_morphology(text)
-  → fst_check() → valid or invalid
-  → gbnf_mask(model_logits) → clamp illegal paths
-  → asp_solve(animacy, obviation, direction)
-  → token_ids = […]
-  → count = len(token_ids)
-  → distribution p_i = count(i) / count
-  → N×IPR = N × Σ(p_i²)
-  → validity = 100% (by definition; FST guarantee)
+tokenize_zpsr(text, analyser=crk-strict-analyzer-for-dictionary.hfstol,
+              generator=crk-strict-generator-with-morpheme-boundaries.hfstol):
+  for word in text.split():
+    → analyses = analyser.lookup(strip_punct(word))   (lowercase retry)
+    → none → unanalysed (0 tokens)
+    → segmented = generator.lookup(analyses[0])       (variant matching the surface form)
+    → tokens = split(segmented, on '<' and '>')
+  → count = Σ tokens; distribution p_i over segment types
+  → N×IPR (N = observed types), effective vocab = 1/Σ(p_i²)
+  → validity = coverage = analysed words / all words   (measured 64.96%)
+  (GBNF masking / ASP solving are decode-time layers, not measured here)
 \end{lstlisting}
 
 \subsection{Statistical Analysis}
@@ -288,11 +280,11 @@ Aggregate across corpus:
 \subsection{Success Criteria (All required)}
 
 \begin{enumerate}
-  \item $\checkmark$ $\text{count}_{\text{zpsr}} < \text{count}_{\text{bpe}}$ by $>10\%$ ($p < 0.05$)
-  \item $\checkmark$ $\text{validity}_{\text{zpsr}} \geq 95\%$, $\text{validity}_{\text{bpe}} < 70\%$
-  \item $\checkmark$ $\text{IPR}_{\text{zpsr}} > \text{IPR}_{\text{bpe}}$ by $>20\%$ (statistically significant)
-  \item $\checkmark$ $\text{compression\_ratio}_{\text{zpsr}} / \text{compression\_ratio}_{\text{bpe}} \geq 1.15$ ($\geq 15\%$ improvement)
-  \item $\checkmark$ Both dual-oracle gates pass (Oracle 1: theoretical, Oracle 2: empirical)
+  \item $\text{count}_{\text{zpsr}} < \text{count}_{\text{bpe}}$ by $>10\%$ --- measured $-69.6\%$ / $-65.6\%$ on analysed words; no $p$-value computed
+  \item $\text{validity}_{\text{zpsr}} \geq 95\%$ --- NOT met (coverage 64.96\%); $\text{validity}_{\text{bpe}}$ not computable
+  \item $\text{IPR}_{\text{zpsr}} > \text{IPR}_{\text{bpe}}$ by $>20\%$ --- NOT supported as stated (N×IPR 5.71 vs.\ 1,260 / 1,922); effective vocab 89.0 vs.\ 39.9 / 52.2
+  \item bytes/token ratio $\geq 1.15$ --- measured $3.29\times$ / $2.91\times$ on the same bytes
+  \item Dual-oracle: Oracle 2 [pending replication on ALTLab corpus]
 \end{enumerate}
 
 \section{Implications for Sovereignty and Language Preservation}
@@ -339,13 +331,13 @@ Hardware acceleration opportunities:
 
 \bigskip
 \noindent
-\textbf{Status}: READY FOR INTEGRATION. Benchmark EXECUTED. All hypotheses PROVEN.
+\textbf{Status}: Benchmark MEASURED 2026-08-30 (v2). Hypothesis verdicts [pending replication on ALTLab corpus]. v1 numbers withdrawn (see Erratum).
 
-\textbf{Corpus}: Giellatekno Plains Cree (2,000 words, 23,558 bytes, native-verified)
+\textbf{Corpus}: GiellaLT lang-crk \texttt{crk\_public\_texts.txt} (2,443 words, 28,662 bytes, unverified test file)
 
-\textbf{Benchmark Results}: Token $\Delta$ $-61.5\%$, Validity $\Delta$ $+57.7\%$, N×IPR $\Delta$ $+16,150\%$, Compression $\Delta$ $+160\%$
+\textbf{Benchmark Results}: tokens $-69.6\%$ (gpt2) / $-65.6\%$ (cl100k) on the 1,587 analysed words; coverage 64.96\%; effective vocab 89.0 vs.\ 39.9 / 52.2; bytes/token 6.260 vs.\ 1.905 / 2.155
 
-\textbf{Dual-Oracle Verdict}: PASS $\checkmark \checkmark$ (Oracle 1 theoretical + Oracle 2 empirical both confirmed)
+\textbf{Dual-Oracle Verdict}: Oracle 1 theoretical argument unchanged; Oracle 2 [pending replication on ALTLab corpus]
 
 \textbf{Integration note}: Insert into \texttt{nistam\_dream\_engine\_whitepaper\_v4.pdf} after Chapter VII (Experimental Verification)
 

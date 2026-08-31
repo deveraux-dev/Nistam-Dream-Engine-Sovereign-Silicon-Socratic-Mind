@@ -167,9 +167,10 @@ def get_expected_nace_level(tick: int) -> int:
 
 
 class EvidenceFlywheel:
-    def __init__(self, manual: bool = False):
+    def __init__(self, manual: bool = False, require_cloud: bool = False):
         self.manual = manual
-        self.model = os.environ.get("GEMINI_MODEL", "gemini-3.7-flash")
+        self.require_cloud = require_cloud
+        self.model = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
         self.chain_state_path = "evidence-chain.json"
 
         # Initialize staging directory per tmpfs spec (STAGING_DIR env variable)
@@ -417,9 +418,10 @@ class EvidenceFlywheel:
 def main():
     parser = argparse.ArgumentParser(description="Surface Ledger Agent Loop")
     parser.add_argument("--manual", action="store_true", help="Run once in manual trigger mode")
+    parser.add_argument("--require-cloud", action="store_true", help="Require real cloud connections without offline mocks")
     args = parser.parse_args()
 
-    agent = EvidenceFlywheel(manual=args.manual)
+    agent = EvidenceFlywheel(manual=args.manual, require_cloud=args.require_cloud)
 
     if args.manual:
         asyncio.run(agent.process_manual_trigger())

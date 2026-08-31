@@ -91,6 +91,30 @@ This skill guides the automated execution, receipt validation, and screen-record
 
 ---
 
+## 🎓 Academic Demonstration Track: 3-Step Presentation Sequence (Generic Morphology)
+
+When demonstrating to quantitative linguists, academic evaluators, or technical judges, use the 1-click **DEMO FLOW** buttons in the Studio Tauri UI:
+
+### Step 1: The Point Cloud = Unconstrained BPE (Thermal Chaos)
+* **UI Action**: Click `[1] THERMAL BPE` (or press `L` to toggle).
+* **Visual**: Camera zooms out to the wide, dense 5D hypersphere of 119,625 scattered points.
+* **Telemetry**: `Entropy H₁: 4.85 nats | 119,625 Active Unconstrained Tokens (Thermal Chaos)`.
+* **Script**: *"This dense cluster represents unconstrained statistical BPE token space—high entropy, scattered probability mass, and thermal noise where tokens can transition anywhere without grammatical rules. In polysynthetic morphologies, unconstrained subwords fragment the grammar, producing combinatorial explosion and illegal hallucinations."*
+
+### Step 2: Constellation Formation = Grammar Constraints (ZPSR / FST)
+* **UI Action**: Click `[2] ZPSR CONSTELLATION`.
+* **Visual**: Glowing vector lines connect specific nodes in sequence, displaying generic morpheme tags: `[ROOT: Action] → [THEME: Transitive] → [AGR: 3Sg.Subj] → [OBJ: 3Pl.Obj]`.
+* **Telemetry**: `Grammar State: Polysynthetic FST Chain | Pruned States: 99.84% | Legal Morpheme Path: 4 Nodes`.
+* **Script**: *"When we apply the Zero-Shot Polysynthetic State Resolver (ZPSR) with FST and GBNF Crucible Masking, the engine clamps illegal transitions. It collapses the probability mass onto pure, valid morpheme paths—forming these distinct geometric constellations."*
+
+### Step 3: The Audio Tone = $N \times \text{IPR}$ Purity Resonance
+* **UI Action**: Click `[3] N×IPR SONIFICATION`.
+* **Visual**: Harmonic Frequency HUD locks at `1539.47 Hz` as the pure sine chime resonates across the active nodes.
+* **Telemetry**: `Acoustic Sonification: High-Dimensional State Vector | Anti-Shannon N × IPR: 195.0 | Resonator: 1539.47 Hz (G6)`.
+* **Script**: *"The audio feedback maps the Anti-Shannon Inverse Participation Ratio (N × IPR). As probability mass concentrates onto pure valid states, the mathematical purity resonates at a specific harmonic frequency rather than noisy white noise. This provides real-time acoustic sonification of the high-dimensional state vector collapse."*
+
+---
+
 ## 🧪 Detailed Verification & Command Reference
 
 ### 1. Vertex AI Cloud Governor & 3-Wave Airgap

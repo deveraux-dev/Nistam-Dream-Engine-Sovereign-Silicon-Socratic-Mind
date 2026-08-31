@@ -129,6 +129,75 @@ impl Box5D {
     }
 }
 
+/// Decomposes an inclusive 5D bounding box into a minimal set of contiguous Morton key ranges
+/// using UB-tree Z-order interval subdivision (Bayer 1997).
+///
+/// Returns a vector of `(start_key, end_key)` inclusive intervals covering all points
+/// contained within the query box without false negatives.
+pub fn box5d_to_morton_ranges(
+    query: &Box5D,
+    max_ranges: usize,
+) -> Vec<(MortonKey5D, MortonKey5D)> {
+    let mut ranges = Vec::new();
+    let max_ranges = max_ranges.max(1);
+
+    for axis in 0..AXES {
+        if query.min[axis] > query.max[axis] {
+            return ranges;
+        }
+    }
+
+    fn subdivide(
+        query: &Box5D,
+        k_low: u64,
+        k_high: u64,
+        bit: usize,
+        max_ranges: usize,
+        ranges: &mut Vec<(MortonKey5D, MortonKey5D)>,
+    ) {
+        let node_min = MortonKey5D(k_low).axes();
+        let node_max = MortonKey5D(k_high).axes();
+
+        for axis in 0..AXES {
+            if node_max[axis] < query.min[axis] || node_min[axis] > query.max[axis] {
+                return;
+            }
+        }
+
+        let mut fully_contained = true;
+        for axis in 0..AXES {
+            if node_min[axis] < query.min[axis] || node_max[axis] > query.max[axis] {
+                fully_contained = false;
+                break;
+            }
+        }
+
+        if fully_contained || bit == 0 || ranges.len() >= max_ranges {
+            let start = MortonKey5D(k_low);
+            let end = MortonKey5D(k_high);
+            if let Some(last) = ranges.last_mut() {
+                if last.1.0.saturating_add(1) >= start.0 {
+                    last.1 = end;
+                    return;
+                }
+            }
+            ranges.push((start, end));
+            return;
+        }
+
+        let mid_bit = bit - 1;
+        let k_mid = k_low | ((1u64 << mid_bit) - 1);
+        subdivide(query, k_low, k_mid, mid_bit, max_ranges, ranges);
+        subdivide(query, k_mid + 1, k_high, mid_bit, max_ranges, ranges);
+    }
+
+    const TOTAL_BITS: usize = AXIS_BITS as usize * AXES;
+    const MAX_KEY: u64 = (1u64 << TOTAL_BITS) - 1;
+
+    subdivide(query, 0, MAX_KEY, TOTAL_BITS, max_ranges, &mut ranges);
+    ranges
+}
+
 /// A residue of the field `F_M61`, held reduced: `0 <= value < M61`. The constructor
 /// reduces; arithmetic in [`mersenne_dot`] depends on that bound to fit `u128`.
 #[repr(transparent)]
@@ -865,5 +934,41 @@ mod tests {
     fn the_node_is_one_cache_line() {
         assert_eq!(core::mem::size_of::<RamusPrimeNode>(), 64);
         assert_eq!(core::mem::align_of::<RamusPrimeNode>(), 64);
+    }
+
+    #[test]
+    fn box5d_morton_ranges_single_point_exact() {
+        let pt = [10, 20, 30, 40, 50];
+        let q = Box5D { min: pt, max: pt };
+        let ranges = box5d_to_morton_ranges(&q, 16);
+        assert_eq!(ranges.len(), 1);
+        let expected_k = MortonKey5D::encode(pt);
+        assert_eq!(ranges[0], (expected_k, expected_k));
+    }
+
+    #[test]
+    fn box5d_morton_ranges_invalid_box_empty() {
+        let q = Box5D { min: [100, 20, 0, 0, 0], max: [50, 20, 0, 0, 0] };
+        let ranges = box5d_to_morton_ranges(&q, 16);
+        assert!(ranges.is_empty());
+    }
+
+    #[test]
+    fn box5d_morton_ranges_covers_all_points_in_box() {
+        let q = Box5D {
+            min: [2, 3, 0, 0, 0],
+            max: [4, 5, 0, 0, 0],
+        };
+        let ranges = box5d_to_morton_ranges(&q, 64);
+        assert!(!ranges.is_empty());
+
+        for x in 2..=4 {
+            for y in 3..=5 {
+                let k = MortonKey5D::encode([x, y, 0, 0, 0]);
+                assert!(q.contains(k));
+                let covered = ranges.iter().any(|(s, e)| k.0 >= s.0 && k.0 <= e.0);
+                assert!(covered, "Key for ({x},{y}) must be covered by ranges");
+            }
+        }
     }
 }

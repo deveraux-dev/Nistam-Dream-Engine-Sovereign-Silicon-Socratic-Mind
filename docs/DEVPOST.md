@@ -1,9 +1,9 @@
 # Nistam Dream Engine — Devpost
 
 **One-liner:** A sovereign 1.58-bit balanced-ternary inference engine that runs a
-three-seat quantized Gemma fleet (2B / 3.2B / 9B) in deterministic lockstep on one
+three-seat quantized Gemma fleet (Baby Bear 2B / Papa Bear 9B / Mama Bear 27B router head) in deterministic lockstep on one
 consumer GPU, governed in the cloud by Google Cloud Vertex AI gemini-2.5-flash (enforcing
-a strict $0.0004/call unit-cost governor ceiling) — and wearing a playable face: a Tauri
+75% input cost reduction via serverless context caching) — and wearing a playable face: a Tauri
 v2 shell that flies the 119,625-star HYG sky, births a character through the Thirteen
 Tolls, and walks a CYOA arc to the Toll Gate.
 
@@ -20,7 +20,7 @@ occur in valid weight data and therefore halt inference the instant they appear.
 A 512-bit XOR+POPCNT MetaRouter dispatches work between the local seats. Expired
 activations are zeroized on tick deadline (ADR-0026) with rolling SHA-256
 tamper-evident evidence chains. Governed audits escalate to a serverless Google Cloud
-Vertex AI gemini-2.5-flash context cache at temperature 0.0 with a strict $0.0004/call ceiling.
+Vertex AI gemini-2.5-flash context cache at temperature 0.0 with metered usage telemetry.
 
 The demo shell (`crates/studio-tauri`) renders it: 5D free-flight star navigation
 with click-any-star dossiers, a brass astrolabe overlay, an M5 geodesic

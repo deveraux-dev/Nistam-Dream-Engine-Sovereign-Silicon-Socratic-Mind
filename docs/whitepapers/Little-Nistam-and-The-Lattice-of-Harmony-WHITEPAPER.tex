@@ -1,5 +1,5 @@
 \documentclass[11pt,oneside]{article}
-\usepackage[utf-8]{inputenc}
+\usepackage[utf8]{inputenc}
 \usepackage[margin=1in]{geometry}
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -16,7 +16,8 @@
   breaklines=true,
   frame=single,
   columns=flexible,
-  tabsize=2
+  tabsize=2,
+  literate={â}{{\^a}}1 {ê}{{\^e}}1 {î}{{\^i}}1 {ô}{{\^o}}1 {→}{{$\rightarrow$}}1 {×}{{$\times$}}1 {Σ}{{$\Sigma$}}1 {²}{{$^{2}$}}1 {≈}{{$\approx$}}1 {≤}{{$\leq$}}1 {≥}{{$\geq$}}1 {–}{{--}}1 {—}{{---}}1 {…}{{\dots}}1 {✓}{{$\checkmark$}}1 {·}{{$\cdot$}}1 {é}{{\'e}}1 {←}{{$\leftarrow$}}1 {'}{{'}}1 {'}{{'}}1 {"}{{``}}1 {"}{{''}}1
 }
 
 \title{Little Nistam and The Lattice of Harmony}
@@ -37,12 +38,14 @@ This whitepaper presents a formal comparative analysis proving that grammar-cons
 
 \textbf{The Measurement}: $N \times \text{IPR} = N \times \sum p_i^2$, a hardware-native $O(N)$ FMA operation that replaces $\ln(x)$ with polynomial arithmetic, enabling real-time purity measurement inside L1 cache workgroup shared memory without frame drops.
 
-\textbf{The Proof}: ZPSR outperforms unconstrained BPE on four dimensions:
+\textbf{Erratum (v2)}: The v1 results (13,000 vs.\ 5,000 tokens; 42.3\% vs.\ 100\% validity; N×IPR 1.2 vs.\ 195.0; 1.81 vs.\ 4.71 B/token) were constants in \texttt{run-zpsr-vs-bpe-v2.ps1}, not measurements. They are withdrawn. Chapter VI now reports only values computed from the corpus by \texttt{.forge/benchmark/measure\_zpsr\_vs\_bpe.py} (\texttt{METHOD.md}).
+
+\textbf{The Measurement} (2026-08-30, 2,443-word lang-crk test file):
 \begin{enumerate}
-  \item \textbf{Token Count}: Fewer tokens needed for same Cree text (predicted 15--40\% savings)
-  \item \textbf{Linguistic Validity}: 100\% morpheme compliance vs. $\sim$42\% for BPE (which fragments UCAS)
-  \item \textbf{Information Purity (N×IPR)}: Higher concentration on valid sequences vs. spread across vocab
-  \item \textbf{Compression Ratio}: Better byte-per-token efficiency ($\sim$20--40\% improvement)
+  \item \textbf{Token Count}: on the 1,587 words the strict analyser covers, 2,545 FST segments vs.\ 8,363 (gpt2) / 7,393 (cl100k) BPE tokens ($-69.6\%$ / $-65.6\%$)
+  \item \textbf{Linguistic Validity}: strict-analyser coverage 64.96\% (relaxed 74.62\%); BPE validity not computable
+  \item \textbf{Information Purity}: effective vocabulary $1/\Sigma p_i^2$ 89.0 (FST segments) vs.\ 39.9 / 52.2 (BPE); N×IPR 5.71 vs.\ 1,260 / 1,922 --- the ``BPE $\approx$ 1'' picture is not supported
+  \item \textbf{Compression Ratio}: 6.260 vs.\ 1.905 / 2.155 bytes/token on the same 15,932 bytes ($3.29\times$ / $2.91\times$)
 \end{enumerate}
 
 By anchoring this work in \textbf{anti-Shannon measurement} rather than transcendental entropy, we prove that ZPSR's efficiency is not a statistical accident but a \textbf{fundamental property of grammar-constrained state machines running on edge hardware}.
@@ -54,15 +57,13 @@ By anchoring this work in \textbf{anti-Shannon measurement} rather than transcen
 Byte Pair Encoding works by iteratively merging the most \emph{frequent} adjacent byte pairs. The algorithm is completely unaware of linguistic structure:
 
 \begin{lstlisting}
-Input:  "nicî-wâpamêw" (Cree: "he looks at me")
-BPE vocab: English-trained, 50K tokens
-Tokenization process:
-  1. Split to bytes: n, î, c, î, -, w, â, p, a, m, ê, w
-  2. Scan for frequent pairs (English statistics)
-  3. Merge high-frequency pairs: "in", "an", "wa"
-  4. Result: [n_token, î_token, c_unusual, ...]
-  5. UCAS characters (î, ê, â) → fragment into 2–3 byte tokens
-Output tokens: ~18 tokens (vs. optimal: ~4-5 morphemes)
+Input:  "nicî-wâpamêw"  (gloss "he looks at me" -- verify with a speaker;
+                         strict analyser: no analysis; relaxed: PV/nihci+wâpamêw+V+TA+Ind+3Sg+4Sg/PlO)
+BPE vocab: tiktoken gpt2 (50,257) / cl100k_base (100,277), measured:
+  gpt2:   nic | î | - | w | â | p | am | ê | w     = 9 tokens
+  cl100k: nic | î | -w | â | p | am | ê | w        = 8 tokens
+  "nic" and "am" are English merges; the diacritic letters stay as single pieces
+Output tokens: 8-9 (vs. FST segments for kî-wâpamêw: kî-<wâpam>êw = 3)
 \end{lstlisting}
 
 \textbf{The failure modes}:
@@ -78,7 +79,7 @@ Output tokens: ~18 tokens (vs. optimal: ~4-5 morphemes)
 
   \item \textbf{Morpheme Destruction}:
   \begin{itemize}
-    \item Cree morphemes carry meaning (\emph{wâp} = see, \emph{am} = him, \emph{êw} = 3rd person)
+    \item Cree morphemes carry meaning (\emph{wâp} = see, \emph{am} = him, \emph{êw} = 3rd person --- gloss to verify with a speaker; the FST segments the word as \texttt{wâpam>êw})
     \item BPE merges based on byte frequency, not morphemic boundary
     \item Result: Token sequence loses linguistic coherence
   \end{itemize}
@@ -97,31 +98,27 @@ Polysynthetic morphology packages multiple morphemes into single words:
 
 \begin{lstlisting}
 English (analytic):    "he sees her" = 3 words
-Cree (polysynthetic):  "wâpamêw" = 1 word, 3 morphemes
-
-Morpheme structure:
-  wâp-      ame  -w
-  see-      him  -3sg.animate
-  [Root]    [OBJ] [PERSON]
+Cree (polysynthetic):  "wâpamêw" = 1 word
+  strict analyser: wâpamêw+V+TA+Ind+3Sg+4Sg/PlO
+  FST segments:    wâpam>êw          (2 inflectional segments; measured)
+  gloss:           wâp-see  ame-him  -w 3sg   -- verify with a speaker
 \end{lstlisting}
 
-\textbf{BPE's blindness to morpheme boundaries}:
+\textbf{BPE's blindness to morpheme boundaries} (measured, tiktoken 0.12.0):
 
 \begin{center}
 \begin{tabular}{llll}
 \toprule
-Morpheme & Cree Form & BPE Behavior & Cost \\
+Tokenizer & Pieces for wâpamêw & Count & Note \\
 \midrule
-Root & wâp & Fragments on macron: wâ·p & 2 tokens \\
-Object & ame & English-like ``am'' merges partially & 2 tokens \\
-Person & w & Single byte, no merge & 1 token \\
-\textbf{Total} & wâpamêw & Statistical merging & \textbf{5 tokens} \\
-\textbf{Optimal} & wâpamêw & Morpheme-aware & \textbf{1 token} \\
+gpt2 & w $\mid$ â $\mid$ p $\mid$ am $\mid$ ê $\mid$ w & 6 & ``am'' is an English merge \\
+cl100k\_base & w $\mid$ â $\mid$ p $\mid$ am $\mid$ ê $\mid$ w & 6 & same split \\
+\textbf{FST segments} & wâpam $\mid$ êw & \textbf{2} & inflectional boundary only \\
 \bottomrule
 \end{tabular}
 \end{center}
 
-\textbf{Token inflation factor}: $5\times$ for a simple transitive verb. Across a corpus of polysynthetic text, this compounds into massive inefficiency.
+\textbf{Token inflation factor}: $3\times$ on this verb (6 vs.\ 2). Across the 1,587 analysed corpus words: 8,363 (gpt2) vs.\ 2,545 segments.
 
 \section{CHAPTER II: THE SOLUTION --- ZPSR AND GRAMMAR CONSTRAINTS}
 
@@ -328,7 +325,7 @@ All use the same algebraic primitive: $\sum(p_i^2)$. No transcendentals, univers
 \begin{itemize}
   \item \textbf{Null}: $\text{validity}_{\text{zpsr}} \approx \text{validity}_{\text{bpe}}$
   \item \textbf{Alternative}: $\text{validity}_{\text{zpsr}} > \text{validity}_{\text{bpe}}$
-  \item \textbf{Prediction}: $\text{validity}_{\text{zpsr}} = 100\%$, $\text{validity}_{\text{bpe}} < 60\%$ (UCAS fragmentation)
+  \item \textbf{Prediction}: withdrawn. Measured: strict-analyser coverage 64.96\%; $\text{validity}_{\text{bpe}}$ not computable. [pending replication on ALTLab corpus]
 \end{itemize}
 
 \textbf{H3 (Information Purity)}: Grammar creates pure token states
@@ -358,9 +355,8 @@ All use the same algebraic primitive: $\sum(p_i^2)$. No transcendentals, univers
 
 \emph{Oracle 2 (Empirical)}:
 \begin{itemize}
-  \item Tokenize Cree text via tiktoken/Gemma vocab
-  \item Measure UCAS fragmentation rate
-  \item Status: UNRUN (requires API readback)
+  \item Tokenize Cree text via tiktoken (gpt2, cl100k\_base)
+  \item Measured: the Latin-orthography diacritics (â, ê, î) each stay one token in both encodings; whole-corpus 6.22 / 5.42 tokens per word. UCAS \emph{syllabics} were not in this corpus (Latin SRO orthography), so Claim A remains UNRUN for syllabics.
 \end{itemize}
 
 \textbf{Claim B}: ``ZPSR produces fewer, purer tokens than BPE''
@@ -376,17 +372,17 @@ All use the same algebraic primitive: $\sum(p_i^2)$. No transcendentals, univers
 \emph{Oracle 2 (Empirical)}:
 \begin{itemize}
   \item Encode same Cree corpus both ways
-  \item Measure token counts, N×IPR, validity percentages
-  \item Status: UNRUN (requires benchmark implementation)
+  \item Measure token counts, $\Sigma p_i^2$, N×IPR, effective vocabulary, analyser coverage
+  \item Status: MEASURED 2026-08-30 (Chapter VI); verdict [pending replication on ALTLab corpus]
 \end{itemize}
 
 \subsection{Measurement Procedures}
 
 \textbf{Setup}:
 \begin{itemize}
-  \item Corpus: 10K+ words of Plains Cree (native-verified)
-  \item BPE tokenizer: tiktoken (standard English-trained)
-  \item ZPSR tokenizer: FST-constrained, gram-valid only
+  \item Corpus (this run): 2,443 words, GiellaLT lang-crk \texttt{crk\_public\_texts.txt}, unverified test file. Target 10K+ speaker-verified words: [pending replication on ALTLab corpus]
+  \item BPE tokenizer: tiktoken 0.12.0 (gpt2, cl100k\_base)
+  \item ZPSR tokenizer: ALTLab \texttt{crk-strict-analyzer-for-dictionary.hfstol} + \texttt{crk-strict-generator-with-morpheme-boundaries.hfstol} via hfst-optimized-lookup 0.0.14
 \end{itemize}
 
 \textbf{Per-sample measurement}:
@@ -395,12 +391,12 @@ All use the same algebraic primitive: $\sum(p_i^2)$. No transcendentals, univers
 1. Tokenize via BPE
    → count_bpe = len(token_ids_bpe)
    → IPR_bpe = N × Σ(p_i²) for token distribution
-   → validity_bpe = % tokens mapping to valid Cree
+   → validity_bpe = null (no oracle maps byte-pieces to morphemes)
 
 2. Tokenize via ZPSR
-   → count_zpsr = len(token_ids_zpsr)
-   → IPR_zpsr = N × Σ(p_i²) for token distribution
-   → validity_zpsr = 100% (FST guarantee)
+   → count_zpsr = len(FST segments over analysed words)
+   → IPR_zpsr = N × Σ(p_i²), N = observed segment types
+   → validity_zpsr = coverage = analysed words / all words (measured 64.96%)
 
 3. Compare
    → delta_count = count_bpe - count_zpsr
@@ -436,16 +432,18 @@ This works for English-like languages where word order and morphology are relati
 \textbf{Animate vs. Inanimate Agreement} (mandatory):
 \begin{lstlisting}
 Animate subject:  "kî-wâpamêw"    (he saw [animate object])
+                   strict analyser: PV/ki+wâpamêw+V+TA+Ind+3Sg+4Sg/PlO; segments kî-<wâpam>êw
 Inanimate object: "kî-wâpamâtêw"  (he saw [inanimate object])
+                   NO analysis (strict or relaxed) -- verify with a speaker
 
-Morpheme difference: -êw vs. -âtêw
+Morpheme difference: -êw vs. -âtêw   -- verify with a speaker
 This is NOT optional. Violating agreement = ungrammatical.
 \end{lstlisting}
 
 \textbf{Obviative Tracking} (mandatory):
 \begin{lstlisting}
-Proximate (main): ni-wâpamâw     (I see him [proximate])
-Obviative (other): ni-wâpamâhkêw (I see him [obviative])
+Proximate (main): ni-wâpamâw     (I see him [proximate])   -- no analysis as written; verify with a speaker
+Obviative (other): ni-wâpamâhkêw (I see him [obviative])   -- no analysis; verify with a speaker
 
 Morpheme change signals a shift in narrative focus.
 Violating obviative marking = confusing the listener.
@@ -487,66 +485,56 @@ If a violation is detected (unauthorized outbound, unvetted processing), the sys
 
 \subsection{Empirical Benchmark Results (August 30, 2026)}
 
-Benchmark executed on Giellatekno Plains Cree corpus (2,000 words, 23,558 bytes UTF-8). Both oracles pass. All four hypotheses \textbf{PROVEN}.
+Benchmark measured on the GiellaLT lang-crk test file \texttt{crk\_public\_texts.txt} (2,443 whitespace words, 28,662 bytes UTF-8, SHA-256 \texttt{c8fa6e74\ldots e9c9c}). Tokenizers: tiktoken 0.12.0 (gpt2, cl100k\_base); ALTLab \texttt{crk-strict-analyzer-for-dictionary} + \texttt{crk-strict-generator-with-morpheme-boundaries} (morphodict main @ e3468e1). Procedure: \texttt{.forge/benchmark/METHOD.md}; hashes of every input and output: \texttt{RECEIPTS.txt}. Hypothesis verdicts are [pending replication on ALTLab corpus].
 
 \begin{center}
 \begin{tabular}{lllll}
 \toprule
-Metric & BPE (Baseline) & ZPSR & Delta & Verdict \\
+Metric & BPE (gpt2 / cl100k) & ZPSR (FST segments) & Delta & Status \\
 \midrule
-\textbf{Token Count} & 13,000 & 5,000 & $-8,000$ ($-61.5\%$) & \textbf{ZPSR saves 61.5\%} $\checkmark$ \\
-\textbf{Validity \%} & 42.3\% & 100.0\% & $+57.7\%$ & \textbf{ZPSR 100\%} $\checkmark$ \\
-\textbf{N×IPR Purity} & 1.2 & 195.0 & $+193.8$ (+16,150\%) & \textbf{ZPSR 162× purer} $\checkmark$ \\
-\textbf{Compression Ratio (B/T)} & 1.81 & 4.71 & $+2.6\times$ (+160\%) & \textbf{ZPSR 2.6× efficient} $\checkmark$ \\
+\textbf{Token Count} (same 1,587 analysed words) & 8,363 / 7,393 & 2,545 & $-69.6\%$ / $-65.6\%$ & measured \\
+\textbf{Coverage} (validity on corpus) & null (no oracle) & 64.96\% strict / 74.62\% relaxed & --- & measured; 100\% withdrawn \\
+\textbf{Effective vocab} $1/\Sigma p_i^2$ & 39.9 / 52.2 & 89.0 & --- & measured \\
+\textbf{N×IPR} & 1,260.2 / 1,922.2 & 5.71 ($N{=}508$ observed) & --- & measured; see below \\
+\textbf{Bytes/token} (same 15,932 bytes) & 1.905 / 2.155 & 6.260 & $3.29\times$ / $2.91\times$ & measured \\
+\textbf{Byte-level} ($N{=}256$; gemma-s13 input) & \multicolumn{4}{l}{28,662 tokens, 11.73 tokens/word, $1/\Sigma p_i^2 = 15.6$} \\
 \bottomrule
 \end{tabular}
 \end{center}
 
-\subsection{Why These Results Exceed Predictions}
+\subsection{Reading the Measured Results}
 
-\textbf{Token Count Savings (61.5\% observed vs. 35\% predicted)}:
+\textbf{Token Count}:
 
-The empirical savings far exceed conservative estimates. On real Cree text, ZPSR's morpheme-aligned tokenization compressed token count from 13K (BPE, statistically chaotic) to 5K (ZPSR, grammar-constrained). This reflects the magnitude of BPE's failure on polysynthetic text:
+On the 1,587 words the strict analyser accepts, the FST segment stream is 2,545 tokens against 8,363 (gpt2) / 7,393 (cl100k). Whole-corpus BPE: 15,188 / 13,239 tokens, 6.22 / 5.42 per word. The FST stream is 1.60 segments per analysed word. Segments are \emph{inflectional} (\texttt{wâpam>êw}), not minimal morphemes; the boundary generator does not split derivational structure inside a stem.
 
-\begin{itemize}
-  \item BPE produces $\sim 6.5$ tokens per word (English-biased merging on UCAS characters)
-  \item ZPSR produces $\sim 2.5$ tokens per word (morpheme-aligned clustering)
-  \item Compound effect across 2,000-word corpus: 61.5\% total reduction
-\end{itemize}
+\textbf{Coverage}:
 
-\textbf{Validity Improvement (42.3\% $\to$ 100\%)}:
+856 of 2,443 whitespace tokens (35\%) get no strict analysis: English words, URLs and phone numbers present in the source text, plus Cree forms absent from the lexicon (e.g.\ \emph{êkâcî}, \emph{kanâta}, \emph{wîcêwâkanihtowinihk}). ``100\% by FST construction'' described generation under a grammar, not analysis of a corpus; on a corpus the validity figure is coverage. BPE validity is null: there is no oracle that maps a byte-piece to a morpheme.
 
-BPE achieves only 42.3\% morphological validity due to UCAS fragmentation and English byte-pair bias. ZPSR guarantees 100\% by FST construction (only valid morpheme sequences allowed). This binary shift proves the linguistic principle: \textbf{grammar is law, not probability}.
+\textbf{N×IPR}:
 
-\textbf{N×IPR Purity (1.2 $\to$ 195.0 --- 162× improvement)}:
-
-The purity metric reveals the core difference:
-
-\begin{itemize}
-  \item \textbf{BPE} (N×IPR = 1.2): Token distribution scattered across 50K vocabulary, near-uniform chaos
-  \item \textbf{ZPSR} (N×IPR = 195.0): Token distribution concentrated on $\sim$150--250 valid morpheme paths, information-localized pure state
-\end{itemize}
-
-This 16,150\% increase is not a statistical fluke; it's the direct consequence of replacing chaotic statistical merging with deterministic grammar constraints. The calculation:
+The v1 story (``BPE $\approx 1$, thermal chaos; ZPSR $\approx 195$, pure'') is not what the metric does on this data. BPE concentrates on a few hundred byte-piece types, so $\Sigma p_i^2$ is large (gpt2: 0.02508) and $N\Sigma p_i^2 = 50{,}257 \times 0.02508 = 1{,}260$. The FST stream has no fixed vocabulary, so its $N$ is the observed 508 types and N×IPR is 5.71. The figure comparable across tokenizers is the effective vocabulary $1/\Sigma p_i^2$: 39.9 (gpt2), 52.2 (cl100k), 89.0 (FST segments) --- the segment stream spreads over \emph{more} effective types, which is the opposite of the v1 ``purity'' claim.
 
 \begin{lstlisting}
-BPE:  N × Σ(p_i²) ≈ 50000 × (1/50000)² ≈ 1.2
-ZPSR: N × Σ(p_i²) ≈ 200 × (1/200)² × concentration_factor ≈ 195.0
+gpt2:   N × Σ(p_i²) = 50,257  × 0.025076 = 1,260.2   ; 1/Σp² = 39.9
+cl100k: N × Σ(p_i²) = 100,277 × 0.019169 = 1,922.2   ; 1/Σp² = 52.2
+ZPSR:   N × Σ(p_i²) = 508     × 0.011241 = 5.71      ; 1/Σp² = 89.0
 \end{lstlisting}
 
-\textbf{Compression Efficiency (1.81 $\to$ 4.71 B/token, 2.6× improvement)}:
+\textbf{Compression Efficiency}:
 
-Same input bytes (23,558), but fewer tokens (5K vs. 13K) concentrates the byte density:
+Same 15,932 bytes (the 1,587 analysed words joined with spaces):
 
 \begin{lstlisting}
-Efficiency = raw_bytes / token_count
-BPE:  23,558 / 13,000 = 1.81 B/token
-ZPSR: 23,558 / 5,000 = 4.71 B/token
+gpt2:   15,932 / 8,363 = 1.905 B/token
+cl100k: 15,932 / 7,393 = 2.155 B/token
+ZPSR:   15,932 / 2,545 = 6.260 B/token
 
-Ratio improvement: 4.71 / 1.81 = 2.6×
+Ratio: 3.29× (vs gpt2), 2.91× (vs cl100k)
 \end{lstlisting}
 
-This means: \textbf{ZPSR requires 2.6× fewer tokens to encode the same Cree text}. On a 1000-token LLM context window, ZPSR preserves 2.6× more semantic content versus BPE.
+This holds on the covered 65\% of the corpus only. Any context-window extrapolation is [pending replication on ALTLab corpus].
 
 \section{CHAPTER VII: IMPLEMENTATION PATHWAY}
 
@@ -554,9 +542,9 @@ This means: \textbf{ZPSR requires 2.6× fewer tokens to encode the same Cree tex
 
 \textbf{Phase 1: Corpus Preparation} (Week 1)
 \begin{itemize}
-  \item Select 10K+ word Plains Cree text corpus (native-verified)
-  \item Annotate with morpheme boundaries
-  \item Version snapshot at \texttt{.forge/benchmark/cree-corpus/}
+  \item Select 10K+ word Plains Cree text corpus (native-verified) --- [pending replication on ALTLab corpus]; this run used the 2,443-word lang-crk test file
+  \item Annotate with morpheme boundaries --- not done; ALTLab gold analyses needed
+  \item Version snapshot: \texttt{.forge/benchmark/} (SHA-256 of corpus, FSTs and outputs in \texttt{RECEIPTS.txt})
 \end{itemize}
 
 \textbf{Phase 2: Benchmark Implementation} (Weeks 2--3)
@@ -586,8 +574,8 @@ This means: \textbf{ZPSR requires 2.6× fewer tokens to encode the same Cree tex
 \begin{itemize}
   \item \textbf{CPU}: x86-64 or ARM (standard)
   \item \textbf{RAM}: 4 GB (BPE tokenizer + ZPSR FST)
-  \item \textbf{Corpus}: 50--100 MB (10K words + annotations)
-  \item \textbf{Runtime}: $\sim 30$ seconds per 1K words (both tokenizers, N×IPR calculation)
+  \item \textbf{Corpus}: 28,662 bytes text + $\sim$17.6 MB of FSTs (this run)
+  \item \textbf{Runtime}: seconds for 2,443 words (both tokenizers, all metrics)
 \end{itemize}
 
 \section{CHAPTER VIII: IMPLICATIONS AND FUTURE WORK}
@@ -636,9 +624,9 @@ For polysynthetic languages like Cree:
   \item ZPSR = grammatical certainty, high purity, linguistic precision
 \end{itemize}
 
-The comparative proof will demonstrate this mathematically and empirically. The anti-Shannon framework provides both the theory and the measurement primitive to make this rigorous.
+The measured run (Chapter VI) supports the token-count and bytes-per-token claims on the 65\% of the corpus the analyser covers, and does not support the ``purity'' claim as originally stated. The anti-Shannon primitive is still the measurement; what it measured here is that the FST segment stream has a \emph{larger} effective vocabulary than BPE, not a smaller one.
 
-\textbf{What remains}: Run the benchmark. Prove the hypotheses. Publish the results.
+\textbf{What remains}: Replicate on a speaker-verified ALTLab corpus with gold morpheme boundaries. Have a speaker check the example forms. Then restate the hypotheses against what the metric actually does.
 
 \appendix
 
@@ -650,7 +638,7 @@ The comparative proof will demonstrate this mathematically and empirically. The 
 
 \textbf{Key Finding}: Observable metrics include token sequence length, merge frequencies, compression ratio (bytes/tokens), and entropy per token. A proper BPE ledger captures merge operations with frequency histograms. Typical compression: 3.2--5.8 B/token for English.
 
-\textbf{Verdict}: PROVEN - Observable infrastructure exists for token measurement.
+\textbf{Verdict}: supported by cited sources (not a benchmark result) -Observable infrastructure exists for token measurement.
 
 \subsection{A.2 LLM Context Windows and Compression Interaction}
 
@@ -658,7 +646,7 @@ The comparative proof will demonstrate this mathematically and empirically. The 
 
 \textbf{Key Finding}: English compresses to 3.97 chars/token, but code (2.8--3.5 chars/token) is more compressible due to syntax repetition. Three bottlenecks emerge: (1) merge table lookups (solvable via L1 cache), (2) entropy ceiling (Shannon limit---fundamental), (3) model-tokenizer mismatch (training vs. inference divergence). Better tokenization increases cache-hit ratios.
 
-\textbf{Verdict}: PROVEN - Entropy ceiling is a hard physical limit; compression gains plateau predictably.
+\textbf{Verdict}: supported by cited sources (not a benchmark result) -Entropy ceiling is a hard physical limit; compression gains plateau predictably.
 
 \subsection{A.3 BPE Algorithm and Core Mechanics}
 
@@ -666,7 +654,7 @@ The comparative proof will demonstrate this mathematically and empirically. The 
 
 \textbf{Key Finding}: BPE's merge loop is deterministic. Entropy rises sharply in early merges (0--1K), then plateaus after $\sim$5K merges (diminishing returns). Empirical compression: $\sim$40--43\% of raw byte size (3.3--3.5 B/token on English). BPE is reversible; merge rules form an ordered sequence.
 
-\textbf{Verdict}: PROVEN - Merge sequence is canonical and deterministic.
+\textbf{Verdict}: supported by cited sources (not a benchmark result) -Merge sequence is canonical and deterministic.
 
 \subsection{A.4 Production Implementations}
 
@@ -674,7 +662,7 @@ The comparative proof will demonstrate this mathematically and empirically. The 
 
 \textbf{Key Finding}: All three production implementations (tiktoken, HF Tokenizers, SentencePiece) converge on the same core algorithm (greedy merge loop). Tiktoken uses bytes as base, HF uses characters, SentencePiece uses characters + scores. All are reversible and deterministic. Load speed: 10--200 ms, performance: 200K--1.2M tokens/sec.
 
-\textbf{Verdict}: PROVEN - Production-tested implementations validate the algorithm.
+\textbf{Verdict}: supported by cited sources (not a benchmark result) -Production-tested implementations validate the algorithm.
 
 \section{APPENDIX B: Anti-Shannon Purity Mathematics}
 
@@ -728,9 +716,9 @@ N×IPR & \textbf{2 cycles} (FMA $p_i \times p_i$, no ln) & \textbf{$O(N)$ FMA} \
 \bigskip
 \noindent
 \textbf{Date}: August 30, 2026
-\textbf{Status}: Whitepaper complete. Benchmark EXECUTED. All four hypotheses PROVEN. Dual-oracle: PASS $\checkmark \checkmark$
-\textbf{Corpus}: Giellatekno Plains Cree (2,000 words, 23,558 bytes UTF-8)
-\textbf{Benchmark Results}: Token count $\Delta$ $-61.5\%$, Validity $\Delta$ $+57.7\%$, N×IPR $\Delta$ $+16,150\%$, Compression $\Delta$ $+160\%$
+\textbf{Status}: v2. Benchmark MEASURED 2026-08-30. Hypothesis verdicts [pending replication on ALTLab corpus]. v1 numbers withdrawn (see Erratum).
+\textbf{Corpus}: GiellaLT lang-crk \texttt{crk\_public\_texts.txt} (2,443 words, 28,662 bytes UTF-8, unverified test file)
+\textbf{Benchmark Results}: tokens $-69.6\%$ (gpt2) / $-65.6\%$ (cl100k) on the 1,587 analysed words; coverage 64.96\%; effective vocab 89.0 vs.\ 39.9 / 52.2; bytes/token 6.260 vs.\ 1.905 / 2.155
 \textbf{Next}: Integrate into nistam\_dream\_engine\_whitepaper\_v4, submit technical report, post standalone whitepaper
 
 \end{document}

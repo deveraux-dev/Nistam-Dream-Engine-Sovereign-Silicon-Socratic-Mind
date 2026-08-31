@@ -204,7 +204,7 @@ The mathematical primitives operate within the sovereign runtime engine under st
 ### 3.2 Realization of Consumption & Governor Directives
 In our architecture, compute is only materialized when a concrete consumer verifies an incoming request. 
 - **Pre-Dispatch Interception**: State vectors are filtered across symmetric lattice gates prior to invoking LLM inference engines.
-- **Unit Cost Governor**: Unit cost governors enforce a strict deterministic upper bound ($0.0004/call) under cached context windows.
+- **Unit Cost Governor**: Unit cost governors enforce serverless context caching discounts (75% input discount at $0.01875/1M cached tokens) under cached context windows.
 - **Immediate Staging Wipe**: Memory buffers are zeroized immediately upon receipt acknowledgment, ensuring zero cloud retention.
 
 ---
@@ -249,7 +249,7 @@ Because 23 years on industrial blast yards, commercial sites, and residential pr
 
 1. **Failure Begins at the Boundary**: If your environmental envelope is compromised, the coating fails. In software, if your memory boundary and state envelopes leak, the agent drifts into hallucination and unconstrained cost.
 2. **Passivation is Longevity**: Steel that is continuously stressed and unpassivated corrodes. Compute that continuously spins without returning to equilibrium burns money, generates heat, and degrades state.
-3. **Respecting the Client**: In trade business, you don't overcharge, you don't waste material, and you don't leave a mess on the customer's property. In agent architecture, that means fixed-cost governors ($0.0004/call), zero cloud retention, zero heap churn, and complete privacy sovereignty.
+3. **Respecting the Client**: In trade business, you don't overcharge, you don't waste material, and you don't leave a mess on the customer's property. In agent architecture, that means deterministic cost governors (serverless context caching for opt-in off-path cloud planning), zero cloud retention, zero heap churn, and complete privacy sovereignty.
 
 You don't need academic posturing to build tools that protect people. You just need respect for the material, exact specifications, and the discipline to measure your work.
 

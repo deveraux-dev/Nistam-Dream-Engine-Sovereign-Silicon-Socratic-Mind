@@ -65,7 +65,7 @@ Graphics cards from different manufacturers (NVIDIA, AMD, Apple, ARM) exhibit fl
 13Forge avoids the passive "sidecar" pattern by using Gemini as an **Active Thermodynamic Governor**:
 *   **Thermodynamic Attention Bias:** Dynamically applies Fredholm-Dante attention masks ($\mathbf{M}_{\text{Dante}}$) and Laughter damping factors ($\lambda_{\text{laugh}}$). In identity/equilibrium state ($T=0$), attention collapses to an un-attackable, zero-entropy state.
 *   **Zero-Point Temperature `0.0`:** Eliminates sampling variance, locking Gemini into deterministic, mechanical validation.
-*   **Vertex AI Context Caching:** Ingests 450,000-token Visual Appearance Reference Standard (VARS) and regulatory handbooks with `CachedContent`, achieving a **75% token read discount**. Measured cost per audit: **$0.0004 USD** (live `gemini-2.5-flash` run; receipt in `TRIPTYCH-SCRIPTS-2026-08-20.md:8`). An earlier figure of $0.00000938 appeared in this document and is withdrawn — it was ~43× low.
+*   **Vertex AI Context Caching:** Ingests 450,000-token Visual Appearance Reference Standard (VARS) and regulatory handbooks with `CachedContent`, achieving a **75% token read discount** ($0.01875 / 1M cached tokens vs $0.075 / 1M uncached).
 
 ### 4. Zero-Retention Cryptographic Envelopes (`forge-envelope`)
 *   **ADR-0026 Sovereign Vault:** Raw photos, telemetry, and audio buffers are wrapped in `EphemeralEnvelope<T: Zeroize>`. Upon integer-tick expiration, memory is immediately zeroized in-place via the `zeroize` crate's volatile writes, with `Drop` as a scope-exit backstop.

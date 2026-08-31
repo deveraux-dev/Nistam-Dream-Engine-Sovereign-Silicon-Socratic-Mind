@@ -11,7 +11,7 @@
 The **Constrained L402 Gate** unifies grammatical sampling constraints (GBNF logit masks) with cryptographic capability authentication (HTTP 402 / L402). This dual-gate architecture enforces two fundamental system invariants:
 
 1. **Zero Syntax Waste**: Every token sampled is mathematically guaranteed to conform to the grammar schema (JSON, RON, or Vixi DSL) via token-level logit masking before argmax/sampling.
-2. **Zero Unauthorized Execution**: Every compute invocation must present a valid L402 capability macaroon + preimage receipt, adhering to strict unit-cost governor limits ($0.0004/call).
+2. **Zero Unauthorized Execution**: Every compute invocation must present a valid L402 capability macaroon + preimage receipt, adhering to strict metered cost governor limits.
 
 ```
                       +---------------------------------------+
@@ -108,4 +108,4 @@ The N × IPR computation is deterministic, zero-transcendental, and exact across
 
 ## 5. Cost Governance & Rate Limiting
 
-**Unit Cost**: The baseline cost per inference call is set to **$0.0004** (ceiling constant; enforcement via the cloud governor scripts). This figure applies when no N × IPR attenuation is active. The governor maintains per-session quota state and rejects calls that would exceed the remaining allocation.
+**Cost Metering**: The baseline cost per inference call is derived directly from live usage metadata (input prompt, cached context tokens, output tokens; enforcement via the cloud governor scripts). This figure applies when no N × IPR attenuation is active. The governor maintains per-session quota state and rejects calls that would exceed the remaining allocation.

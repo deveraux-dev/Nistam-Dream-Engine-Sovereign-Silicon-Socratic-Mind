@@ -165,7 +165,7 @@ Rather than decoding trits sequentially or using scalar branch trees, MMA maps b
 ```
 
 ### 4.1 Zero Residual State & Ephemeral Host Memory (ADR-0026)
-In accordance with sovereign computing protocol ADR-0026, all intermediate activations, key-value cache entries, and temporary matrices are wrapped in self-shredding memory envelopes that execute SIMD `.zeroize()` immediately upon drop. Zero residual state remains in host memory, and telemetry writes 0 bytes of persistent raw data. The optional serverless Vertex context cache ($0.0004/call governor) operates strictly off the hot path for advisory planning, ensuring no raw sovereign tokens ever leave local host hardware.
+In accordance with sovereign computing protocol ADR-0026, all intermediate activations, key-value cache entries, and temporary matrices are wrapped in self-shredding memory envelopes that execute SIMD `.zeroize()` immediately upon drop. Zero residual state remains in host memory, and telemetry writes 0 bytes of persistent raw data. The optional serverless Vertex context cache (75% discount governor) operates strictly off the hot path for advisory planning, ensuring no raw sovereign tokens ever leave local host hardware.
 
 ### 4.2 Inter-Agent Envelopes & Zero-Trust Coordination (`KIND_MMA_ENVELOPE` 21313)
 For distributed multi-agent swarms operating across open Nostr relays, action tensors and tool-call states are encapsulated into NIP-01 Kind 21313 binary envelopes:

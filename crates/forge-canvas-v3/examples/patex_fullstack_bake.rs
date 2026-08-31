@@ -36,8 +36,8 @@ const FULLSTACK: &str = "\
 ║  └───────────[4-LANE AMBISONIC / LABAN EFFORT BUS]─────────────┘  ║
 ║  ┌───[SOVEREIGN CRUCIBLE]───┐  ┌──────────[CLOUD GOVERNOR]─────┐  ║
 ║  │ ┌─────────┐ ┌──────────┐ │  │ ┌───────────┐ ┌─────────────┐ │  ║
-║  │ │ASP/FST  │ │ADR-0026  │ │  │ │GEMINI 3.7 │ │450K CONTEXT │ │  ║
-║  │ │GBNF MASK│ │0-RETENTION│ │  │ │FLASH T=0  │ │$0.0004/CALL│ │  ║
+║  │ │ASP/FST  │ │ADR-0026  │ │  │ │GEMINI 2.5 │ │450K CONTEXT │ │  ║
+║  │ │GBNF MASK│ │0-RETENTION│ │  │ │FLASH T=0  │ │75% DISCOUNT│ │  ║
 ║  │ └─────────┘ └──────────┘ │  │ └───────────┘ └─────────────┘ │  ║
 ║  └───────[TAPE E: FAILSAFE]─┘  └───────[WASIBOX SANDBOX]───────┘  ║
 ╚═══════════════════════════════════════════════════════════════════╝";
@@ -153,12 +153,12 @@ fn main() {
         (22, "[CLOUD GOVERNOR]"),
         (24, "ASP/FST"),
         (24, "ADR-0026"),
-        (24, "GEMINI 3.7"),
+        (24, "GEMINI 2.5"),
         (24, "450K CONTEXT"),
         (25, "GBNF MASK"),
         (25, "0-RETENTION"),
         (25, "FLASH T=0"),
-        (25, "$0.0004/CALL"),
+        (25, "75% DISCOUNT"),
         (27, "[TAPE E: FAILSAFE]"),
         (27, "[WASIBOX SANDBOX]"),
     ];
@@ -187,7 +187,7 @@ fn main() {
         "4-LANE AMBISONIC: SCHAEFFER DSP & RUDOLF LABAN EFFORT VECTORS",
         "SOVEREIGN VAULT: ASP + FST + GBNF CRUCIBLE, ADR-0026 ZERO-RETENTION",
         "WASIBOX SANDBOX: FAIL-CLOSED SNAPSHOTS TO TAPE E:/.AIRGAP",
-        "GEMINI VERTEX-AI: 450K CACHED CONTEXT, T=0.0, $0.0004/CALL GOVERNOR",
+        "GEMINI VERTEX-AI: 450K CACHED CONTEXT, T=0.0, 75% CONTEXT DISCOUNT",
         "",
         "BAKED BY PATEX 5D GEOMETRIC TYPESETTING ENGINE",
         "zero heap hotpath · integer only ALU · 3^5 = 243 cell states · 13 moons",
