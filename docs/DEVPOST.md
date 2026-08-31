@@ -65,7 +65,7 @@ stale on the next run and becomes a claim instead of a measurement.
 
 ## Try it out
 
-- **Demo video:** [https://youtu.be/ttMofC_9-G0](https://youtu.be/ttMofC_9-G0) (≤3:00, English subtitles.)
+- **Demo video:** [https://youtu.be/fkdUBRbHdfk](https://youtu.be/fkdUBRbHdfk) (≤3:00, English subtitles.)
 - **Build the shell:** `cd crates/studio-tauri && cargo build --release` — Rust
   stable + Windows WebView2 only, no Node. Full instructions:
   [`docs/JUDGE-BUILD.md`](JUDGE-BUILD.md).
