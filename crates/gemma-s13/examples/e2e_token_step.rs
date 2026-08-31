@@ -161,7 +161,7 @@ fn main() {
     println!("[e2e_token_step]   Loaded attn_norm: {} f32 values", attn_norm.len());
 
     // Create forward graph
-    let graph = Gemma9bForwardGraph::new(config, DispatchEngine::ScalarReference);
+    let _graph = Gemma9bForwardGraph::new(config, DispatchEngine::ScalarReference);
 
     // Synthetic embeddings: deterministic, tied to output head for self-consistency.
     // Heap, not stack — at 262144 entries this is 512 KB, and the Windows main

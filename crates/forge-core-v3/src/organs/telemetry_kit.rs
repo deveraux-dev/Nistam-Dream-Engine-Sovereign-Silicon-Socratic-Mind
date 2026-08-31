@@ -461,6 +461,34 @@ pub fn render_audio_section(
 // The shell level (forge_gui or equivalent) intercepts F12 key and calls TelemetryShared::toggle().
 // Stub: no input binding here; only the state machine.
 
+/// Headless organ entry: print the telemetry kit state and hardware metrics snapshot. Exit 0 always.
+pub fn run(_args: &[String]) -> i32 {
+    let shared = TelemetryShared::default();
+    let view = shared.load();
+    println!("telemetry-kit: F12 live overlay subsystem");
+    println!("  state: on={}", shared.is_on());
+    println!(
+        "  snapshot: frame_us={} vram={}/{}MB ({} pmy) ram={}/{}MB ({} pmy)",
+        view.frame_us,
+        view.vram_used_mb,
+        view.vram_total_mb,
+        view.vram_pct_q,
+        view.ram_used_mb,
+        view.ram_total_mb,
+        view.ram_pct_q,
+    );
+    println!(
+        "  audio: peak_l={} peak_r={} rms={} phase={}pmy cycle_us={}",
+        view.audio_peak_l,
+        view.audio_peak_r,
+        view.audio_rms,
+        view.audio_phase_pmy,
+        view.audio_cycle_us,
+    );
+    0
+}
+
+
 #[cfg(test)]
 mod tests {
     use super::*;

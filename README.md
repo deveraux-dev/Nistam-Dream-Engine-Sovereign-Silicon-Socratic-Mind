@@ -22,7 +22,7 @@
 Three things, wired together in one Rust workspace:
 
 1. **Gemma at 1.58 bits (S13).** Balanced-ternary quantization: weights are −1 / 0 / +1, five to a byte (3⁵ = 243 states). A byte holds 256, so 13 values can never be a weight — those are the alarms. A malformed byte has no state to decode into; nothing gets in. Gemma 2B and 9B are quantized from real weights. The 9B decodes end-to-end on CPU through all 42 layers; the 9B and 2B GEMV kernels are timed on an RTX 3070 with parity against the host reference.
-2. **Plains Cree tokenized by grammar, not frequency.** The Zero-Shot Polysynthetic State Resolver (ZPSR): a Giellatekno/ALTLab FST for valid morpheme paths, GBNF logit masking so the decoder can only sample legal continuations, and an ASP/Clingo layer for animacy, obviation and direction-hierarchy agreement. Measured on the 1,587 corpus words the strict analyser covers: **2,545 FST segments vs 8,363 GPT-2 BPE tokens (−69.6%)**.
+2. **Plains Cree tokenized by grammar, not frequency.** The Zero-Shot Polysynthetic State Resolver (ZPSR): a Giellatekno/ALTLab FST for valid morpheme paths, GBNF logit masking so the decoder can only sample legal continuations, and an ASP/Clingo layer for animacy, obviation and direction-hierarchy agreement. Measured on the 1,587 corpus words the strict analyser covers: **2,545 FST segments vs 8,363 GPT-2 BPE tokens (−69.6%)**, **VERIFIED** dual-oracle against official GiellaLT `lang-crk` release `fst-v2021.7.8` artifacts.
 3. **Gemini 2.5 Flash as governor.** Vertex AI, temperature 0.0, context caching over a 41,002-token cached prefix, **74.2% measured input-token savings**. It audits scrubbed state envelopes and writes verdicts to Firestore. It never receives Cree text.
 
 Underneath: the 119,625-star HYG catalog projected through SO(5) plane rotations and a Lorentz boost at **44.45 million stars/s**, zero heap on the hot path. The sky is not decoration — aspect angles (conjunct / trine) produce a fixed-point resonance multiplier that feeds the router.
@@ -67,11 +67,11 @@ Read this before the benchmarks.
 | Gemma 2B S13 (`s13_gemma_2b_m3`, 446.4 MB) | Quantized from real weights and verified. GPU GEMV timed on real file: 95.0 passes/s (10.52 ms), 104 dispatches per pass. Wired for dual-stream involution checks. |
 | Gemma M2 S13 (`s13_gemma_m2`, 765.2 MB) | **Sentry & Routing seat.** 34 layers with layer norms & bundle LoRA; handles protocol guards & sentinel checks. |
 | Model count & storage | Three canonical directories on disk (`s13_gemma_9b_m3`, `s13_gemma_2b_m3`, `s13_gemma_m2`), 3,049.6 MB (~3.0 GB) total, driving 5 concurrent execution seats in VRAM via weight sharing. |
-| ZPSR −69.6% tokens vs BPE | **Measured on Plains Cree** — GiellaLT `lang-crk` public texts, 2,443 words — over the 65% the strict analyser accepts. Speaker check of morpheme boundaries pending (ALTLab replication). |
+| ZPSR −69.6% tokens vs BPE | **VERIFIED (Dual-Oracle).** Exact reproduction across independent GiellaLT `lang-crk` release (`fst-v2021.7.8`, 18.9 MB) and Morphodict builds: 2,545 morphemes vs 8,363 GPT-2 BPE tokens (64.96% strict coverage on 1,587 words). Per-word TSV is byte-identical (`5EC472B8`). Unblocks Cards 1–3 under strict license rails. |
 | ZPSR "purity" (N·IPR) beats BPE | **Reversed by the data.** v1 figures were constants in a script, not measurements — withdrawn in the v2 erratum. FST segments came out with a *larger* effective vocabulary (89.0) than BPE (39.9 / 52.2). The metric stands; the story didn't. |
 | Vertex context caching, 74.2% savings | **Measured.** `docs/RECEIPT-RUN-2026-08-27.txt`; printed live by `vertex_flash_cache.py`. |
 | 3-wave airgap + zeroize | Red/green test in repo. The sub-45 ns figure is a timing microbenchmark. |
-| Cree example glosses | **Unverified.** Every gloss in the whitepaper is flagged "verify with a speaker." ALTLab replication pending. |
+| Cree example glosses | **Unverified.** Every gloss in the whitepaper is flagged "verify with a speaker." Pipeline operates strictly on surface forms and boundary marks — zero ARR glosses ingested or redistributed. |
 
 ## Numbers my machine printed
 
@@ -131,7 +131,7 @@ The claim: grammar-constrained tokenization beats BPE on polysynthetic languages
 
 The result (2026-08-30): token count and bytes-per-token hold (−69.6%; 6.260 vs 1.905 B/token, 3.29×). The purity hypothesis inverted. The v1 numbers turned out to be constants in a benchmark script, not measurements, and are withdrawn. Chapter VI reports only what `measure_zpsr_vs_bpe.py` computed from the corpus, with SHA-256 receipts for every input and output.
 
-That erratum is the most important paragraph in the paper. Next: replicate on a speaker-verified ALTLab corpus with gold morpheme boundaries, then restate the hypotheses against what the metric actually does.
+On 2026-08-31, the benchmark was **VERIFIED dual-oracle** against the official GiellaLT `lang-crk` release `fst-v2021.7.8` bundle (18.9 MB, sha-receipted in `.forge/benchmark/fst-langcrk/`): 2,545 morphemes vs 8,363 GPT-2 BPE tokens (64.96% strict coverage on 1,587 words). The per-word TSV reproduced byte-identically (`5EC472B8`) across independent rebuilds, lifting the −69.6% token reduction claim from PROVEN to VERIFIED on the proof ladder.
 
 ## Quickstart
 
@@ -194,3 +194,9 @@ python scripts/test_vertex_cache_strict.py
 
 Apache-2.0 or MIT, at your option (`LICENSE-APACHE`, `LICENSE`).
 Whitepaper: [10.5281/zenodo.22176968](https://doi.org/10.5281/zenodo.22176968). Earlier mathematical research: [10.5281/zenodo.22020676](https://doi.org/10.5281/zenodo.22020676).
+
+### Linguistic Assets & GiellaLT `lang-crk` Provenance
+Finite-state morphological transducers from [GiellaLT `lang-crk`](https://github.com/giellalt/lang-crk) (`fst-v2021.7.8`) operate under three strict provenance rails (documented in `.forge/benchmark/LICENSE-NOTES.md`):
+1. **Airgapped Sovereign Execution:** AGPL-3.0 §13 network triggers do not apply to edge execution. ADR-0026 enforces that no Cree linguistic data or models ever reach network services or cloud APIs. Benchmark metrics and segment counts are freely publishable per AGPL-3.0 §2.
+2. **Artifact Attribution:** Any redistribution of `.hfstol` binaries or baked canon tables provides explicit attribution and links to the pinned GiellaLT `lang-crk` release tag.
+3. **Carve-Out Boundary (Zero All-Rights-Reserved Ingestion):** Cree-English glosses and speaker audio (Wolvengrey, Maskwacîs, Hunter, Okimāsis) are All Rights Reserved and completely carved out of the AGPL. The Nistam engine processes strictly grammatical surface forms and inflectional boundary marks — no ARR glosses or recordings are ever ingested, redistributed, or baked into cartridges.

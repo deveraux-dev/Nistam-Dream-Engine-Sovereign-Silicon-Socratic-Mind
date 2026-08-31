@@ -662,7 +662,17 @@ void main(){
     try {
       const bytes = await invokeCommand('get_sky_vbo');
       if (!bytes) return;
-      const buf = bytes instanceof ArrayBuffer ? bytes : new Uint8Array(bytes).buffer;
+      let buf;
+      if (bytes instanceof ArrayBuffer) {
+        buf = bytes;
+      } else if (bytes && bytes.buffer instanceof ArrayBuffer) {
+        buf = bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength);
+      } else if (Array.isArray(bytes) || bytes instanceof Uint8Array) {
+        buf = new Uint8Array(bytes).buffer;
+      } else {
+        console.warn('[shell] get_sky_vbo returned unrecognized format:', bytes);
+        return;
+      }
       const decoded = viewSkyVbo(buf);
       if (!decoded) { console.warn('[shell] sky vbo refused: bad bytes'); return; }
       const verts = decoded.verts;
@@ -1392,8 +1402,11 @@ void main(){
     skyLstDeg = payload.lst_deg || 0;
     const offSol = Math.abs(cam5d.tx) + Math.abs(cam5d.ty) + Math.abs(cam5d.tz) > 0.5;
     const focus = offSol ? `(${cam5d.tx.toFixed(0)}, ${cam5d.ty.toFixed(0)}, ${cam5d.tz.toFixed(0)})` : 'Sol';
-    $('sky-title').textContent =
-      `5D SKY — r=${cam5d.distance.toFixed(0)} pitch=${cam5d.pitch.toFixed(2)} yaw=${cam5d.yaw.toFixed(2)} fov=${cam5d.fov_deg.toFixed(0)}° · focus ${focus}`;
+    const skyTitleEl = $('sky-title');
+    if (skyTitleEl) {
+      skyTitleEl.textContent =
+        `5D SKY — r=${cam5d.distance.toFixed(0)} pitch=${cam5d.pitch.toFixed(2)} yaw=${cam5d.yaw.toFixed(2)} fov=${cam5d.fov_deg.toFixed(0)}° · focus ${focus}`;
+    }
   }
 
   function ringStar() { ringStarIdx(activeStarIdx); }
@@ -1557,11 +1570,14 @@ void main(){
     $('theory-tuning').textContent = r.ref_a_hz < 436 ? 'A440' : 'A432';
     theoryAlchemical = r.ref_a_hz < 436;
 
-    $('theory-pulses').innerHTML = '';
-    for (const on of r.pulses) {
-      const d = document.createElement('span');
-      d.className = on ? 'pulse on' : 'pulse';
-      $('theory-pulses').appendChild(d);
+    const pulsesEl = $('theory-pulses');
+    if (pulsesEl) {
+      pulsesEl.innerHTML = '';
+      for (const on of r.pulses) {
+        const d = document.createElement('span');
+        d.className = on ? 'pulse on' : 'pulse';
+        pulsesEl.appendChild(d);
+      }
     }
 
     const host = $('theory-knobs');

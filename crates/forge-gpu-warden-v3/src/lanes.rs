@@ -42,12 +42,8 @@ impl WorkloadClass {
     }
 }
 
-// `id`/`priority` are written at dispatch (below) and carried on the ticket
-// as its identity/queue-class, but nothing reads them back yet — no
-// preemption or cancellation-by-id logic exists in this file (2026-08-20,
-// restored after a revasc pass removed this as "stale": it wasn't, the
-// fields just have no reader yet).
-#[allow(dead_code)]
+// Inflight ticket carried in the scheduler's per-lane queue.
+// `id` and `priority` are actively queried by `inflight_priority()` and `cancel_ticket_by_id()`.
 struct InflightTicket {
     id: WorkloadId,
     priority: Priority,
@@ -184,6 +180,32 @@ impl LaneScheduler {
         }
     }
 
+    /// Cancel a specific in-flight ticket by its WorkloadId across all lanes.
+    pub fn cancel_ticket_by_id(&self, target_id: WorkloadId, signal: PanicSignal) -> bool {
+        for lane in &self.lanes {
+            let mut state = lane.lock().unwrap();
+            if let Some(pos) = state.inflight.iter().position(|t| t.id == target_id) {
+                let ticket = state.inflight.remove(pos).unwrap();
+                ticket.sink.cancel_flag.store(true, std::sync::atomic::Ordering::SeqCst);
+                let _ = ticket.sink.tx.send(FenceEvent::Cancelled(signal));
+                state.vram_used_mb = state.vram_used_mb.saturating_sub(ticket.vram_mb);
+                return true;
+            }
+        }
+        false
+    }
+
+    /// Query the priority lane of an active in-flight ticket.
+    pub fn inflight_priority(&self, target_id: WorkloadId) -> Option<Priority> {
+        for lane in &self.lanes {
+            let state = lane.lock().unwrap();
+            if let Some(ticket) = state.inflight.iter().find(|t| t.id == target_id) {
+                return Some(ticket.priority);
+            }
+        }
+        None
+    }
+
     /// Phase 1 helper: free VRAM for tickets whose fence already completed.
     fn free_completed_inflight(&self, priority: Priority) {
         let mut lane = self.lanes[Self::lane_idx(priority)].lock().unwrap();
@@ -198,3 +220,33 @@ impl Default for LaneScheduler {
         Self::new()
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::manifest::BudgetManifest;
+    use crate::opaque::OpaqueSieveState;
+
+    #[test]
+    fn scheduler_admit_and_query_priority() {
+        let scheduler = LaneScheduler::new();
+        let ticket = DispatchTicket {
+            manifest: BudgetManifest::stub(1, Priority::P1Sovereign, 10, 100, b""),
+            state: OpaqueSieveState::null(),
+            lane: Priority::P1Sovereign,
+        };
+        let fence = scheduler.admit(ticket).expect("admit failed");
+        assert_eq!(fence.ticket_id, 1);
+        // Phase 1 immediately completes fence and frees inflight
+        assert_eq!(scheduler.inflight_priority(1), None);
+    }
+
+    #[test]
+    fn cancel_nonexistent_ticket_returns_false() {
+        let scheduler = LaneScheduler::new();
+        let signal = PanicSignal::ShutdownInProgress;
+        assert!(!scheduler.cancel_ticket_by_id(999, signal));
+    }
+}
+
+

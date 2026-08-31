@@ -13,13 +13,10 @@ pub mod create_geo;
 pub mod creation_spine;
 pub mod dungeon_master_kit;
 pub mod forge_scan;
-pub mod massread;
-pub mod massweld;
 pub mod page_layout;
 pub mod silent_drops;
 pub mod song;
 pub mod story_beats;
-pub mod story_render;
 pub mod symbiosis;
 pub mod telemetry_kit;
 pub mod timeline_export;
@@ -86,6 +83,11 @@ pub const ORGANS: &[Organ] = &[
         name: "creation-spine",
         about: "print the artifact codex constants: 12 kinds, genre bounds",
         run: creation_spine::run,
+    },
+    Organ {
+        name: "telemetry-kit",
+        about: "hardware and audio metrics overlay state and slots",
+        run: telemetry_kit::run,
     },
 ];
 
